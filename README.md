@@ -14,10 +14,10 @@ Assets
  ├─Scenes             // 场景，只有MainScene会打包
  └─Scripts
      ├─3rd
+     ├─Game
      │  ├─Instruments // 仪器逻辑
-     ├─Game           // 游戏逻辑
-     ├─Managers       // 游戏管理器
-     │  └─UI          // UI逻辑
+     │  └─UI          // UI 逻辑
+     ├─Managers       // 游戏管理器  
      └─Utils
-        └─Record      // 存档逻辑
+         └─Record     // 存档
 ```

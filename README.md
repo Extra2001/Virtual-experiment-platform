@@ -17,7 +17,7 @@ Assets
      │  ├─Instruments // 仪器逻辑
      ├─Game           // 游戏逻辑
      ├─Managers       // 游戏管理器
-     │  ├─UI          // UI逻辑
-     |  └─Record
-     └─Utils          // 通用工具
+     │  └─UI          // UI逻辑
+     └─Utils
+        └─Record      // 存档逻辑
 ```

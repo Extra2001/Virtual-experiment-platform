@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IMeasurable
-{
+public interface IMeasurable {
     double GetMeasureResult();
 }
 
-public interface IResetable
-{
+public interface IResetable {
     void Reset();
 }
 
-public abstract class InstrumentBase: IMeasurable, IResetable
-{
+public abstract class InstrumentBase : IMeasurable, IResetable {
     /// <summary>
     /// 仪器名称
     /// </summary>

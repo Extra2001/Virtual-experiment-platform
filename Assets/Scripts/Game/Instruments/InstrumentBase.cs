@@ -27,7 +27,7 @@ public abstract class InstrumentBase: IMeasurable, IResetable
     /// <summary>
     /// 随机误差
     /// </summary>
-    public abstract double RandomError { get; set; }
+    public virtual double RandomError { get => Random.Range(-1 * (float)RandomErrorLimit, (float)RandomErrorLimit); }
 
     /// <summary>
     /// 随机误差限

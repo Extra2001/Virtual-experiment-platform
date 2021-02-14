@@ -14,7 +14,6 @@ public class GameLaunch : MonoBehaviour {
 
     private void LaunchServices() {
         // 启动服务程序
-
         Main.m_Event.Throw<ServiceStartedEventHandler>();
     }
 

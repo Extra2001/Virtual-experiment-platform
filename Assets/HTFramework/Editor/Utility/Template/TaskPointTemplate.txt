@@ -1,0 +1,64 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using HT.Framework;
+using DG.Tweening;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+/// <summary>
+/// 新建任务点
+/// </summary>
+[TaskPoint("#SCRIPTNAME#")]
+public class #SCRIPTNAME# : TaskPointBase
+{
+	public #SCRIPTNAME#() : base()
+    {
+        
+    }
+
+	protected override void OnStart()
+    {
+        base.OnStart();
+    }
+
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+    }
+
+	public override void OnGuide()
+    {
+        base.OnGuide();
+    }
+
+	public override void OnAutoComplete()
+    {
+        if (_isCompleting)
+        {
+            return;
+        }
+
+        base.OnAutoComplete();
+    }
+
+    protected override void OnEnd()
+    {
+        base.OnEnd();
+    }
+
+    protected override IEnumerator OnBeforeComplete()
+    {
+        yield return base.OnBeforeComplete();
+    }
+
+#if UNITY_EDITOR
+    public override int OnPropertyGUI()
+    {
+        int height = base.OnPropertyGUI();
+
+        return height;
+    }
+#endif
+}

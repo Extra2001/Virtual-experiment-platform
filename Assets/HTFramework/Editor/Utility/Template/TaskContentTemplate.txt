@@ -1,0 +1,44 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using HT.Framework;
+using DG.Tweening;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+/// <summary>
+/// 新建任务内容
+/// </summary>
+[TaskContent("#SCRIPTNAME#")]
+public class #SCRIPTNAME# : TaskContentBase
+{
+	public #SCRIPTNAME#() : base()
+    {
+        
+    }
+
+	public override void OnStart()
+    {
+        base.OnStart();
+    }
+
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+    }
+
+    public override void OnComplete()
+    {
+        base.OnComplete();
+    }
+
+#if UNITY_EDITOR
+    public override int OnPropertyGUI()
+    {
+        int height = base.OnPropertyGUI();
+
+        return height;
+    }
+#endif
+}

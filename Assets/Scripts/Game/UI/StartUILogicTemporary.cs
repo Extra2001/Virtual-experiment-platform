@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using HT.Framework;
 using DG.Tweening;
+using UnityEngine.UI;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
-[UIResource("DefaultBundle", "Assets/AssetsPackage/UI/Start.prefab", null)]
+[UIResource("Default", "Assets/AssetsPackage/UI/Start.prefab", null)]
 public class StartUILogicTemporary : UILogicTemporary
 {
 	/// <summary>
@@ -15,6 +16,12 @@ public class StartUILogicTemporary : UILogicTemporary
     public override void OnInit()
     {
         base.OnInit();
+
+        UIEntity.FindChildren("NewGameButton").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            
+            Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
+        });
     }
 
 	/// <summary>

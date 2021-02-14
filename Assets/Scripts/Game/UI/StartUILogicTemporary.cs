@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
-[UIResource("Default", "Assets/AssetsPackage/UI/Start.prefab", null)]
+[UIResource("Default", "Assets/AssetsPackage/UI/Start.prefab", "UI/Start")]
 public class StartUILogicTemporary : UILogicTemporary
 {
 	/// <summary>

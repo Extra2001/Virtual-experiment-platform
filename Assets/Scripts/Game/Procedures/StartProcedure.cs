@@ -8,8 +8,6 @@ using DG.Tweening;
 /// </summary>
 public class StartProcedure : ProcedureBase
 {
-
-
     /// <summary>
     /// 流程初始化
     /// </summary>
@@ -24,7 +22,7 @@ public class StartProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenTemporaryUI<StartUILogicTemporary>();
+        Main.m_UI.OpenResidentUI<StartUILogic>();
 
         base.OnEnter(lastProcedure);
     }
@@ -35,7 +33,7 @@ public class StartProcedure : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
-        Main.m_UI.CloseUI<StartUILogicTemporary>();
+        Main.m_UI.CloseUI<StartUILogic>();
 
         base.OnLeave(nextProcedure);
     }

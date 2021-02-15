@@ -246,8 +246,8 @@ namespace HT.Framework
 
                 if (_currentWorldTemporaryUI != null && _currentWorldTemporaryUI.IsOpened)
                 {
-                    _currentWorldTemporaryUI.UIEntity.SetActive(false);
                     _currentWorldTemporaryUI.OnClose();
+                    _currentWorldTemporaryUI.UIEntity.SetActive(false);
                     _currentWorldTemporaryUI = null;
                 }
 
@@ -360,8 +360,8 @@ namespace HT.Framework
                     return;
                 }
 
-                ui.UIEntity.SetActive(false);
                 ui.OnClose();
+                ui.UIEntity.SetActive(false);
             }
             else
             {

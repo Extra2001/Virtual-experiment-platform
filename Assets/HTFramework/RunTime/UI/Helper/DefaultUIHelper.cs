@@ -502,8 +502,9 @@ namespace HT.Framework
                                 {
                                     return null;
                                 }
-                                _currentOverlayTemporaryUI.UIEntity.SetActive(false);
                                 _currentOverlayTemporaryUI.OnClose();
+                                _currentOverlayTemporaryUI.UIEntity.SetActive(false);
+                                ui._lastUILogic = _currentOverlayTemporaryUI;
                                 _currentOverlayTemporaryUI = null;
                             }
                             _currentOverlayTemporaryUI = ui;
@@ -540,8 +541,9 @@ namespace HT.Framework
                                 {
                                     return null;
                                 }
-                                _currentCameraTemporaryUI.UIEntity.SetActive(false);
                                 _currentCameraTemporaryUI.OnClose();
+                                _currentCameraTemporaryUI.UIEntity.SetActive(false);
+                                ui._lastUILogic = _currentCameraTemporaryUI;
                                 _currentCameraTemporaryUI = null;
                             }
                             _currentCameraTemporaryUI = ui;
@@ -636,6 +638,15 @@ namespace HT.Framework
             }
             return null;
         }
+        public UILogicTemporary GetCurrentOverlayTemporaryUI()
+        {
+            return _currentOverlayTemporaryUI;
+        }
+        public UILogicTemporary GetCurrentCameraTemporaryUI()
+        {
+            return _currentCameraTemporaryUI;
+        }
+
         /// <summary>
         /// 置顶常驻UI
         /// </summary>
@@ -722,8 +733,8 @@ namespace HT.Framework
                                 return;
                             }
 
-                            ui.UIEntity.SetActive(false);
                             ui.OnClose();
+                            ui.UIEntity.SetActive(false);
                         }
                         else
                         {
@@ -745,8 +756,8 @@ namespace HT.Framework
                                 return;
                             }
 
-                            ui.UIEntity.SetActive(false);
                             ui.OnClose();
+                            ui.UIEntity.SetActive(false);
                         }
                         else
                         {

@@ -22,7 +22,7 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        var prefabInfo = new PrefabInfo(null, null, "Environment/Highschool_Classrooms_Snaps014.prefab");
+        var prefabInfo = new PrefabInfo(null, null, "Environment/Highschool_Classrooms_Snaps014");
 
         Main.m_Resource.LoadPrefab(prefabInfo, GameObject.Find("GameObject").transform,  loadDoneAction: (obj) =>
         {

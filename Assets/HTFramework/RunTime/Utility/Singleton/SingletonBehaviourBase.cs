@@ -8,7 +8,7 @@ namespace HT.Framework
     [DisallowMultipleComponent]
     public abstract class SingletonBehaviourBase<T> : HTBehaviour where T : class
     {
-        private static T _current;
+        private static T _current = null;
         /// <summary>
         /// 当前实例
         /// </summary>

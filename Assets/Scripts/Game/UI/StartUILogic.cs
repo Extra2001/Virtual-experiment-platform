@@ -7,8 +7,8 @@ using UnityEngine.UI;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
-[UIResource("Default", "Assets/AssetsPackage/UI/Start.prefab", "UI/Start")]
-public class StartUILogicTemporary : UILogicTemporary
+[UIResource(null, null, "UI/Start")]
+public class StartUILogic : UILogicResident
 {
 	/// <summary>
 	/// 初始化
@@ -19,7 +19,6 @@ public class StartUILogicTemporary : UILogicTemporary
 
         UIEntity.FindChildren("NewGameButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            
             Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
         });
     }

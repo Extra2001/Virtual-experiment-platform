@@ -5,6 +5,18 @@
     /// </summary>
     public abstract class UILogicTemporary : UILogicBase
     {
+        internal UILogicTemporary _lastUILogic = null;
+
+        protected void NavigateBack()
+        {
+            if (_lastUILogic != null)
+            {
+                Log.Info(_lastUILogic.ToString());
+                Close();
+                _lastUILogic.Open();
+            }
+        }
+
         /// <summary>
         /// 打开自己
         /// </summary>

@@ -26,6 +26,7 @@ public class EnterClassroomProcedure : ProcedureBase
 
         Main.m_Resource.LoadPrefab(prefabInfo, GameObject.Find("GameObject").transform,  loadDoneAction: (obj) =>
         {
+            //obj.transform.localScale = new Vector3
             obj.SetActive(true);
         });
 

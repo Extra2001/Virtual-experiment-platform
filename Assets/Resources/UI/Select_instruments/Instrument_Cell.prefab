@@ -186,8 +186,8 @@ GameObject:
   - component: {fileID: 6138075884066391519}
   - component: {fileID: 6135674832093085625}
   - component: {fileID: 6296040769663562993}
-  - component: {fileID: 4038743326001065733}
   - component: {fileID: 6130409242344748167}
+  - component: {fileID: 1623095805}
   m_Layer: 5
   m_Name: Instrument_Cell
   m_TagString: Untagged
@@ -243,24 +243,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4038743326001065733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6211691890165430267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9409f360a0deeb949a3635126edf8000, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 6296040769663562993}
-  message: {fileID: 6316245182035912877}
-  messageLarge: {fileID: 3033379622235211722}
-  image: {fileID: 6315561798834918619}
-  imageLarge: {fileID: 6373412129526022048}
-  button: {fileID: 6316106602178092355}
 --- !u!225 &6130409242344748167
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -273,6 +255,24 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1623095805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6211691890165430267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff35822431b09a14a83c5506b2fc7f4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6296040769663562993}
+  message: {fileID: 6316245182035912877}
+  messageLarge: {fileID: 3033379622235211722}
+  image: {fileID: 6315561798834918619}
+  imageLarge: {fileID: 6373412129526022048}
+  button: {fileID: 6316106602178092355}
 --- !u!1 &6212163184671828739
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 
         void Start()
         {
-            var items = Enumerable.Range(0, 20)
+            var items = Enumerable.Range(0, 6)
                 .Select(i => new ItemData($"Cell {i}"))
                 .ToArray();
 

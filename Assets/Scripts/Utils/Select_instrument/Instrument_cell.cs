@@ -1,6 +1,6 @@
 using HT.Framework;
 using DG.Tweening;
-using System;
+using UnityEngine.Sprites;
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 {
     class Instrument_cell : FancyCell<ItemData, Context>
@@ -16,8 +16,8 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
         //数组长度为仪器数量
         private string[] message_text = {"直尺","游标卡尺","螺旋测微计","天平","仪器5","仪器6"};
         private string[] messageLarge_text = { "仪器1的描述", "仪器2的描述", "仪器3的描述", "仪器4的描述", "仪器5的描述", "仪器6的描述" };
-        private string image_source = "UI/Resources/Secect_instruments/image";
-        private string imageLarge_source = "UI/Resources/Secect_instruments/imageLarge";
+        private string image_source = "UI/Resources/Select_instruments/image";
+        private string imageLarge_source = "UI/Resources/Select_instruments/imageLarge";
 
 
         //
@@ -41,10 +41,9 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
             imageLarge.color = image.color = selected
                 ? new Color32(255, 255, 255, 255)
                 : new Color32(255, 255, 255, 77);
- 
 
-            try { imageLarge.sprite = Resources.Load(imageLarge_source + Index, typeof(Sprite)) as Sprite; }
-            catch (Exception ex){ Debug.Log(ex.Message); }
+            image.sprite = Resources.Load<Sprite>(image_source + (Index + 1));
+            imageLarge.sprite = Resources.Load<Sprite>(imageLarge_source + (Index+1));
             
         }
 

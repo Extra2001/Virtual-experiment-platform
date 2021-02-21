@@ -1,5 +1,6 @@
 using HT.Framework;
 using DG.Tweening;
+using System;
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 {
     class Instrument_cell : FancyCell<ItemData, Context>
@@ -40,9 +41,14 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
             imageLarge.color = image.color = selected
                 ? new Color32(255, 255, 255, 255)
                 : new Color32(255, 255, 255, 77);
-            Debug.Log("123456");
-            imageLarge.sprite = Resources.Load<Sprite>(imageLarge_source + Index) as Sprite;
+ 
+
+            try { imageLarge.sprite = Resources.Load(imageLarge_source + Index, typeof(Sprite)) as Sprite; }
+            catch (Exception ex){ Debug.Log(ex.Message); }
+            
         }
+
+
 
         public override void UpdatePosition(float position)
         {

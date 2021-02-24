@@ -18,7 +18,7 @@ public class PauseUILogic : UILogicTemporary
     public override void OnInit()
     {
         base.OnInit();
-
+        Log.Info("暂停面板 已加载");
         SubscribeEvent();
         AddInnerLogic();
     }
@@ -61,6 +61,21 @@ public class PauseUILogic : UILogicTemporary
                     Main.m_Procedure.SwitchProcedure<StartProcedure>();
                 });
             }
+            else if (item.gameObject.name.Equals("SaveRecordButton"))
+            {
+                item.onClick.AddListener(() =>
+                {
+                    Main.m_UI.OpenTemporaryUI<SaveRecordUILogic>();
+                });
+                
+            }
+            else if (item.gameObject.name.Equals("ReadRecordButton"))
+            {
+                item.onClick.AddListener(() =>
+                {
+                    Main.m_UI.OpenTemporaryUI<ReadRecordUILogic>();
+                });
+            }
         }
     }
 
@@ -73,9 +88,10 @@ public class PauseUILogic : UILogicTemporary
         {
             if ((e as PauseEventHandler).Paused)
             {
-                Main.m_UI.OpenTemporaryUI<PauseUILogic>();
+                if ((e as PauseEventHandler).NeedOpenPauseMenu)
+                    Main.m_UI.OpenTemporaryUI<PauseUILogic>();
             }
-            else
+            else if((e as PauseEventHandler).NeedOpenPauseMenu)
             {
                 UIShowHideHelper.HideUpToDown(UIEntity);
 
@@ -98,6 +114,7 @@ public class PauseUILogic : UILogicTemporary
         base.OnOpen(args);
 
         UIShowHideHelper.ShowUpToDown(UIEntity);
+        Log.Info("暂停面板 已打开");
     }
 
     /// <summary>
@@ -106,6 +123,7 @@ public class PauseUILogic : UILogicTemporary
     public override void OnClose()
     {
         base.OnClose();
+        Log.Info("暂停面板 已关闭");
     }
 
     /// <summary>
@@ -114,6 +132,7 @@ public class PauseUILogic : UILogicTemporary
     public override void OnDestroy()
     {
         base.OnDestroy();
+        Log.Info("暂停面板 已销毁");
     }
 
     /// <summary>

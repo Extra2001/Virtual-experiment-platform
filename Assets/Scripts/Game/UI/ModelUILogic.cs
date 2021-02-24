@@ -20,6 +20,8 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
     private Button CancelButton;
     private Button ConfirmButton;
 
+    private bool needToRecover = true;
+
     /// <summary>
     /// 初始化
     /// </summary>
@@ -73,6 +75,13 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
         this.Data.ConfirmAction = model.ConfirmAction;
         this.Data.CancelAction = model.CancelAction;
 
+        if (Main.Current.Pause == false)
+        {
+            PauseManager.Instance.Pause(false);
+            needToRecover = true;
+        }
+        else needToRecover = false;
+
         Main.m_UI.OpenTemporaryUI<ModelUILogic>();
     }
 
@@ -91,6 +100,10 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
     /// </summary>
     public override void OnClose()
     {
+        if (needToRecover)
+        {
+            PauseManager.Instance.Continue(false);
+        }
         base.OnClose();
     }
 

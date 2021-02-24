@@ -38,6 +38,12 @@ public class PauseManager : SingletonBehaviorManager<PauseManager>
         Time.timeScale = 0;
         Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<PauseEventHandler>().Fill(true));
     }
+    public void Pause(bool needOpenPauseMenu)
+    {
+        Main.Current.Pause = true;
+        Time.timeScale = 0;
+        Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<PauseEventHandler>().Fill(true, needOpenPauseMenu));
+    }
 
     /// <summary>
     /// ¼ÌÐøÓÎÏ·
@@ -47,5 +53,12 @@ public class PauseManager : SingletonBehaviorManager<PauseManager>
         Main.Current.Pause = false;
         Time.timeScale = 1;
         Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<PauseEventHandler>().Fill(false));
+    }
+
+    public void Continue(bool needOpenPauseMenu)
+    {
+        Main.Current.Pause = false;
+        Time.timeScale = 1;
+        Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<PauseEventHandler>().Fill(false, needOpenPauseMenu));
     }
 }

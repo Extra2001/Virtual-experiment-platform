@@ -21,6 +21,10 @@ public class StartUILogic : UILogicResident
         {
             Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
         });
+        UIEntity.FindChildren("ExitButton").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            Application.Quit();
+        });
     }
 
 	/// <summary>

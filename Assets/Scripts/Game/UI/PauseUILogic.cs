@@ -93,7 +93,7 @@ public class PauseUILogic : UILogicTemporary
             }
             else if((e as PauseEventHandler).NeedOpenPauseMenu)
             {
-                UIShowHideHelper.HideUpToDown(UIEntity);
+                UIShowHideHelper.HideToUp(UIEntity);
 
                 Task.Delay(300).ContinueWith(_ =>
                 {
@@ -113,7 +113,7 @@ public class PauseUILogic : UILogicTemporary
     {
         base.OnOpen(args);
 
-        UIShowHideHelper.ShowUpToDown(UIEntity);
+        UIShowHideHelper.ShowFromUp(UIEntity);
         Log.Info("暂停面板 已打开");
     }
 

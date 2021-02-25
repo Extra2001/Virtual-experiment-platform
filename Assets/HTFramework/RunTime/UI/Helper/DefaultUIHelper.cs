@@ -108,7 +108,7 @@ namespace HT.Framework
                 return !_UIEntity.activeSelf;
             }
         }
-        
+
         /// <summary>
         /// 初始化助手
         /// </summary>
@@ -282,7 +282,7 @@ namespace HT.Framework
         {
 
         }
-        
+
         /// <summary>
         /// 预加载常驻UI
         /// </summary>
@@ -624,6 +624,53 @@ namespace HT.Framework
                         else
                         {
                             throw new HTFrameworkException(HTFrameworkModule.UI, "获取UI失败：UI对象 " + type.Name + " 并未存在，或并未打开！");
+                        }
+                    case UIType.World:
+                        if (WorldUIs.ContainsKey(attribute.WorldUIDomainName))
+                        {
+                            return WorldUIs[attribute.WorldUIDomainName].GetOpenedUI(type);
+                        }
+                        else
+                        {
+                            throw new HTFrameworkException(HTFrameworkModule.UI, "获取UI失败：UI对象 " + type.Name + " 的域 " + attribute.WorldUIDomainName + " 并未存在！");
+                        }
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// 获取UI
+        /// </summary>
+        /// <param name="type">UI逻辑类</param>
+        /// <returns>UI逻辑对象</returns>
+        public UILogicBase GetUI(Type type)
+        {
+            UIResourceAttribute attribute = type.GetCustomAttribute<UIResourceAttribute>();
+            if (attribute != null)
+            {
+                switch (attribute.EntityType)
+                {
+                    case UIType.Overlay:
+                        if (OverlayUIs.ContainsKey(type))
+                        {
+                            UILogicBase ui = OverlayUIs[type];
+
+                            return ui;
+                        }
+                        else
+                        {
+                            throw new HTFrameworkException(HTFrameworkModule.UI, "获取UI失败：UI对象 " + type.Name + " 并未存在！");
+                        }
+                    case UIType.Camera:
+                        if (CameraUIs.ContainsKey(type))
+                        {
+                            UILogicBase ui = CameraUIs[type];
+
+                            return ui;
+                        }
+                        else
+                        {
+                            throw new HTFrameworkException(HTFrameworkModule.UI, "获取UI失败：UI对象 " + type.Name + " 并未存在！");
                         }
                     case UIType.World:
                         if (WorldUIs.ContainsKey(attribute.WorldUIDomainName))

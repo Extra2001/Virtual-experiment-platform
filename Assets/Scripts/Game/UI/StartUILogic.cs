@@ -10,9 +10,9 @@ using UnityEngine.UI;
 [UIResource(null, null, "UI/Start")]
 public class StartUILogic : UILogicResident
 {
-	/// <summary>
-	/// 初始化
-	/// </summary>
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public override void OnInit()
     {
         base.OnInit();
@@ -25,35 +25,49 @@ public class StartUILogic : UILogicResident
         {
             Application.Quit();
         });
+        bool showed = false;
+        UIEntity.FindChildren("ContinueButton").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            if (showed)
+            {
+                showed = false;
+                UIAPI.Instance.HideIndicator<Indicator3UILogic>();
+            }
+            else
+            {
+                showed = true;
+                UIAPI.Instance.ShowIndicator<Indicator3UILogic>("E", "打开哈哈哈");
+            }
+        });
     }
 
-	/// <summary>
-	/// 打开UI
-	/// </summary>
+    /// <summary>
+    /// 打开UI
+    /// </summary>
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
     }
-    
-	/// <summary>
-	/// 关闭UI
-	/// </summary>
+
+    /// <summary>
+    /// 关闭UI
+    /// </summary>
     public override void OnClose()
     {
         base.OnClose();
     }
 
-	/// <summary>
-	/// 销毁UI
-	/// </summary>
+    /// <summary>
+    /// 销毁UI
+    /// </summary>
     public override void OnDestroy()
     {
         base.OnDestroy();
     }
 
-	/// <summary>
-	/// UI逻辑刷新
-	/// </summary>
+    /// <summary>
+    /// UI逻辑刷新
+    /// </summary>
     public override void OnUpdate()
     {
         base.OnUpdate();

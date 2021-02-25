@@ -5,7 +5,7 @@
 Assets 
  ├─3rd                // 第三方组件
  │  └─Plugins         // dll库
- ├─AssetsPackage      // 资源包，主要为Prefab预制体
+ ├─Resources      // 资源包，主要为Prefab预制体
  │  ├─Audios
  │  ├─Environment
  │  ├─Instruments     // 测量仪器资源

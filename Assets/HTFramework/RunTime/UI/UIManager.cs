@@ -199,6 +199,15 @@ namespace HT.Framework
             return _helper.GetOpenedUI(typeof(T)) as T;
         }
         /// <summary>
+        /// 获取UI
+        /// </summary>
+        /// <typeparam name="T">UI逻辑类</typeparam>
+        /// <returns>UI逻辑对象</returns>
+        public T GetUI<T>() where T : UILogicBase
+        {
+            return _helper.GetUI(typeof(T)) as T;
+        }
+        /// <summary>
         /// 获取已经打开的UI
         /// </summary>
         /// <param name="type">UI逻辑类</param>

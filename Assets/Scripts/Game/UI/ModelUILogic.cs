@@ -92,7 +92,7 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
     {
         base.OnOpen(args);
 
-        UIShowHideHelper.ShowUpToDown(UIEntity);
+        UIShowHideHelper.ShowFromUp(UIEntity);
     }
 
     /// <summary>

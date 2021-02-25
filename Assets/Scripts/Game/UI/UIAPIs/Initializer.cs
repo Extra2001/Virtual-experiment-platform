@@ -16,5 +16,9 @@ public class UIAPIInitializer : SingletonBase<UIAPIInitializer>
         Main.m_UI.PreloadingTemporaryUI<PauseUILogic>();
 
         Main.m_UI.PreloadingTemporaryUI<ModelUILogic>();
+
+        Main.m_UI.PreloadingResidentUI<Indicator1UILogic>();
+        Main.m_UI.PreloadingResidentUI<Indicator2UILogic>();
+        Main.m_UI.PreloadingResidentUI<Indicator3UILogic>();
     }
 }

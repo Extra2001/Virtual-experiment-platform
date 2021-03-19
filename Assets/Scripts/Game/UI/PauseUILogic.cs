@@ -12,6 +12,12 @@ using UnityEngine.UI;
 [UIResource(null, null, "UI/PauseMenu")]
 public class PauseUILogic : UILogicTemporary
 {
+    Button ContinueButton = null;
+    Button QuitButton = null;
+    Button RestartButton = null;
+    Button SaveRecordButton = null;
+    Button ReadRecordButton = null;
+
     /// <summary>
     /// 初始化
     /// </summary>
@@ -32,6 +38,7 @@ public class PauseUILogic : UILogicTemporary
         {
             if (item.gameObject.name.Equals("ContinueButton"))
             {
+                ContinueButton = item;
                 item.onClick.AddListener(() =>
                 {
                     PauseManager.Instance.Continue();
@@ -39,6 +46,7 @@ public class PauseUILogic : UILogicTemporary
             }
             else if (item.gameObject.name.Equals("QuitButton"))
             {
+                QuitButton = item;
                 item.onClick.AddListener(() =>
                 {
                     UIAPI.Instance.ShowModel(new ModelDialogModel()
@@ -55,6 +63,7 @@ public class PauseUILogic : UILogicTemporary
             }
             else if (item.gameObject.name.Equals("RestartButton"))
             {
+                RestartButton = item;
                 item.onClick.AddListener(() =>
                 {
                     PauseManager.Instance.Continue();
@@ -63,6 +72,7 @@ public class PauseUILogic : UILogicTemporary
             }
             else if (item.gameObject.name.Equals("SaveRecordButton"))
             {
+                SaveRecordButton = item;
                 item.onClick.AddListener(() =>
                 {
                     Main.m_UI.OpenTemporaryUI<SaveRecordUILogic>();
@@ -71,6 +81,7 @@ public class PauseUILogic : UILogicTemporary
             }
             else if (item.gameObject.name.Equals("ReadRecordButton"))
             {
+                ReadRecordButton = item;
                 item.onClick.AddListener(() =>
                 {
                     Main.m_UI.OpenTemporaryUI<ReadRecordUILogic>();
@@ -112,7 +123,9 @@ public class PauseUILogic : UILogicTemporary
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
-
+        if (Main.m_Procedure.CurrentProcedure is StartProcedure)
+            SaveRecordButton.interactable = false;
+        else SaveRecordButton.interactable = true;
         UIShowHideHelper.ShowFromUp(UIEntity);
         Log.Info("暂停面板 已打开");
     }
@@ -126,7 +139,7 @@ public class PauseUILogic : UILogicTemporary
         Log.Info("暂停面板 已关闭");
     }
 
-    /// <summary>
+    /// <summary>s
     /// 销毁UI
     /// </summary>
     public override void OnDestroy()

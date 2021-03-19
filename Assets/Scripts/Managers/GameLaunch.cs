@@ -40,7 +40,7 @@ public class GameLaunch : MonoBehaviour
     {
         MainThread.Enable();
 
-        GameManager.Current.LoadStartScreen();
+        GameManager.Enable();
 
         PauseManager.Enable();
     }

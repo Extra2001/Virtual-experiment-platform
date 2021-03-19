@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
-[UIResource(null, null, "UI/Indicator2")]
+[UIResource(null, null, "UI/Indicator/Indicator2")]
 public class Indicator2UILogic : IndicatorBase
 {
     private Text MessageText;

@@ -49,6 +49,7 @@ public class ReadRecordUILogic : UILogicTemporary
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
+        UIShowHideHelper.ShowFromUp(UIEntity);
         Log.Info("读取存档面板 已打开");
     }
     

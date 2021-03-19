@@ -49,7 +49,7 @@ public class SaveRecordUILogic : UILogicTemporary
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
-
+        UIShowHideHelper.ShowFromUp(UIEntity);
         Log.Info("保存存档面板 已打开");
     }
     

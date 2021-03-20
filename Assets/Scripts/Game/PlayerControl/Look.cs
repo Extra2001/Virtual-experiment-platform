@@ -13,6 +13,8 @@ public class Look : HTBehaviour
     private float Field_of_view;
     private GameObject player;
 
+    private bool LookAble = true;
+
     public RotationAxes Axes = RotationAxes.MouseXAndY;
     public float Speed_v = 9.0f;
     public float Speed_h = 9.0f;
@@ -26,10 +28,14 @@ public class Look : HTBehaviour
         Field_of_view = GetComponent<Camera>().fieldOfView;
         Rotation_y = GameObject.Find("Player").GetComponent<Transform>().localEulerAngles.y;
         player = GameObject.Find("Player");
+        Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
     }
     void FixedUpdate()
     {
-        Lookaround();
+        if (LookAble)
+        {
+            Lookaround();
+        }
     }
     void Lookaround()
     {
@@ -64,5 +70,11 @@ public class Look : HTBehaviour
         MouseXAndY = 0,
         MouseX = 1,
         MouseY = 2
+    }
+
+    private void WhenSitdown(object sender, EventHandlerBase handler)
+    {
+        Speed_h /= 20;
+        Speed_v /= 10;
     }
 }

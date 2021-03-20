@@ -11,10 +11,11 @@ public class Move : HTBehaviour
 
     public float Player_speed = 5f;
     private bool Moveable = true;
+    private Vector3 SitPosition = new Vector3(-51,8,-8);
     // Start is called before the first frame update
     void Start()
     {
-        
+        Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
     }
 
     // Update is called once per frame
@@ -44,6 +45,11 @@ public class Move : HTBehaviour
         {
             transform.Translate(Vector3.right * Player_speed * Time.deltaTime);
         }
+    }
+    private void WhenSitdown(object sender, EventHandlerBase handler)
+    {
+        Moveable = false;
+        transform.position = SitPosition;
     }
 
 }

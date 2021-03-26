@@ -32,6 +32,7 @@ public class Look : HTBehaviour
     }
     void FixedUpdate()
     {
+
         if (LookAble)
         {
             Lookaround();

@@ -12,10 +12,12 @@ public class UIAPIInitializer : SingletonBase<UIAPIInitializer>
     public void Initialize()
     {
         Main.m_UI.PreloadingResidentUI<StartUILogic>();
-
         Main.m_UI.PreloadingTemporaryUI<PauseUILogic>();
-
         Main.m_UI.PreloadingTemporaryUI<ModelUILogic>();
+        Main.m_UI.PreloadingResidentUI<ChooseExpUILogic>();
+        Main.m_UI.PreloadingResidentUI<EnterExpressionUILogic>();
+        Main.m_UI.PreloadingResidentUI<AddValueUILogic>();
+        Main.m_UI.PreloadingResidentUI<PreviewUILogic>();
 
         Main.m_UI.PreloadingResidentUI<Indicator1UILogic>();
         Main.m_UI.PreloadingResidentUI<Indicator2UILogic>();

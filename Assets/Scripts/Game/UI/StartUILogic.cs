@@ -19,7 +19,7 @@ public class StartUILogic : UILogicResident
 
         UIEntity.FindChildren("NewGameButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
+            Main.m_Event.Throw<StartNewExpEventHandler>();
         });
         UIEntity.FindChildren("ExitButton").GetComponent<Button>().onClick.AddListener(() =>
         {

@@ -11,6 +11,8 @@ namespace Utils.Record
     {
         public Text _title;
         public Text _time;
+        public Button _LoadButton;
+        public Button _DeleteButton;
         public int recordId { get; set; }
         public string title
         {
@@ -26,31 +28,27 @@ namespace Utils.Record
         // Start is called before the first frame update
         void Start()
         {
-            foreach (var item in GetComponentsInChildren<Button>(true))
-            {
-                if (item.gameObject.name.Equals("LoadRecordButton"))
-                    item.onClick.AddListener(LoadRecord);
-                if (item.gameObject.name.Equals("DeleteRecordButton"))
-                    item.onClick.AddListener(DeleteRecord);
-            }
+            if (_LoadButton != null)
+                _LoadButton.onClick.AddListener(LoadRecord);
+            if (_DeleteButton != null)
+                _DeleteButton.onClick.AddListener(DeleteRecord);
         }
 
         public void SetRecordInfo(RecordInfo recordInfo)
         {
-            this.recordId = recordInfo.recordId;
+            this.recordId = recordInfo.id;
             this.time = recordInfo.timeString;
             this.title = recordInfo.title;
         }
 
         void LoadRecord()
         {
-            RecordManager.currentRecordId = recordId;
-            //Manager.UpdateRecord();
+            RecordManager.records[recordId].LoadToTempRecord();
         }
 
         void DeleteRecord()
         {
-            RecordManager.DeleteRecord(recordId);
+            RecordManager.records[recordId].Delete();
         }
     }
 }

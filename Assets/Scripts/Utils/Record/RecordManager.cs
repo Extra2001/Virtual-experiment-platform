@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System;
 using HT.Framework;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Utils.Record
 {
@@ -14,100 +16,101 @@ namespace Utils.Record
             get => GetRecordInfos();
         }
         /// <summary>
-        /// 获取默认存档
+        /// 存档索引器
         /// </summary>
         /// <param name="Id">存档ID</param>
-        public static RecordIndexor defaultRecord
+        public static RecordIndexor records
         {
             get => new RecordIndexor();
         }
         /// <summary>
-        /// 当前的存档Id
+        /// 工作存档
         /// </summary>
-        public static int currentRecordId
+        public static Record tempRecord
         {
             get
             {
-                if (_currentRecordId == -1)
-                    _currentRecordId = Storage.CommonStorage.GetStorage<HH>("currentRecordId").currentRecordId;
-                return _currentRecordId;
+                if (_tempRecord == null)
+                    _tempRecord = GetRecord(-2);
+                _tempRecord.info.id = -2;
+                return _tempRecord;
             }
-            set
+        }
+
+        private static Storage recordStorage = new Storage(0);
+        private static Record _tempRecord = null;
+
+        // 以下为存档的扩展方法
+        public static void Save(this Record record)
+        {
+            if (record.info.id.Equals(-2))
             {
-                _currentRecordId = value;
-                Storage.CommonStorage.SetStorage("currentRecordId", new HH() { currentRecordId = value });
+                recordStorage.SetStorage($"Record{record.info.id}", record);
+                return;
             }
+            SaveRecord(record);
         }
-        public static DefaultRecord currentDefaultRecord
+        public static void Delete(this Record record)
         {
-            get => GetRecord(currentRecordId);
+            record = new Record()
+            {
+                info = record.info
+            };
+            DeleteRecord(record.info.id);
         }
-        private static int _currentRecordId = -1;
+
         /// <summary>
-        /// 保存由存档管理器收集默认存档内容
+        /// 清空工作存档
         /// </summary>
-        /// <param name="recordInfo">存档信息</param>
-        public static void SaveRecord(RecordInfo recordInfo)
+        /// <returns></returns>
+        public static void ClearTempRecord()
         {
-            SaveRecord(recordInfo, CollectRecordData(recordInfo));
+            _tempRecord = new Record(-2);
         }
         /// <summary>
-        /// 保存已收集好的默认存档内容
+        /// 覆盖保存存档内容
         /// </summary>
-        public static void SaveRecord(RecordInfo recordInfo, DefaultRecord record)
+        public static void SaveRecord(Record record)
         {
-            if (recordInfo == null)
-                recordInfo = DefaultRecord.GenRecordInfo(GetFirstNone());
-            if (string.IsNullOrEmpty(recordInfo.title))
-                recordInfo = DefaultRecord.GenRecordInfo(recordInfo.recordId);
             var list = Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
-            int index = list.FindIndex(x => recordInfo.recordId.Equals(x.recordId));
-            Storage recordStorage = new Storage(recordInfo.recordId);
+            int index = list.FindIndex(x => record.info.id.Equals(x.id));
             if (index == -1)
-                list.Add(recordInfo);
+                list.Add(record.info);
             else
-                list[index] = recordInfo;
-            recordStorage.SetStorage("defaultRecord", record);
+                list[index] = record.info;
+
+            recordStorage.SetStorage($"Record{record.info.id}", record);
             Storage.CommonStorage.SetStorage("RecordInfo", list);
             Main.m_Event.Throw<RecordUpdateEventHandler>();
         }
         /// <summary>
-        /// 获取存档信息列表
-        public static List<RecordInfo> GetRecordInfos()
-        {
-            return Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
-        }
-        /// <summary>
-        /// 获取存档信息列表
-        public static RecordInfo GetRecordInfo(int Id)
-        {
-            return Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo").Find(x => Id.Equals(x.recordId));
-        }
-        /// <summary>
-        /// 获取默认存档
+        /// 深拷贝
         /// </summary>
-        /// <param name="Id">存档ID</param>
-        public static DefaultRecord GetRecord(int Id)
+        public static T DeepCopy<T>(this object obj)
         {
-            if (!RecordContains(Id))
-                return null;
-            Storage recordStorage = new Storage(Id);
-            return recordStorage.GetStorage<DefaultRecord>("defaultRecord");
+            object retval;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(ms, obj);
+                ms.Seek(0, SeekOrigin.Begin);
+                retval = bf.Deserialize(ms);
+                ms.Close();
+            }
+            return (T)retval;
         }
         /// <summary>
-        /// 将存档从存档信息中删除 不会实际删除文件
+        /// 加载到工作存档
         /// </summary>
-        /// <param name="Id">存档ID</param>
-        public static void DeleteRecord(int Id)
+        /// <param name="record"></param>
+        /// <returns></returns>
+        public static Record LoadToTempRecord(this Record record) 
         {
-            var list = Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
-            int index = list.FindIndex(x => Id.Equals(x.recordId));
-            if (index != -1)
-                list.RemoveAt(index);
-            Storage.CommonStorage.SetStorage("RecordInfo", list);
-            Storage storage = new Storage(Id);
-            storage.DeleteStorage();
-            Main.m_Event.Throw<RecordUpdateEventHandler>();
+            var ret = record.DeepCopy<Record>();
+            ret.info = tempRecord.info;
+            _tempRecord = ret;
+            Main.m_Event.Throw<ChangeRecordEventHandler>();
+            return ret;
         }
         /// <summary>
         /// 获取第一个没有存档的ID
@@ -117,45 +120,9 @@ namespace Utils.Record
             var _records = recordInfos;
             for (int i = 1; ; i++)
             {
-                if (_records.FindIndex(x => i.Equals(x.recordId)) == -1)
+                if (_records.FindIndex(x => i.Equals(x.id)) == -1)
                     return i;
             }
-        }
-        /// <summary>
-        /// 获取存档其他附件
-        /// </summary>
-        /// <typeparam name="T">数据模型类</typeparam>
-        /// <param name="Id">存档ID</param>
-        /// <param name="name">附件名称</param>
-        public static T GetAttachments<T>(int Id, string name) where T : new()
-        {
-            if (!RecordContains(Id))
-                return default(T);
-            Storage recordStorage = new Storage(Id);
-            return recordStorage.GetStorage<T>(name);
-        }
-        /// <summary>
-        /// 保存其他附件
-        /// </summary>
-        /// <typeparam name="T">数据模型类</typeparam>
-        /// <param name="Id">存档ID</param>
-        /// <param name="name">附件名称</param>
-        /// <param name="values">内容</param>
-        public static void SetAttachments<T>(int Id, string name, T values) where T : new()
-        {
-            Storage recordStorage = new Storage(Id);
-            recordStorage.SetStorage(name, values);
-        }
-        /// <summary>
-        /// 管理器内置默认存档数据收集器
-        /// </summary>
-        /// <param name="recordInfo">存档信息</param>
-        private static DefaultRecord CollectRecordData(RecordInfo recordInfo)
-        {
-            var record = new DefaultRecord();
-            // 在此处收集存档信息
-
-            return record;
         }
         /// <summary>
         /// 是否存在指定ID的存档
@@ -164,22 +131,49 @@ namespace Utils.Record
         public static bool RecordContains(int Id)
         {
             var list = Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
-            int index = list.FindIndex(x => Id.Equals(x.recordId));
+            int index = list.FindIndex(x => Id.Equals(x.id));
             if (index == -1)
                 return false;
             return true;
         }
+
+        /// <summary>
+        /// 获取存档信息列表
+        /// </summary>
+        private static List<RecordInfo> GetRecordInfos()
+        {
+            return Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
+        }
+        /// <summary>
+        /// 获取存档
+        /// </summary>
+        /// <param name="Id">存档ID</param>
+        private static Record GetRecord(int Id)
+        {
+            return recordStorage.GetStorage<Record>($"Record{Id}");
+        }
+        /// <summary>
+        /// 删除存档
+        /// </summary>
+        /// <param name="Id">存档ID</param>
+        private static void DeleteRecord(int Id)
+        {
+            var list = Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
+            int index = list.FindIndex(x => Id.Equals(x.id));
+            if (index != -1)
+                list.RemoveAt(index);
+            Storage.CommonStorage.SetStorage("RecordInfo", list);
+            recordStorage.DeleteStorage($"Record{Id}");
+
+            Main.m_Event.Throw<RecordUpdateEventHandler>();
+        }
         public class RecordIndexor
         {
-            public DefaultRecord this[int Id]
+            public Record this[int Id]
             {
                 get => GetRecord(Id);
-                set => SaveRecord(GetRecordInfo(Id), value);
+                set => SaveRecord(value);
             }
-        }
-        private class HH
-        {
-            public int currentRecordId { get; set; }
         }
     }
 
@@ -187,11 +181,12 @@ namespace Utils.Record
     /// 存档信息模型类
     /// 用来管理所有存档
     /// </summary>
+    [Serializable]
     public class RecordInfo
     {
-        public int recordId { get; set; }
+        public int id { get; set; }
         public string title { get; set; }
-        public DateTime time { get; set; }
+        public DateTime time { get; set; } = DateTime.Now;
         public string timeString { get => time.ToLocalTime().ToString("F"); }
     }
 }

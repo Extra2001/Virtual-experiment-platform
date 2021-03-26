@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +18,16 @@ public abstract class InstrumentBase : IMeasurable, IResetable {
     public string Name { get; set; }
 
     /// <summary>
+    /// 上限
+    /// </summary>
+    public double URV { get; set; }
+
+    /// <summary>
+    /// 下限
+    /// </summary>
+    public double LRV { get; set; }
+
+    /// <summary>
     /// 仪器误差限
     /// </summary>
     public virtual double ErrorLimit { get; set; }
@@ -24,12 +35,17 @@ public abstract class InstrumentBase : IMeasurable, IResetable {
     /// <summary>
     /// 随机误差
     /// </summary>
-    public virtual double RandomError { get => Random.Range(-1 * (float)RandomErrorLimit, (float)RandomErrorLimit); }
+    public virtual double RandomError { get => UnityEngine.Random.Range(-1 * (float)RandomErrorLimit, (float)RandomErrorLimit); }
 
     /// <summary>
     /// 随机误差限
     /// </summary>
     public double RandomErrorLimit { get; set; }
+
+    /// <summary>
+    /// 主值
+    /// </summary>
+    public virtual double MainValue { get; set; }
 
     /// <summary>
     /// 单位名称

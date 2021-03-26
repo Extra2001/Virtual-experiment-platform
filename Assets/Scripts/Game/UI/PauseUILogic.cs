@@ -67,7 +67,7 @@ public class PauseUILogic : UILogicTemporary
                 item.onClick.AddListener(() =>
                 {
                     PauseManager.Instance.Continue();
-                    Main.m_Procedure.SwitchProcedure<StartProcedure>();
+                    GameManager.Instance.SwitchBackToStart();
                 });
             }
             else if (item.gameObject.name.Equals("SaveRecordButton"))

@@ -23,7 +23,7 @@ namespace Utils.Record
         {
             id = -1;
             this.name = name;
-            directory = $"{Application.persistentDataPath}/LocalStorage/{name}/";
+            directory = $"{Application.persistentDataPath}/LocalStorage/{this.name}/";
         }
         /// <summary>
         /// 游戏通用Storage
@@ -102,8 +102,13 @@ namespace Utils.Record
                 Error = errorHandler
             }));
         }
+        public void DeleteStorage(string key)
+        {
+            string path = directory + key;
+            FileIOHelper.DeleteFile(path);
+        }
 
-        public void DeleteStorage()
+        public void DeleteSelf()
         {
             Directory.Delete(directory, true);
         }
@@ -136,6 +141,10 @@ namespace Utils.Record
                 {
                     sw.Write(data);
                 }
+            }
+            internal static void DeleteFile(string path)
+            {
+                File.Delete(path);
             }
         }
     }

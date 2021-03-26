@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 public class ModelDialogModel
 {
-    public BindableString Title = new BindableString("确认？");
+    public BindableString Title = new BindableString("提示");
 
     public BindableString Message = new BindableString("");
 

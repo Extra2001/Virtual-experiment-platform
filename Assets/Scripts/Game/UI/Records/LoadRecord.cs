@@ -12,11 +12,13 @@ namespace Utils.Record
         public GameObject EmptyObj;
         private GameObject emptyObj;
         private List<RecordCell> showedRecords = new List<RecordCell>();
+
         void Start()
         {
             Main.m_Event.Subscribe<RecordUpdateEventHandler>(RefreshRecord);
             RefreshRecord();
         }
+
         private void RefreshRecord()
         {
             foreach (var item in showedRecords)

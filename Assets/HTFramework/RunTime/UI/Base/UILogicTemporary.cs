@@ -7,7 +7,7 @@
     {
         internal UILogicTemporary _lastUILogic = null;
 
-        protected void NavigateBack()
+        public void NavigateBack()
         {
             if (_lastUILogic != null)
             {

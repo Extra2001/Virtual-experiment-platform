@@ -43,5 +43,7 @@ public class GameLaunch : MonoBehaviour
         GameManager.Enable();
 
         PauseManager.Enable();
+
+        KeyboardManager.Enable();
     }
 }

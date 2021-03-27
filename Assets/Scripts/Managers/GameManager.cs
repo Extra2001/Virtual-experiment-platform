@@ -3,30 +3,58 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utils.Record;
 
 public class GameManager : SingletonBehaviorManager<GameManager>
 {
-    List<Type> ProcedureStack = new List<Type>();
+    List<Type> ProcedureStack { get => RecordManager.tempRecord.procedureStack; }
+
+    public bool CanContinue { get => ProcedureStack.Count > 1; }
 
     public void SwitchBackToStart()
     {
         Main.m_Procedure.SwitchProcedure(ProcedureStack[0]);
-        ProcedureStack.RemoveRange(1, ProcedureStack.Count - 1);
     }
 
     public void SwitchBackProcedure()
     {
-        string hh = "";
-        ProcedureStack.ForEach(x => hh+=x.Name);
-        Debug.Log(hh);
         if (ProcedureStack.Count <= 1) return;
-        Main.m_Procedure.SwitchProcedure(ProcedureStack[ProcedureStack.Count - 2]);
+        if (ProcedureStack.Count == 2)
+        {
+            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            {
+                Message = new BindableString("继续返回将丢失当前进度，继续？"),
+                ConfirmAction = () =>
+                {
+                    ProcedureStack.RemoveAt(ProcedureStack.Count - 1);
+                    Main.m_Procedure.SwitchProcedure(ProcedureStack[ProcedureStack.Count - 1]);
+                }
+            });
+            return;
+        }
         ProcedureStack.RemoveAt(ProcedureStack.Count - 1);
+        Main.m_Procedure.SwitchProcedure(ProcedureStack[ProcedureStack.Count - 1]);
+    }
+
+    public void ContinueExp()
+    {
+        Main.m_Procedure.SwitchProcedure(ProcedureStack[ProcedureStack.Count - 1]);
+    }
+
+    private void StartNewExp()
+    {
+        RecordManager.ClearTempRecord();
+        Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();
+        ProcedureStack.Clear();
+        ProcedureStack.Add(typeof(StartProcedure));
+        ProcedureStack.Add(typeof(ChooseExpProcedure));
     }
 
     private void Start()
     {
-        ProcedureStack.Add(Main.m_Procedure.CurrentProcedure.GetType());
+        Debug.Log(ProcedureStack.Count);
+        if (ProcedureStack.Count == 0)
+            ProcedureStack.Add(typeof(StartProcedure));
         Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
         Main.m_Event.Subscribe<StartNewExpEventHandler>(StartNewExp);
         Main.m_Event.Subscribe<ChooseExpEventHandler>(ChooseExp);
@@ -41,15 +69,6 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         ProcedureStack.Add(typeof(OnChair));
     }
 
-    private void StartNewExp()
-    {
-        Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();
-        ProcedureStack.Add(typeof(ChooseExpProcedure));
-        string hh = "";
-        ProcedureStack.ForEach(x => hh += x.Name);
-        Debug.Log(hh);
-    }
-
     private void ChooseExp(EventHandlerBase handler)
     {
         if ((handler as ChooseExpEventHandler).expId == 0)
@@ -61,35 +80,31 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         {
             // 加载预制实验
         }
-        string hh = "";
-        ProcedureStack.ForEach(x => hh += x.Name);
-        Debug.Log(hh);
     }
 
     private void AddValue()
     {
-        Main.m_Procedure.SwitchProcedure<EnterExpressionProcedure>();
-        ProcedureStack.Add(typeof(EnterExpressionProcedure));
-        string hh = "";
-        ProcedureStack.ForEach(x => hh += x.Name);
-        Debug.Log(hh);
+        if (ValueValidator.ValidateQuantities(RecordManager.tempRecord.quantities))
+        {
+            Main.m_Procedure.SwitchProcedure<EnterExpressionProcedure>();
+            ProcedureStack.Add(typeof(EnterExpressionProcedure));
+        }
     }
 
     private void EnterExpression()
     {
         Main.m_Procedure.SwitchProcedure<PreviewProcedure>();
         ProcedureStack.Add(typeof(PreviewProcedure));
-        string hh = "";
-        ProcedureStack.ForEach(x => hh += x.Name);
-        Debug.Log(hh);
     }
 
     private void PreviewConfirm()
     {
         Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
         ProcedureStack.Add(typeof(EnterClassroomProcedure));
-        string hh = "";
-        ProcedureStack.ForEach(x => hh += x.Name);
-        Debug.Log(hh);
+    }
+
+    public override void OnDestroy()
+    {
+        RecordManager.tempRecord.Save();
     }
 }

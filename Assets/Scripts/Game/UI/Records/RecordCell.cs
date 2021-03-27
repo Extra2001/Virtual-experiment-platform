@@ -13,6 +13,7 @@ namespace Utils.Record
         public Text _time;
         public Button _LoadButton;
         public Button _DeleteButton;
+        public LoadRecord _LoadRecord;
         public int recordId { get; set; }
         public string title
         {
@@ -29,9 +30,9 @@ namespace Utils.Record
         void Start()
         {
             if (_LoadButton != null)
-                _LoadButton.onClick.AddListener(LoadRecord);
+                _LoadButton.onClick.AddListener(()=> { Main.m_UI.GetOpenedUI<ReadRecordUILogic>()?.NavigateBack(); RecordManager.records[recordId].Load(); });
             if (_DeleteButton != null)
-                _DeleteButton.onClick.AddListener(DeleteRecord);
+                _DeleteButton.onClick.AddListener(()=> { RecordManager.records[recordId].Delete(); });
         }
 
         public void SetRecordInfo(RecordInfo recordInfo)
@@ -39,16 +40,6 @@ namespace Utils.Record
             this.recordId = recordInfo.id;
             this.time = recordInfo.timeString;
             this.title = recordInfo.title;
-        }
-
-        void LoadRecord()
-        {
-            RecordManager.records[recordId].LoadToTempRecord();
-        }
-
-        void DeleteRecord()
-        {
-            RecordManager.records[recordId].Delete();
         }
     }
 }

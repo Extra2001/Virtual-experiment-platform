@@ -4,6 +4,7 @@ using UnityEngine;
 using HT.Framework;
 using DG.Tweening;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
@@ -55,13 +56,27 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
 
         CancelButton.onClick.AddListener(() =>
         {
-            NavigateBack();
-            Data.CancelAction?.Invoke();
+            UIShowHideHelper.HideToUp(UIEntity);
+            Task.Delay(300).ContinueWith(x =>
+            {
+                MainThread.Instance.Run(() =>
+                {
+                    NavigateBack();
+                    Data.CancelAction?.Invoke();
+                });
+            });
         });
         ConfirmButton.onClick.AddListener(() =>
         {
-            NavigateBack();
-            Data.ConfirmAction?.Invoke();
+            UIShowHideHelper.HideToUp(UIEntity);
+            Task.Delay(300).ContinueWith(x =>
+            {
+                MainThread.Instance.Run(() =>
+                {
+                    NavigateBack();
+                    Data.ConfirmAction?.Invoke();
+                });
+            });
         });
     }
 
@@ -74,6 +89,11 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
 
         this.Data.ConfirmAction = model.ConfirmAction;
         this.Data.CancelAction = model.CancelAction;
+
+        if (model.ShowCancel)
+            CancelButton.gameObject.SetActive(true);
+        else
+            CancelButton.gameObject.SetActive(false);
 
         if (Main.Current.Pause == false)
         {

@@ -8,7 +8,7 @@ public static class UIShowHideHelper
 {
     public static void ShowFromUp(GameObject UIEntity)
     {
-        UIEntity.transform.localPosition = new Vector3(0, 400, 0);
+        UIEntity.transform.localPosition = new Vector3(0, 500, 0);
         UIEntity.transform.DOLocalMove(new Vector3(0, 0, 0), 0.3f)
             .SetUpdate(true)
             .SetEase(Ease.OutExpo)
@@ -17,7 +17,7 @@ public static class UIShowHideHelper
 
     public static void HideToUp(GameObject UIEntity)
     {
-        UIEntity.transform.DOLocalMove(new Vector3(0, 400, 0), 0.3f)
+        UIEntity.transform.DOLocalMove(new Vector3(0, 500, 0), 0.3f)
             .SetUpdate(true)
             .SetEase(Ease.OutExpo);
     }

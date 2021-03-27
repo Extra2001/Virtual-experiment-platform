@@ -25,19 +25,9 @@ public class StartUILogic : UILogicResident
         {
             Application.Quit();
         });
-        bool showed = false;
         UIEntity.FindChildren("ContinueButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            if (showed)
-            {
-                showed = false;
-                UIAPI.Instance.HideIndicator<Indicator3UILogic>();
-            }
-            else
-            {
-                showed = true;
-                UIAPI.Instance.ShowIndicator<Indicator3UILogic>("E", "打开哈哈哈");
-            }
+            GameManager.Instance.ContinueExp();
         });
     }
 
@@ -46,6 +36,11 @@ public class StartUILogic : UILogicResident
     /// </summary>
     public override void OnOpen(params object[] args)
     {
+        if (GameManager.Instance.CanContinue)
+            UIEntity.FindChildren("ContinueButton").GetComponent<Button>().interactable = true;
+        else
+            UIEntity.FindChildren("ContinueButton").GetComponent<Button>().interactable = false;
+
         base.OnOpen(args);
     }
 

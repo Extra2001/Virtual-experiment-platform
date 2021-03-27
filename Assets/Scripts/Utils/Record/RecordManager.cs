@@ -58,6 +58,25 @@ namespace Utils.Record
             };
             DeleteRecord(record.info.id);
         }
+        public static void Load(this Record record)
+        {
+            LoadToTempRecord(record);
+            PauseManager.Instance.Continue();
+            GameManager.Instance.ContinueExp();
+        }
+        /// <summary>
+        /// 加载到工作存档
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        private static Record LoadToTempRecord(this Record record)
+        {
+            var ret = record.DeepCopy<Record>();
+            ret.info = tempRecord.info;
+            _tempRecord = ret;
+            Main.m_Event.Throw<ChangeRecordEventHandler>();
+            return ret;
+        }
 
         /// <summary>
         /// 清空工作存档
@@ -99,19 +118,7 @@ namespace Utils.Record
             }
             return (T)retval;
         }
-        /// <summary>
-        /// 加载到工作存档
-        /// </summary>
-        /// <param name="record"></param>
-        /// <returns></returns>
-        public static Record LoadToTempRecord(this Record record) 
-        {
-            var ret = record.DeepCopy<Record>();
-            ret.info = tempRecord.info;
-            _tempRecord = ret;
-            Main.m_Event.Throw<ChangeRecordEventHandler>();
-            return ret;
-        }
+        
         /// <summary>
         /// 获取第一个没有存档的ID
         /// </summary>
@@ -136,6 +143,8 @@ namespace Utils.Record
                 return false;
             return true;
         }
+
+        
 
         /// <summary>
         /// 获取存档信息列表

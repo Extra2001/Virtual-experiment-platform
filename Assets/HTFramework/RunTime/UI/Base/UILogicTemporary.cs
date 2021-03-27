@@ -15,6 +15,7 @@
                 Close();
                 _lastUILogic.Open();
             }
+            else Close();
         }
 
         /// <summary>

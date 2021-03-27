@@ -19,4 +19,6 @@ public class ModelDialogModel
     public UnityAction CancelAction { get; set; }
 
     public UnityAction ConfirmAction { get; set; }
+
+    public bool ShowCancel { get; set; } = true;
 }

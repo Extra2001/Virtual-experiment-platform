@@ -10,27 +10,27 @@ public interface IMeasurable {
 public interface IResetable {
     void Reset();
 }
-
+[Serializable]
 public abstract class InstrumentBase : IMeasurable, IResetable {
     /// <summary>
     /// 仪器名称
     /// </summary>
-    public string Name { get; set; }
+    public abstract string Name { get; }
 
     /// <summary>
     /// 上限
     /// </summary>
-    public double URV { get; set; }
+    public abstract double URV { get; }
 
     /// <summary>
     /// 下限
     /// </summary>
-    public double LRV { get; set; }
+    public abstract double LRV { get; }
 
     /// <summary>
     /// 仪器误差限
     /// </summary>
-    public virtual double ErrorLimit { get; set; }
+    public abstract double ErrorLimit { get; }
 
     /// <summary>
     /// 随机误差
@@ -40,27 +40,27 @@ public abstract class InstrumentBase : IMeasurable, IResetable {
     /// <summary>
     /// 随机误差限
     /// </summary>
-    public double RandomErrorLimit { get; set; }
+    public abstract double RandomErrorLimit { get; set; }
 
     /// <summary>
     /// 主值
     /// </summary>
-    public virtual double MainValue { get; set; }
+    public abstract double MainValue { get; set; }
 
     /// <summary>
     /// 单位名称
     /// </summary>
-    public string Unit { get; set; }
+    public abstract string Unit { get; }
 
     /// <summary>
     /// 单位符号
     /// </summary>
-    public string UnitSymbol { get; set; }
+    public abstract string UnitSymbol { get; }
 
     /// <summary>
     /// 游戏对象
     /// </summary>
-    public GameObject gameObject { get; set; }
+    public abstract GameObject gameObject { get; set; }
 
     /// <summary>
     /// 测量获取数据

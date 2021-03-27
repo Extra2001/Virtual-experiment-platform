@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Utils.Record
 {
@@ -25,5 +26,12 @@ namespace Utils.Record
         }
 
         public RecordInfo info { get; set; } = new RecordInfo();
+
+        public List<Type> procedureStack { get; set; } = new List<Type>();
+
+        public List<QuantityModel> quantities { get; set; } = new List<QuantityModel>();
+
+        public string stringExpression { get; set; } = "";
+        public string latexExpression { get; set; } = "";
     }
 }

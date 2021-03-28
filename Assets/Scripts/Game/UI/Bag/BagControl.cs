@@ -6,7 +6,7 @@ using DG.Tweening;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
-[UIResource(null, null, "UI/Select_instruments/Select_instrument")]
+[UIResource(null, null, "UI/Bag/Bag")]
 public class BagControl : UILogicTemporary
 {
 	/// <summary>

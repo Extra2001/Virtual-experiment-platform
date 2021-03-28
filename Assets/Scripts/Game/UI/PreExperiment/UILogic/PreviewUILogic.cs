@@ -23,6 +23,8 @@ public class PreviewUILogic : UILogicResident
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
+
+        UIEntity.GetComponent<PreviewExp>()?.LoadQuantities();
     }
 
 	/// <summary>

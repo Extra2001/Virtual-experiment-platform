@@ -7,26 +7,15 @@ using System.Threading.Tasks;
 
 public class PauseManager : SingletonBehaviorManager<PauseManager>
 {
-    private bool canSetEvent = true;
-
-    private void Update()
+    private void Start()
     {
-        if (canSetEvent && Input.GetKey(KeyCode.Escape))
+        KeyboardManager.Instance.Register(KeyCode.Escape, () =>
         {
             if (Main.Current.Pause)
-            {
                 Continue();
-            }
             else
-            {
                 Pause();
-            }
-            canSetEvent = false;
-            Task.Delay(300).ContinueWith((_) =>
-            {
-                canSetEvent = true;
-            });
-        }
+        });
     }
 
     /// <summary>

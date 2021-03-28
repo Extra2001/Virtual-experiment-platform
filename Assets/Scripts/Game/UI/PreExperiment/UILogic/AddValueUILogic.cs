@@ -6,7 +6,7 @@ using DG.Tweening;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
-[UIResource(null, null, "UI/PreExperiment/AddValuePanel")]
+[UIResource(null, null, "UI/PreExperiment/AddQuantityPanel")]
 public class AddValueUILogic : UILogicResident
 {
 	/// <summary>

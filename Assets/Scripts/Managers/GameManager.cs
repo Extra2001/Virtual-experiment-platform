@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Utils.Record;
 
 public class GameManager : SingletonBehaviorManager<GameManager>
 {
@@ -103,6 +102,9 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         ProcedureStack.Add(typeof(EnterClassroomProcedure));
     }
 
+    /// <summary>
+    /// 自动保存
+    /// </summary>
     public override void OnDestroy()
     {
         RecordManager.tempRecord.Save();

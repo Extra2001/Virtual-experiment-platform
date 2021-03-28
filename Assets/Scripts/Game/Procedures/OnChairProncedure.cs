@@ -23,6 +23,12 @@ public class OnChair : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         base.OnEnter(lastProcedure);
+        KeyboardManager.Instance.Register(KeyCode.B, () =>
+        {
+            // 不必判断当前流程，在流程的生命周期结束的函数取消注册就OK
+            Main.m_UI.OpenTemporaryUI<BagControl>();
+            Debug.Log("B");
+        });
     }
 
     /// <summary>

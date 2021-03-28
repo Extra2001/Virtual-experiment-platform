@@ -11,6 +11,7 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     //此脚本控制非连续按下的所有键盘按键（移动及卡尺夹紧除外），下行标注所有按键作用
     //ESC：暂停，E：坐上凳子，B：打开关闭背包，~~~~~~~~~~~~~~
     private Dictionary<KeyCode, Action> registered = new Dictionary<KeyCode, Action>();
+    private Dictionary<KeyCode, Action> registeredHoldOn = new Dictionary<KeyCode, Action>();
     private bool Inputable = true;
 
     private void Start()
@@ -34,6 +35,9 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
                     InputGap();
                     item.Value.Invoke();
                 }
+        foreach (var item in registeredHoldOn)
+            if (Input.GetKeyDown(item.Key))
+                item.Value.Invoke();
     }
 
     /// <summary>
@@ -45,7 +49,18 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     {
         if (registered.ContainsKey(key))
             throw new Exception("该按键已注册");
+        if (registeredHoldOn.ContainsKey(key))
+            throw new Exception("该按键已注册");
         registered.Add(key, action);
+    }
+
+    public void RegisterHoldOn(KeyCode key, Action action)
+    {
+        if (registered.ContainsKey(key))
+            throw new Exception("该按键已注册");
+        if (registeredHoldOn.ContainsKey(key))
+            throw new Exception("该按键已注册");
+        registeredHoldOn.Add(key, action);
     }
 
     /// <summary>
@@ -56,6 +71,12 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     {
         if (registered.ContainsKey(key))
             registered.Remove(key);
+    }
+
+    public void UnRegisterHoldOn(KeyCode key)
+    {
+        if (registeredHoldOn.ContainsKey(key))
+            registeredHoldOn.Remove(key);
     }
 
     private void InputGap()

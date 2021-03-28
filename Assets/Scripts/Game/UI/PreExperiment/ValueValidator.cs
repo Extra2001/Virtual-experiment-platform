@@ -8,6 +8,7 @@ public class ValueValidator
 {
     public static bool ValidateQuantities(List<QuantityModel> models)
     {
+        return true;
         if (models.Count < 2)
         {
             UIAPI.Instance.ShowModel(new ModelDialogModel()

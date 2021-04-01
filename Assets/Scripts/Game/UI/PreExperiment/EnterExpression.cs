@@ -33,7 +33,7 @@ public class EnterExpression : HTBehaviour
         });
     }
 
-    private void SyncExpression()
+    public void SyncExpression()
     {
         if (RecordManager.tempRecord.expressionKind == Expression.String)
         {

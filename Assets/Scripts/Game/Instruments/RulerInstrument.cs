@@ -4,9 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[EntityResource(null, null, "")]
 public class RulerInstrument : InstrumentBase
 {
-    public override string Name { get => "钢板尺"; }
+    public override string InstName { get => "钢板尺"; }
 
     public override double URV { get => 500; }
 
@@ -28,7 +29,7 @@ public class RulerInstrument : InstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override void Reset()
+    public override void InstReset()
     {
         throw new System.NotImplementedException();
     }

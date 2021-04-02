@@ -25,24 +25,24 @@ public class adsorb_ruler : HTBehaviour
     void Update()
     {
 
-        if (!Input.GetMouseButton(1))
-        {
-            if (!Input.GetMouseButton(0))
-            {
-                for (int i = 0; i < m_Desk.Length; i++)
-                {
-                    GameObject RU = m_Desk[i];
-                    if (Vector3.Distance(RU.transform.position, BO.transform.position) <= 0.3f && Doing)
-                    {
-                        transform.position += (BO.transform.position - RU.transform.position) / t;
-                    }
-                    else if (Vector3.Distance(RU.transform.position, BO.transform.position) > 0.3f)
-                    {
-                        Doing = true;
-                    }
-                }
-            }
-        }
+        //if (!Input.GetMouseButton(1))
+        //{
+        //    if (!Input.GetMouseButton(0))
+        //    {
+        //        for (int i = 0; i < m_Desk.Length; i++)
+        //        {
+        //            GameObject RU = m_Desk[i];
+        //            if (Vector3.Distance(RU.transform.position, BO.transform.position) <= 0.3f && Doing)
+        //            {
+        //                transform.position += (BO.transform.position - RU.transform.position) / t;
+        //            }
+        //            else if (Vector3.Distance(RU.transform.position, BO.transform.position) > 0.3f)
+        //            {
+        //                Doing = true;
+        //            }
+        //        }
+        //    }
+        //}
     }
     private void OnTriggerEnter(Collider other)
     {

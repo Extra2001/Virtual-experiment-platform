@@ -2,20 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using HT.Framework;
 
 public interface IMeasurable {
     double GetMeasureResult();
 }
 
 public interface IResetable {
-    void Reset();
+    void InstReset();
 }
-[Serializable]
-public abstract class InstrumentBase : IMeasurable, IResetable {
+
+public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable {
     /// <summary>
     /// 仪器名称
     /// </summary>
-    public abstract string Name { get; }
+    public abstract string InstName { get; }
 
     /// <summary>
     /// 上限
@@ -71,5 +72,5 @@ public abstract class InstrumentBase : IMeasurable, IResetable {
     /// <summary>
     /// 重置仪器状态
     /// </summary>
-    public abstract void Reset();
+    public abstract void InstReset();
 }

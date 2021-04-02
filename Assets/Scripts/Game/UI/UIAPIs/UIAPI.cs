@@ -4,9 +4,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using System;
 
 public class UIAPI : SingletonBehaviorManager<UIAPI>
 {
+    public void ShowInstrumentInfo<T>() where T : InstrumentBase
+    {
+        Main.m_UI.OpenTemporaryUI<InstrmentInfoUILogic>(typeof(T));
+    }
+
+    public void ShowInstrumentInfo(Type instrument)
+    {
+        Main.m_UI.OpenTemporaryUI<InstrmentInfoUILogic>(instrument);
+    }
+
+    /// <summary>
+    /// ÏÔÊ¾Ä£Ì¬´°¿Ú
+    /// </summary>
+    /// <param name="model"></param>
     public void ShowModel(ModelDialogModel model)
     {
         Main.m_UI.OpenTemporaryUI<ModelUILogic>();
@@ -15,7 +30,6 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
 
     public void ShowIndicator<T>(string key, string message) where T : IndicatorBase
     {
-        
         Main.m_UI.GetUI<T>().ShowIndicator(key, message);
         Main.m_UI.OpenResidentUI<T>();
     }

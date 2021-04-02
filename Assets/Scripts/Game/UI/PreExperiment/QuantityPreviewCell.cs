@@ -21,7 +21,7 @@ public class QuantityPreviewCell : HTBehaviour
         _Symbol.text = model.Symbol;
         _Group.text = model.Groups.ToString();
         var inst = (InstrumentBase)System.Activator.CreateInstance(model.InstrumentType);
-        _InstrumentName.text = inst.Name;
+        _InstrumentName.text = inst.InstName;
         _InstrumentUnit.text = inst.UnitSymbol;
     }
 }

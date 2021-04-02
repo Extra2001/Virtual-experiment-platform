@@ -53,7 +53,7 @@ public class QuantityCell : HTBehaviour
             instruments.Add(i);
         }
         _Instrument.ClearOptions();
-        _Instrument.AddOptions(instruments.Select(x => x.Name).ToList());
+        _Instrument.AddOptions(instruments.Select(x => x.InstName).ToList());
 
         _Name.text = model.Name;
         _Symbol.text = model.Symbol;

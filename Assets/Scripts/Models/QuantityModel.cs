@@ -12,4 +12,6 @@ public class QuantityModel
     public string Symbol { get; set; } = "";
     public Type InstrumentType { get; set; } = typeof(RulerInstrument);
     public int Groups { get; set; } = 8;
+
+    public List<double> Data { get; set; } = new List<double>();
 }

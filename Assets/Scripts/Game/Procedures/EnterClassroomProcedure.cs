@@ -8,6 +8,7 @@ using DG.Tweening;
 /// </summary>
 public class EnterClassroomProcedure : ProcedureBase
 {
+    bool showed = false;
     /// <summary>
     /// 流程初始化
     /// </summary>
@@ -30,6 +31,14 @@ public class EnterClassroomProcedure : ProcedureBase
             obj.SetActive(true);
         });*/
 
+        KeyboardManager.Instance.Register(KeyCode.T, () =>
+        {
+            if (showed)
+                UIAPI.Instance.HideDataTable();
+            else
+                UIAPI.Instance.ShowDataTable();
+            showed = !showed;
+        });
         base.OnEnter(lastProcedure);
     }
 
@@ -39,6 +48,9 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
+        if (showed)
+            UIAPI.Instance.HideDataTable();
+        KeyboardManager.Instance.UnRegister(KeyCode.T);
         base.OnLeave(nextProcedure);
     }
 

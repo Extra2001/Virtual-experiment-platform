@@ -28,5 +28,4 @@ public class DataInput : HTBehaviour
         Value = value;
         GroupNumber = groupNumber;
     }
-    
 }

@@ -40,4 +40,22 @@ public static class UIShowHideHelper
             .SetUpdate(true)
             .SetEase(Ease.OutExpo);
     }
+
+    public static void ShowFromLeft(GameObject UIEntity)
+    {
+        Debug.Log(UIEntity.transform.localPosition.x);
+        var tmp = UIEntity.transform.localPosition;
+        tmp.x = -900;
+        UIEntity.transform.localPosition = tmp;
+        UIEntity.transform.DOLocalMoveX(0, 0.5f)
+            .SetUpdate(true)
+            .SetEase(Ease.OutExpo);
+    }
+
+    public static void HideToLeft(GameObject UIEntity)
+    {
+        UIEntity.transform.DOLocalMoveX(-900, 0.5f)
+            .SetUpdate(true)
+            .SetEase(Ease.OutExpo);
+    }
 }

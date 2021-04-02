@@ -8,6 +8,26 @@ using System;
 
 public class UIAPI : SingletonBehaviorManager<UIAPI>
 {
+    public void ShowDataTable()
+    {
+        Main.m_UI.GetUI<DatatableUILogic>().Show();
+    }
+
+    public void ShowDataTable(Type type)
+    {
+        Main.m_UI.GetUI<DatatableUILogic>().Show(type);
+    }
+
+    public void ShowDataTable<T>() where T:InstrumentBase
+    {
+        Main.m_UI.GetUI<DatatableUILogic>().Show(typeof(T));
+    }
+
+    public void HideDataTable()
+    {
+        Main.m_UI.GetUI<DatatableUILogic>().Hide();
+    }
+
     public void ShowInstrumentInfo<T>() where T : InstrumentBase
     {
         Main.m_UI.OpenTemporaryUI<InstrmentInfoUILogic>(typeof(T));

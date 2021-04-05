@@ -25,8 +25,6 @@ public class QuantityCell : HTBehaviour
 
     private QuantityModel QuantityReference = null;
 
-    
-
     private void SetQuantity(QuantityModel model)
     {
         instruments.Clear();

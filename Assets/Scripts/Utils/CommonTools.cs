@@ -37,8 +37,12 @@ public static class CommonTools
         return Activator.CreateInstance(instrument) as InstrumentBase;
     }
 
+    private static Dictionary<string, Sprite> spritePool = new Dictionary<string, Sprite>();
+
     public static Sprite GetSprite(string path)
     {
+        if (spritePool.ContainsKey(path))
+            return spritePool[path];
         using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
         {
             fs.Seek(0, SeekOrigin.Begin);
@@ -49,6 +53,7 @@ public static class CommonTools
             texture2D.LoadImage(bytes);
 
             Sprite ret = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            spritePool.Add(path, ret);
             return ret;
         }
     }

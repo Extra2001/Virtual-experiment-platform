@@ -30,6 +30,8 @@ public class GameLaunch : MonoBehaviour
     {
         // 启动服务程序
 
+        ProcessManager.StartService();
+
         Main.m_Event.Throw<ServiceStartedEventHandler>();
     }
 
@@ -45,5 +47,10 @@ public class GameLaunch : MonoBehaviour
         PauseManager.Enable();
 
         KeyboardManager.Enable();
+    }
+
+    private void OnDestroy()
+    {
+        ProcessManager.StopService();
     }
 }

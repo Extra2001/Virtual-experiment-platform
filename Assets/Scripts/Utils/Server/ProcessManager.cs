@@ -8,29 +8,57 @@ using System.Net.NetworkInformation;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-public class ProcessManager
+public static class ProcessManager
 {
-    public string FileName { get => ""; }
-    private Process process = null;
+    public static string FileName => @"C:\Users\jingx\PycharmProjects\testFlaskProject\venv\Scripts\python.exe";
+    public static int Port { get; private set; }
+    private static Process process = null;
 
-    public void StartService()
+    public static void StartService()
     {
-        process = Process.Start(FileName, GetPort().ToString());
-        process.Exited += Process_Exited;
+        int port = GetPort();
+        var startInfo = new ProcessStartInfo()
+        {
+            FileName = FileName,
+            Arguments = $@"-u C:\Users\jingx\PycharmProjects\testFlaskProject\app.py {port}",
+            CreateNoWindow = true,
+            UseShellExecute = false,
+            RedirectStandardError = true,
+            RedirectStandardOutput = true
+        };
+        (process = Process.Start(startInfo)).Exited += Process_Exited;
+        
+        
+        Task.Delay(2000).ContinueWith(_=>
+        {
+            UnityEngine.Debug.Log(process.StandardOutput.ReadToEnd());
+        });
+        if (false)
+            UnityEngine.Debug.Log($"服务未能成功启动，请检查配置");
+        else
+            UnityEngine.Debug.Log($"服务已运行在 http://localhost:{port}/");
+
     }
 
-    private void Process_Exited(object sender, System.EventArgs e)
+    private static void Process_Exited(object sender, System.EventArgs e)
     {
+        UnityEngine.Debug.Log($"服务中途崩溃。");
         StartService();
     }
 
-    public void StopService()
+    public static void StopService()
     {
         process.Exited -= Process_Exited;
-        process.Kill();
+        if (process.HasExited)
+            UnityEngine.Debug.Log($"服务在此前已停止。");
+        else
+        {
+            process.Kill();
+            UnityEngine.Debug.Log($"服务已停止。");
+        }
     }
 
-    private int GetPort()
+    private static int GetPort()
     {
         System.Random r = new System.Random();
         for (int i = 0; i < 10000; i++)
@@ -42,7 +70,7 @@ public class ProcessManager
         return 0;
     }
 
-    private bool PortInUse(int port)
+    private static bool PortInUse(int port)
     {
         bool inUse = false;
 

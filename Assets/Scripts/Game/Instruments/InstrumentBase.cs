@@ -3,16 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using HT.Framework;
+using System.Threading.Tasks;
 
-public interface IMeasurable {
+public interface IMeasurable
+{
     double GetMeasureResult();
 }
 
-public interface IResetable {
+public interface IResetable
+{
     void InstReset();
 }
 
-public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable {
+public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable
+{
     /// <summary>
     /// 仪器名称
     /// </summary>
@@ -62,6 +66,8 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable 
     /// 游戏对象
     /// </summary>
     public abstract GameObject gameObject { get; set; }
+
+    public abstract Sprite previewImage { get; }
 
     /// <summary>
     /// 测量获取数据

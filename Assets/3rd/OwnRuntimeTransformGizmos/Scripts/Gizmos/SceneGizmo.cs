@@ -366,6 +366,7 @@ namespace RTEditor
         {
             GameObject gizmoCameraObj = new GameObject("Scene Gizmo Camera");
             _gizmoCamera = gizmoCameraObj.AddComponent<Camera>();
+            _gizmoCamera.gameObject.SetActive(false);
             _gizmoCameraTransform = _gizmoCamera.transform;
             _gizmoCamera.cullingMask = 0;
             _gizmoCamera.clearFlags = CameraClearFlags.Depth;

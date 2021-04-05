@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using UnityEngine;
 
 /// <summary>
 /// 默认存档数据模型类
@@ -33,4 +33,8 @@ public class Record
     public Expression expressionKind { get; set; } = Expression.String;
     public string stringExpression { get; set; } = "";
     public string latexExpression { get; set; } = "";
+
+    public InstrumentInfoModel showedInstrument { get; set; } = new InstrumentInfoModel();
+
+    public List<ObjectsModel> objects { get; set; } = new List<ObjectsModel>();
 }

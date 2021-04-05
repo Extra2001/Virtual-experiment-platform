@@ -8,13 +8,9 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 
         void Start()
         {
-            var items = Enumerable.Range(0, 6)
-                .Select(i => new ItemData($"Cell {i}"))
-                .ToArray();
-
+            var items = new ItemData[CommonTools.GetSubClassNames(typeof(InstrumentBase)).Count]; 
             scrollView.UpdateData(items);
             scrollView.SelectCell(0);
         }
     }
 }
-

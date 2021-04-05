@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[EntityResource(null, null, "")]
+[EntityResource(null, null, "Instruments/Ruler/rulerRescaled")]
 public class RulerInstrument : InstrumentBase
 {
     public override string InstName { get => "钢板尺"; }
@@ -23,6 +23,8 @@ public class RulerInstrument : InstrumentBase
     public override string UnitSymbol { get => "mm"; }
 
     public override GameObject gameObject { get; set; }
+
+    public override Sprite previewImage { get => Resources.Load<Sprite>("Instruments/Ruler/ruler_preview"); }
 
     public override double GetMeasureResult()
     {

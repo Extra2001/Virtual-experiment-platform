@@ -83,7 +83,9 @@ namespace UnityEngine.UI.Extensions
             set => decelerationRate = value;
         }
 
-        [SerializeField] Snap snap = new Snap {
+        [SerializeField]
+        Snap snap = new Snap
+        {
             Enable = true,
             VelocityThreshold = 0.5f,
             Duration = 0.3f,

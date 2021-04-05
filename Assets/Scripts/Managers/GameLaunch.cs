@@ -23,12 +23,16 @@ public class GameLaunch : MonoBehaviour
     /// </summary>
     private void PreLoadingAssets()
     {
-        
+        // 加载仪器
+        foreach(var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)))
+            Main.m_Entity.CreateEntity(item, entityName: item.Name);
     }
 
     private void LaunchServices()
     {
         // 启动服务程序
+
+        ProcessManager.StartService();
 
         Main.m_Event.Throw<ServiceStartedEventHandler>();
     }
@@ -45,5 +49,10 @@ public class GameLaunch : MonoBehaviour
         PauseManager.Enable();
 
         KeyboardManager.Enable();
+    }
+
+    private void OnDestroy()
+    {
+        ProcessManager.StopService();
     }
 }

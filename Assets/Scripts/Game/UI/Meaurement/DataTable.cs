@@ -23,7 +23,6 @@ public class DataTable : HTBehaviour
         showedColumn.Clear();
         foreach (var item in RecordManager.tempRecord.quantities)
         {
-            Debug.Log(item.Name);
             if (filter.Invoke(item.InstrumentType))
             {
                 var showed = Instantiate(_dataColumn, _ColumnContainer.transform);

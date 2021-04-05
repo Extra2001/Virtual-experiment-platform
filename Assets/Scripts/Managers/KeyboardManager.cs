@@ -48,18 +48,32 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     public void Register(KeyCode key, Action action)
     {
         if (registered.ContainsKey(key))
+        {
+            Debug.LogError($"{key}建已被注册");
             throw new Exception("该按键已注册");
+        }
         if (registeredHoldOn.ContainsKey(key))
+        {
+            Debug.LogError($"{key}建已被注册");
             throw new Exception("该按键已注册");
+        }
+        Debug.Log($"已注册{key}键");
         registered.Add(key, action);
     }
 
     public void RegisterHoldOn(KeyCode key, Action action)
     {
         if (registered.ContainsKey(key))
+        {
+            Debug.LogError($"{key}建已被注册");
             throw new Exception("该按键已注册");
+        }
         if (registeredHoldOn.ContainsKey(key))
+        {
+            Debug.LogError($"{key}建已被注册");
             throw new Exception("该按键已注册");
+        }
+        Debug.Log($"已注册{key}键");
         registeredHoldOn.Add(key, action);
     }
 

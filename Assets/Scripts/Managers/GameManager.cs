@@ -10,6 +10,19 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     public bool CanContinue { get => ProcedureStack.Count > 1; }
 
+    private void Start()
+    {
+        if (ProcedureStack.Count == 0)
+            ProcedureStack.Add(typeof(StartProcedure));
+        Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
+        Main.m_Event.Subscribe<StartNewExpEventHandler>(StartNewExp);
+        Main.m_Event.Subscribe<ChooseExpEventHandler>(ChooseExp);
+        Main.m_Event.Subscribe<AddValueEventHandler>(AddValue);
+        Main.m_Event.Subscribe<EnterExpressionEventHandler>(EnterExpression);
+        Main.m_Event.Subscribe<PreviewConfirmEventHandler>(PreviewConfirm);
+        Main.m_Event.Subscribe<StartUncertaintyEventHandler>(EnterUncertainty);
+    }
+
     public void SwitchBackToStart()
     {
         Main.m_Procedure.SwitchProcedure(ProcedureStack[0]);
@@ -49,18 +62,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         ProcedureStack.Add(typeof(ChooseExpProcedure));
     }
 
-    private void Start()
-    {
-        Debug.Log(ProcedureStack.Count);
-        if (ProcedureStack.Count == 0)
-            ProcedureStack.Add(typeof(StartProcedure));
-        Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
-        Main.m_Event.Subscribe<StartNewExpEventHandler>(StartNewExp);
-        Main.m_Event.Subscribe<ChooseExpEventHandler>(ChooseExp);
-        Main.m_Event.Subscribe<AddValueEventHandler>(AddValue);
-        Main.m_Event.Subscribe<EnterExpressionEventHandler>(EnterExpression);
-        Main.m_Event.Subscribe<PreviewConfirmEventHandler>(PreviewConfirm);
-    }
+    
 
     private void WhenSitdown(object sender, EventHandlerBase handler)
     {
@@ -100,6 +102,14 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     {
         Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
         ProcedureStack.Add(typeof(EnterClassroomProcedure));
+    }
+
+    private void EnterUncertainty()
+    {
+        Main.m_Procedure.SwitchProcedure<EnterUncertaintyProcedure>();
+        var pro = Main.m_Procedure.GetProcedure<EnterUncertaintyProcedure>();
+
+        
     }
 
     /// <summary>

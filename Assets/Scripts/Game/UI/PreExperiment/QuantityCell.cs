@@ -25,31 +25,12 @@ public class QuantityCell : HTBehaviour
 
     private QuantityModel QuantityReference = null;
 
-    private List<Type> GetSubClassNames(Type parentType)
-    {
-        var subTypeList = new List<Type>();
-        var assembly = parentType.Assembly;
-        var assemblyAllTypes = assembly.GetTypes();
-        foreach (var itemType in assemblyAllTypes)
-        {
-            var baseType = itemType.BaseType;
-            if (baseType != null)
-            {
-                if (baseType.Name == parentType.Name)
-                {
-                    subTypeList.Add(itemType);
-                }
-            }
-        }
-        return subTypeList;
-    }
-
     private void SetQuantity(QuantityModel model)
     {
         instruments.Clear();
-        foreach (var item in GetSubClassNames(typeof(InstrumentBase)))
+        foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)))
         {
-            var i = (InstrumentBase)Activator.CreateInstance(item);
+            var i = item.CreateInstrumentInstance();
             instruments.Add(i);
         }
         _Instrument.ClearOptions();

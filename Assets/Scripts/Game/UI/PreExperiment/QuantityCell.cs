@@ -32,7 +32,7 @@ public class QuantityCell : HTBehaviour
         instruments.Clear();
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)))
         {
-            var i = (InstrumentBase)Activator.CreateInstance(item);
+            var i = item.CreateInstrumentInstance();
             instruments.Add(i);
         }
         _Instrument.ClearOptions();

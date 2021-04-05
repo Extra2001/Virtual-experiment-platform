@@ -36,7 +36,7 @@ public class UncertaintyInput : HTBehaviour
         this.quantity = quantity;
         _Name.text = quantity.Name;
         _Symbol.text = quantity.Symbol;
-        var instance = (InstrumentBase)System.Activator.CreateInstance(quantity.InstrumentType);
+        var instance = quantity.InstrumentType.CreateInstrumentInstance();
         _Unit.text = instance.UnitSymbol;
         _Instrument.text = instance.InstName;
         UA.text = quantity.UA.ToString();

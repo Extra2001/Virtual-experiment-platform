@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Obj_To_Electronic_scale : HTBehaviour
 {
@@ -19,12 +20,20 @@ public class Obj_To_Electronic_scale : HTBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        GameObject ES = GameObject.Find("ElectronicScales");
+                if (Vector3.Distance(ES.transform.position, this.transform.position) <= 3.0f && Doing)
+                    {
+                        absord();
+                    }
+                    else if (Vector3.Distance(ES.transform.position,this.transform.position) > 3.0f)
+                    {
+                        Doing = true;
+                    }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name== "ElectronicScales")
+        if (other.tag== "Tools_Be_Moved")
         {
             Doing = false;
         }

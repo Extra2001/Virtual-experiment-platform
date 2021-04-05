@@ -56,7 +56,7 @@ public class InstrumentInfo : HTBehaviour
 
     public void ShowInstrument(Type instrument)
     {
-        var instance = (InstrumentBase)Activator.CreateInstance(instrument);
+        var instance = instrument.CreateInstrumentInstance();
         _instrument = instance;
 
         _Name.text = instance.InstName;

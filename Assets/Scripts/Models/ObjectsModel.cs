@@ -20,6 +20,4 @@ public class ObjectsModel
     public Vector3 position { get; set; } = new Vector3();
     public Vector3 rotation { get; set; } = new Vector3();
     public Vector3 maxSize { get; set; } = new Vector3();
-
-    public Sprite PreviewImageSprite => CommonTools.GetSprite(PreviewImage);
 }

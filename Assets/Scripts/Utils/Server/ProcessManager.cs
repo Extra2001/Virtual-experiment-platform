@@ -27,16 +27,7 @@ public static class ProcessManager
             RedirectStandardOutput = true
         };
         (process = Process.Start(startInfo)).Exited += Process_Exited;
-        
-        
-        Task.Delay(2000).ContinueWith(_=>
-        {
-            UnityEngine.Debug.Log(process.StandardOutput.ReadToEnd());
-        });
-        if (false)
-            UnityEngine.Debug.Log($"服务未能成功启动，请检查配置");
-        else
-            UnityEngine.Debug.Log($"服务已运行在 http://localhost:{port}/");
+        UnityEngine.Debug.Log($"服务已运行在 http://localhost:{port}/");
 
     }
 

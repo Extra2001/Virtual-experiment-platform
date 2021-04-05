@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[EntityResource(null, null, "")]
+[EntityResource(null, null, "Instruments/Ruler/rulerRescaled")]
 public class RulerInstrument : InstrumentBase
 {
     public override string InstName { get => "钢板尺"; }

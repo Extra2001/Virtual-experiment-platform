@@ -14,4 +14,6 @@ public class QuantityModel
     public int Groups { get; set; } = 8;
 
     public List<double> Data { get; set; } = new List<double>();
+    public double UA { get; set; } = 0.0;
+    public double UB { get; set; } = 0.0;
 }

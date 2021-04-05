@@ -24,7 +24,6 @@ public class PauseUILogic : UILogicTemporary
     public override void OnInit()
     {
         base.OnInit();
-        Log.Info("暂停面板 已加载");
         SubscribeEvent();
         AddInnerLogic();
     }
@@ -127,7 +126,6 @@ public class PauseUILogic : UILogicTemporary
             SaveRecordButton.interactable = false;
         else SaveRecordButton.interactable = true;
         UIShowHideHelper.ShowFromUp(UIEntity);
-        Log.Info("暂停面板 已打开");
     }
 
     /// <summary>
@@ -136,7 +134,6 @@ public class PauseUILogic : UILogicTemporary
     public override void OnClose()
     {
         base.OnClose();
-        Log.Info("暂停面板 已关闭");
     }
 
     /// <summary>s
@@ -145,7 +142,6 @@ public class PauseUILogic : UILogicTemporary
     public override void OnDestroy()
     {
         base.OnDestroy();
-        Log.Info("暂停面板 已销毁");
     }
 
     /// <summary>

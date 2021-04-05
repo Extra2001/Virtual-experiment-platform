@@ -49,8 +49,6 @@ public class DataColumn : HTBehaviour
                 int tmp = i;
                 showed._Value.onEndEdit.AddListener(_ =>
                 {
-                    Debug.Log(quantity.Data.Count);
-                    Debug.Log(tmp);
                     quantity.Data[tmp] = showed.Value;
                 });
             }

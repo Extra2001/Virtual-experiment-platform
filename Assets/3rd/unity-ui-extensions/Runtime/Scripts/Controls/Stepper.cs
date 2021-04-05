@@ -94,14 +94,14 @@ namespace UnityEngine.UI.Extensions
         {
             base.OnValidate();
 
-            RecreateSprites(sides);
-            if (separator)
-                LayoutSides();
+            //RecreateSprites(sides);
+            ////if (separator)
+            ////    LayoutSides();
 
-            if (!wrap)
-            {
-                DisableAtExtremes(sides);
-            }
+            //if (!wrap)
+            //{
+            //    DisableAtExtremes(sides);
+            //}
         }
 #endif
 

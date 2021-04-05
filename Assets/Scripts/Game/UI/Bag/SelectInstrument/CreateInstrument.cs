@@ -4,11 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class CreateInstrument : HTBehaviour
 {
     //启用自动化
     protected override bool IsAutomate => true;
+
+    public Type InstrumentType;
 
     private Button btn;
     private bool IfConsistent;
@@ -19,7 +22,6 @@ public class CreateInstrument : HTBehaviour
         btn = GetComponent<Button>();
         btn.onClick.AddListener(CreateOrDestory);
         IfConsistent = false;
-
     }
 
     private void CreateOrDestory()
@@ -32,5 +34,6 @@ public class CreateInstrument : HTBehaviour
         {
 
         }
+        Main.m_UI.CloseUI<BagControl>();
     }
 }

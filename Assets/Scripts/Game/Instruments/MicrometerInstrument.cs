@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [EntityResource(null, null, "Instruments/Ruler/rulerRescaled")]
-public class RulerInstrument : InstrumentBase
+public class MicrometerInstrument : InstrumentBase
 {
-    public override string InstName { get => "钢板尺"; }
+    public override string InstName { get => "螺旋测微器"; }
 
     public override double URV { get => 500; }
 
@@ -24,7 +24,7 @@ public class RulerInstrument : InstrumentBase
 
     public override GameObject gameObject { get; set; }
 
-    public override Sprite previewImage { get => Resources.Load<Sprite>("Instruments/Ruler/ruler_preview"); }
+    public override Sprite previewImage { get => Resources.Load<Sprite>("Instruments/Micrometer/micrometer_preview"); }
 
     public override double GetMeasureResult()
     {

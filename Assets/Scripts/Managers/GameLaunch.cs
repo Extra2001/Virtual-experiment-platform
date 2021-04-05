@@ -23,7 +23,7 @@ public class GameLaunch : MonoBehaviour
     /// </summary>
     private void PreLoadingAssets()
     {
-        
+
     }
 
     private void LaunchServices()

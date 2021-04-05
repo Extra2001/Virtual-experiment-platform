@@ -1,6 +1,9 @@
 using HT.Framework;
 using DG.Tweening;
 using UnityEngine.Sprites;
+using System.Collections.Generic;
+using System;
+
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 {
     class InstrumentCell : FancyCell<ItemData, Context>
@@ -11,16 +14,16 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
         [SerializeField] Image image = default;
         [SerializeField] Image imageLarge = default;
         [SerializeField] Button button = default;
+        [SerializeField] GameObject page = default;
 
         //仪器各项内容列表
         //数组长度为仪器数量
-        private string[] message_text = { "直尺", "游标卡尺", "螺旋测微计", "天平", "仪器5", "仪器6" };
-        private string[] messageLarge_text = { "仪器1的描述", "仪器2的描述", "仪器3的描述", "仪器4的描述", "仪器5的描述", "仪器6的描述" };
-        private string image_source = "UI/Resources/Select_instruments/image";
-        private string imageLarge_source = "UI/Resources/Select_instruments/imageLarge";
+        //private string[] message_text = { "直尺", "游标卡尺", "螺旋测微计", "天平", "仪器5", "仪器6" };
+        //private string[] messageLarge_text = { "仪器1的描述", "仪器2的描述", "仪器3的描述", "仪器4的描述", "仪器5的描述", "仪器6的描述" };
+        //private string image_source = "UI/Resources/Select_instruments/image";
+        //private string imageLarge_source = "UI/Resources/Select_instruments/imageLarge";
 
-
-        //
+        private List<Type> instrumentsTypes => CommonTools.GetSubClassNames(typeof(InstrumentBase));
 
         static class AnimatorHash
         {
@@ -34,20 +37,22 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 
         public override void UpdateContent(ItemData itemData)
         {
-            message.text = message_text[Index];
-            messageLarge.text = messageLarge_text[Index];
+            var ins = instrumentsTypes[Index].CreateInstrumentInstance();
+            message.text = ins.InstName;
+            messageLarge.text = ins.InstName;
 
             var selected = Context.SelectedIndex == Index;
             imageLarge.color = image.color = selected
                 ? new Color32(255, 255, 255, 255)
                 : new Color32(255, 255, 255, 77);
-
-            image.sprite = Resources.Load<Sprite>(image_source + (Index + 1));
-            imageLarge.sprite = Resources.Load<Sprite>(imageLarge_source + (Index + 1));
-
+            //image.sprite = ins.previewImage;
+            imageLarge.sprite = ins.previewImage;
+            var cicomp = imageLarge.gameObject.GetComponent<CreateInstrument>();
+            if (cicomp == null)
+                imageLarge.gameObject.AddComponent<CreateInstrument>().InstrumentType = instrumentsTypes[Index];
+            else
+                cicomp.InstrumentType = instrumentsTypes[Index];
         }
-
-
 
         public override void UpdatePosition(float position)
         {

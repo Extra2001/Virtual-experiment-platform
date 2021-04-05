@@ -12,7 +12,6 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     private void Start()
     {
-        Debug.Log(ProcedureStack.Count);
         if (ProcedureStack.Count == 0)
             ProcedureStack.Add(typeof(StartProcedure));
         Main.m_Event.Subscribe<Sitdown>(WhenSitdown);

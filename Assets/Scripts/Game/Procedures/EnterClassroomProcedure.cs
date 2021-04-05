@@ -23,14 +23,7 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        /*var prefabInfo = new PrefabInfo(null, null, "Environment/classroom");
-
-        Main.m_Resource.LoadPrefab(prefabInfo, GameObject.Find("GameObject").transform,  loadDoneAction: (obj) =>
-        {
-            //obj.transform.localScale = new Vector3
-            obj.SetActive(true);
-        });*/
-
+        Main.m_UI.OpenTemporaryUI<DatatableUILogic>();
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {
             if (showed)

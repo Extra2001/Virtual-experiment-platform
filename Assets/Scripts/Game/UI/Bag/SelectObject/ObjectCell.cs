@@ -45,8 +45,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                 : new Color32(255, 255, 255, 77);
 
             //image.sprite = Resources.Load<Sprite>(image_source + (Index + 1));
-            imageLarge.sprite = objects[Index].PreviewImageSprite;
-
+            imageLarge.sprite = CommonTools.GetSprite(objects[Index].PreviewImage);
         }
 
 

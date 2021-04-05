@@ -14,7 +14,6 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
         [SerializeField] Image image = default;
         [SerializeField] Image imageLarge = default;
         [SerializeField] Button button = default;
-        [SerializeField] GameObject page = default;
 
         //仪器各项内容列表
         //数组长度为仪器数量

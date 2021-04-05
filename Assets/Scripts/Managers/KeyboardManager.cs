@@ -17,12 +17,12 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     private void Start()
     {
         // 去流程的生命周期函数注册监听，这只是个替代方案
-        /*Register(KeyCode.B, () =>
-        {
-            // 不必判断当前流程，在流程的生命周期结束的函数取消注册就OK
-            Main.m_UI.OpenTemporaryUI<BagControl>();
-            Debug.Log("B");
-        });*/
+        //Register(KeyCode.B, () =>
+        //{
+        //    // 不必判断当前流程，在流程的生命周期结束的函数取消注册就OK
+        //    Main.m_UI.OpenTemporaryUI<BagControl>();
+        //    Debug.Log("B");
+        //});
     }
 
     // Update is called once per frame

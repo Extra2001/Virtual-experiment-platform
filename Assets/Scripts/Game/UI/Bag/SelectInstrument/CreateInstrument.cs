@@ -14,26 +14,29 @@ public class CreateInstrument : HTBehaviour
     public Type InstrumentType;
 
     private Button btn;
-    private bool IfConsistent;
+    private Type ShowedInstrument;
 
     // Start is called before the first frame update
     void Start()
     {
         btn = GetComponent<Button>();
         btn.onClick.AddListener(CreateOrDestory);
-        IfConsistent = false;
+        ShowedInstrument = null;
     }
 
     private void CreateOrDestory()
     {
-        if (IfConsistent)
+        //ShowedInstrument=
+        if (ShowedInstrument != null)
         {
 
         }
-        else
+        Main.m_Entity.CreateEntity(InstrumentType,loadDoneAction:x=>
         {
 
-        }
+        });
+
+
         Main.m_UI.CloseUI<BagControl>();
     }
 }

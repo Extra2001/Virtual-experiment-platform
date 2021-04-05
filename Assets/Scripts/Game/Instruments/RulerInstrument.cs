@@ -35,4 +35,55 @@ public class RulerInstrument : InstrumentBase
     {
         throw new System.NotImplementedException();
     }
+
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    public override void OnInit()
+    {
+        base.OnInit();
+        Debug.Log("初始化");
+    }
+
+    /// <summary>
+    /// 显示实体
+    /// </summary>
+    public override void OnShow()
+    {
+        base.OnShow();
+    }
+
+    /// <summary>
+    /// 隐藏实体
+    /// </summary>
+    public override void OnHide()
+    {
+        base.OnHide();
+    }
+
+    /// <summary>
+    /// 销毁实体
+    /// </summary>
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+    }
+
+    /// <summary>
+    /// 实体逻辑刷新
+    /// </summary>
+    public override void OnUpdate()
+    {
+        base.OnUpdate();
+    }
+
+    /// <summary>
+    /// 重置实体
+    /// </summary>
+    public override void Reset()
+    {
+        base.Reset();
+    }
+
 }

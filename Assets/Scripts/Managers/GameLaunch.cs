@@ -32,7 +32,7 @@ public class GameLaunch : MonoBehaviour
     {
         // 启动服务程序
 
-        ProcessManager.StartService();
+        //ProcessManager.StartService();
 
         Main.m_Event.Throw<ServiceStartedEventHandler>();
     }

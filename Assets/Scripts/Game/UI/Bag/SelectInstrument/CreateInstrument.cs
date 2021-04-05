@@ -15,6 +15,7 @@ public class CreateInstrument : HTBehaviour
 
     private Button btn;
     private Type ShowedInstrument;
+    private EntityLogicBase SelectedInstrument;
 
     // Start is called before the first frame update
     void Start()
@@ -29,12 +30,10 @@ public class CreateInstrument : HTBehaviour
         //ShowedInstrument=
         if (ShowedInstrument != null)
         {
-
+            //
         }
-        Main.m_Entity.CreateEntity(InstrumentType,loadDoneAction:x=>
-        {
-
-        });
+        SelectedInstrument = Main.m_Entity.GetEntity(InstrumentType, InstrumentType.Name);
+        Main.m_Entity.ShowEntity(SelectedInstrument);
 
 
         Main.m_UI.CloseUI<BagControl>();

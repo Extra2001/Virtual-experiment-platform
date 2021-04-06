@@ -39,11 +39,11 @@ public static class ProcessManager
 
     public static void StopService()
     {
-        process.Exited -= Process_Exited;
-        if (process.HasExited)
+        if (process == null || process.HasExited)
             UnityEngine.Debug.Log($"服务在此前已停止。");
         else
         {
+            process.Exited -= Process_Exited;
             process.Kill();
             UnityEngine.Debug.Log($"服务已停止。");
         }

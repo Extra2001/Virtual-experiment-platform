@@ -23,6 +23,7 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        showed = false;
         Main.m_UI.OpenTemporaryUI<DatatableUILogic>();
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {

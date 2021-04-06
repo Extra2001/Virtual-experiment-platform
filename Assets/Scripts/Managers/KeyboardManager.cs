@@ -12,39 +12,24 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     //ESC：暂停，E：坐上凳子，B：打开关闭背包，~~~~~~~~~~~~~~
     private Dictionary<KeyCode, Action> registered = new Dictionary<KeyCode, Action>();
     private Dictionary<KeyCode, Action> registeredHoldOn = new Dictionary<KeyCode, Action>();
-    private bool Inputable = true;
+    private Dictionary<int, Tuple<Func<bool>, Action>> registedCustom = new Dictionary<int, Tuple<Func<bool>, Action>>();
 
-    private void Start()
+    private void FixedUpdate()
     {
-        // 去流程的生命周期函数注册监听，这只是个替代方案
-        //Register(KeyCode.B, () =>
-        //{
-        //    // 不必判断当前流程，在流程的生命周期结束的函数取消注册就OK
-        //    Main.m_UI.OpenTemporaryUI<BagControl>();
-        //    Debug.Log("B");
-        //});
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Inputable)
-            foreach (var item in registered)
-                if (Input.GetKeyDown(item.Key))
-                {
-                    InputGap();
-                    item.Value.Invoke();
-                }
-        foreach (var item in registeredHoldOn)
+        foreach (var item in registered)
             if (Input.GetKeyDown(item.Key))
                 item.Value.Invoke();
+        foreach (var item in registeredHoldOn)
+            if (Input.GetKey(item.Key))
+                item.Value.Invoke();
+        foreach (var item in registedCustom)
+            if (item.Value.Item1.Invoke())
+                item.Value.Item2.Invoke();
     }
 
     /// <summary>
-    /// 注册按键，按下指定的按键会触发第二个委托。
+    /// 注册按键，按下指定的按键会触发回调。
     /// </summary>
-    /// <param name="key"></param>
-    /// <param name="action"></param>
     public void Register(KeyCode key, Action action)
     {
         if (registered.ContainsKey(key))
@@ -57,10 +42,13 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
             Debug.LogError($"{key}建已被注册");
             throw new Exception("该按键已注册");
         }
-        Debug.Log($"已注册{key}键");
+        //Debug.Log($"已注册{key}键");
         registered.Add(key, action);
     }
 
+    /// <summary>
+    /// 注册按键，长按键会持续触发回调。
+    /// </summary>
     public void RegisterHoldOn(KeyCode key, Action action)
     {
         if (registered.ContainsKey(key))
@@ -73,33 +61,53 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
             Debug.LogError($"{key}建已被注册");
             throw new Exception("该按键已注册");
         }
-        Debug.Log($"已注册{key}键");
+        //Debug.Log($"已注册{key}键");
         registeredHoldOn.Add(key, action);
     }
 
     /// <summary>
     /// 取消注册按键，取消后按下按键不会触发。
     /// </summary>
-    /// <param name="key"></param>
     public void UnRegister(KeyCode key)
     {
         if (registered.ContainsKey(key))
             registered.Remove(key);
+        else
+            Debug.LogWarning($"未注册{key}的单击按键，无法取消注册");
     }
 
     public void UnRegisterHoldOn(KeyCode key)
     {
         if (registeredHoldOn.ContainsKey(key))
             registeredHoldOn.Remove(key);
+        else
+            Debug.LogWarning($"未注册{key}的长按按键，无法取消注册");
     }
 
-    private void InputGap()
+    /// <summary>
+    /// 注册自定义监听逻辑。
+    /// </summary>
+    /// <param name="KeyCondition"></param>
+    /// <param name="action"></param>
+    /// <returns></returns>
+    public int Register(Func<bool> KeyCondition, Action action)
     {
-        Inputable = false;
-        //禁止200ms内连续按下两个按键
-        Task.Delay(200).ContinueWith((_) =>
-        {
-            Inputable = true;
-        });
+        //Debug.Log("已注册自定义监听逻辑。");
+        int id = 0;
+        for (; registedCustom.ContainsKey(id); id++) ;
+        registedCustom.Add(id, new Tuple<Func<bool>, Action>(KeyCondition, action));
+        return id;
+    }
+
+    /// <summary>
+    /// 取消自定义监听逻辑
+    /// </summary>
+    /// <param name="id"></param>
+    public void UnRegister(int id)
+    {
+        if (registedCustom.ContainsKey(id))
+            registedCustom.Remove(id);
+        else
+            Debug.LogWarning($"未注册id为{id}的监听逻辑，无法取消注册");
     }
 }

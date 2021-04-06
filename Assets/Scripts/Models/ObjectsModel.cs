@@ -11,6 +11,12 @@ using UnityEngine.Networking;
 [Serializable]
 public class ObjectsModel
 {
+    public class Vector3
+    {
+        public float x { get; set; }
+        public float y { get; set; }
+        public float z { get; set; }
+    }
     public string Name { get; set; } = "";
     public string ResourcePath { get; set; } = "";
     public string PreviewImage { get; set; } = "";

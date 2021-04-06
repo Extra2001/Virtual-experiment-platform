@@ -8,7 +8,8 @@ using DG.Tweening;
 /// </summary>
 public class OnChair : ProcedureBase
 {
-    bool showed = false;
+    bool showedDataTable = false;
+    bool showedBag = false;
     /// <summary>
     /// 流程初始化
     /// </summary>
@@ -23,19 +24,23 @@ public class OnChair : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        showedBag = showedDataTable = false;
         base.OnEnter(lastProcedure);
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {
-            if (showed)
+            if (showedDataTable)
                 UIAPI.Instance.HideDataTable();
             else
                 UIAPI.Instance.ShowDataTable();
-            showed = !showed;
+            showedDataTable = !showedDataTable;
         });
         KeyboardManager.Instance.Register(KeyCode.B, () =>
         {
-            // 不必判断当前流程，在流程的生命周期结束的函数取消注册就OK
-            Main.m_UI.OpenTemporaryUI<BagControl>();
+            if (showedBag)
+                Main.m_UI.CloseUI<BagControl>();
+            else
+                Main.m_UI.OpenTemporaryUI<BagControl>();
+            showedBag = !showedBag;
         });
     }
 
@@ -46,6 +51,10 @@ public class OnChair : ProcedureBase
     public override void OnLeave(ProcedureBase nextProcedure)
     {
         base.OnLeave(nextProcedure);
+        if (showedDataTable)
+            UIAPI.Instance.HideDataTable();
+        if (showedBag)
+            Main.m_UI.CloseUI<BagControl>();
         KeyboardManager.Instance.UnRegister(KeyCode.T);
         KeyboardManager.Instance.UnRegister(KeyCode.B);
     }

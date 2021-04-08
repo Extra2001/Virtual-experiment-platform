@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[EntityResource(null, null, "Instruments/Ruler/rulerRescaled")]
+[EntityResource(null, null, "Instruments/Micrometer/Micrometer")]
 public class MicrometerInstrument : InstrumentBase
 {
     public override string InstName { get => "螺旋测微器"; }

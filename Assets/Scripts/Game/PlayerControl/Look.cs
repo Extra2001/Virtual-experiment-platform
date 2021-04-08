@@ -77,5 +77,6 @@ public class Look : HTBehaviour
     {
         Speed_h /= 20;
         Speed_v /= 10;
+        Rotation_y = 180;
     }
 }

@@ -20,7 +20,7 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
         Main.m_UI.GetUI<DatatableUILogic>().Show(type);
     }
 
-    public void ShowDataTable<T>() where T:InstrumentBase
+    public void ShowDataTable<T>() where T : InstrumentBase
     {
         Main.m_UI.OpenTemporaryUI<DatatableUILogic>();
         Main.m_UI.GetUI<DatatableUILogic>().Show(typeof(T));
@@ -29,6 +29,7 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
     public void HideDataTable()
     {
         Main.m_UI.GetUI<DatatableUILogic>().Hide();
+        Task.Delay(300).ContinueWith(_ => MainThread.Instance.Run(() => Main.m_UI.CloseUI<DatatableUILogic>()));
     }
 
     public void ShowInstrumentInfo<T>() where T : InstrumentBase

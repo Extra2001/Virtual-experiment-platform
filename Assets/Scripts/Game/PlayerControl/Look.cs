@@ -30,7 +30,7 @@ public class Look : HTBehaviour
         player = GameObject.Find("Player");
         Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
     }
-    void FixedUpdate()
+    void LateUpdate()
     {
 
         if (LookAble)

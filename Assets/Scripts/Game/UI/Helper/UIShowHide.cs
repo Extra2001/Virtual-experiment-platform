@@ -24,7 +24,6 @@ public static class UIShowHideHelper
 
     public static void ShowFromRight(GameObject UIEntity)
     {
-        Log.Info(UIEntity.transform.localPosition.ToString());
         var tmp = UIEntity.transform.localPosition;
         tmp.x = 600;
         UIEntity.transform.localPosition = tmp;
@@ -43,7 +42,6 @@ public static class UIShowHideHelper
 
     public static void ShowFromLeft(GameObject UIEntity)
     {
-        Debug.Log(UIEntity.transform.localPosition.x);
         var tmp = UIEntity.transform.localPosition;
         tmp.x = -900;
         UIEntity.transform.localPosition = tmp;

@@ -14,7 +14,7 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     private Dictionary<KeyCode, Action> registeredHoldOn = new Dictionary<KeyCode, Action>();
     private Dictionary<int, Tuple<Func<bool>, Action>> registedCustom = new Dictionary<int, Tuple<Func<bool>, Action>>();
 
-    private void FixedUpdate()
+    private void Update()
     {
         foreach (var item in registered)
             if (Input.GetKeyDown(item.Key))
@@ -22,6 +22,10 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
         foreach (var item in registeredHoldOn)
             if (Input.GetKey(item.Key))
                 item.Value.Invoke();
+    }
+
+    private void FixedUpdate()
+    {
         foreach (var item in registedCustom)
             if (item.Value.Item1.Invoke())
                 item.Value.Item2.Invoke();

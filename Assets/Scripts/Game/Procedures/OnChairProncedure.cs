@@ -8,8 +8,6 @@ using DG.Tweening;
 /// </summary>
 public class OnChair : ProcedureBase
 {
-    bool showedDataTable = false;
-    bool showedBag = false;
     /// <summary>
     /// 流程初始化
     /// </summary>
@@ -24,23 +22,20 @@ public class OnChair : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        showedBag = showedDataTable = false;
         base.OnEnter(lastProcedure);
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {
-            if (showedDataTable)
+            if (Main.m_UI.GetOpenedUI<DatatableUILogic>() != null)
                 UIAPI.Instance.HideDataTable();
             else
                 UIAPI.Instance.ShowDataTable();
-            showedDataTable = !showedDataTable;
         });
         KeyboardManager.Instance.Register(KeyCode.B, () =>
         {
-            if (showedBag)
-                Main.m_UI.CloseUI<BagControl>();
-            else
+            if (Main.m_UI.GetOpenedUI<BagControl>() == null)
                 Main.m_UI.OpenTemporaryUI<BagControl>();
-            showedBag = !showedBag;
+            else
+                Main.m_UI.CloseUI<BagControl>();
         });
     }
 
@@ -51,10 +46,8 @@ public class OnChair : ProcedureBase
     public override void OnLeave(ProcedureBase nextProcedure)
     {
         base.OnLeave(nextProcedure);
-        if (showedDataTable)
-            UIAPI.Instance.HideDataTable();
-        if (showedBag)
-            Main.m_UI.CloseUI<BagControl>();
+        UIAPI.Instance.HideDataTable();
+        Main.m_UI.CloseUI<BagControl>();
         KeyboardManager.Instance.UnRegister(KeyCode.T);
         KeyboardManager.Instance.UnRegister(KeyCode.B);
     }

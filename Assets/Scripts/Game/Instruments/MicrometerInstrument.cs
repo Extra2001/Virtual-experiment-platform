@@ -53,9 +53,9 @@ public class MicrometerInstrument : InstrumentBase
     /// </summary>
     public override void OnShow()
     {
-        Position.x = RecordManager.tempRecord.InstrumentStartPosition[0];
-        Position.y = RecordManager.tempRecord.InstrumentStartPosition[1];
-        Position.z = RecordManager.tempRecord.InstrumentStartPosition[2];
+        Position.x = RecordManager.tempRecord.InstrumentStartPosition[0]+27f;
+        Position.y = RecordManager.tempRecord.InstrumentStartPosition[1]-15f;
+        Position.z = RecordManager.tempRecord.InstrumentStartPosition[2]+8f;
 
         Self.transform.position = Position;
         base.OnShow();

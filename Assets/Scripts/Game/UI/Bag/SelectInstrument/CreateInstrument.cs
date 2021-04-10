@@ -27,14 +27,14 @@ public class CreateInstrument : HTBehaviour
 
     private void CreateOrDestory()
     {
-        //ShowedInstrument=
+        ShowedInstrument = RecordManager.tempRecord.Instrumenttype;
         if (ShowedInstrument != null)
         {
-            //
+            Main.m_Entity.HideEntity(Main.m_Entity.GetEntity(ShowedInstrument, ShowedInstrument.Name));
         }
         SelectedInstrument = Main.m_Entity.GetEntity(InstrumentType, InstrumentType.Name);
         Main.m_Entity.ShowEntity(SelectedInstrument);
-
+        RecordManager.tempRecord.Instrumenttype = InstrumentType;
 
         Main.m_UI.CloseUI<BagControl>();
     }

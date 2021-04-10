@@ -18,9 +18,9 @@ public class Sitdown : EventHandlerBase
         Debug.Log("y="+y);
         Debug.Log("z="+z);
 
-        RecordManager.tempRecord.InstrumentStartPosition[0] = x+1;
-        RecordManager.tempRecord.InstrumentStartPosition[1] = y-4;
-        RecordManager.tempRecord.InstrumentStartPosition[2] = z-19;
+        RecordManager.tempRecord.InstrumentStartPosition[0] = x;
+        RecordManager.tempRecord.InstrumentStartPosition[1] = y;
+        RecordManager.tempRecord.InstrumentStartPosition[2] = z;
 
         RecordManager.tempRecord.ObjectStartPosition[0] = x;
         RecordManager.tempRecord.ObjectStartPosition[1] = y;

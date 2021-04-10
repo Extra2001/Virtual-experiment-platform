@@ -9,6 +9,17 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     List<Type> ProcedureStack { get => RecordManager.tempRecord.procedureStack; }
 
     public bool CanContinue { get => ProcedureStack.Count > 1; }
+
+    public bool FPSable
+    {
+        get => firstPersonController.gameObject.activeSelf;
+        set
+        {
+            firstPersonController.gameObject.GetComponent<CharacterController>().enabled = value;
+            firstPersonController.enabled = value;
+        }
+    }
+
     public bool Movable
     {
         get => firstPersonController.m_WalkSpeed > 0.1;

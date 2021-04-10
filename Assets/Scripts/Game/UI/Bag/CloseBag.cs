@@ -19,6 +19,6 @@ public class CloseBag : HTBehaviour
 
     private void CloseIt()
     {
-        Main.m_UI.CloseUI<BagControl>();
+        Main.m_UI.GetUI<BagControl>().Hide();
     }
 }

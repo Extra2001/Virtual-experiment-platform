@@ -36,7 +36,7 @@ public class OnChair : ProcedureBase
             if (Main.m_UI.GetOpenedUI<BagControl>() == null)
                 Main.m_UI.OpenTemporaryUI<BagControl>();
             else
-                Main.m_UI.CloseUI<BagControl>();
+                Main.m_UI.GetUI<BagControl>().Hide();
         });
     }
 

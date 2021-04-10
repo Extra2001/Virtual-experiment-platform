@@ -83,7 +83,7 @@ public class PauseUILogic : UILogicTemporary
                 ReadRecordButton = item;
                 item.onClick.AddListener(() =>
                 {
-                    Main.m_UI.OpenTemporaryUI<ReadRecordUILogic>();
+                    Main.m_UI.OpenTemporaryUI<SettingsLogicTemporary>();
                 });
             }
         }

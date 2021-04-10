@@ -1,6 +1,8 @@
 ﻿using HT.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using Dummiesman;
+using System.IO;
 using UnityEngine;
 using System.IO;
 
@@ -35,7 +37,9 @@ public class GameLaunch : MonoBehaviour
 
         //加载被测物体
 
-
+        foreach(var item in RecordManager.tempRecord.objects)
+            if (File.Exists(item.ResourcePath))
+                Main.m_ObjectPool.RegisterSpawnPool(item.id.ToString(), new OBJLoader().Load(item.ResourcePath));
     }
 
     private void LaunchServices()

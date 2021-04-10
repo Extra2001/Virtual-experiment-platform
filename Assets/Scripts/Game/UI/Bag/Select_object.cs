@@ -24,7 +24,8 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                         Name = "立方体",
                         DetailMessage = "纯正立方体",
                         Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png"
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png",
+                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object11.obj"
                     },
                     new ObjectsModel()
                     {

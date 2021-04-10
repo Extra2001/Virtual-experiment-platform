@@ -15,6 +15,7 @@ public class NearChair : HTBehaviour
         ShowTips();
         if (Input.GetKeyDown(KeyCode.E))
         {
+            Debug.Log("dadadada");
             Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill());
         }
     }

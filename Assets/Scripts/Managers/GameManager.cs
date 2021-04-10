@@ -9,9 +9,26 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     List<Type> ProcedureStack { get => RecordManager.tempRecord.procedureStack; }
 
     public bool CanContinue { get => ProcedureStack.Count > 1; }
+    public bool Movable
+    {
+        get => firstPersonController.m_WalkSpeed > 0.1;
+        set
+        {
+            if (value)
+            {
+                firstPersonController.m_WalkSpeed = 30;
+                firstPersonController.m_RunSpeed = 50;
+            }
+            else
+                firstPersonController.m_RunSpeed = firstPersonController.m_WalkSpeed = 0;
+        }
+    }
+
+    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController firstPersonController = null;
 
     private void Start()
     {
+        firstPersonController = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         if (ProcedureStack.Count == 0)
             ProcedureStack.Add(typeof(StartProcedure));
         Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
@@ -62,7 +79,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         ProcedureStack.Add(typeof(ChooseExpProcedure));
     }
 
-    
+
 
     private void WhenSitdown(object sender, EventHandlerBase handler)
     {
@@ -109,7 +126,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         Main.m_Procedure.SwitchProcedure<EnterUncertaintyProcedure>();
         var pro = Main.m_Procedure.GetProcedure<EnterUncertaintyProcedure>();
 
-        
+
     }
 
     /// <summary>

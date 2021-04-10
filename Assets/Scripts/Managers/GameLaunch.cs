@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class GameLaunch : MonoBehaviour
 {
@@ -24,6 +25,11 @@ public class GameLaunch : MonoBehaviour
         // 加载仪器
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
+
+
+        //加载被测物体
+
+
     }
 
     private void LaunchServices()

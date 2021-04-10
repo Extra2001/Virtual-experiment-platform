@@ -7,6 +7,9 @@ using UnityEngine;
 [EntityResource(null, null, "Instruments/Ruler/Ruler")]
 public class RulerInstrument : InstrumentBase
 {
+    private Vector3 Position = new Vector3();
+    private GameObject Self;
+
     public override string InstName { get => "钢板尺"; }
 
     public override double URV { get => 500; }
@@ -43,7 +46,7 @@ public class RulerInstrument : InstrumentBase
     public override void OnInit()
     {
         base.OnInit();
-        Debug.Log("初始化");
+        Self = GameObject.Find("RulerInstrument");
     }
 
     /// <summary>
@@ -51,6 +54,11 @@ public class RulerInstrument : InstrumentBase
     /// </summary>
     public override void OnShow()
     {
+        Position.x = RecordManager.tempRecord.InstrumentStartPosition[0];
+        Position.y = RecordManager.tempRecord.InstrumentStartPosition[1];
+        Position.z = RecordManager.tempRecord.InstrumentStartPosition[2];
+
+        Self.transform.position = Position;
         base.OnShow();
     }
 

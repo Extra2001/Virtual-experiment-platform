@@ -33,6 +33,10 @@ public class Record
     public Expression expressionKind { get; set; } = Expression.String;
     public string stringExpression { get; set; } = "";
     public string latexExpression { get; set; } = "";
+    
+    public float[] InstrumentStartPosition { get; set; } = new float[3];
+    public float[] ObjectStartPosition { get; set; } = new float[3];
+
 
     public InstrumentInfoModel showedInstrument { get; set; } = new InstrumentInfoModel();
 

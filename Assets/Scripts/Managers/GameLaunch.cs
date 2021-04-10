@@ -7,8 +7,6 @@ public class GameLaunch : MonoBehaviour
 {
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-
         UIAPIInitializer.Current.Initialize();
 
         PreLoadingAssets();

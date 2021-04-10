@@ -24,4 +24,12 @@ public class MainThread : SingletonBehaviorManager<MainThread>
     {
         tasks.Add(action);
     }
+
+    public void DelayAndRun(int delay, Action action)
+    {
+        Task.Delay(delay).ContinueWith(_ =>
+        {
+            Run(action);
+        });
+    }
 }

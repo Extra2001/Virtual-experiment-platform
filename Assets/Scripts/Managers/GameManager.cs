@@ -117,8 +117,12 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     private void PreviewConfirm()
     {
-        Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
-        ProcedureStack.Add(typeof(EnterClassroomProcedure));
+        UIAPI.Instance.ShowAndHideLoading(1000);
+        MainThread.Instance.DelayAndRun(500, () =>
+        {
+            Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
+            ProcedureStack.Add(typeof(EnterClassroomProcedure));
+        });
     }
 
     private void EnterUncertainty()

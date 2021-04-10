@@ -17,6 +17,8 @@ public class ObjectsModel
         public float y { get; set; }
         public float z { get; set; }
     }
+
+    public int id { get; set; }
     public string Name { get; set; } = "";
     public string ResourcePath { get; set; } = "";
     public string PreviewImage { get; set; } = "";

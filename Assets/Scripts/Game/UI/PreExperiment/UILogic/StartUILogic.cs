@@ -4,6 +4,7 @@ using UnityEngine;
 using HT.Framework;
 using DG.Tweening;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
@@ -27,7 +28,11 @@ public class StartUILogic : UILogicResident
         });
         UIEntity.FindChildren("ContinueButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            GameManager.Instance.ContinueExp();
+            UIAPI.Instance.ShowAndHideLoading(1000);
+            MainThread.Instance.DelayAndRun(500, () =>
+            {
+                GameManager.Instance.ContinueExp();
+            });
         });
     }
 

@@ -5,8 +5,14 @@ using UnityEngine;
 
 public class GameLaunch : MonoBehaviour
 {
+    public LoadingScreenManager2 InitLoading;
+    public LoadingScreenManager LoadingScreen;
+
     private void Awake()
     {
+        InitLoading.gameObject.SetActive(true);
+        LoadingScreen.gameObject.SetActive(true);
+
         UIAPIInitializer.Current.Initialize();
 
         PreLoadingAssets();

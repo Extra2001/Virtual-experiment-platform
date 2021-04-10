@@ -15,6 +15,14 @@ public class DataTable : HTBehaviour
     private List<DataColumn> showedColumn = new List<DataColumn>();
     private int times = 0;
 
+    private void Start()
+    {
+        GetComponent<Button>().onClick.AddListener(() =>
+        {
+            UIAPI.Instance.HideDataTable();
+        });
+    }
+
     private void Show(Func<Type, bool> filter)
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(gameObject.rectTransform());

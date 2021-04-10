@@ -23,6 +23,7 @@ public class OnChair : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         base.OnEnter(lastProcedure);
+        Main.m_UI.OpenResidentUI<GameButtonUILogic>();
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {
             if (Main.m_UI.GetOpenedUI<DatatableUILogic>() != null)
@@ -48,6 +49,7 @@ public class OnChair : ProcedureBase
         base.OnLeave(nextProcedure);
         UIAPI.Instance.HideDataTable();
         Main.m_UI.CloseUI<BagControl>();
+        Main.m_UI.CloseUI<GameButtonUILogic>();
         KeyboardManager.Instance.UnRegister(KeyCode.T);
         KeyboardManager.Instance.UnRegister(KeyCode.B);
     }

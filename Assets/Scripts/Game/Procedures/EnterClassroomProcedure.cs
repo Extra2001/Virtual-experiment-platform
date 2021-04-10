@@ -25,6 +25,7 @@ public class EnterClassroomProcedure : ProcedureBase
     {
         showed = false;
         Main.m_UI.OpenTemporaryUI<DatatableUILogic>();
+        Main.m_UI.OpenResidentUI<GameButtonUILogic>();
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {
             if (showed)
@@ -45,6 +46,7 @@ public class EnterClassroomProcedure : ProcedureBase
         if (showed)
             UIAPI.Instance.HideDataTable();
         KeyboardManager.Instance.UnRegister(KeyCode.T);
+        Main.m_UI.CloseUI<GameButtonUILogic>();
         base.OnLeave(nextProcedure);
     }
 

@@ -310,7 +310,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1821464251}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &167384618
 CapsuleCollider:
@@ -1132,12 +1132,12 @@ PrefabInstance:
     - target: {fileID: -8673256827504242499, guid: c6649864d6cf69e44a19eae9e967564a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.63
+      value: 0.101
       objectReference: {fileID: 0}
     - target: {fileID: -8673256827504242499, guid: c6649864d6cf69e44a19eae9e967564a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.064
+      value: 0.012
       objectReference: {fileID: 0}
     - target: {fileID: -8449146071767398717, guid: c6649864d6cf69e44a19eae9e967564a,
         type: 3}
@@ -1275,7 +1275,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1821464251}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &684398767
 BoxCollider:
@@ -2209,8 +2209,8 @@ Transform:
   m_LocalPosition: {x: 3.86, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 684398766}
   - {fileID: 167384617}
+  - {fileID: 684398766}
   m_Father: {fileID: 268838031}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5982,7 +5982,7 @@ BoxCollider:
   m_GameObject: {fileID: 5896963658030691485}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.6114189, y: 0.5832305, z: 1.0313365}
   m_Center: {x: -0.000000014901163, y: -9.195508e-16, z: -0.00000002980233}
@@ -6110,9 +6110,9 @@ MonoBehaviour:
   m_WalkSpeed: 30
   m_RunSpeed: 50
   m_RunstepLenghten: 0.7
-  m_JumpSpeed: 50
+  m_JumpSpeed: 10
   m_StickToGroundForce: 10
-  m_GravityMultiplier: 2
+  m_GravityMultiplier: 4
   m_MouseLook:
     Enabled: 1
     XSensitivity: 2
@@ -9526,8 +9526,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6114189, y: 0.58323056, z: 1.0313367}
-  m_Center: {x: 0.0000005811453, y: 0.00000011920929, z: -0.00000002980233}
+  m_Size: {x: 0.6114189, y: 1.121661, z: 1.0313367}
+  m_Center: {x: 0.0000005721685, y: 0.007076335, z: -0.000000047683717}
 --- !u!4 &5896963658882021744
 Transform:
   m_ObjectHideFlags: 0
@@ -10891,7 +10891,7 @@ BoxCollider:
   m_GameObject: {fileID: 5896963659247891335}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.6114189, y: 0.58323056, z: 1.0313367}
   m_Center: {x: -0.000000014901163, y: 0.00000011920929, z: -7.1054274e-15}
@@ -12103,6 +12103,7 @@ GameObject:
   - component: {fileID: 5896963659581956109}
   - component: {fileID: 5896963659581956111}
   - component: {fileID: 5896963659581956110}
+  - component: {fileID: 5896963659581956112}
   m_Layer: 0
   m_Name: Chair (5)
   m_TagString: Untagged
@@ -12173,8 +12174,20 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6114189, y: 0.58323056, z: 1.0313367}
-  m_Center: {x: 0.00000010430813, y: 5.2888386e-15, z: -0.00000002980233}
+  m_Size: {x: 0.6114189, y: 1.0722221, z: 1.0313367}
+  m_Center: {x: 0.00000009547424, y: -0.04947352, z: -0.000000047683717}
+--- !u!114 &5896963659581956112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5896963659581956108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e086703b3caf1a4f9c3b5eda820a58d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5896963659582521304
 Transform:
   m_ObjectHideFlags: 0
@@ -12614,7 +12627,7 @@ BoxCollider:
   m_GameObject: {fileID: 5896963659685541450}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.6114189, y: 0.58323056, z: 1.0313367}
   m_Center: {x: -0.000000014901163, y: -0.00000023841858, z: -7.1054274e-15}

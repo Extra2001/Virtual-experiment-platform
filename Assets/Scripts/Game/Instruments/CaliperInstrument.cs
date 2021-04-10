@@ -7,6 +7,9 @@ using UnityEngine;
 [EntityResource(null, null, "Instruments/Caliper/Caliper")]
 public class CaliperInstrument : InstrumentBase
 {
+    private Vector3 Position = new Vector3();
+    private GameObject Self;
+
     public override string InstName { get => "游标卡尺"; }
 
     public override double URV { get => 500; }
@@ -34,5 +37,27 @@ public class CaliperInstrument : InstrumentBase
     public override void InstReset()
     {
         throw new System.NotImplementedException();
+    }
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    public override void OnInit()
+    {
+        base.OnInit();
+        Self = GameObject.Find("CaliperInstrument");
+    }
+
+    /// <summary>
+    /// 显示实体
+    /// </summary>
+    public override void OnShow()
+    {
+        Position.x = RecordManager.tempRecord.InstrumentStartPosition[0];
+        Position.y = RecordManager.tempRecord.InstrumentStartPosition[1];
+        Position.z = RecordManager.tempRecord.InstrumentStartPosition[2];
+
+        Self.transform.position = Position;
+        base.OnShow();
     }
 }

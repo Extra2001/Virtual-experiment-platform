@@ -7,6 +7,9 @@ using UnityEngine;
 [EntityResource(null, null, "Instruments/Micrometer/Micrometer")]
 public class MicrometerInstrument : InstrumentBase
 {
+    private Vector3 Position = new Vector3();
+    private GameObject Self;
+
     public override string InstName { get => "螺旋测微器"; }
 
     public override double URV { get => 500; }
@@ -34,5 +37,27 @@ public class MicrometerInstrument : InstrumentBase
     public override void InstReset()
     {
         throw new System.NotImplementedException();
+    }
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    public override void OnInit()
+    {
+        base.OnInit();
+        Self = GameObject.Find("MicrometerInstrument");
+    }
+
+    /// <summary>
+    /// 显示实体
+    /// </summary>
+    public override void OnShow()
+    {
+        Position.x = RecordManager.tempRecord.InstrumentStartPosition[0];
+        Position.y = RecordManager.tempRecord.InstrumentStartPosition[1];
+        Position.z = RecordManager.tempRecord.InstrumentStartPosition[2];
+
+        Self.transform.position = Position;
+        base.OnShow();
     }
 }

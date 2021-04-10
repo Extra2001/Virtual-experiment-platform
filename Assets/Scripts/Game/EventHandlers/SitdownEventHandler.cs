@@ -8,11 +8,24 @@ using DG.Tweening;
 /// </summary>
 public class Sitdown : EventHandlerBase
 {
+
     /// <summary>
     /// 填充数据，所有属性、字段的初始化工作可以在这里完成
     /// </summary>
-    public Sitdown Fill()
+    public Sitdown Fill(float x,float y, float z)
     {
+        Debug.Log("x="+x);
+        Debug.Log("y="+y);
+        Debug.Log("z="+z);
+
+        RecordManager.tempRecord.InstrumentStartPosition[0] = x+1;
+        RecordManager.tempRecord.InstrumentStartPosition[1] = y-4;
+        RecordManager.tempRecord.InstrumentStartPosition[2] = z-19;
+
+        RecordManager.tempRecord.ObjectStartPosition[0] = x;
+        RecordManager.tempRecord.ObjectStartPosition[1] = y;
+        RecordManager.tempRecord.ObjectStartPosition[2] = z;
+
         return this;
     }
 

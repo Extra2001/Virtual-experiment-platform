@@ -20,7 +20,7 @@ public class FPS : HTBehaviour
 
     void OnGUI()
     {
-        GUI.Label(new Rect(10, 10, 200, 20), fpsFormat);
+        GUI.Label(new Rect(10, 10, 200, 20), fpsFormat, new GUIStyle { fontSize = 16 });
     }
 
     void Update()

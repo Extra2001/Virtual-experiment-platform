@@ -11,7 +11,6 @@
         {
             if (_lastUILogic != null)
             {
-                Log.Info(_lastUILogic.ToString());
                 Close();
                 _lastUILogic.Open();
             }

@@ -11,6 +11,7 @@ public class CreateObject : HTBehaviour
     protected override bool IsAutomate => true;
 
     public ObjectsModel objects = null;
+    private ObjectsModel ShowedObject=null;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,13 @@ public class CreateObject : HTBehaviour
 
     private void CreateOrDestory()
     {
+        if (ShowedObject != null)
+        {
 
+        }
+
+        Main.m_ObjectPool.Spawn(objects.id.ToString());
+
+        Main.m_UI.CloseUI<BagControl>();
     }
 }

@@ -8,6 +8,29 @@ using System;
 
 public class UIAPI : SingletonBehaviorManager<UIAPI>
 {
+    public LoadingScreenManager LoadingScreenManager;
+
+    public void ShowLoading()
+    {
+        LoadingScreenManager.RevealLoadingScreen();
+    }
+
+    public void ShowAndHideLoading(int delay)
+    {
+        ShowLoading();
+
+        MainThread.Instance.DelayAndRun(delay, () =>
+        {
+            HideLoading();
+        });
+
+    }
+
+    public void HideLoading()
+    {
+        LoadingScreenManager.HideLoadingScreen();
+    }
+
     public void ShowDataTable()
     {
         Main.m_UI.OpenTemporaryUI<DatatableUILogic>();
@@ -20,7 +43,7 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
         Main.m_UI.GetUI<DatatableUILogic>().Show(type);
     }
 
-    public void ShowDataTable<T>() where T:InstrumentBase
+    public void ShowDataTable<T>() where T : InstrumentBase
     {
         Main.m_UI.OpenTemporaryUI<DatatableUILogic>();
         Main.m_UI.GetUI<DatatableUILogic>().Show(typeof(T));
@@ -29,6 +52,7 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
     public void HideDataTable()
     {
         Main.m_UI.GetUI<DatatableUILogic>().Hide();
+        MainThread.Instance.DelayAndRun(300, () => Main.m_UI.CloseUI<DatatableUILogic>());
     }
 
     public void ShowInstrumentInfo<T>() where T : InstrumentBase
@@ -62,12 +86,10 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
         try
         {
             UIShowHideHelper.HideToRight(Main.m_UI.GetOpenedUI<T>().UIEntity);
-            Task.Delay(300).ContinueWith(_ =>
+
+            MainThread.Instance.DelayAndRun(300, () =>
             {
-                MainThread.Instance.Run(() =>
-                {
-                    Main.m_UI.CloseUI<T>();
-                });
+                Main.m_UI.CloseUI<T>();
             });
         }
         catch { }

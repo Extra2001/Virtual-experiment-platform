@@ -30,7 +30,7 @@ public class Look : HTBehaviour
         player = GameObject.Find("Player");
         Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
     }
-    void FixedUpdate()
+    void LateUpdate()
     {
 
         if (LookAble)
@@ -77,5 +77,6 @@ public class Look : HTBehaviour
     {
         Speed_h /= 20;
         Speed_v /= 10;
+        Rotation_y = 180;
     }
 }

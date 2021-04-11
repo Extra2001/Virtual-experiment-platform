@@ -10,8 +10,36 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     public bool CanContinue { get => ProcedureStack.Count > 1; }
 
+    public bool FPSable
+    {
+        get => firstPersonController.gameObject.activeSelf;
+        set
+        {
+            firstPersonController.gameObject.GetComponent<CharacterController>().enabled = value;
+            firstPersonController.enabled = value;
+        }
+    }
+
+    public bool Movable
+    {
+        get => firstPersonController.m_WalkSpeed > 0.1;
+        set
+        {
+            if (value)
+            {
+                firstPersonController.m_WalkSpeed = 30;
+                firstPersonController.m_RunSpeed = 50;
+            }
+            else
+                firstPersonController.m_RunSpeed = firstPersonController.m_WalkSpeed = 0;
+        }
+    }
+
+    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController firstPersonController = null;
+
     private void Start()
     {
+        firstPersonController = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         if (ProcedureStack.Count == 0)
             ProcedureStack.Add(typeof(StartProcedure));
         Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
@@ -62,7 +90,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         ProcedureStack.Add(typeof(ChooseExpProcedure));
     }
 
-    
+
 
     private void WhenSitdown(object sender, EventHandlerBase handler)
     {
@@ -100,8 +128,12 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     private void PreviewConfirm()
     {
-        Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
-        ProcedureStack.Add(typeof(EnterClassroomProcedure));
+        UIAPI.Instance.ShowAndHideLoading(1000);
+        MainThread.Instance.DelayAndRun(500, () =>
+        {
+            Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
+            ProcedureStack.Add(typeof(EnterClassroomProcedure));
+        });
     }
 
     private void EnterUncertainty()
@@ -109,7 +141,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         Main.m_Procedure.SwitchProcedure<EnterUncertaintyProcedure>();
         var pro = Main.m_Procedure.GetProcedure<EnterUncertaintyProcedure>();
 
-        
+
     }
 
     /// <summary>

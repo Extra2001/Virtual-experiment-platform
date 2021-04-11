@@ -20,29 +20,33 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                 {
                     new ObjectsModel()
                     {
-                         Name = "立方体",
-                         DetailMessage = "纯正立方体",
-                         Integrated = true,
-                         PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png"
+                        id = 0,
+                        Name = "立方体",
+                        DetailMessage = "纯正立方体",
+                        Integrated = true,
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png",
+                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object11.obj"
                     },
                     new ObjectsModel()
                     {
-                         Name = "圆柱",
-                         DetailMessage = "较高的一个圆柱",
-                         Integrated = true,
-                         PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder.png"
+                        id = 1,
+                        Name = "圆柱",
+                        DetailMessage = "较高的一个圆柱",
+                        Integrated = true,
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder.png",
+                        ResourcePath = $"{Application.streamingAssetsPath}/"
                     },
                     new ObjectsModel()
                     {
-                         Name = "圆柱",
-                         DetailMessage = "较胖的一个圆柱",
-                         Integrated = true,
-                         PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png"
+                        id = 2,
+                        Name = "圆柱",
+                        DetailMessage = "较胖的一个圆柱",
+                        Integrated = true,
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png"
                     },
                 };
             }
             var items = new ItemData[RecordManager.tempRecord.objects.Count];
-            Debug.Log(items.Length);
             scrollView.UpdateData(items);
             scrollView.SelectCell(0);
         }

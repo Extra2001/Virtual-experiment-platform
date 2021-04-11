@@ -30,7 +30,7 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
     {
         Data = new ModelDialogModel();
 
-        foreach(var item in UIEntity.GetComponentsInChildren<Text>(true))
+        foreach (var item in UIEntity.GetComponentsInChildren<Text>(true))
         {
             if (item.gameObject.name.Equals("Title"))
             {
@@ -40,7 +40,7 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
             {
                 Message = item;
             }
-            else if(item.gameObject.transform.parent.gameObject.name.Equals("ConfirmButton"))
+            else if (item.gameObject.transform.parent.gameObject.name.Equals("ConfirmButton"))
             {
                 ConfirmText = item;
                 ConfirmButton = item.gameObject.transform.parent.gameObject.GetComponent<Button>();
@@ -57,25 +57,19 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
         CancelButton.onClick.AddListener(() =>
         {
             UIShowHideHelper.HideToUp(UIEntity);
-            Task.Delay(300).ContinueWith(x =>
-            {
-                MainThread.Instance.Run(() =>
-                {
-                    NavigateBack();
-                    Data.CancelAction?.Invoke();
-                });
-            });
+            MainThread.Instance.DelayAndRun(300, () =>
+             {
+                 NavigateBack();
+                 Data.CancelAction?.Invoke();
+             });
         });
         ConfirmButton.onClick.AddListener(() =>
         {
             UIShowHideHelper.HideToUp(UIEntity);
-            Task.Delay(300).ContinueWith(x =>
+            MainThread.Instance.DelayAndRun(300, () =>
             {
-                MainThread.Instance.Run(() =>
-                {
-                    NavigateBack();
-                    Data.ConfirmAction?.Invoke();
-                });
+                NavigateBack();
+                Data.ConfirmAction?.Invoke();
             });
         });
     }

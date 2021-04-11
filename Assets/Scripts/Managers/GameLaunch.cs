@@ -1,13 +1,19 @@
 ﻿using HT.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using Dummiesman;
+using System.IO;
 using UnityEngine;
 
 public class GameLaunch : MonoBehaviour
 {
+    public LoadingScreenManager2 InitLoading;
+    public LoadingScreenManager LoadingScreen;
+
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        InitLoading.gameObject.SetActive(true);
+        LoadingScreen.gameObject.SetActive(true);
 
         UIAPIInitializer.Current.Initialize();
 
@@ -26,13 +32,19 @@ public class GameLaunch : MonoBehaviour
         // 加载仪器
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
+
+
+        //加载被测物体
+        foreach (var item in RecordManager.tempRecord.objects)
+            if (File.Exists(item.ResourcePath))
+                Main.m_ObjectPool.RegisterSpawnPool(item.id.ToString(), new OBJLoader().Load(item.ResourcePath));
     }
 
     private void LaunchServices()
     {
         // 启动服务程序
 
-        ProcessManager.StartService();
+        //ProcessManager.StartService();
 
         Main.m_Event.Throw<ServiceStartedEventHandler>();
     }

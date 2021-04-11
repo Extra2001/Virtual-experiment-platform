@@ -76,14 +76,14 @@ public class PauseUILogic : UILogicTemporary
                 {
                     Main.m_UI.OpenTemporaryUI<SaveRecordUILogic>();
                 });
-                
+
             }
             else if (item.gameObject.name.Equals("ReadRecordButton"))
             {
                 ReadRecordButton = item;
                 item.onClick.AddListener(() =>
                 {
-                    Main.m_UI.OpenTemporaryUI<ReadRecordUILogic>();
+                    Main.m_UI.OpenTemporaryUI<SettingsLogicTemporary>();
                 });
             }
         }
@@ -101,16 +101,13 @@ public class PauseUILogic : UILogicTemporary
                 if ((e as PauseEventHandler).NeedOpenPauseMenu)
                     Main.m_UI.OpenTemporaryUI<PauseUILogic>();
             }
-            else if((e as PauseEventHandler).NeedOpenPauseMenu)
+            else if ((e as PauseEventHandler).NeedOpenPauseMenu)
             {
                 UIShowHideHelper.HideToUp(UIEntity);
 
-                Task.Delay(300).ContinueWith(_ =>
+                MainThread.Instance.DelayAndRun(300, () =>
                 {
-                    MainThread.Instance.Run(() =>
-                    {
-                        Main.m_UI.CloseUI<PauseUILogic>();
-                    });
+                    Main.m_UI.CloseUI<PauseUILogic>();
                 });
             }
         });

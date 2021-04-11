@@ -9,13 +9,16 @@ public class NearChair : HTBehaviour
     //启用自动化
     protected override bool IsAutomate => true;
 
+    private Vector3 Position = new Vector3();
+
 
     private void OnTriggerStay(Collider other)
     {
         ShowTips();
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill());
+            Position = transform.position;
+            Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill(Position.x, Position.y, Position.z));
         }
     }
 

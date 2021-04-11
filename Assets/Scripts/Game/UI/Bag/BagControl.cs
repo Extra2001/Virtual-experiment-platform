@@ -23,6 +23,9 @@ public class BagControl : UILogicTemporary
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
+        GameManager.Instance.FPSable = false;
+        UIEntity.FindChildren("BagControl").GetComponent<BagSelectorAnimate>()?.Show();
+        UIEntity.FindChildren("Select_instrument").GetComponent<InstrumentChooserAnimate>()?.Show();
     }
     
 	/// <summary>
@@ -30,7 +33,22 @@ public class BagControl : UILogicTemporary
 	/// </summary>
     public override void OnClose()
     {
+        GameManager.Instance.FPSable = true;
         base.OnClose();
+    }
+
+    public void Hide()
+    {
+        var o1 = UIEntity.FindChildren("BagControl").GetComponent<BagSelectorAnimate>()?.Hide();
+        var o2 = UIEntity.FindChildren("Select_instrument").GetComponent<InstrumentChooserAnimate>()?.Hide();
+        MainThread.Instance.DelayAndRun(100, () =>
+        {
+            Close();
+            UIEntity.FindChildren("BagControl").GetComponent<BagSelectorAnimate>()?.Kill();
+            UIEntity.FindChildren("Select_instrument").GetComponent<InstrumentChooserAnimate>()?.Kill();
+            UIEntity.FindChildren("BagControl").transform.position = (Vector3)o1;
+            UIEntity.FindChildren("Select_instrument").transform.position = (Vector3)o2;
+        });
     }
 
 	/// <summary>

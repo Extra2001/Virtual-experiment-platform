@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 774645489796923644}
   - component: {fileID: 774645489796923645}
   - component: {fileID: 5962157361634944715}
+  - component: {fileID: 7640971985927764599}
   m_Layer: 5
   m_Name: Select_instrument
   m_TagString: Untagged
@@ -124,6 +125,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollView: {fileID: 3195073834428778277}
+--- !u!114 &7640971985927764599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774645489796923643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6622442531d949c489439321f8db3fbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1429165030318405604
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,6 +659,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7856613346431779914}
   - component: {fileID: 7485675294719493840}
+  - component: {fileID: 6374533257864078403}
   m_Layer: 5
   m_Name: BagControl
   m_TagString: Untagged
@@ -692,6 +706,18 @@ MonoBehaviour:
   m_onValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6374533257864078403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4704186601417576497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e11c57cf892147a4292f10fe67dbcb95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4966323179442216929
 GameObject:
   m_ObjectHideFlags: 0

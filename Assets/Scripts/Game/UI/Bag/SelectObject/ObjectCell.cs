@@ -15,15 +15,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
         [SerializeField] Image imageLarge = default;
         [SerializeField] Button button = default;
 
-        //仪器各项内容列表
-        ////数组长度为仪器数量
-        //private string[] message_text = { "物体1", "物体2", "物体3", "物体4", "物体5", "物体6" };
-        //private string[] messageLarge_text = { "被测物体1的描述", "被测物体2的描述", "被测物体3的描述", "被测物体4的描述", "被测物体5的描述", "被测物体6的描述" };
-        //private string image_source = "UI/Resources/Select_instruments/image";
-        //private string imageLarge_source = "UI/Resources/Select_instruments/imageLarge";
-
         private List<ObjectsModel> objects => RecordManager.tempRecord.objects;
-        //
 
         static class AnimatorHash
         {
@@ -45,7 +37,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                 ? new Color32(255, 255, 255, 255)
                 : new Color32(255, 255, 255, 77);
 
-            //image.sprite = Resources.Load<Sprite>(image_source + (Index + 1));
+            imageLarge.gameObject.GetComponent<CreateObject>().objects = objects[Index];
             imageLarge.sprite = CommonTools.GetSprite(objects[Index].PreviewImage);
         }
 

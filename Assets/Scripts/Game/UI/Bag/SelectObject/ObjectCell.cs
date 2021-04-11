@@ -36,8 +36,11 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
             imageLarge.color = image.color = selected
                 ? new Color32(255, 255, 255, 255)
                 : new Color32(255, 255, 255, 77);
-
-            imageLarge.gameObject.GetComponent<CreateObject>().objects = objects[Index];
+            var cicomp = imageLarge.gameObject.GetComponent<CreateObject>();
+            if (cicomp == null)
+                imageLarge.gameObject.AddComponent<CreateObject>().objects = objects[Index];
+            else
+                cicomp.objects = objects[Index];
             imageLarge.sprite = CommonTools.GetSprite(objects[Index].PreviewImage);
         }
 

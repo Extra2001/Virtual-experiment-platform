@@ -35,10 +35,11 @@ public class GameLaunch : MonoBehaviour
 
 
         //加载被测物体
-        var objLoader = new OBJLoader();
+        
         foreach (var item in RecordManager.tempRecord.objects)
             if (File.Exists(item.ResourcePath))
             {
+                var objLoader = new OBJLoader();
                 var obj = objLoader.Load(item.ResourcePath);
                 obj.SetActive(false);
                 Main.m_ObjectPool.RegisterSpawnPool(item.id.ToString(), obj);

@@ -25,7 +25,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                         DetailMessage = "纯正立方体",
                         Integrated = true,
                         PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object11.obj"
+                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object1.obj"
                     },
                     new ObjectsModel()
                     {
@@ -34,7 +34,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                         DetailMessage = "较高的一个圆柱",
                         Integrated = true,
                         PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/"
+                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object2.obj"
                     },
                     new ObjectsModel()
                     {
@@ -42,7 +42,8 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                         Name = "圆柱",
                         DetailMessage = "较胖的一个圆柱",
                         Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png"
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
+                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object3.obj"
                     },
                 };
             }

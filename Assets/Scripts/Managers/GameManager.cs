@@ -8,6 +8,8 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 {
     List<Type> ProcedureStack { get => RecordManager.tempRecord.procedureStack; }
 
+    public GameObject MyObject = null;
+
     public bool CanContinue { get => ProcedureStack.Count > 1; }
 
     public bool FPSable

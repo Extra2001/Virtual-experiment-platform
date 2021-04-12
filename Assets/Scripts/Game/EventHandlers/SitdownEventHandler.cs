@@ -14,17 +14,14 @@ public class Sitdown : EventHandlerBase
     /// </summary>
     public Sitdown Fill(float x,float y, float z)
     {
-        Debug.Log("x="+x);
-        Debug.Log("y="+y);
-        Debug.Log("z="+z);
 
         RecordManager.tempRecord.InstrumentStartPosition[0] = x;
         RecordManager.tempRecord.InstrumentStartPosition[1] = y;
         RecordManager.tempRecord.InstrumentStartPosition[2] = z;
 
-        RecordManager.tempRecord.ObjectStartPosition[0] = x;
-        RecordManager.tempRecord.ObjectStartPosition[1] = y;
-        RecordManager.tempRecord.ObjectStartPosition[2] = z;
+        RecordManager.tempRecord.ObjectStartPosition[0] = x-12f;
+        RecordManager.tempRecord.ObjectStartPosition[1] = y+2.5f;
+        RecordManager.tempRecord.ObjectStartPosition[2] = z+8f;
 
         return this;
     }

@@ -13,6 +13,7 @@ public class EnterUncertaintyProcedure : ProcedureBase
 
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        GameManager.Instance.ShowUncertainty();
         base.OnEnter(lastProcedure);
     }
 

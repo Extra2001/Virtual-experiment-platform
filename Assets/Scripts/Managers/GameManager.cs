@@ -11,6 +11,13 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     public bool CanContinue { get => ProcedureStack.Count > 1; }
 
+    public int _currentQuantityIndex { get => RecordManager.tempRecord.currentQuantityIndex; set => RecordManager.tempRecord.currentQuantityIndex = value; }
+
+    public QuantityModel CurrentQuantity
+    {
+        get => RecordManager.tempRecord.quantities[_currentQuantityIndex];
+    }
+
     public bool FPSable
     {
         get => firstPersonController.gameObject.activeSelf;
@@ -91,8 +98,6 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         ProcedureStack.Add(typeof(ChooseExpProcedure));
     }
 
-
-
     private void WhenSitdown(object sender, EventHandlerBase handler)
     {
         Main.m_Procedure.SwitchProcedure<OnChair>();
@@ -140,9 +145,14 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     private void EnterUncertainty()
     {
         Main.m_Procedure.SwitchProcedure<EnterUncertaintyProcedure>();
+        ProcedureStack.Add(typeof(EnterUncertaintyProcedure));
+        _currentQuantityIndex = 0;
+        ShowUncertainty();
+    }
+    public void ShowUncertainty()
+    {
         var pro = Main.m_Procedure.GetProcedure<EnterUncertaintyProcedure>();
-
-
+        pro.ShowUncertainty(CurrentQuantity);
     }
 
     /// <summary>

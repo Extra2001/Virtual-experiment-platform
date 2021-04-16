@@ -12,9 +12,32 @@ public class UncertaintyBackNext : HTBehaviour
 
     private void Start()
     {
+        GameManager gm = GameManager.Instance;
+        Record rec = RecordManager.tempRecord;
         BackButton.onClick.AddListener(() =>
         {
-
+            if (gm._currentQuantityIndex == 0)
+            {
+                Main.m_UI.CloseUI<UncertaintyUILogic>();
+                gm.SwitchBackProcedure();
+            }
+            else
+            {
+                gm._currentQuantityIndex--;
+                gm.ShowUncertainty();
+            }
+        });
+        NextButton.onClick.AddListener(() =>
+        {
+            if (gm._currentQuantityIndex >= rec.quantities.Count - 1)
+            {
+                // 切换至下一流程
+            }
+            else
+            {
+                gm._currentQuantityIndex++;
+                gm.ShowUncertainty();
+            }
         });
     }
 }

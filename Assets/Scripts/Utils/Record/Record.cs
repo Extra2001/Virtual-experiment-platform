@@ -30,6 +30,8 @@ public class Record
 
     public List<QuantityModel> quantities { get; set; } = new List<QuantityModel>();
 
+    public int currentQuantityIndex { get; set; } = 0;
+
     public Expression expressionKind { get; set; } = Expression.String;
     public string stringExpression { get; set; } = "";
     public string latexExpression { get; set; } = "";
@@ -40,7 +42,7 @@ public class Record
     public Type Instrumenttype { get; set; } = null;
     public ObjectsModel ShowedObject { get; set; } = null;
 
-
+    
 
     public InstrumentInfoModel showedInstrument { get; set; } = new InstrumentInfoModel();
 

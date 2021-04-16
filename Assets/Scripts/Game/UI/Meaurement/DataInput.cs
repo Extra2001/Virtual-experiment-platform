@@ -13,6 +13,11 @@ public class DataInput : HTBehaviour
 
     public Text _GroupNumber;
     public InputField _Value;
+    public bool Inputable
+    {
+        get => _Value.readOnly;
+        set => _Value.readOnly = value;
+    }
 
     public double Value { get => Convert.ToDouble(_Value.text); set => _Value.text = value.ToString(); }
     public int GroupNumber { get => Convert.ToInt32(_GroupNumber.text.Remove(_GroupNumber.text.Length - 1, 1)); 

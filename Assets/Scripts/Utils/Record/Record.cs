@@ -38,6 +38,8 @@ public class Record
     public float[] ObjectStartPosition { get; set; } = new float[3];
 
     public Type Instrumenttype { get; set; } = null;
+    public ObjectsModel ShowedObject { get; set; } = null;
+
 
 
     public InstrumentInfoModel showedInstrument { get; set; } = new InstrumentInfoModel();

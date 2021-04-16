@@ -57,6 +57,8 @@ public class CreateObject : HTBehaviour
         for (int i = 0; i < GameObjectList.Count; i++)
         {
             //加组件
+            GameObjectList[i].gameObject.tag = ("Tools_Be_Moved");
+            GameObjectList[i].gameObject.layer = 11;                    //layer的序号
             GameObjectList[i].gameObject.AddComponent<MeshCollider>();
             GameObjectList[i].gameObject.GetComponent<MeshCollider>().convex = true;
             GameObjectList[i].gameObject.GetComponent<MeshCollider>().isTrigger = true;

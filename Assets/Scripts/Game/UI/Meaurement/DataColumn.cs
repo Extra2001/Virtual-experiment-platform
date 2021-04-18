@@ -15,14 +15,14 @@ public class DataColumn : HTBehaviour
     private QuantityModel quantity;
     private List<DataInput> showedInputs = new List<DataInput>();
 
-    public void ShowQuantity(QuantityModel quantity)
+    public void ShowQuantity(QuantityModel quantity, bool inputable = true)
     {
         foreach (var item in showedInputs)
             Destroy(item.gameObject);
         showedInputs.Clear();
         this.quantity = quantity;
-
-        _Name.text = quantity.Name;
+        if (_Name != null)
+            _Name.text = quantity.Name;
 
         if (quantity.Data.Count != quantity.Groups)
         {
@@ -31,6 +31,7 @@ public class DataColumn : HTBehaviour
             {
                 quantity.Data.Add(0);
                 var showed = Instantiate(_dataInput, _Content.transform);
+                showed.Inputable = inputable;
                 showedInputs.Add(showed);
                 showed.Show(i + 1);
                 showed._Value.onEndEdit.AddListener(_ =>
@@ -45,6 +46,7 @@ public class DataColumn : HTBehaviour
             {
                 var showed = Instantiate(_dataInput, _Content.transform);
                 showedInputs.Add(showed);
+                showed.Inputable = inputable;
                 showed.Show(i + 1, quantity.Data[i]);
                 int tmp = i;
                 showed._Value.onEndEdit.AddListener(_ =>

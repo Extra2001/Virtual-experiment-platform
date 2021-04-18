@@ -18,14 +18,23 @@ public class CreateObject : HTBehaviour
     private float Width;
     private float Height;
     private float Mass;//估计值
+<<<<<<< HEAD
     private float Density=1;//密度，瞎定的一个值
+=======
+    private float Density = 1;//密度，瞎定的一个值
+>>>>>>> 346d2257edf423f0423f49401ebe2dc44ca92f86
 
 
     private Vector3 ClosestPoint = new Vector3();//最近点
     private Vector3 FarthestPoint = new Vector3();//最远点
     private Vector3 Temp = new Vector3();
+<<<<<<< HEAD
     private float MaxDistence=2f; //物体大小的最大限度
     private float MinDistence=0.01f; //物体大小的最小限度 
+=======
+    private float MaxDistence = 2f; //物体大小的最大限度
+    private float MinDistence = 0.01f; //物体大小的最小限度 
+>>>>>>> 346d2257edf423f0423f49401ebe2dc44ca92f86
 
 
 
@@ -38,6 +47,7 @@ public class CreateObject : HTBehaviour
     private void CreateOrDestory()
     {
         ShowedObject = RecordManager.tempRecord.ShowedObject;
+<<<<<<< HEAD
         if (ShowedObject!=null)
         {           
             //Main.m_ObjectPool.Despawn(ShowedObject.id.ToString(), GameManager.Instance.MyObject);
@@ -93,6 +103,65 @@ public class CreateObject : HTBehaviour
             }
 
         }
+=======
+        if (ShowedObject != null)
+        {
+            //Main.m_ObjectPool.Despawn(ShowedObject.id.ToString(), GameManager.Instance.MyObject);
+        }
+        RecordManager.tempRecord.ShowedObject = objects;
+        MyObject = Main.m_ObjectPool.Spawn(objects.id.ToString());
+        MyObject.AddComponent<ObjectValue>();
+        GameManager.Instance.MyObject = MyObject;
+
+
+        //初始化被测物体设置
+        List<Transform> GameObjectList = new List<Transform>();
+        foreach (Transform child in MyObject.transform)
+        {
+            GameObjectList.Add(child);
+        }
+        for (int i = 0; i < GameObjectList.Count; i++)
+        {
+            //加组件
+            GameObjectList[i].gameObject.tag = ("Tools_Be_Moved");
+            GameObjectList[i].gameObject.layer = 11;                    //layer的序号
+            GameObjectList[i].gameObject.AddComponent<MeshCollider>();
+            GameObjectList[i].gameObject.GetComponent<MeshCollider>().convex = true;
+            GameObjectList[i].gameObject.GetComponent<MeshCollider>().isTrigger = true;
+            GameObjectList[i].gameObject.AddComponent<Rigidbody>();
+            GameObjectList[i].gameObject.GetComponent<Rigidbody>().useGravity = false;
+            GameObjectList[i].gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            //获取所有子物体中的最近点和最远点
+            Temp = GameObjectList[i].gameObject.GetComponent<MeshFilter>().mesh.bounds.min;
+            if (Temp.x < ClosestPoint.x)
+            {
+                ClosestPoint.x = Temp.x;
+            }
+            if (Temp.y < ClosestPoint.y)
+            {
+                ClosestPoint.y = Temp.y;
+            }
+            if (Temp.z < ClosestPoint.z)
+            {
+                ClosestPoint.z = Temp.z;
+            }
+            Temp = GameObjectList[i].gameObject.GetComponent<MeshFilter>().mesh.bounds.max;
+            if (Temp.x > FarthestPoint.x)
+            {
+                FarthestPoint.x = Temp.x;
+            }
+            if (Temp.y > FarthestPoint.y)
+            {
+                FarthestPoint.y = Temp.y;
+            }
+            if (Temp.z > FarthestPoint.z)
+            {
+                FarthestPoint.z = Temp.z;
+            }
+
+        }
+>>>>>>> 346d2257edf423f0423f49401ebe2dc44ca92f86
         Length = Mathf.Abs(FarthestPoint.x - ClosestPoint.x);
         Width = Mathf.Abs(FarthestPoint.y - ClosestPoint.y);
         Height = Mathf.Abs(FarthestPoint.z - ClosestPoint.z);
@@ -131,7 +200,11 @@ public class CreateObject : HTBehaviour
         }
 
         //移到合适位置
+<<<<<<< HEAD
         MyObject.transform.position = new Vector3(RecordManager.tempRecord.ObjectStartPosition[0], RecordManager.tempRecord.ObjectStartPosition[1]+Width, RecordManager.tempRecord.ObjectStartPosition[2]);
+=======
+        MyObject.transform.position = new Vector3(RecordManager.tempRecord.ObjectStartPosition[0], RecordManager.tempRecord.ObjectStartPosition[1] + Width, RecordManager.tempRecord.ObjectStartPosition[2]);
+>>>>>>> 346d2257edf423f0423f49401ebe2dc44ca92f86
 
         //记录赋值
 

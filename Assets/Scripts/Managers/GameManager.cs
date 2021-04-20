@@ -9,6 +9,8 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     List<Type> ProcedureStack { get => RecordManager.tempRecord.procedureStack; }
     public GameObject MyObject;
 
+    public GameObject MyObject = null;
+
     public bool CanContinue { get => ProcedureStack.Count > 1; }
 
     public int _currentQuantityIndex { get => RecordManager.tempRecord.currentQuantityIndex; set => RecordManager.tempRecord.currentQuantityIndex = value; }

@@ -12,20 +12,16 @@ public class Sitdown : EventHandlerBase
     /// <summary>
     /// 填充数据，所有属性、字段的初始化工作可以在这里完成
     /// </summary>
-    public Sitdown Fill(float x,float y, float z)
+    public Sitdown Fill(float x, float y, float z)
     {
 
         RecordManager.tempRecord.InstrumentStartPosition[0] = x;
         RecordManager.tempRecord.InstrumentStartPosition[1] = y;
         RecordManager.tempRecord.InstrumentStartPosition[2] = z;
 
-        RecordManager.tempRecord.ObjectStartPosition[0] = x-12f;
-<<<<<<< HEAD
-        RecordManager.tempRecord.ObjectStartPosition[1] = y+2.5f;
-=======
-        RecordManager.tempRecord.ObjectStartPosition[1] = y+3f;
->>>>>>> 346d2257edf423f0423f49401ebe2dc44ca92f86
-        RecordManager.tempRecord.ObjectStartPosition[2] = z+8f;
+        RecordManager.tempRecord.ObjectStartPosition[0] = x - 12f;
+        RecordManager.tempRecord.ObjectStartPosition[1] = y + 3f;
+        RecordManager.tempRecord.ObjectStartPosition[2] = z + 8f;
 
         return this;
     }
@@ -35,6 +31,6 @@ public class Sitdown : EventHandlerBase
     /// </summary>
     public override void Reset()
     {
-        
+
     }
 }

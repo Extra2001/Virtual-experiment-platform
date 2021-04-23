@@ -25,7 +25,8 @@ public class CreateObject : HTBehaviour
     private Vector3 FarthestPoint = new Vector3();//最远点
     private Vector3 Temp = new Vector3();
     private float MaxDistence = 2f; //物体大小的最大限度
-    private float MinDistence = 0.01f; //物体大小的最小限度 
+    private float MinDistence = 0.01f; //物体大小的最小限度
+    private float TempRate;
 
 
 

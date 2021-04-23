@@ -45,26 +45,6 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                         PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
                         ResourcePath = $"{Application.streamingAssetsPath}/Objects/object3.obj"
                     },
-                    new ObjectsModel()
-                    {
-                        id = 3,
-                        Name = "被测物体4",
-                        DetailMessage = "被测物体4",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object4.obj"
-                    },
-                    new ObjectsModel()
-                    {
-                        id = 4,
-                        Name = "被测物体5",
-                        DetailMessage = "被测物体5",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object5.obj"
-                    },
-
-
                 };
             }
             var items = new ItemData[RecordManager.tempRecord.objects.Count];

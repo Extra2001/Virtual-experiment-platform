@@ -38,6 +38,12 @@ public class OnChair : ProcedureBase
             else
                 Main.m_UI.GetUI<BagControl>().Hide();
         });
+
+        if (RecordManager.tempRecord.ShowedObject != null)
+        {
+            CreateObject.CreateWithoutDestory();
+        }
+        
     }
 
     /// <summary>

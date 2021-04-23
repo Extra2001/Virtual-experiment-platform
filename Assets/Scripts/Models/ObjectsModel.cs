@@ -24,7 +24,6 @@ public class ObjectsModel
     public string PreviewImage { get; set; } = "";
     public string DetailMessage { get; set; } = "";
     public bool Integrated { get; set; } = false;
-    public float Rate { get; set; } = 1f; //物体放大或缩小倍率
 
     public Vector3 position { get; set; } = new Vector3();
     public Vector3 rotation { get; set; } = new Vector3();

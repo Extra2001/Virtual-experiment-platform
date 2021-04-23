@@ -26,11 +26,7 @@ public class CreateObject : HTBehaviour
     private Vector3 Temp = new Vector3();
     private float MaxDistence = 2f; //物体大小的最大限度
     private float MinDistence = 0.01f; //物体大小的最小限度
-    private float TempRate;
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
         GetComponent<Button>().onClick.AddListener(CreateWithDestory);
@@ -124,26 +120,6 @@ public class CreateObject : HTBehaviour
         Width = Mathf.Abs(FarthestPoint.y - ClosestPoint.y);
         Height = Mathf.Abs(FarthestPoint.z - ClosestPoint.z);
 
-        //防止被错误缩放
-        while (RecordManager.tempRecord.ShowedObject.Rate > 1.1f)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x / 10f, MyObject.transform.localScale.y / 10f, MyObject.transform.localScale.z / 10f);
-            Debug.Log("缩小0");
-            //Length *= 10f;
-            //Width *= 10f;
-            //Height *= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate /= 10f;
-        }
-        while (RecordManager.tempRecord.ShowedObject.Rate < 0.9f)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x * 10f, MyObject.transform.localScale.y * 10f, MyObject.transform.localScale.z * 10f);
-            Debug.Log("RecordManager.tempRecord.Rate:" + RecordManager.tempRecord.ShowedObject.Rate + "放大");
-            //Length /= 10f;
-            //Width /= 10f;
-            //Height /= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate *= 10f;
-        }
-
 
 
 
@@ -154,7 +130,6 @@ public class CreateObject : HTBehaviour
             Length /= 10f;
             Width /= 10f;
             Height /= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate /= 10f;
         }
         while (Length < MinDistence)
         {
@@ -162,7 +137,6 @@ public class CreateObject : HTBehaviour
             Length *= 10f;
             Width *= 10f;
             Height *= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate *= 10f;
         }
         while (Width > MaxDistence)
         {
@@ -170,7 +144,6 @@ public class CreateObject : HTBehaviour
             Length /= 10f;
             Width /= 10f;
             Height /= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate /= 10f;
         }
         while (Width < MinDistence)
         {
@@ -178,7 +151,6 @@ public class CreateObject : HTBehaviour
             Length *= 10f;
             Width *= 10f;
             Height *= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate *= 10f;
         }
         while (Height > MaxDistence)
         {
@@ -186,7 +158,6 @@ public class CreateObject : HTBehaviour
             Length /= 10f;
             Width /= 10f;
             Height /= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate /= 10f;
         }
         while (Height < MinDistence)
         {
@@ -194,7 +165,6 @@ public class CreateObject : HTBehaviour
             Length *= 10f;
             Width *= 10f;
             Height *= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate *= 10f;
         }
 
         //移到合适位置
@@ -217,11 +187,10 @@ public class CreateObject : HTBehaviour
 
         if (ShowedObject != null)
         {
-            TempRate = ShowedObject.Rate;
             Main.m_ObjectPool.Despawn(ShowedObject.id.ToString(), GameManager.Instance.MyObject);
+            Main.m_ObjectPool.Clear(ShowedObject.id.ToString());
         }
         RecordManager.tempRecord.ShowedObject = objects;
-        RecordManager.tempRecord.ShowedObject.Rate = TempRate;
         MyObject = Main.m_ObjectPool.Spawn(objects.id.ToString());
         if (MyObject.GetComponent<ObjectValue>() == null)
         {
@@ -287,29 +256,6 @@ public class CreateObject : HTBehaviour
         Width = Mathf.Abs(FarthestPoint.y - ClosestPoint.y);
         Height = Mathf.Abs(FarthestPoint.z - ClosestPoint.z);
 
-        while (RecordManager.tempRecord.ShowedObject.Rate > 1.1f)
-        {
-            Debug.Log("RecordManager.tempRecord.Rate:" + RecordManager.tempRecord.ShowedObject.Rate);
-            Debug.Log("缩小");
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x / 10f, MyObject.transform.localScale.y / 10f, MyObject.transform.localScale.z / 10f);
-            //Length *= 10f;
-            //Width *= 10f;
-            //Height *= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate /= 10f;
-        }
-        while (RecordManager.tempRecord.ShowedObject.Rate < 0.9f)
-        {
-            Debug.Log("RecordManager.tempRecord.Rate:" + RecordManager.tempRecord.ShowedObject.Rate + "放大");
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x * 10f, MyObject.transform.localScale.y * 10f, MyObject.transform.localScale.z * 10f);
-            //Length /= 10f;
-            //Width /= 10f;
-            //Height /= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate *= 10f;
-        }
-
-        Debug.Log("Length"+Length);
-        Debug.Log("Width" + Width);
-        Debug.Log("Height" + Height);
 
 
         //将物体缩放至合适大小
@@ -319,7 +265,6 @@ public class CreateObject : HTBehaviour
             Length /= 10f;
             Width /= 10f;
             Height /= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate /= 10f;
         }
         while (Length < MinDistence)
         {
@@ -327,7 +272,6 @@ public class CreateObject : HTBehaviour
             Length *= 10f;
             Width *= 10f;
             Height *= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate *= 10f;
         }
         while (Width > MaxDistence)
         {
@@ -335,7 +279,6 @@ public class CreateObject : HTBehaviour
             Length /= 10f;
             Width /= 10f;
             Height /= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate /= 10f;
         }
         while (Width < MinDistence)
         {
@@ -343,7 +286,6 @@ public class CreateObject : HTBehaviour
             Length *= 10f;
             Width *= 10f;
             Height *= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate *= 10f;
         }
         while (Height > MaxDistence)
         {
@@ -351,7 +293,6 @@ public class CreateObject : HTBehaviour
             Length /= 10f;
             Width /= 10f;
             Height /= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate /= 10f;
         }
         while (Height < MinDistence)
         {            
@@ -359,7 +300,6 @@ public class CreateObject : HTBehaviour
             Length *= 10f;
             Width *= 10f;
             Height *= 10f;
-            RecordManager.tempRecord.ShowedObject.Rate *= 10f;
         }
 
         //移到合适位置
@@ -376,6 +316,7 @@ public class CreateObject : HTBehaviour
 
 
         Main.m_UI.CloseUI<BagControl>();
+        
     }
 
 }

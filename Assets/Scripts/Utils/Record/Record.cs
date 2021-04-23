@@ -41,7 +41,6 @@ public class Record
 
     public Type Instrumenttype { get; set; } = null;
     public ObjectsModel ShowedObject { get; set; } = null;
-    public float ObjectRate { get; set; } = 1f; //物体放大或缩小倍率
 
 
     public InstrumentInfoModel showedInstrument { get; set; } = new InstrumentInfoModel();

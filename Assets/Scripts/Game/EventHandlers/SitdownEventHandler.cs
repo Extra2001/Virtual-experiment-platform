@@ -14,6 +14,7 @@ public class Sitdown : EventHandlerBase
     /// </summary>
     public Sitdown Fill(float x, float y, float z)
     {
+        Debug.Log("Sitdown");
 
         RecordManager.tempRecord.InstrumentStartPosition[0] = x;
         RecordManager.tempRecord.InstrumentStartPosition[1] = y;

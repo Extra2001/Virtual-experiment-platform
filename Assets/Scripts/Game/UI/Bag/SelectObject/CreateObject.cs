@@ -378,8 +378,4 @@ public class CreateObject : HTBehaviour
         Main.m_UI.CloseUI<BagControl>();
     }
 
-    private void Update()
-    {
-        Debug.Log(RecordManager.tempRecord.ShowedObject.Rate);
-    }
 }

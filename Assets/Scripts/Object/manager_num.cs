@@ -27,9 +27,9 @@ public class manager_num : HTBehaviour
         f6 = this.transform.Find("1").gameObject;
         f7 = this.transform.Find("1").gameObject;
     }
-    public void Show_num(string nums)
+    public void Show_num(double num)
     {
-
+        
     }
     // Update is called once per frame
     void Update()

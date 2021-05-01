@@ -32,6 +32,8 @@ public class FormulaController : HTBehaviour
         Instance = this;
         baseCell.ReplaceFlags.Add(baseCell.Value1, "{0}");
         showedCells.Add(baseCell);
+        clickedButton = baseCell.Value1;
+        clickedCell = baseCell;
         baseCell.Value1.onClick.AddListener(() =>
         {
             clickedButton = baseCell.Value1;
@@ -41,7 +43,7 @@ public class FormulaController : HTBehaviour
         });
     }
 
-    public void SelectCell(string cellName)
+    public void SelectCell(string cellName, string value = "0")
     {
         var cell = GetCell(cellName);
         DeleteChild(clickedButton.transform);
@@ -65,7 +67,14 @@ public class FormulaController : HTBehaviour
 
                 // 呼出选择器
             });
+        if (cellName.Equals("Customize")) HandleCustomize(hh, value);
         RefreshContentSizeFitter();
+    }
+
+    private void HandleCustomize(FormulaCell cellInstance, string value)
+    {
+        cellInstance.value = value;
+        cellInstance.gameObject.GetComponent<FormulaCustomizeShower>().SetValue(value);
     }
 
     private FormulaCell GetCell(string cellName)

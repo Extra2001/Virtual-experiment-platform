@@ -22,7 +22,7 @@ public class FormulaCustomizeCell : HTBehaviour
                 show.text = "0";
                 return;
             }
-            FormulaSelectorCell.value = $"({value})";
+            FormulaSelectorCell.value = $"{value}";
             show.text = value;
         });
     }

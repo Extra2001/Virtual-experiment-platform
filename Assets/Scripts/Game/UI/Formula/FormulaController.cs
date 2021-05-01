@@ -23,6 +23,10 @@ public class FormulaController : HTBehaviour
 
     [SerializeField]
     private FormulaCell baseCell;
+    [SerializeField]
+    private GameObject Selector;
+    [SerializeField]
+    private GameObject Mask;
     private List<FormulaCell> showedCells = new List<FormulaCell>();
     private Button clickedButton;
     private FormulaCell clickedCell;
@@ -34,17 +38,21 @@ public class FormulaController : HTBehaviour
         showedCells.Add(baseCell);
         clickedButton = baseCell.Value1;
         clickedCell = baseCell;
+        this.Mask.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            HideSelector();
+        });
         baseCell.Value1.onClick.AddListener(() =>
         {
             clickedButton = baseCell.Value1;
             clickedCell = baseCell;
-
-            // 呼出选择器
+            ShowSelector();
         });
     }
 
     public void SelectCell(string cellName, string value = "0")
     {
+        HideSelector();
         var cell = GetCell(cellName);
         DeleteChild(clickedButton.transform);
         var hh = Instantiate(cell, clickedButton.gameObject.transform);
@@ -56,19 +64,29 @@ public class FormulaController : HTBehaviour
             {
                 clickedButton = hh.Value1;
                 clickedCell = hh;
-
-                // 呼出选择器
+                ShowSelector();
             });
         if (hh.Value2 != null)
             hh.Value2.onClick.AddListener(() =>
             {
                 clickedButton = hh.Value2;
                 clickedCell = hh;
-
-                // 呼出选择器
+                ShowSelector();
             });
         if (cellName.Equals("Customize")) HandleCustomize(hh, value);
         RefreshContentSizeFitter();
+    }
+
+    private void ShowSelector()
+    {
+        Mask.SetActive(true);
+        UIShowHideHelper.ShowFromUp(Selector, 132);
+    }
+
+    private void HideSelector()
+    {
+        Mask.SetActive(false);
+        UIShowHideHelper.HideToUp(Selector);
     }
 
     private void HandleCustomize(FormulaCell cellInstance, string value)

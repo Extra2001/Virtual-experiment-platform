@@ -8,22 +8,29 @@ using UnityEngine.UI;
 
 public class FormulaController : HTBehaviour
 {
+    /// <summary>
+    /// 获取实例对象
+    /// </summary>
     public static FormulaController Instance { get; private set; }
-
-    public FormulaCell baseCell;
-
-    private List<FormulaCell> showedCells = new List<FormulaCell>();
-
-    private Button clickedButton;
-
-    private FormulaCell clickedCell;
-
+    /// <summary>
+    /// 获取当前的表达式，如果未完成填写会抛异常
+    /// </summary>
     public string Expression { get => GetExpression("base"); }
+    /// <summary>
+    /// 获取当前表达式计算值
+    /// </summary>
+    public double ExpressionExecuted { get => Javascript.Eval(GetExpression("base")); }
+
+    [SerializeField]
+    private FormulaCell baseCell;
+    private List<FormulaCell> showedCells = new List<FormulaCell>();
+    private Button clickedButton;
+    private FormulaCell clickedCell;
 
     private void Start()
     {
         Instance = this;
-        baseCell.thisGUID = "base";
+        baseCell.ReplaceFlags.Add(baseCell.Value1, "{0}");
         showedCells.Add(baseCell);
         baseCell.Value1.onClick.AddListener(() =>
         {
@@ -32,30 +39,6 @@ public class FormulaController : HTBehaviour
 
             // 呼出选择器
         });
-    }
-
-    private FormulaCell GetCell(string cellName)
-    {
-        var obj = Resources.Load<GameObject>($"UI/Formula/Cells/{cellName}");
-        var ret = obj.GetComponent<FormulaCell>();
-        return ret;
-    }
-
-    private void DeleteChild(Transform cell)
-    {
-        int childCnt = cell.childCount;
-        for(int i = 0; i < childCnt; i++)
-            Destroy(cell.transform.GetChild(i).gameObject);
-    }
-
-    private void RefreshContentSizeFitter()
-    {
-        var list = showedCells[0].GetComponentsInChildren<ContentSizeFitter>();
-        foreach(var item in list)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(item.gameObject.rectTransform());
-        foreach (var item in list)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(item.gameObject.rectTransform());
-        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
     }
 
     public void SelectCell(string cellName)
@@ -85,7 +68,38 @@ public class FormulaController : HTBehaviour
         RefreshContentSizeFitter();
     }
 
-    public string GetExpression(string guid)
+    private FormulaCell GetCell(string cellName)
+    {
+        var obj = Resources.Load<GameObject>($"UI/Formula/Cells/{cellName}");
+        var ret = obj.GetComponent<FormulaCell>();
+        return ret;
+    }
+
+    private void DeleteChild(Transform cell)
+    {
+        int childCnt = cell.childCount;
+        for (int i = 0; i < childCnt; i++)
+            Destroy(cell.transform.GetChild(i).gameObject);
+    }
+
+    private void RefreshContentSizeFitter()
+    {
+        var list = showedCells[0].GetComponentsInChildren<ContentSizeFitter>();
+        for (int i = 0; i < list.Length; i++)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        for (int i = list.Length - 1; i >= 0; i--)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        for (int i = 0; i < list.Length; i++)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        for (int i = list.Length - 1; i >= 0; i--)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+    }
+
+    private string GetExpression(string guid)
     {
         var curCell = showedCells.Where(x => x.thisGUID.Equals(guid)).Last();
         var value = curCell.value;
@@ -96,7 +110,4 @@ public class FormulaController : HTBehaviour
         }
         return value;
     }
-
-
-
 }

@@ -9,40 +9,32 @@ using System;
 public class UncertaintyInput : HTBehaviour
 {
     public Text _Title;
-    public Text _Name;
-    public Text _Symbol;
-    public Text _Unit;
-    public Text _Group;
-    public Text _Instrument;
-    public InputField UA;
-    public InputField UB;
+    public Text _AverageTitle;
+    public Text _AverageValue;
+    public Text _UaTitle;
+    public Text _UaValue;
+    public Text _UbTitle;
+    public Text _UbValue;
+    public Text _ComplexTitle;
+
     public DataColumn dataColumn;
 
-    private QuantityModel quantity;
 
     private void Start()
     {
-        UA.onEndEdit.AddListener(x =>
-        {
-            quantity.UA = Convert.ToDouble(x);
-        });
-        UB.onEndEdit.AddListener(x =>
-        {
-            quantity.UB = Convert.ToDouble(x);
-        });
+
     }
 
     public void Show(QuantityModel quantity)
     {
         var instance = quantity.InstrumentType.CreateInstrumentInstance();
-        this.quantity = quantity;
-        _Title.text = quantity.Name + ":" + quantity.Symbol + "/" + instance.UnitSymbol; 
-        _Name.text = quantity.Name;
-        _Symbol.text = quantity.Symbol;        
-        _Unit.text = instance.UnitSymbol;
-        _Instrument.text = instance.InstName;
-        UA.text = quantity.UA.ToString();
-        UB.text = quantity.UB.ToString();
+
+        _Title.text = "处理" + quantity.Name + ":" + quantity.Symbol + "/" + instance.UnitSymbol;
+        _AverageTitle.text = instance.UnitSymbol + "的平均值=";
+        _UaTitle.text = instance.UnitSymbol + "的A类不确定度=";
+        _UbTitle.text = instance.UnitSymbol + "的B类不确定度=";
+        _ComplexTitle.text = instance.UnitSymbol + "的合成不确定度=";
+
         dataColumn.ShowQuantity(quantity);
     }
 }

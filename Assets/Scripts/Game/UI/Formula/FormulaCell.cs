@@ -27,8 +27,9 @@ public class FormulaCell : HTBehaviour
             ReplaceFlags.Add(Value1, "{0}");
         if (Value2 != null)
             ReplaceFlags.Add(Value2, "{1}");
-        foreach (var item in ReplaceFlags)
+        for (int i = 0; i < ReplaceFlags.Count; i++)
         {
+            var item = ReplaceFlags.ElementAt(i);
             var str = Guid.NewGuid().ToString("N");
             value = value.Replace(item.Value, str);
             ReplaceFlags[item.Key] = str;

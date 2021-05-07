@@ -18,11 +18,11 @@ public class FormulaCustomizeCell : HTBehaviour
         {
             if (string.IsNullOrEmpty(value))
             {
-                FormulaSelectorCell.value = $"(0)";
+                FormulaSelectorCell.value = $"0";
                 show.text = "0";
                 return;
             }
-            FormulaSelectorCell.value = $"({value})";
+            FormulaSelectorCell.value = $"{value}";
             show.text = value;
         });
     }

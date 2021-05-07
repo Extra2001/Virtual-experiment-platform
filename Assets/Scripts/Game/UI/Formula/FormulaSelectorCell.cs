@@ -17,7 +17,7 @@ public class FormulaSelectorCell : HTBehaviour
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
-            FormulaController.Instance.SelectCell(gameObject.name);
+            FormulaController.Instance.SelectCell(gameObject.name, value);
         });
     }
 }

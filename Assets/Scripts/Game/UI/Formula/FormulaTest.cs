@@ -16,6 +16,7 @@ public class FormulaTest : HTBehaviour
         GetComponent<Button>().onClick.AddListener(() =>
         {
             Log.Info(FormulaController.Instance.Expression);
+            Log.Info(FormulaController.Instance.ExpressionExecuted.ToString());
         });
     }
 

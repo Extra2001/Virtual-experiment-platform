@@ -8,30 +8,91 @@ using UnityEngine.UI;
 
 public class FormulaController : HTBehaviour
 {
+    /// <summary>
+    /// 获取实例对象
+    /// </summary>
     public static FormulaController Instance { get; private set; }
-
-    public FormulaCell baseCell;
-
-    private List<FormulaCell> showedCells = new List<FormulaCell>();
-
-    private Button clickedButton;
-
-    private FormulaCell clickedCell;
-
+    /// <summary>
+    /// 获取当前的表达式，如果未完成填写会抛异常
+    /// </summary>
     public string Expression { get => GetExpression("base"); }
+    /// <summary>
+    /// 获取当前表达式计算值
+    /// </summary>
+    public double ExpressionExecuted { get => Javascript.Eval(GetExpression("base")); }
+
+    [SerializeField]
+    private FormulaCell baseCell;
+    [SerializeField]
+    private GameObject Selector;
+    [SerializeField]
+    private GameObject Mask;
+    private List<FormulaCell> showedCells = new List<FormulaCell>();
+    private Button clickedButton;
+    private FormulaCell clickedCell;
 
     private void Start()
     {
         Instance = this;
-        baseCell.thisGUID = "base";
+        baseCell.ReplaceFlags.Add(baseCell.Value1, "{0}");
         showedCells.Add(baseCell);
+        clickedButton = baseCell.Value1;
+        clickedCell = baseCell;
+        this.Mask.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            HideSelector();
+        });
         baseCell.Value1.onClick.AddListener(() =>
         {
             clickedButton = baseCell.Value1;
             clickedCell = baseCell;
-
-            // 呼出选择器
+            ShowSelector();
         });
+    }
+
+    public void SelectCell(string cellName, string value = "0")
+    {
+        HideSelector();
+        var cell = GetCell(cellName);
+        DeleteChild(clickedButton.transform);
+        var hh = Instantiate(cell, clickedButton.gameObject.transform);
+        hh.thisGUID = clickedCell.ReplaceFlags[clickedButton];
+        hh.GenerateReplaceFlags();
+        showedCells.Add(hh);
+        if (hh.Value1 != null)
+            hh.Value1.onClick.AddListener(() =>
+            {
+                clickedButton = hh.Value1;
+                clickedCell = hh;
+                ShowSelector();
+            });
+        if (hh.Value2 != null)
+            hh.Value2.onClick.AddListener(() =>
+            {
+                clickedButton = hh.Value2;
+                clickedCell = hh;
+                ShowSelector();
+            });
+        if (cellName.Equals("Customize")) HandleCustomize(hh, value);
+        RefreshContentSizeFitter();
+    }
+
+    private void ShowSelector()
+    {
+        Mask.SetActive(true);
+        UIShowHideHelper.ShowFromUp(Selector, 132);
+    }
+
+    private void HideSelector()
+    {
+        Mask.SetActive(false);
+        UIShowHideHelper.HideToUp(Selector);
+    }
+
+    private void HandleCustomize(FormulaCell cellInstance, string value)
+    {
+        cellInstance.value = value;
+        cellInstance.gameObject.GetComponent<FormulaCustomizeShower>().SetValue(value);
     }
 
     private FormulaCell GetCell(string cellName)
@@ -44,48 +105,28 @@ public class FormulaController : HTBehaviour
     private void DeleteChild(Transform cell)
     {
         int childCnt = cell.childCount;
-        for(int i = 0; i < childCnt; i++)
+        for (int i = 0; i < childCnt; i++)
             Destroy(cell.transform.GetChild(i).gameObject);
     }
 
     private void RefreshContentSizeFitter()
     {
         var list = showedCells[0].GetComponentsInChildren<ContentSizeFitter>();
-        foreach(var item in list)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(item.gameObject.rectTransform());
-        foreach (var item in list)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(item.gameObject.rectTransform());
+        for (int i = 0; i < list.Length; i++)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        for (int i = list.Length - 1; i >= 0; i--)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        for (int i = 0; i < list.Length; i++)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        for (int i = list.Length - 1; i >= 0; i--)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
         LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
     }
 
-    public void SelectCell(string cellName)
-    {
-        var cell = GetCell(cellName);
-        DeleteChild(clickedButton.transform);
-        var hh = Instantiate(cell, clickedButton.gameObject.transform);
-        hh.thisGUID = clickedCell.ReplaceFlags[clickedButton];
-        hh.GenerateReplaceFlags();
-        showedCells.Add(hh);
-        if (hh.Value1 != null)
-            hh.Value1.onClick.AddListener(() =>
-            {
-                clickedButton = hh.Value1;
-                clickedCell = hh;
-
-                // 呼出选择器
-            });
-        if (hh.Value2 != null)
-            hh.Value2.onClick.AddListener(() =>
-            {
-                clickedButton = hh.Value2;
-                clickedCell = hh;
-
-                // 呼出选择器
-            });
-        RefreshContentSizeFitter();
-    }
-
-    public string GetExpression(string guid)
+    private string GetExpression(string guid)
     {
         var curCell = showedCells.Where(x => x.thisGUID.Equals(guid)).Last();
         var value = curCell.value;
@@ -96,7 +137,4 @@ public class FormulaController : HTBehaviour
         }
         return value;
     }
-
-
-
 }

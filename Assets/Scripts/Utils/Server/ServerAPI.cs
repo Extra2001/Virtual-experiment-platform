@@ -10,61 +10,61 @@ using System.Threading.Tasks;
 
 public static class ServerAPI
 {
-    public static Task<ValidateStatus> ValidateSymbol(string symbol)
-    {
-        return Task.Run(() =>
-        {
-            var result = GetUrl("valsym")
-            .AllowAnyHttpStatus()
-            .PostJsonAsync(new { symbol })
-            .ReceiveJson<CodeResponse>().Result;
+    // public static Task<ValidateStatus> ValidateSymbol(string symbol)
+    // {
+    //     return Task.Run(() =>
+    //     {
+    //         var result = GetUrl("valsym")
+    //         .AllowAnyHttpStatus()
+    //         .PostJsonAsync(new { symbol })
+    //         .ReceiveJson<CodeResponse>().Result;
 
-            if (result.code == 0)
-                return Pass();
-            return Refuse("未知错误");
-        });
-    }
+    //         if (result.code == 0)
+    //             return Pass();
+    //         return Refuse("未知错误");
+    //     });
+    // }
 
-    public static Task<ValidateStatus> ValidateExpression(string expression, List<QuantityModel> quantities)
-    {
-        return Task.Run(() =>
-        {
-            var result = GetUrl("valexpr")
-            .AllowAnyHttpStatus()
-            .PostJsonAsync(new
-            {
-                expr = expression,
-                quantities
-            })
-            .ReceiveJson<CodeResponse>().Result;
+    // public static Task<ValidateStatus> ValidateExpression(string expression, List<QuantityModel> quantities)
+    // {
+    //     return Task.Run(() =>
+    //     {
+    //         var result = GetUrl("valexpr")
+    //         .AllowAnyHttpStatus()
+    //         .PostJsonAsync(new
+    //         {
+    //             expr = expression,
+    //             quantities
+    //         })
+    //         .ReceiveJson<CodeResponse>().Result;
 
-            if (result.code == 0)
-                return Pass();
-            return Refuse("未知错误");
-        });
-    }
+    //         if (result.code == 0)
+    //             return Pass();
+    //         return Refuse("未知错误");
+    //     });
+    // }
 
-    private static string GetUrl(string parmas)
-    {
-        return "http://localhost:" +
-            $"{ProcessManager.Port}/{parmas}";
-    }
+    // private static string GetUrl(string parmas)
+    // {
+    //     return "http://localhost:" +
+    //         $"{ProcessManager.Port}/{parmas}";
+    // }
 
-    private static ValidateStatus Pass()
-    {
-        return new ValidateStatus()
-        {
-            Passed = true,
-            Message = "通过"
-        };
-    }
+    // private static ValidateStatus Pass()
+    // {
+    //     return new ValidateStatus()
+    //     {
+    //         Passed = true,
+    //         Message = "通过"
+    //     };
+    // }
 
-    private static ValidateStatus Refuse(string message)
-    {
-        return new ValidateStatus()
-        {
-            Passed = false,
-            Message = message
-        };
-    }
+    // private static ValidateStatus Refuse(string message)
+    // {
+    //     return new ValidateStatus()
+    //     {
+    //         Passed = false,
+    //         Message = message
+    //     };
+    // }
 }

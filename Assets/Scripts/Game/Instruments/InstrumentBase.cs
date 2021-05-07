@@ -15,7 +15,12 @@ public interface IResetable
     void InstReset();
 }
 
-public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable
+public interface IShowValuable
+{
+    void ShowValue(double value);
+}
+
+public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable, IShowValuable
 {
     /// <summary>
     /// 仪器名称
@@ -79,4 +84,6 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable
     /// 重置仪器状态
     /// </summary>
     public abstract void InstReset();
+
+    public abstract void ShowValue(double value);
 }

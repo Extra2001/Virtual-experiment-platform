@@ -94,4 +94,8 @@ public class RulerInstrument : InstrumentBase
         base.Reset();
     }
 
+    public override void ShowValue(double value)
+    {
+        throw new System.NotImplementedException();
+    }
 }

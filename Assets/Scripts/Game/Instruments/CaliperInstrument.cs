@@ -60,4 +60,9 @@ public class CaliperInstrument : InstrumentBase
         Self.transform.position = Position;
         base.OnShow();
     }
+
+    public override void ShowValue(double value)
+    {
+        throw new System.NotImplementedException();
+    }
 }

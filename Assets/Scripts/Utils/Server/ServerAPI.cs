@@ -21,7 +21,7 @@ public static class ServerAPI
 
     //         if (result.code == 0)
     //             return Pass();
-    //         return Refuse("Î´Öª´íÎó");
+    //         return Refuse("Î´Öªï¿½ï¿½ï¿½ï¿½");
     //     });
     // }
 
@@ -40,7 +40,7 @@ public static class ServerAPI
 
     //         if (result.code == 0)
     //             return Pass();
-    //         return Refuse("Î´Öª´íÎó");
+    //         return Refuse("Î´Öªï¿½ï¿½ï¿½ï¿½");
     //     });
     // }
 
@@ -55,7 +55,7 @@ public static class ServerAPI
     //     return new ValidateStatus()
     //     {
     //         Passed = true,
-    //         Message = "Í¨¹ý"
+    //         Message = "Í¨ï¿½ï¿½"
     //     };
     // }
 

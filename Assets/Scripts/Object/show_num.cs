@@ -142,6 +142,5 @@ public class show_num : HTBehaviour
     // Update is called once per frame
     void Update()
     {
-        f1.layer = 12;
     }
 }

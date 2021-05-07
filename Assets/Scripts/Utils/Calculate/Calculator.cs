@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MathNet.Numerics;
 using MathNet.Symbolics;
@@ -10,54 +11,95 @@ using expr = MathNet.Symbolics.Expression;
 using symexpr = MathNet.Symbolics.SymbolicExpression;
 using symdiff = MathNet.Symbolics.Calculus;
 using symfuncs = MathNet.Symbolics.Function;
-public class MakeExpressionResult {
-    public string resexpr, uncexpr;
-    public List<string> argtable;
-    public symexpr sym, unc;
-}
-public static class Calculate {
-    public static Tuple<double, double> CalcUncertain(double[] data) {
+public class CalcVariable {
+    public List<double> values;
+    public double ub;
+    public CalcVariable(double ub, int measures) {
+        this.ub = ub; values = new List<double>(measures);
+    }
+    public (double, double, double) CalcUncertain() {// value,ua,u
         int n = 0;
         double sum1 = 0, sum2 = 0;
-        foreach(var item in data) {
+        foreach(var item in values) {
             sum1 += item; n++;
         }
         double average = sum1 / n;
-        foreach(var item in data) {
+        foreach(var item in values) {
             sum2 += (item - average) * (item - average) / (n * (n - 1));
         }
-        return new Tuple<double, double>(average, Math.Sqrt(sum2));
+        return (average, Math.Sqrt(sum2), Math.Sqrt(sum2 + ub * ub));
     }
-    public static void CalcExpression(string exprstr, Dictionary<string, double[]> data) {
-        symexpr sym = symexpr.Parse(exprstr), res = 0;
-        Dictionary<string, FloatingPoint> nom = new Dictionary<string, FloatingPoint>(data.Count * 2 + 2);
-        foreach(var item in data) {
-            string uname = $"u_{item.Key}";
-            var av_unc = CalcUncertain(item.Value);
-            nom[item.Key] = av_unc.Item1;
-            nom[uname] = av_unc.Item2;
-            symexpr s = item.Key;
-            symexpr us = uname;
-            res += (sym.Differentiate(s) * us).Pow(2);
-        }
-        res = res.Sqrt();
-        Console.WriteLine(sym);
-        Console.WriteLine();
-        Console.WriteLine(res);
-        Console.WriteLine();
-        Console.WriteLine(sym.ToLaTeX());
-        Console.WriteLine();
-        Console.WriteLine(res.ToLaTeX());
-        var calcres = sym.Evaluate(nom);
-        var calcu = res.Evaluate(nom);
-        Console.WriteLine(calcres);
-        Console.WriteLine(calcu);       
+}
+public class CalcArgs {
+    private Dictionary<string, CalcVariable> vars;//变量
+    private Dictionary<string, double> cons;//常量
+    public int arrlen { get; private set; }
+    public CalcArgs(int measures) {
+        vars = new Dictionary<string, CalcVariable>(); cons = new Dictionary<string, double>();
+        arrlen = measures;
     }
-    public static Tuple<string,string> MakeUncertain(string exprstr,string[] vars) {
-        symexpr sym = symexpr.Parse(exprstr);
-        foreach(var item in vars) {
-
+    public static readonly HashSet<string> keywords = new HashSet<string>(){
+            "pi","e","abs","acos","asin","atan","sin","cos","tan","cot","sec","csc","j","sqrt","pow","sinh","cosh","tanh","exp","ln","lg"
+        };
+    public bool ValidVarname(string v) {
+        if(keywords.Contains(v)) {
+            return false;
         }
-        return new Tuple<string, string>(sym.ToLaTeX(), null);
+        else {
+            if(vars.ContainsKey(v) || !char.IsLetter(v[0]) || Regex.IsMatch(v, @"[^a-zA-Z0-9]")) {
+                return false;
+            }
+            return true;
+        }
+    }
+    public bool SetConstant(string varname, double val) {
+        if(!cons.ContainsKey(varname)) {
+            if(ValidVarname(varname)) {
+                cons[varname] = val; return true;
+            }
+            return false;
+        }
+        else {
+            cons[varname] = val;
+            return true;
+        }
+    }
+    public bool AddVariable(string varname, double ub) {
+        //先检查变量如果没有出现过就加入
+        if(ValidVarname(varname)) {
+            vars[varname] = new CalcVariable(ub, arrlen);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public bool Measure(string varname, double value) {
+        //添加一个测量值 成功返回true
+        if(vars.ContainsKey(varname)) {
+            vars[varname].values.Add(value); return true;
+        }
+        return false;
+    }
+    public static (symexpr, symexpr) Calculate(string expression, CalcArgs argobj) {//return (value,uncertain)
+        symexpr val = symexpr.Parse(expression), unc = 0;
+        foreach(var item in argobj.vars) {
+            symexpr uncvar = symexpr.Parse($"u_{item.Key}");
+            unc += (val.Differentiate(item.Key) * uncvar).Pow(2);
+        }
+        return (val, unc.Sqrt());
+    }
+    public static (double, double) CalculateValue(symexpr valexpr, symexpr uncexpr, CalcArgs argobj) {
+        //return (value, uncertain)
+        Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
+        foreach(var item in argobj.cons) {
+            vals[item.Key] = argobj.cons[item.Key];
+        }
+        foreach(var item in argobj.vars) {
+            var unc = argobj.vars[item.Key].CalcUncertain();
+            vals[item.Key] = unc.Item1;
+            vals[$"u_{item.Key}"] = unc.Item3;
+        }
+        return (valexpr.Evaluate(vals).RealValue, uncexpr.Evaluate(vals).RealValue);
     }
 }

@@ -18,7 +18,7 @@ public class UncertaintyBackNext : HTBehaviour
         {
             if (gm._currentQuantityIndex == 0)
             {
-                Main.m_UI.CloseUI<UncertaintyUILogic>();
+                Main.m_UI.CloseUI<MeasuredDataProcess>();
                 gm.SwitchBackProcedure();
             }
             else
@@ -31,7 +31,7 @@ public class UncertaintyBackNext : HTBehaviour
         {
             if (gm._currentQuantityIndex >= rec.quantities.Count - 1)
             {
-                Main.m_Procedure.SwitchProcedure<ComplexDataProcessProcedure>();
+                gm.SwitchProcedure<ComplexDataProcessProcedure>();
             }
             else
             {

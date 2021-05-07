@@ -144,19 +144,26 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         });
     }
 
+    public void SwitchProcedure<T>() where T : ProcedureBase
+    {
+        Main.m_Procedure.SwitchProcedure<T>();
+        ProcedureStack.Add(typeof(T));
+    }
+
     private void ProcessTips()
     {
         Main.m_Procedure.SwitchProcedure<ProcessExplainProcedure>();
         ProcedureStack.Add(typeof(ProcessExplainProcedure));
     }
 
-    private void EnterUncertainty()
+    public void EnterUncertainty()
     {
         Main.m_Procedure.SwitchProcedure<MeasuredDataProcessProcedure>();
         ProcedureStack.Add(typeof(MeasuredDataProcessProcedure));
         _currentQuantityIndex = 0;
         ShowUncertainty();
     }
+
     public void ShowUncertainty()
     {
         var pro = Main.m_Procedure.GetProcedure<MeasuredDataProcessProcedure>();

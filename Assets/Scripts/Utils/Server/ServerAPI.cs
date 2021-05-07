@@ -19,19 +19,11 @@ public static class ServerAPI
     //         .PostJsonAsync(new { symbol })
     //         .ReceiveJson<CodeResponse>().Result;
 
-<<<<<<< HEAD
-            if (result.code == 0)
-                return Pass();
-            return Refuse("未知错误");
-        });
-    }
-=======
     //         if (result.code == 0)
     //             return Pass();
-    //         return Refuse("δ֪����");
+    //         return Refuse("δ֪����");
     //     });
     // }
->>>>>>> 8ea9a5e28762f89436cab7fb79a04eae7b15628e
 
     // public static Task<ValidateStatus> ValidateExpression(string expression, List<QuantityModel> quantities)
     // {
@@ -46,19 +38,11 @@ public static class ServerAPI
     //         })
     //         .ReceiveJson<CodeResponse>().Result;
 
-<<<<<<< HEAD
-            if (result.code == 0)
-                return Pass();
-            return Refuse("未知错误");
-        });
-    }
-=======
     //         if (result.code == 0)
     //             return Pass();
-    //         return Refuse("δ֪����");
+    //         return Refuse("δ֪����");
     //     });
     // }
->>>>>>> 8ea9a5e28762f89436cab7fb79a04eae7b15628e
 
     // private static string GetUrl(string parmas)
     // {
@@ -66,25 +50,14 @@ public static class ServerAPI
     //         $"{ProcessManager.Port}/{parmas}";
     // }
 
-<<<<<<< HEAD
-    private static ValidateStatus Pass()
-    {
-        return new ValidateStatus()
-        {
-            Passed = true,
-            Message = "通过"
-        };
-    }
-=======
     // private static ValidateStatus Pass()
     // {
     //     return new ValidateStatus()
     //     {
     //         Passed = true,
-    //         Message = "ͨ��"
+    //         Message = "ͨ��"
     //     };
     // }
->>>>>>> 8ea9a5e28762f89436cab7fb79a04eae7b15628e
 
     // private static ValidateStatus Refuse(string message)
     // {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HT.Framework;
 using System.Threading.Tasks;
+using UnityEngine.EventSystems;
 
 public interface IMeasurable
 {
@@ -89,8 +90,15 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public override void OnShow()
     {
-        Entity.AddComponent<RightButton>();
+        Entity.layer = 11;
+        Entity.tag = "Tools_Be_Moved";
+        AddRightButton();
         base.OnShow();
+    }
+
+    private void AddRightButton()
+    {
+        var right = Entity.AddComponent<RightButton>();
     }
 
     public override void OnHide()

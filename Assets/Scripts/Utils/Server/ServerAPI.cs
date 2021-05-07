@@ -21,7 +21,7 @@ public static class ServerAPI
 
             if (result.code == 0)
                 return Pass();
-            return Refuse("未知错误");
+            return Refuse("鏈煡閿欒");
         });
     }
 
@@ -40,7 +40,7 @@ public static class ServerAPI
 
             if (result.code == 0)
                 return Pass();
-            return Refuse("未知错误");
+            return Refuse("鏈煡閿欒");
         });
     }
 
@@ -55,7 +55,7 @@ public static class ServerAPI
         return new ValidateStatus()
         {
             Passed = true,
-            Message = "通过"
+            Message = "閫氳繃"
         };
     }
 

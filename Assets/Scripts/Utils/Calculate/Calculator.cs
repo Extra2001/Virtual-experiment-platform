@@ -10,6 +10,11 @@ using expr = MathNet.Symbolics.Expression;
 using symexpr = MathNet.Symbolics.SymbolicExpression;
 using symdiff = MathNet.Symbolics.Calculus;
 using symfuncs = MathNet.Symbolics.Function;
+public class MakeExpressionResult {
+    public string resexpr, uncexpr;
+    public List<string> argtable;
+    public symexpr sym, unc;
+}
 public static class Calculate {
     public static Tuple<double, double> CalcUncertain(double[] data) {
         int n = 0;
@@ -46,6 +51,13 @@ public static class Calculate {
         var calcres = sym.Evaluate(nom);
         var calcu = res.Evaluate(nom);
         Console.WriteLine(calcres);
-        Console.WriteLine(calcu);
+        Console.WriteLine(calcu);       
+    }
+    public static Tuple<string,string> MakeUncertain(string exprstr,string[] vars) {
+        symexpr sym = symexpr.Parse(exprstr);
+        foreach(var item in vars) {
+
+        }
+        return new Tuple<string, string>(sym.ToLaTeX(), null);
     }
 }

@@ -71,6 +71,6 @@ public class GameLaunch : MonoBehaviour
 
     private void OnDestroy()
     {
-        ProcessManager.StopService();
+        // ProcessManager.StopService();
     }
 }

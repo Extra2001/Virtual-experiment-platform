@@ -35,6 +35,16 @@ public class show_num : HTBehaviour
         f6.layer = 12;
         f7.layer = 12;
     }
+    public void ChangeTheNum_init()
+    {
+        f1.layer = 12;
+        f2.layer = 12;
+        f3.layer = 12;
+        f4.layer = 12;
+        f5.layer = 12;
+        f6.layer = 12;
+        f7.layer = 12;
+    }
     public void ChangeTheNum(int i)
     {
         if (i == 0)

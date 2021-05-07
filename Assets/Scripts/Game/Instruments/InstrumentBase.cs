@@ -86,4 +86,15 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     public abstract void InstReset();
 
     public abstract void ShowValue(double value);
+
+    public override void OnShow()
+    {
+        Entity.AddComponent<RightButton>();
+        base.OnShow();
+    }
+
+    public override void OnHide()
+    {
+        GameObject.Destroy(Entity.GetComponent<RightButton>());
+    }
 }

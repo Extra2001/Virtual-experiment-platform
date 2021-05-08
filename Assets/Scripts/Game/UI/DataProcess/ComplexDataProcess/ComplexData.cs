@@ -6,7 +6,7 @@ using DG.Tweening;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
-[UIResource("AssetBundleName", "AssetPath", "UI/DataProcess/ProcessExplain")]
+[UIResource("AssetBundleName", "AssetPath", "UI/DataProcess/ComplexDataProcess")]
 public class ComplexData : UILogicResident
 {
 	/// <summary>

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NextBackButtonControl : HTBehaviour
+public class NextBackButtonComplexData : HTBehaviour
 {
     //启用自动化
     protected override bool IsAutomate => true;

@@ -22,6 +22,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        Main.m_UI.OpenResidentUI<ComplexData>();
         base.OnEnter(lastProcedure);
     }
 
@@ -31,6 +32,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
+        Main.m_UI.CloseUI<ComplexData>();
         base.OnLeave(nextProcedure);
     }
 

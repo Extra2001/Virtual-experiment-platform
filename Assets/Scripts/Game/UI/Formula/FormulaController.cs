@@ -48,6 +48,12 @@ public class FormulaController : HTBehaviour
             clickedCell = baseCell;
             ShowSelector();
         });
+
+        var v = Selector.transform.position;
+        v.y = 1000;
+        Selector.transform.position = v;
+        Selector.SetActive(true);
+        Mask.SetActive(false);
     }
 
     public void SelectCell(string cellName, string value = "0")
@@ -80,6 +86,9 @@ public class FormulaController : HTBehaviour
     private void ShowSelector()
     {
         Mask.SetActive(true);
+        var v = Selector.transform.position;
+        v.x = 0;
+        Selector.transform.position = v;
         UIShowHideHelper.ShowFromUp(Selector, 132);
     }
 

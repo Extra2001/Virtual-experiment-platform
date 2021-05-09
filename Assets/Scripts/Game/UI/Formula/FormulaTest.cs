@@ -13,11 +13,11 @@ public class FormulaTest : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Button>().onClick.AddListener(() =>
-        {
-            Log.Info(FormulaController.Instance.Expression);
-            Log.Info(FormulaController.Instance.ExpressionExecuted.ToString());
-        });
+        //GetComponent<Button>().onClick.AddListener(() =>
+        //{
+        //    Log.Info(FormulaController.Instance.Expression);
+        //    Log.Info(FormulaController.Instance.ExpressionExecuted.ToString());
+        //});
     }
 
     // Update is called once per frame

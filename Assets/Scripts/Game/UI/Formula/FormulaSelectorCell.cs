@@ -13,11 +13,13 @@ public class FormulaSelectorCell : HTBehaviour
 
     public string value;
 
+    public string InstanceName;
+
     private void Start()
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
-            FormulaController.Instance.SelectCell(gameObject.name, value);
+            FormulaController.Instances[InstanceName].SelectCell(gameObject.name, value);
         });
     }
 }

@@ -11,7 +11,7 @@ public class FormulaController : HTBehaviour
     /// <summary>
     /// 获取实例对象
     /// </summary>
-    public static FormulaController Instance { get; private set; }
+    public static Dictionary<string, FormulaController> Instances { get; } = new Dictionary<string, FormulaController>();
     /// <summary>
     /// 获取当前的表达式，如果未完成填写会抛异常
     /// </summary>
@@ -20,6 +20,10 @@ public class FormulaController : HTBehaviour
     /// 获取当前表达式计算值
     /// </summary>
     public double ExpressionExecuted { get => Javascript.Eval(GetExpression("base")); }
+    /// <summary>
+    /// 实例名称
+    /// </summary>
+    public string InstanceName;
 
     [SerializeField]
     private FormulaCell baseCell;
@@ -33,7 +37,8 @@ public class FormulaController : HTBehaviour
 
     private void Start()
     {
-        Instance = this;
+        AddInstance();
+
         baseCell.ReplaceFlags.Add(baseCell.Value1, "{0}");
         showedCells.Add(baseCell);
         clickedButton = baseCell.Value1;
@@ -145,5 +150,24 @@ public class FormulaController : HTBehaviour
             value = value.Replace(item.Value, $"({GetExpression(item.Value)})");
         }
         return value;
+    }
+
+    private void AddInstance()
+    {
+        if (string.IsNullOrEmpty(InstanceName))
+        {
+            for(int i=0; string.IsNullOrEmpty(InstanceName) ; i++)
+                if (!Instances.ContainsKey(i.ToString()))
+                    InstanceName = i.ToString();
+        }
+        Instances.Add(InstanceName, this);
+
+        foreach(var item in Selector.GetComponentsInChildren<FormulaSelectorCell>(true))
+            item.InstanceName = InstanceName;
+    }
+
+    private void OnDestroy()
+    {
+        Instances.Remove(InstanceName);
     }
 }

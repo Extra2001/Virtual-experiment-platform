@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DealMeasuredDataInput : HTBehaviour
+public class DealComplexDataInput : HTBehaviour
 {
     //启用自动化
     protected override bool IsAutomate => true;
+
+    public GameObject Formula;
 
     public Button CallButton1;
     public Button SureButton1;
@@ -23,11 +25,6 @@ public class DealMeasuredDataInput : HTBehaviour
     public Button CallButton3;
     public Button SureButton3;
     public GameObject Field3;
-    public Text Value3;
-
-    public Button CallButton4;
-    public Button SureButton4;
-    public GameObject Field4;
 
     public Sprite StartSprite;
     public Sprite WorkingSprite;
@@ -43,11 +40,9 @@ public class DealMeasuredDataInput : HTBehaviour
         SureButton2.onClick.AddListener(SureClick2);
         CallButton3.onClick.AddListener(CallClick3);
         SureButton3.onClick.AddListener(SureClick3);
-        CallButton4.onClick.AddListener(CallClick4);
-        SureButton4.onClick.AddListener(SureClick4);
-
         CurrentField = Field1;
     }
+
 
     private void CallClick1()
     {
@@ -68,7 +63,7 @@ public class DealMeasuredDataInput : HTBehaviour
             Field1.SetActive(true);
             CurrentField = Field1;
         }
-        
+
     }
     private void SureClick1()
     {
@@ -84,7 +79,6 @@ public class DealMeasuredDataInput : HTBehaviour
         }
 
     }
-
     private void CallClick2()
     {
         if (CurrentField == Field2)
@@ -143,7 +137,8 @@ public class DealMeasuredDataInput : HTBehaviour
     {
         try
         {
-            Value3.text = "=" + NumberFormat(Field3.GetComponent<FormulaController>().ExpressionExecuted);
+            //检查最终结果表达式是否正确
+            //~~~~~
             CallButton3.image.sprite = EndSprite;
         }
         catch
@@ -153,48 +148,12 @@ public class DealMeasuredDataInput : HTBehaviour
         }
     }
 
-    private void CallClick4()
-    {
-        if (CurrentField == Field4)
-        {
-            if (CurrentField.activeInHierarchy == true)
-            {
-                CurrentField.SetActive(false);
-            }
-            else
-            {
-                CurrentField.SetActive(true);
-            }
-        }
-        else
-        {
-            CurrentField.SetActive(false);
-            Field4.SetActive(true);
-            CurrentField = Field4;
-        }
-    }
-    private void SureClick4()
-    {
-        try
-        {
-            //检查不确定度表达式是否正确
-            //~~~~~
-            CallButton4.image.sprite = EndSprite;
-        }
-        catch
-        {
-            //弹出报错提示框
-            CallButton4.image.sprite = WorkingSprite;
-        }
-    }
-
-
 
     private string NumberFormat(double Input)
     {
         string Output;
 
-        if(Input > 0.01 && Input < 1000)
+        if (Input > 0.01 && Input < 1000)
         {
             Output = Input.ToString("f4");
         }
@@ -205,5 +164,4 @@ public class DealMeasuredDataInput : HTBehaviour
 
         return Output;
     }
-
 }

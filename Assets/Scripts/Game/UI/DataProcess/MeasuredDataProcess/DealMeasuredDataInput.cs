@@ -49,6 +49,23 @@ public class DealMeasuredDataInput : HTBehaviour
         CurrentField = Field1;
     }
 
+    public void Show(QuantityModel quantity)
+    {
+        //按钮颜色，存储的表达式等等
+
+        //下为针对一个按钮的控制demo
+        if (quantity.AverageState == (int)QuantityModel.InputState.Start)
+        {
+            CallButton1.image.sprite = StartSprite;
+        }else if (quantity.AverageState == (int)QuantityModel.InputState.Working){
+            CallButton1.image.sprite = WorkingSprite;
+        }else if (quantity.AverageState == (int)QuantityModel.InputState.End)
+        {
+            CallButton1.image.sprite = EndSprite;
+        }
+
+    }
+
     private void CallClick1()
     {
         if (CurrentField == Field1)
@@ -76,6 +93,7 @@ public class DealMeasuredDataInput : HTBehaviour
         {
             Value1.text = "=" + NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton1.image.sprite = EndSprite;
+            //存入qunantitymodel中
         }
         catch
         {

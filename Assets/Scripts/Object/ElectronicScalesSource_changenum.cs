@@ -9,7 +9,7 @@ public class ElectronicScalesSource_changenum : HTBehaviour
 {
     //启用自动化
     protected override bool IsAutomate => true;
-    public double qwq;
+    public double num;
     public int accuracy_ratings;
 
 
@@ -23,6 +23,6 @@ public class ElectronicScalesSource_changenum : HTBehaviour
     void Update()
     {
         this.transform.Find("num").gameObject.GetComponent<manager_num>().accuracy_rating = accuracy_ratings;
-        this.transform.Find("num").gameObject.GetComponent<manager_num>().Show_num(qwq);
+        this.transform.Find("num").gameObject.GetComponent<manager_num>().Show_num(num);
     }
 }

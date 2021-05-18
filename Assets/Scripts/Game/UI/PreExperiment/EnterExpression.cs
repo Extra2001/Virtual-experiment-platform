@@ -28,21 +28,21 @@ public class EnterExpression : HTBehaviour
         SyncExpression();
         SegmentedControl.onValueChanged.AddListener(value =>
         {
-            RecordManager.tempRecord.expressionKind = (Expression)value;
+            RecordManager.tempRecord.expressionKind = (ExpressionKind)value;
             SyncExpression();
         });
     }
 
     public void SyncExpression()
     {
-        if (RecordManager.tempRecord.expressionKind == Expression.String)
+        if (RecordManager.tempRecord.expressionKind == ExpressionKind.String)
         {
             StringExpressionCheckButton.gameObject.transform.parent.gameObject.SetActive(true);
             LatexExpressionCheckButton.gameObject.transform.parent.gameObject.SetActive(false);
             ExpressionInput = StringExpressionInput;
             ExpressionCheckButton = StringExpressionCheckButton;
         }
-        else if (RecordManager.tempRecord.expressionKind == Expression.Latex)
+        else if (RecordManager.tempRecord.expressionKind == ExpressionKind.Latex)
         {
             LatexExpressionCheckButton.gameObject.transform.parent.gameObject.SetActive(true);
             StringExpressionCheckButton.gameObject.transform.parent.gameObject.SetActive(false);

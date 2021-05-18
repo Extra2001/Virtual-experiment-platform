@@ -6,7 +6,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public enum Expression
+public enum ExpressionKind
 {
     String,
     Latex

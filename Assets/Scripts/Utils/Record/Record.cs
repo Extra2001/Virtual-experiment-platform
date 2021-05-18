@@ -32,7 +32,7 @@ public class Record
 
     public int currentQuantityIndex { get; set; } = 0;
 
-    public Expression expressionKind { get; set; } = Expression.String;
+    public ExpressionKind expressionKind { get; set; } = ExpressionKind.String;
     public string stringExpression { get; set; } = "";
     public string latexExpression { get; set; } = "";
     

@@ -10,11 +10,8 @@ public class UncertaintyInput : HTBehaviour
 {
     public Text _Title;
     public Text _AverageTitle;
-    public Text _AverageValue;
     public Text _UaTitle;
-    public Text _UaValue;
     public Text _UbTitle;
-    public Text _UbValue;
     public Text _ComplexTitle;
 
     public DataColumn dataColumn;
@@ -22,7 +19,7 @@ public class UncertaintyInput : HTBehaviour
 
     private void Start()
     {
-
+        
     }
 
     public void Show(QuantityModel quantity)
@@ -30,10 +27,10 @@ public class UncertaintyInput : HTBehaviour
         var instance = quantity.InstrumentType.CreateInstrumentInstance();
 
         _Title.text = "处理" + quantity.Name + ":" + quantity.Symbol + "/" + instance.UnitSymbol;
-        _AverageTitle.text = instance.UnitSymbol + "的平均值=";
-        _UaTitle.text = instance.UnitSymbol + "的A类不确定度=";
-        _UbTitle.text = instance.UnitSymbol + "的B类不确定度=";
-        _ComplexTitle.text = instance.UnitSymbol + "的合成不确定度=";
+        _AverageTitle.text = quantity.Name + "的平均值\n\n=";
+        _UaTitle.text = quantity.Name + "的A类不确定度\n\n=";
+        _UbTitle.text = quantity.Name + "的B类不确定度\n\n=";
+        _ComplexTitle.text = quantity.Name + "的合成不确定度\n\n=";
 
         dataColumn.ShowQuantity(quantity);
     }

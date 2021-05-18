@@ -16,4 +16,17 @@ public class QuantityModel
     public List<double> Data { get; set; } = new List<double>();
     public double UA { get; set; } = 0.0;
     public double UB { get; set; } = 0.0;
+
+    
+    public int AverageState { get; set; } = (int)InputState.Start;
+    public int UaState { get; set; } = (int)InputState.Start;
+    public int UbState { get; set; } = (int)InputState.Start;
+    public int ComplexState { get; set; } = (int)InputState.Start;
+
+    public enum InputState
+    {
+        Start=0,
+        Working=1,
+        End=2
+    }
 }

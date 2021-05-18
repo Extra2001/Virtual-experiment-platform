@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [EntityResource(null, null, "Instruments/Micrometer/Micrometer")]
+
 public class MicrometerInstrument : InstrumentBase
 {
     private Vector3 Position = new Vector3();
@@ -63,6 +64,7 @@ public class MicrometerInstrument : InstrumentBase
 
     public override void ShowValue(double value)
     {
+        //Self.transform.Find
         throw new System.NotImplementedException();
     }
 }

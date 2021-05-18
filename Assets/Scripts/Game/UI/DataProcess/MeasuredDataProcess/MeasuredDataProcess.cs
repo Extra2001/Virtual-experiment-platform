@@ -21,8 +21,11 @@ public class MeasuredDataProcess : UILogicResident
 	/// 打开UI
 	/// </summary>
     public override void OnOpen(params object[] args)
-    {
+    {       
         base.OnOpen(args);
+        QuantityModel quantity = (QuantityModel)args[0];
+        UIEntity.GetComponent<UncertaintyInput>().Show(quantity);
+        UIEntity.GetComponent<DealMeasuredDataInput>().Show(quantity);
     }
 
 	/// <summary>

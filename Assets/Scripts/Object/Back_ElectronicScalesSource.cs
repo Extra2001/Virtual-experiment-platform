@@ -29,7 +29,7 @@ public class Back_ElectronicScalesSource : HTBehaviour
         mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
         Player = GameObject.Find("FirstPersonCharacter");
         Ele = GameObject.Find("FlagCamera_disable");
-        if (Input.GetKey(KeyCode.V) && Enable)
+        if (Input.GetKey(KeyCode.G) && Enable)
         {
             moveable = true;
             GetComponent<Look_ElectronicScalesSource>().enabled = false;

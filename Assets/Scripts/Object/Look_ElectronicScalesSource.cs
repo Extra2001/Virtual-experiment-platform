@@ -13,6 +13,7 @@ public class Look_ElectronicScalesSource : HTBehaviour
     Camera mCamera;
     GameObject Player;
     GameObject Ele;
+    public int FieldView;
     private Vector3 temp1 = new Vector3(0.0f, 0.0f, 0.0f);
     private Vector3 temp2 = new Vector3(0.0f, 0.0f, 0.0f);
     protected override bool IsAutomate => true;
@@ -29,7 +30,7 @@ public class Look_ElectronicScalesSource : HTBehaviour
         mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
         Player = GameObject.Find("FirstPersonCharacter");
         Ele = GameObject.Find("FlagCamera_disable");
-        if (Input.GetKey(KeyCode.B) && Enable)
+        if (Input.GetKey(KeyCode.F) && Enable)
         {
             GetComponent<Back_ElectronicScalesSource>().enabled = false;
             moveable = true;
@@ -41,14 +42,14 @@ public class Look_ElectronicScalesSource : HTBehaviour
             temp2 = Ele.transform.rotation.eulerAngles;
             temp1 += (temp2 - temp1) / time;
             mCamera.transform.rotation = Quaternion.Euler(temp1);
-            mCamera.fieldOfView -= (mCamera.fieldOfView - 19.0f) / time;
+            mCamera.fieldOfView -= (mCamera.fieldOfView - FieldView) / time;
         }
-        if (mCamera.fieldOfView < 19.01f && moveable)
+        if (mCamera.fieldOfView < FieldView+0.01 && moveable)
         {
             mCamera.transform.position = Ele.transform.position;
             mCamera.transform.rotation = Ele.transform.rotation;
             mCamera = gameObject.GetComponent<Camera>();
-            mCamera.fieldOfView = 19.0f;
+            mCamera.fieldOfView = FieldView;
             moveable = false;
             GetComponent<Back_ElectronicScalesSource>().enabled = true;
         }

@@ -5,27 +5,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NextBackButtonComplexData : HTBehaviour
+public class BackEndButton : HTBehaviour
 {
     //启用自动化
     protected override bool IsAutomate => true;
 
     public Button BackButton;
-    public Button NextButton;
+    public Button EndButton;
 
     // Start is called before the first frame update
     void Start()
     {
         BackButton.onClick.AddListener(Back);
-        NextButton.onClick.AddListener(Next);
+        EndButton.onClick.AddListener(End);
     }
 
     public void Back()
     {
         Main.m_Procedure.SwitchLastProcedure();
     }
-    public void Next()
+    public void End()
     {
-        Main.m_Procedure.SwitchNextProcedure();
+        
     }
 }

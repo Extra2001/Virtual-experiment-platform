@@ -15,7 +15,7 @@ public class DataColumn : HTBehaviour
     private QuantityModel quantity;
     private List<DataInput> showedInputs = new List<DataInput>();
 
-    public void ShowQuantity(QuantityModel quantity, bool inputable = true)
+    public void ShowQuantity(QuantityModel quantity, bool inputable = false)
     {
         foreach (var item in showedInputs)
             Destroy(item.gameObject);

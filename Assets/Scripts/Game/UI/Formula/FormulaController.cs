@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine.UI;
 using System;
 
-public class FormulaController : HTBehaviour
+public class FormulaController : MonoBehaviour
 {
     /// <summary>
     /// 获取实例对象
@@ -38,28 +38,7 @@ public class FormulaController : HTBehaviour
 
     private void Start()
     {
-        AddInstance();
-
-        baseCell.ReplaceFlags.Add(baseCell.Value1, "{0}");
-        showedCells.Add(baseCell);
-        clickedButton = baseCell.Value1;
-        clickedCell = baseCell;
-        this.Mask.GetComponent<Button>().onClick.AddListener(() =>
-        {
-            HideSelector();
-        });
-        baseCell.Value1.onClick.AddListener(() =>
-        {
-            clickedButton = baseCell.Value1;
-            clickedCell = baseCell;
-            ShowSelector();
-        });
-
-        var v = Selector.transform.position;
-        v.y = 1000;
-        Selector.transform.position = v;
-        Selector.SetActive(true);
-        Mask.SetActive(false);
+        CheckActive();
     }
 
     /// <summary>
@@ -102,6 +81,7 @@ public class FormulaController : HTBehaviour
     /// <returns></returns>
     public List<FormulaNode> Serialize()
     {
+        CheckActive();
         var ret = new List<FormulaNode>();
         foreach (var item in showedCells)
         {
@@ -125,11 +105,19 @@ public class FormulaController : HTBehaviour
     /// <param name="nodes"></param>
     public void LoadFormula(List<FormulaNode> nodes)
     {
+        CheckActive();
+        if (nodes.Count == 0 || nodes[0].PrefabName != "Base")
+        {
+            Log.Error("加载的公式节点并非控制器产生");
+            Initialize();
+        }
         // 清空当前显示
+        Log.Info(showedCells.Count.ToString());
         for (int i = 1; i < showedCells.Count; i++)
             Destroy(showedCells[i]?.gameObject);
         for (int i = 1; i < showedCells.Count; i++)
             showedCells.RemoveAt(i);
+        Log.Info(showedCells.Count.ToString());
         RefreshContentSizeFitter();
 
         // 处理根节点
@@ -146,6 +134,43 @@ public class FormulaController : HTBehaviour
 
         // 显示方块
         RestoreCell(baseCell, nodes);
+    }
+
+    /// <summary>
+    /// 初始化公式编辑器，此操作会清空其中所有内容。
+    /// </summary>
+    public void Initialize()
+    {
+        AddInstance();
+        baseCell.ReplaceFlags.Clear();
+        baseCell.ReplaceFlags.Add(baseCell.Value1, "{0}");
+        DeleteChild(baseCell.Value1.transform);
+        showedCells.Clear();
+        showedCells.Add(baseCell);
+        clickedButton = baseCell.Value1;
+        clickedCell = baseCell;
+        this.Mask.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            HideSelector();
+        });
+        baseCell.Value1.onClick.AddListener(() =>
+        {
+            clickedButton = baseCell.Value1;
+            clickedCell = baseCell;
+            ShowSelector();
+        });
+
+        var v = Selector.transform.position;
+        v.y = 1000;
+        Selector.transform.position = v;
+        Selector.SetActive(true);
+        Mask.SetActive(false);
+    }
+
+    private void CheckActive()
+    {
+        if (showedCells.Count == 0)
+            Initialize();
     }
 
     /// <summary>
@@ -247,6 +272,7 @@ public class FormulaController : HTBehaviour
                 if (!Instances.ContainsKey(i.ToString()))
                     InstanceName = i.ToString();
         }
+        Instances.Remove(InstanceName);
         Instances.Add(InstanceName, this);
 
         foreach (var item in Selector.GetComponentsInChildren<FormulaSelectorCell>(true))

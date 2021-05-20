@@ -67,7 +67,7 @@ public class DealMeasuredDataInput : HTBehaviour
         {
             Debug.Log(quantity.AverageExpression.Count);
             Field1.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);
-        }      
+        }
         CallButton2.image.sprite = Sprites[quantity.UaState];
         Value2.text = "=" + NumberFormat(quantity.Ua);
         CallButton3.image.sprite = Sprites[quantity.UbState];

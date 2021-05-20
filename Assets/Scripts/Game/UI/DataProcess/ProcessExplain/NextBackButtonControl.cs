@@ -27,6 +27,6 @@ public class NextBackButtonControl : HTBehaviour
     }
     public void Next()
     {
-        Main.m_Procedure.SwitchNextProcedure();
+        GameManager.Instance.SwitchNextProcedure();
     }
 }

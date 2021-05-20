@@ -86,6 +86,15 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         Main.m_Procedure.SwitchProcedure(ProcedureStack[ProcedureStack.Count - 1]);
     }
 
+    public void SwitchNextProcedure()
+    {
+        ProcedureBase Temp;
+        Main.m_Procedure.SwitchNextProcedure();
+        Temp = Main.m_Procedure.CurrentProcedure;
+        ProcedureStack.Add(Temp.GetType());
+    }
+
+
     public void ContinueExp()
     {
         Main.m_Procedure.SwitchProcedure(ProcedureStack[ProcedureStack.Count - 1]);

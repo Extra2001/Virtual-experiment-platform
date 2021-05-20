@@ -14,19 +14,17 @@ public class QuantityModel
     public int Groups { get; set; } = 8;
 
     public List<double> Data { get; set; } = new List<double>();
-    public double UA { get; set; } = 0.0;
-    public double UB { get; set; } = 0.0;
+
+    public double Average { get; set; } = 0.0;
+    public double Ua { get; set; } = 0.0;
+    public double Ub { get; set; } = 0.0;
 
     
-    public int AverageState { get; set; } = (int)InputState.Start;
-    public int UaState { get; set; } = (int)InputState.Start;
-    public int UbState { get; set; } = (int)InputState.Start;
-    public int ComplexState { get; set; } = (int)InputState.Start;
 
-    public enum InputState
-    {
-        Start=0,
-        Working=1,
-        End=2
-    }
+    //此处状态0代表初始，1代表正在构建表达式，2代表构建表达式完成
+    public int AverageState { get; set; } = 0;
+    public int UaState { get; set; } = 0;
+    public int UbState { get; set; } = 0;
+    public int ComplexState { get; set; } = 0;
+
 }

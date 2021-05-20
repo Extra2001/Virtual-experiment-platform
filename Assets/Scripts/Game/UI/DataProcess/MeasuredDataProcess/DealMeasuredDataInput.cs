@@ -32,6 +32,9 @@ public class DealMeasuredDataInput : HTBehaviour
     public Sprite StartSprite;
     public Sprite WorkingSprite;
     public Sprite EndSprite;
+
+
+    private Sprite[] Sprites = new Sprite[3];
     private GameObject CurrentField;
 
     // Start is called before the first frame update
@@ -47,23 +50,22 @@ public class DealMeasuredDataInput : HTBehaviour
         SureButton4.onClick.AddListener(SureClick4);
 
         CurrentField = Field1;
+        Sprites[0] = StartSprite;
+        Sprites[1] = WorkingSprite;
+        Sprites[2] = EndSprite;
     }
 
     public void Show(QuantityModel quantity)
     {
         //按钮颜色，存储的表达式等等
 
-        //下为针对一个按钮的控制demo
-        if (quantity.AverageState == (int)QuantityModel.InputState.Start)
-        {
-            CallButton1.image.sprite = StartSprite;
-        }else if (quantity.AverageState == (int)QuantityModel.InputState.Working){
-            CallButton1.image.sprite = WorkingSprite;
-        }else if (quantity.AverageState == (int)QuantityModel.InputState.End)
-        {
-            CallButton1.image.sprite = EndSprite;
-        }
-
+        CallButton1.image.sprite = Sprites[quantity.AverageState];
+        Value1.text = "=" + quantity.Average;
+        CallButton2.image.sprite = Sprites[quantity.UaState];
+        Value2.text = "=" + quantity.Ua;
+        CallButton3.image.sprite = Sprites[quantity.UbState];
+        Value3.text = "=" + quantity.Ub;
+        CallButton4.image.sprite = Sprites[quantity.ComplexState];
     }
 
     private void CallClick1()
@@ -85,7 +87,6 @@ public class DealMeasuredDataInput : HTBehaviour
             Field1.SetActive(true);
             CurrentField = Field1;
         }
-        
     }
     private void SureClick1()
     {
@@ -93,12 +94,14 @@ public class DealMeasuredDataInput : HTBehaviour
         {
             Value1.text = "=" + NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton1.image.sprite = EndSprite;
-            //存入qunantitymodel中
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 3;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Average = Field1.GetComponent<FormulaController>().ExpressionExecuted;
         }
         catch
         {
             //弹出报错提示框
             CallButton1.image.sprite = WorkingSprite;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 2;
         }
 
     }

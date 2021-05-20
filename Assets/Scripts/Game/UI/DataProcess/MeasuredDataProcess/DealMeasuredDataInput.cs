@@ -30,12 +30,8 @@ public class DealMeasuredDataInput : HTBehaviour
     public Button SureButton4;
     public GameObject Field4;
 
-    public Sprite StartSprite;
-    public Sprite WorkingSprite;
-    public Sprite EndSprite;
 
-
-    private Sprite[] Sprites = new Sprite[3];
+    public Sprite[] Sprites = new Sprite[3];
     private GameObject CurrentField;
 
     // Start is called before the first frame update
@@ -51,9 +47,6 @@ public class DealMeasuredDataInput : HTBehaviour
         SureButton4.onClick.AddListener(SureClick4);
 
         CurrentField = Field1;
-        Sprites[0] = StartSprite;
-        Sprites[1] = WorkingSprite;
-        Sprites[2] = EndSprite;
     }
 
     public void Show(QuantityModel quantity)
@@ -62,17 +55,59 @@ public class DealMeasuredDataInput : HTBehaviour
 
         CallButton1.image.sprite = Sprites[quantity.AverageState];
         Value1.text = "=" + NumberFormat(quantity.Average);
-        
+        Field1.SetActive(true);
         if (quantity.AverageExpression != null)
         {
-            Debug.Log(quantity.AverageExpression.Count);
-            Field1.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);
+            
+            Field1.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);            
         }
+        else
+        {
+            Field1.GetComponent<FormulaController>().Initialize();
+        }
+        Field1.SetActive(false);
+
         CallButton2.image.sprite = Sprites[quantity.UaState];
         Value2.text = "=" + NumberFormat(quantity.Ua);
+        Field2.SetActive(true);
+        if (quantity.UaExpression != null)
+        {
+
+            Field2.GetComponent<FormulaController>().LoadFormula(quantity.UaExpression);
+        }
+        else
+        {
+            Field2.GetComponent<FormulaController>().Initialize();
+        }
+        Field2.SetActive(false);
+
         CallButton3.image.sprite = Sprites[quantity.UbState];
         Value3.text = "=" + NumberFormat(quantity.Ub);
+        Field3.SetActive(true);
+        if (quantity.UbExpression != null)
+        {
+
+            Field3.GetComponent<FormulaController>().LoadFormula(quantity.UbExpression);
+        }
+        else
+        {
+            Field3.GetComponent<FormulaController>().Initialize();
+        }
+        Field3.SetActive(false);
+
         CallButton4.image.sprite = Sprites[quantity.ComplexState];
+        Field4.SetActive(true);
+        if (quantity.AverageExpression != null)
+        {
+
+            Field1.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);
+        }
+        else
+        {
+            Field1.GetComponent<FormulaController>().Initialize();
+        }
+        Field4.SetActive(false);
+
     }
 
     private void CallClick1()
@@ -100,7 +135,7 @@ public class DealMeasuredDataInput : HTBehaviour
         try
         {
             Value1.text = "=" + NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
-            CallButton1.image.sprite = EndSprite;
+            CallButton1.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Average = Field1.GetComponent<FormulaController>().ExpressionExecuted;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageExpression = Field1.GetComponent<FormulaController>().Serialize();
@@ -108,7 +143,7 @@ public class DealMeasuredDataInput : HTBehaviour
         catch
         {
             //弹出报错提示框
-            CallButton1.image.sprite = WorkingSprite;
+            CallButton1.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 1;
         }
 
@@ -139,14 +174,14 @@ public class DealMeasuredDataInput : HTBehaviour
         try
         {
             Value2.text = "=" + NumberFormat(Field2.GetComponent<FormulaController>().ExpressionExecuted);
-            CallButton2.image.sprite = EndSprite;
+            CallButton2.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UaState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Ua = Field2.GetComponent<FormulaController>().ExpressionExecuted;
         }
         catch
         {
             //弹出报错提示框
-            CallButton2.image.sprite = WorkingSprite;
+            CallButton2.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UaState = 1;
         }
     }
@@ -176,14 +211,14 @@ public class DealMeasuredDataInput : HTBehaviour
         try
         {
             Value3.text = "=" + NumberFormat(Field3.GetComponent<FormulaController>().ExpressionExecuted);
-            CallButton3.image.sprite = EndSprite;
+            CallButton3.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UbState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Ub = Field3.GetComponent<FormulaController>().ExpressionExecuted;
         }
         catch
         {
             //弹出报错提示框
-            CallButton3.image.sprite = WorkingSprite;
+            CallButton3.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UbState = 1;
         }
     }
@@ -214,13 +249,13 @@ public class DealMeasuredDataInput : HTBehaviour
         {
             //检查不确定度表达式是否正确
             //~~~~~
-            CallButton4.image.sprite = EndSprite;
+            CallButton4.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].ComplexState = 2;
         }
         catch
         {
             //弹出报错提示框
-            CallButton4.image.sprite = WorkingSprite;
+            CallButton4.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].ComplexState = 1;
         }
     }

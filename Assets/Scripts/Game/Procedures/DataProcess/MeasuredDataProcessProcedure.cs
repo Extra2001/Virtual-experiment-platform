@@ -33,7 +33,7 @@ public class MeasuredDataProcessProcedure : ProcedureBase
         Main.m_UI.OpenResidentUI<MeasuredDataProcess>(quantity);
     }
 
-    public string GetStatisticValue(StatisticValue valueKind)
+    public string GetStatisticValue(MeasuredStatisticValue valueKind)
     {
         throw new NotImplementedException();
     }
@@ -65,10 +65,14 @@ public class MeasuredDataProcessProcedure : ProcedureBase
     }
 }
 
-public enum StatisticValue
+public enum MeasuredStatisticValue
 {
-    Symbol,
-    Average,
-    Uncertainty,
-    SigmaX
+    Number,     //测得数据组数
+    Average,    //平均值
+    SigmaX,     //X_i求和
+    SigmaXSquare,//(X_i)^2求和
+    SigmaXCube,  //(X_i)^3求和
+    Variance,    //方差
+    StandardDeviation,//标准差
+    InstrumentError   //仪器误差限
 }

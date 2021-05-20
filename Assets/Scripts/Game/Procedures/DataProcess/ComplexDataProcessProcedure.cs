@@ -33,7 +33,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
         return RecordManager.tempRecord.quantities.Select(x => x.Name).ToList();
     }
 
-    public string GetStatisticValue(StatisticValue valueKind)
+    public string GetStatisticValue(string QuantityName, ComplexStatisticValue valueKind)
     {
         throw new NotImplementedException();
     }
@@ -63,4 +63,10 @@ public class ComplexDataProcessProcedure : ProcedureBase
     {
         base.OnUpdateSecond();
     }
+}
+
+public enum ComplexStatisticValue
+{
+    Average,
+    Uncertain
 }

@@ -62,7 +62,12 @@ public class DealMeasuredDataInput : HTBehaviour
 
         CallButton1.image.sprite = Sprites[quantity.AverageState];
         Value1.text = "=" + NumberFormat(quantity.Average);
-        Field1.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);
+        
+        if (quantity.AverageExpression != null)
+        {
+            Debug.Log(quantity.AverageExpression.Count);
+            Field1.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);
+        }      
         CallButton2.image.sprite = Sprites[quantity.UaState];
         Value2.text = "=" + NumberFormat(quantity.Ua);
         CallButton3.image.sprite = Sprites[quantity.UbState];
@@ -229,6 +234,10 @@ public class DealMeasuredDataInput : HTBehaviour
         if(Math.Abs(Input) > 0.01 && Math.Abs(Input) < 1000)
         {
             Output = Input.ToString("f4");
+        }
+        else if((Input-0)==0)
+        {
+            Output = "0";
         }
         else
         {

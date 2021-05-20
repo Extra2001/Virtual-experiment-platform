@@ -27,4 +27,9 @@ public class QuantityModel
     public int UbState { get; set; } = 0;
     public int ComplexState { get; set; } = 0;
 
+    //存储输入的公式
+    public List<FormulaNode> AverageExpression { get; set; } = null;
+    public List<FormulaNode> UaExpression { get; set; } = null;
+    public List<FormulaNode> UbExpression { get; set; } = null;
+    public List<FormulaNode> ComplexExpression { get; set; } = null;
 }

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class DealMeasuredDataInput : HTBehaviour
 {
@@ -60,11 +61,12 @@ public class DealMeasuredDataInput : HTBehaviour
         //按钮颜色，存储的表达式等等
 
         CallButton1.image.sprite = Sprites[quantity.AverageState];
-        Value1.text = "=" + quantity.Average;
+        Value1.text = "=" + NumberFormat(quantity.Average);
+        Field1.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);
         CallButton2.image.sprite = Sprites[quantity.UaState];
-        Value2.text = "=" + quantity.Ua;
+        Value2.text = "=" + NumberFormat(quantity.Ua);
         CallButton3.image.sprite = Sprites[quantity.UbState];
-        Value3.text = "=" + quantity.Ub;
+        Value3.text = "=" + NumberFormat(quantity.Ub);
         CallButton4.image.sprite = Sprites[quantity.ComplexState];
     }
 
@@ -94,14 +96,15 @@ public class DealMeasuredDataInput : HTBehaviour
         {
             Value1.text = "=" + NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton1.image.sprite = EndSprite;
-            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 3;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Average = Field1.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageExpression = Field1.GetComponent<FormulaController>().Serialize();
         }
         catch
         {
             //弹出报错提示框
             CallButton1.image.sprite = WorkingSprite;
-            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 2;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 1;
         }
 
     }
@@ -132,11 +135,14 @@ public class DealMeasuredDataInput : HTBehaviour
         {
             Value2.text = "=" + NumberFormat(Field2.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton2.image.sprite = EndSprite;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UaState = 2;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Ua = Field2.GetComponent<FormulaController>().ExpressionExecuted;
         }
         catch
         {
             //弹出报错提示框
             CallButton2.image.sprite = WorkingSprite;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UaState = 1;
         }
     }
 
@@ -166,11 +172,14 @@ public class DealMeasuredDataInput : HTBehaviour
         {
             Value3.text = "=" + NumberFormat(Field3.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton3.image.sprite = EndSprite;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UbState = 2;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Ub = Field3.GetComponent<FormulaController>().ExpressionExecuted;
         }
         catch
         {
             //弹出报错提示框
             CallButton3.image.sprite = WorkingSprite;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UbState = 1;
         }
     }
 
@@ -201,11 +210,13 @@ public class DealMeasuredDataInput : HTBehaviour
             //检查不确定度表达式是否正确
             //~~~~~
             CallButton4.image.sprite = EndSprite;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].ComplexState = 2;
         }
         catch
         {
             //弹出报错提示框
             CallButton4.image.sprite = WorkingSprite;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].ComplexState = 1;
         }
     }
 
@@ -215,7 +226,7 @@ public class DealMeasuredDataInput : HTBehaviour
     {
         string Output;
 
-        if(Input > 0.01 && Input < 1000)
+        if(Math.Abs(Input) > 0.01 && Math.Abs(Input) < 1000)
         {
             Output = Input.ToString("f4");
         }

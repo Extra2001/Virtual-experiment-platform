@@ -9,6 +9,8 @@ using System;
 /// </summary>
 public class MeasuredDataProcessProcedure : ProcedureBase
 {
+    private QuantityModel curQuantity;
+
     /// <summary>
     /// 流程初始化
     /// </summary>
@@ -29,12 +31,16 @@ public class MeasuredDataProcessProcedure : ProcedureBase
 
     public void ShowUncertainty(QuantityModel quantity)
     {
+        curQuantity = quantity;
         Main.m_UI.CloseUI<MeasuredDataProcess>();
         Main.m_UI.OpenResidentUI<MeasuredDataProcess>(quantity);
     }
 
     public string GetStatisticValue(MeasuredStatisticValue valueKind)
     {
+        if (valueKind == MeasuredStatisticValue.Symbol)
+            return curQuantity.Symbol;
+        return "0";
         throw new NotImplementedException();
     }
 
@@ -67,6 +73,7 @@ public class MeasuredDataProcessProcedure : ProcedureBase
 
 public enum MeasuredStatisticValue
 {
+    Symbol,
     Number,     //测得数据组数
     Average,    //平均值
     SigmaX,     //X_i求和

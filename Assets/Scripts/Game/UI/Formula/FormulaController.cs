@@ -31,6 +31,10 @@ public class FormulaController : MonoBehaviour
     [SerializeField]
     private GameObject Selector;
     [SerializeField]
+    private GameObject MeasuredSelector;
+    [SerializeField]
+    private GameObject ComplexSelector;
+    [SerializeField]
     private GameObject Mask;
     private List<FormulaCell> showedCells = new List<FormulaCell>();
     private Button clickedButton;
@@ -47,7 +51,7 @@ public class FormulaController : MonoBehaviour
     /// <param name="cellName"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public FormulaCell SelectCell(string cellName, string value = "0")
+    public FormulaCell SelectCell(string cellName, string value = "0", string name = "x")
     {
         HideSelector();
         var cell = GetCell(cellName);
@@ -70,7 +74,17 @@ public class FormulaController : MonoBehaviour
                 clickedCell = hh;
                 ShowSelector();
             });
-        if (cellName.Equals("Customize")) HandleCustomize(hh, value);
+        if (cellName.Equals("Customize"))
+        {
+            hh.value = value;
+            hh.NameShower.text = value;
+        }
+        else if (cellName.StartsWith("Statistic"))
+        {
+            hh.value = value;
+            if (hh.NameShower)
+                hh.NameShower.text = name;
+        }
         RefreshContentSizeFitter();
         return hh;
     }
@@ -163,7 +177,19 @@ public class FormulaController : MonoBehaviour
         var v = Selector.transform.position;
         v.y = 1000;
         Selector.transform.position = v;
+
+        v = MeasuredSelector.transform.position;
+        v.y = -1000;
+        MeasuredSelector.transform.position = v;
+
+        v = ComplexSelector.transform.position;
+        v.y = -1000;
+        ComplexSelector.transform.position = v;
+
         Selector.SetActive(true);
+        MeasuredSelector.SetActive(true);
+        ComplexSelector.SetActive(true);
+
         Mask.SetActive(false);
     }
 
@@ -204,18 +230,25 @@ public class FormulaController : MonoBehaviour
         v.x = 0;
         Selector.transform.position = v;
         UIShowHideHelper.ShowFromUp(Selector, 132);
+        if (Main.m_Procedure.CurrentProcedure is MeasuredDataProcessProcedure)
+        {
+            var procedure = Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure;
+            foreach (var item in MeasuredSelector.GetComponentsInChildren<FormulaSelectorCell>())
+                item.SetSelectorName(procedure.GetStatisticValue(MeasuredStatisticValue.Symbol));
+            UIShowHideHelper.ShowFromUp(MeasuredSelector, -132);
+        }
+        else if (Main.m_Procedure.CurrentProcedure is ComplexDataProcessProcedure)
+            UIShowHideHelper.ShowFromUp(ComplexSelector, -132);
     }
 
     private void HideSelector()
     {
         Mask.SetActive(false);
         UIShowHideHelper.HideToUp(Selector);
-    }
-
-    private void HandleCustomize(FormulaCell cellInstance, string value)
-    {
-        cellInstance.value = value;
-        cellInstance.gameObject.GetComponent<FormulaCustomizeShower>().SetValue(value);
+        if (Main.m_Procedure.CurrentProcedure is MeasuredDataProcessProcedure)
+            UIShowHideHelper.HideToButtom(MeasuredSelector);
+        else if (Main.m_Procedure.CurrentProcedure is ComplexDataProcessProcedure)
+            UIShowHideHelper.HideToButtom(ComplexSelector);
     }
 
     private FormulaCell GetCell(string cellName)

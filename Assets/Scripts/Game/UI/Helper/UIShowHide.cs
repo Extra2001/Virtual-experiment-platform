@@ -24,6 +24,22 @@ public static class UIShowHideHelper
             .WaitForCompletion();
     }
 
+    public static void ShowFromButtom(GameObject UIEntity, float height)
+    {
+        UIEntity.transform.localPosition = new Vector3(0, -700, 0);
+        UIEntity.transform.DOLocalMove(new Vector3(0, height, 0), 0.3f)
+            .SetUpdate(true)
+            .SetEase(Ease.OutExpo)
+            .WaitForCompletion();
+    }
+
+    public static void HideToButtom(GameObject UIEntity)
+    {
+        UIEntity.transform.DOLocalMove(new Vector3(0, -700, 0), 0.3f)
+            .SetUpdate(true)
+            .SetEase(Ease.OutExpo);
+    }
+
     public static void HideToUp(GameObject UIEntity)
     {
         UIEntity.transform.DOLocalMove(new Vector3(0, 500, 0), 0.3f)

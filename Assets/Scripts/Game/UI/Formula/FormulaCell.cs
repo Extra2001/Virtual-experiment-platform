@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class FormulaCell : HTBehaviour
 {
-    public VaribleExpression varibleExpression = 0;
-
     public string thisGUID = "";
 
     public Dictionary<Button, string> ReplaceFlags = new Dictionary<Button, string>();
@@ -19,6 +17,8 @@ public class FormulaCell : HTBehaviour
     public Button Value2;
 
     public string value;
+
+    public Text NameShower;
 
     public string GenerateReplaceFlags()
     {

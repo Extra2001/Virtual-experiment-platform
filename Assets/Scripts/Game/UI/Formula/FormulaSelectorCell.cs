@@ -6,27 +6,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class FormulaSelectorCell : HTBehaviour
 {
-    public VaribleExpression varibleExpression = 0;
-
-    public string value;
+    public enum ValueType
+    {
+        Normal,
+        Measured,
+        Complex
+    }
 
     public FormulaController FormulaControllerInstance;
+    [SerializeField]
+    private Text Text;
+    [Space]
+    [SerializeField]
+    private ValueType valueType;
+    [SerializeField]
+    private MeasuredStatisticValue MeasuredStatisticValue;
+    [SerializeField]
+    private ComplexStatisticValue ComplexStatisticValue;
+    [Space]
+    public string value;
 
     private void Start()
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
+            if (valueType == ValueType.Measured)
+                value = (Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure)?.GetStatisticValue(MeasuredStatisticValue);
+            else if (valueType == ValueType.Complex)
+                value = (Main.m_Procedure.CurrentProcedure as ComplexDataProcessProcedure)?.GetStatisticValue(Text.text, ComplexStatisticValue);
             FormulaControllerInstance.SelectCell(gameObject.name, value);
         });
     }
-}
 
-public enum VaribleExpression
-{
-    Zero,
-    One,
-    Two
+    public void SetSelectorName(string name)
+    {
+        if (Text)
+            Text.text = name;
+    }
 }

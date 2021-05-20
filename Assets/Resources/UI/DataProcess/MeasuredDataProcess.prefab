@@ -182,6 +182,7 @@ RectTransform:
   - {fileID: 85336617310492717}
   - {fileID: 85336618368152932}
   - {fileID: 1717045554375019257}
+  - {fileID: 3821686583194889038}
   - {fileID: 3425712794698639027}
   m_Father: {fileID: 9088345524055250049}
   m_RootOrder: 4
@@ -589,9 +590,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.atan({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.atan({0}))
 --- !u!114 &751585112489667112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724,9 +728,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (Math.PI)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.PI)
 --- !u!114 &751585112522861841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -934,9 +941,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: (Math.pow({0}, {1}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, {1}))
 --- !u!114 &751585112576680793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1069,9 +1079,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (Math.E)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.E)
 --- !u!114 &751585112587613143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1204,9 +1217,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (8.314472)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (8.314472)
 --- !u!114 &751585112595182953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1558,9 +1574,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.602176487e-19)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.602176487e-19)
 --- !u!114 &751585112612410560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1767,9 +1786,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (8.854187817e-12)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (8.854187817e-12)
 --- !u!114 &751585112656788525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1904,9 +1926,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}/{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}/{1})
 --- !u!114 &751585112712403573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2041,9 +2066,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}-{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}-{1})
 --- !u!114 &751585112754015214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2178,9 +2206,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.sqrt({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.sqrt({0}))
 --- !u!114 &751585112785082949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2314,9 +2345,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.exp({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.exp({0}))
 --- !u!114 &751585112794552019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2452,9 +2486,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}+{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}+{1})
 --- !u!114 &751585112827254240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2601,9 +2638,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (6.67428e-11)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (6.67428e-11)
 --- !u!114 &751585112875822557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2737,9 +2777,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.sin({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.sin({0}))
 --- !u!114 &751585112920808962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2873,9 +2916,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.acos({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.acos({0}))
 --- !u!114 &751585112938568213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3008,9 +3054,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (6.62606896e-34)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (6.62606896e-34)
 --- !u!114 &751585112974219166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3144,9 +3193,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.pow({0}, 2))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, 2))
 --- !u!114 &751585112983043158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3280,9 +3332,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.asin({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.asin({0}))
 --- !u!114 &751585112987286450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3416,9 +3471,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.log({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.log({0}))
 --- !u!114 &751585113025987853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3610,9 +3668,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: 0
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: 0
 --- !u!1 &751585113132296147
 GameObject:
   m_ObjectHideFlags: 0
@@ -3668,6 +3729,8 @@ MonoBehaviour:
   InstanceName: 
   baseCell: {fileID: 1717045555689052935}
   Selector: {fileID: 1717045554436554485}
+  MeasuredSelector: {fileID: 0}
+  ComplexSelector: {fileID: 0}
   Mask: {fileID: 1717045554500954410}
 --- !u!1 &751585113213964754
 GameObject:
@@ -3759,9 +3822,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.pow({0}, 3))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, 3))
 --- !u!114 &751585113213964752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3895,11 +3961,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9b331b1fa690ef4c9e49fb439410fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
   thisGUID: base
   Value1: {fileID: 751585113348189728}
   Value2: {fileID: 0}
   value: ({0})
+  NameShower: {fileID: 0}
 --- !u!114 &751585113348189728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4037,6 +4103,8 @@ MonoBehaviour:
   InstanceName: 
   baseCell: {fileID: 1717045553985179610}
   Selector: {fileID: 1717045554111844392}
+  MeasuredSelector: {fileID: 0}
+  ComplexSelector: {fileID: 0}
   Mask: {fileID: 1717045554147480109}
 --- !u!1 &751585113498387436
 GameObject:
@@ -4128,9 +4196,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.log({0})/Math.log(10))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.log({0})/Math.log(10))
 --- !u!114 &751585113498387434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4372,9 +4443,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.cos({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.cos({0}))
 --- !u!114 &751585113596155278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4610,9 +4684,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.3806504e-23)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.3806504e-23)
 --- !u!114 &751585113708001759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4711,6 +4788,8 @@ MonoBehaviour:
   InstanceName: 
   baseCell: {fileID: 1717045554390421088}
   Selector: {fileID: 1717045554576294863}
+  MeasuredSelector: {fileID: 0}
+  ComplexSelector: {fileID: 0}
   Mask: {fileID: 1717045555983461994}
 --- !u!1 &751585113888244090
 GameObject:
@@ -4801,9 +4880,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (299792458)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (299792458)
 --- !u!114 &751585113888244088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4938,9 +5020,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}*{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}*{1})
 --- !u!114 &751585114052820772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5074,9 +5159,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.tan({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.tan({0}))
 --- !u!114 &751585114256122396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5209,9 +5297,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.2566370614e-6)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.2566370614e-6)
 --- !u!114 &751585114422583167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6409,9 +6500,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.pow({0}, 3))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, 3))
 --- !u!114 &1717045553973355271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6546,9 +6640,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}*{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}*{1})
 --- !u!114 &1717045553977854476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6682,11 +6779,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9b331b1fa690ef4c9e49fb439410fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
   thisGUID: base
   Value1: {fileID: 1717045553985179611}
   Value2: {fileID: 0}
   value: ({0})
+  NameShower: {fileID: 0}
 --- !u!114 &1717045553985179611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7692,9 +7789,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.acos({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.acos({0}))
 --- !u!114 &1717045554051582870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8230,9 +8330,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (299792458)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (299792458)
 --- !u!114 &1717045554083705936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9688,9 +9791,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.asin({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.asin({0}))
 --- !u!114 &1717045554174495738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9977,9 +10083,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: (Math.pow({0}, {1}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, {1}))
 --- !u!114 &1717045554180852915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10112,9 +10221,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.3806504e-23)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.3806504e-23)
 --- !u!114 &1717045554183481917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10366,9 +10478,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.3806504e-23)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.3806504e-23)
 --- !u!114 &1717045554189176055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10733,9 +10848,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.sin({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.sin({0}))
 --- !u!114 &1717045554215969577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10869,9 +10987,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.exp({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.exp({0}))
 --- !u!114 &1717045554216386807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12408,9 +12529,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: (Math.pow({0}, {1}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, {1}))
 --- !u!114 &1717045554335296565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12755,9 +12879,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: 0
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: 0
 --- !u!1 &1717045554367747248
 GameObject:
   m_ObjectHideFlags: 0
@@ -13000,9 +13127,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.cos({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.cos({0}))
 --- !u!114 &1717045554376843430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13214,11 +13344,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9b331b1fa690ef4c9e49fb439410fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
   thisGUID: base
   Value1: {fileID: 1717045554390421089}
   Value2: {fileID: 0}
   value: ({0})
+  NameShower: {fileID: 0}
 --- !u!114 &1717045554390421089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13539,9 +13669,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.cos({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.cos({0}))
 --- !u!114 &1717045554401463835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13675,9 +13808,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.log({0})/Math.log(10))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.log({0})/Math.log(10))
 --- !u!114 &1717045554404693270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13892,9 +14028,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}/{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}/{1})
 --- !u!114 &1717045554419502495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14027,9 +14166,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (6.62606896e-34)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (6.62606896e-34)
 --- !u!114 &1717045554428275845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14267,9 +14409,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}-{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}-{1})
 --- !u!114 &1717045554445016869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14558,9 +14703,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (299792458)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (299792458)
 --- !u!114 &1717045554470268216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14848,9 +14996,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.log({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.log({0}))
 --- !u!114 &1717045554482798085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14984,9 +15135,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.acos({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.acos({0}))
 --- !u!114 &1717045554487575074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15251,9 +15405,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.2566370614e-6)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.2566370614e-6)
 --- !u!114 &1717045554509640884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15539,9 +15696,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (Math.E)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.E)
 --- !u!114 &1717045554530748799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16057,9 +16217,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (8.854187817e-12)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (8.854187817e-12)
 --- !u!114 &1717045554546462811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17501,9 +17664,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.tan({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.tan({0}))
 --- !u!114 &1717045554580782414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17944,9 +18110,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.cos({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.cos({0}))
 --- !u!114 &1717045554598564666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18547,9 +18716,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.2566370614e-6)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.2566370614e-6)
 --- !u!114 &1717045554618591831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18955,9 +19127,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.3806504e-23)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.3806504e-23)
 --- !u!114 &1717045554626898417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19358,9 +19533,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}*{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}*{1})
 --- !u!114 &1717045554653682872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19495,9 +19673,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.sqrt({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.sqrt({0}))
 --- !u!114 &1717045554662817349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19783,9 +19964,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.atan({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.atan({0}))
 --- !u!114 &1717045554667128160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19995,9 +20179,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}+{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}+{1})
 --- !u!114 &1717045554673824262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20145,9 +20332,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.log({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.log({0}))
 --- !u!114 &1717045554674036849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20556,9 +20746,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (299792458)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (299792458)
 --- !u!114 &1717045554698570939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20917,9 +21110,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.2566370614e-6)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.2566370614e-6)
 --- !u!114 &1717045554712071277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21111,9 +21307,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: 0
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: 0
 --- !u!1 &1717045554717939510
 GameObject:
   m_ObjectHideFlags: 0
@@ -21204,9 +21403,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.tan({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.tan({0}))
 --- !u!114 &1717045554717939508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21340,9 +21542,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.asin({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.asin({0}))
 --- !u!114 &1717045554722721794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21549,9 +21754,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (6.67428e-11)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (6.67428e-11)
 --- !u!114 &1717045554732141207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22358,9 +22566,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.pow({0}, 2))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, 2))
 --- !u!114 &1717045554782182987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22494,9 +22705,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.tan({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.tan({0}))
 --- !u!114 &1717045554791058988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22705,9 +22919,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}*{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}*{1})
 --- !u!114 &1717045554793504430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24111,9 +24328,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (Math.PI)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.PI)
 --- !u!114 &1717045554873978174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24714,9 +24934,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}-{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}-{1})
 --- !u!114 &1717045554908117858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24849,9 +25072,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (6.62606896e-34)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (6.62606896e-34)
 --- !u!114 &1717045554909041238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25059,9 +25285,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.exp({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.exp({0}))
 --- !u!114 &1717045554912867248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25194,9 +25423,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (8.854187817e-12)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (8.854187817e-12)
 --- !u!114 &1717045554916647529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25331,9 +25563,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}/{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}/{1})
 --- !u!114 &1717045554931729351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25995,9 +26230,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.pow({0}, 2))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, 2))
 --- !u!114 &1717045554979368447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26431,9 +26669,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.602176487e-19)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.602176487e-19)
 --- !u!114 &1717045555011376630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26794,9 +27035,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.acos({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.acos({0}))
 --- !u!114 &1717045555029978941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26930,9 +27174,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.sin({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.sin({0}))
 --- !u!114 &1717045555043543850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27218,9 +27465,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.pow({0}, 2))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, 2))
 --- !u!114 &1717045555055954302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27654,9 +27904,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (6.62606896e-34)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (6.62606896e-34)
 --- !u!114 &1717045555065627318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28086,9 +28339,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (8.314472)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (8.314472)
 --- !u!114 &1717045555086109701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28647,9 +28903,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.asin({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.asin({0}))
 --- !u!114 &1717045555110170266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29351,9 +29610,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}-{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}-{1})
 --- !u!114 &1717045555147423430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29716,9 +29978,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.exp({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.exp({0}))
 --- !u!114 &1717045555168945147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30002,9 +30267,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.sqrt({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.sqrt({0}))
 --- !u!114 &1717045555178483565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30328,9 +30596,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}+{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}+{1})
 --- !u!114 &1717045555204399304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30551,9 +30822,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (6.67428e-11)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (6.67428e-11)
 --- !u!114 &1717045555235526901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31061,9 +31335,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (8.854187817e-12)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (8.854187817e-12)
 --- !u!114 &1717045555319032069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31198,9 +31475,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}/{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}/{1})
 --- !u!114 &1717045555322203997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32305,9 +32585,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.atan({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.atan({0}))
 --- !u!114 &1717045555420356352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32588,9 +32871,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (Math.PI)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.PI)
 --- !u!114 &1717045555453024313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32872,9 +33158,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: (Math.pow({0}, {1}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, {1}))
 --- !u!114 &1717045555455039089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33540,9 +33829,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.602176487e-19)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.602176487e-19)
 --- !u!114 &1717045555490284008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33817,9 +34109,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.atan({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.atan({0}))
 --- !u!114 &1717045555492624845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34066,9 +34361,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (8.314472)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (8.314472)
 --- !u!114 &1717045555506462785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34201,9 +34499,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (Math.E)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.E)
 --- !u!114 &1717045555518293759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34649,9 +34950,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 2
-  value: ({0}+{1})
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: ({0}+{1})
 --- !u!114 &1717045555555085720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34883,17 +35187,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1717045555574348151}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1717045554059332950}
-  m_Father: {fileID: 3425712794698639027}
-  m_RootOrder: 3
+  m_Father: {fileID: 3821686583194889038}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 233.32, y: -221.2}
+  m_AnchoredPosition: {x: 233.32, y: -211.61998}
   m_SizeDelta: {x: 160, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1717045555574348147
@@ -35295,9 +35599,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (1.602176487e-19)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (1.602176487e-19)
 --- !u!114 &1717045555603019788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35431,9 +35738,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.log({0})/Math.log(10))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.log({0})/Math.log(10))
 --- !u!114 &1717045555607008962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35567,9 +35877,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.log({0})/Math.log(10))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.log({0})/Math.log(10))
 --- !u!114 &1717045555607539995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36192,9 +36505,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.sqrt({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.sqrt({0}))
 --- !u!114 &1717045555682624567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36406,11 +36722,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9b331b1fa690ef4c9e49fb439410fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
   thisGUID: base
   Value1: {fileID: 1717045555689052936}
   Value2: {fileID: 0}
   value: ({0})
+  NameShower: {fileID: 0}
 --- !u!114 &1717045555689052936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36583,9 +36899,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.pow({0}, 3))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, 3))
 --- !u!114 &1717045555690704394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37594,9 +37913,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (Math.E)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.E)
 --- !u!114 &1717045555752413539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38484,9 +38806,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.pow({0}, 3))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.pow({0}, 3))
 --- !u!114 &1717045555823273208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38851,9 +39176,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (8.314472)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (8.314472)
 --- !u!114 &1717045555839749267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39450,9 +39778,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (6.67428e-11)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (6.67428e-11)
 --- !u!114 &1717045555879976655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40183,9 +40514,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.log({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.log({0}))
 --- !u!114 &1717045555956789285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40661,9 +40995,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: 0
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: 0
 --- !u!1 &1717045555992927140
 GameObject:
   m_ObjectHideFlags: 0
@@ -41205,9 +41542,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 0
-  value: (Math.PI)
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.PI)
 --- !u!114 &1717045556024086481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41341,9 +41681,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc679476e442d214c8de892f420d09dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  varibleExpression: 1
-  value: (Math.sin({0}))
   FormulaControllerInstance: {fileID: 0}
+  Text: {fileID: 0}
+  valueType: 0
+  MeasuredStatisticValue: 0
+  ComplexStatisticValue: 0
+  value: (Math.sin({0}))
 --- !u!114 &1717045556026084022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42541,9 +42884,8 @@ RectTransform:
   - {fileID: 751585113555382509}
   - {fileID: 751585114540219393}
   - {fileID: 751585113670667228}
-  - {fileID: 1717045555574348150}
   m_Father: {fileID: 85336617636784328}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -42565,6 +42907,8 @@ MonoBehaviour:
   InstanceName: 
   baseCell: {fileID: 751585113348189743}
   Selector: {fileID: 751585113670667229}
+  MeasuredSelector: {fileID: 0}
+  ComplexSelector: {fileID: 0}
   Mask: {fileID: 751585114540219394}
 --- !u!1 &4991265939021845982
 GameObject:
@@ -42950,9 +43294,9 @@ RectTransform:
   m_Father: {fileID: 4672276892888870491}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 79, y: -10}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 79, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2416275637183555283
@@ -43444,20 +43788,256 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CallButton1: {fileID: 85336618368152935}
   SureButton1: {fileID: 1717045555574348149}
-  Field1: {fileID: 4047967335121695162}
+  Field1: {fileID: 3821686583194889025}
   Value1: {fileID: 1717045554375019256}
   CallButton2: {fileID: 826523886817081199}
   SureButton2: {fileID: 1717045554185790887}
-  Field2: {fileID: 751585113746625591}
+  Field2: {fileID: 0}
   Value2: {fileID: 1717045554149655681}
   CallButton3: {fileID: 1717045553955254155}
   SureButton3: {fileID: 1717045554612029007}
-  Field3: {fileID: 751585113355830756}
+  Field3: {fileID: 0}
   Value3: {fileID: 1717045554118748540}
   CallButton4: {fileID: 1717045554014503065}
   SureButton4: {fileID: 1717045554613408562}
-  Field4: {fileID: 751585113132296147}
+  Field4: {fileID: 0}
   Sprites:
   - {fileID: 21300000, guid: cb43dfbc906f0b748a7955cfb3d78639, type: 3}
   - {fileID: 21300000, guid: 602d6bb8c3c73204e807dbf5038642ac, type: 3}
   - {fileID: 21300000, guid: 5390cdc69b2c8d14db4be9d5b45408ca, type: 3}
+--- !u!1001 &1076378154188900813
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 85336617636784328}
+    m_Modifications:
+    - target: {fileID: 4321568369356106269, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568369356106269, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568369356106269, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568369565825884, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568369565825884, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568369565825884, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568369565825884, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568370122143465, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 219
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568370122143465, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568370122143465, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568370215923198, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568370215923198, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371021154229, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 150.00003
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371021154229, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -149.999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371021154229, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371021154229, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371199454429, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371199454429, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -140.00002
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371207217804, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_Name
+      value: FormulaEditor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371265274742, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371265274742, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321568371265274742, guid: bb43ccdaa35e0604d9a496768c0ea315,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bb43ccdaa35e0604d9a496768c0ea315, type: 3}
+--- !u!1 &3821686583194889025 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4321568371207217804, guid: bb43ccdaa35e0604d9a496768c0ea315,
+    type: 3}
+  m_PrefabInstance: {fileID: 1076378154188900813}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &3821686583194889038 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4321568371207217795, guid: bb43ccdaa35e0604d9a496768c0ea315,
+    type: 3}
+  m_PrefabInstance: {fileID: 1076378154188900813}
+  m_PrefabAsset: {fileID: 0}

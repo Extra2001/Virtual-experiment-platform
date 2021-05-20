@@ -33,7 +33,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
         return RecordManager.tempRecord.quantities.Select(x => x.Name).ToList();
     }
 
-    public string GetStatisticValue(string QuantityName, ComplexStatisticValue valueKind)
+    public string GetStatisticValue(string quantityName, ComplexStatisticValue valueKind)
     {
         throw new NotImplementedException();
     }

@@ -32,6 +32,12 @@ public class FormulaTest : HTBehaviour
             var str = JsonConvert.SerializeObject(FormulaController.Instances.First().Value.Serialize());
             Log.Info(str);
             FormulaController.Instances.Last().Value.LoadFormula(JsonConvert.DeserializeObject<List<FormulaNode>>(str));
+
+            // 存储：
+            Storage.CommonStorage.SetStorage("yourkey", FormulaController.Instances.First().Value.Serialize());
+
+            // 取用：
+            FormulaController.Instances.Last().Value.LoadFormula(Storage.CommonStorage.GetStorage<List<FormulaNode>>("yourkey"));
         });
     }
 

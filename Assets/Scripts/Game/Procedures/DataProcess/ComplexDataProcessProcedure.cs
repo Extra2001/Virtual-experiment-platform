@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using HT.Framework;
 using DG.Tweening;
+using System;
+using System.Linq;
 /// <summary>
 /// 新建流程
 /// </summary>
@@ -24,6 +26,16 @@ public class ComplexDataProcessProcedure : ProcedureBase
     {
         Main.m_UI.OpenResidentUI<ComplexData>();
         base.OnEnter(lastProcedure);
+    }
+
+    public List<string> GetQuantitiesName()
+    {
+        return RecordManager.tempRecord.quantities.Select(x => x.Name).ToList();
+    }
+
+    public string GetStatisticValue(StatisticValue valueKind)
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>

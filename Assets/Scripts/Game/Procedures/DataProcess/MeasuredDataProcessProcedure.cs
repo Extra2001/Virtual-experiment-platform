@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HT.Framework;
 using DG.Tweening;
+using System;
 /// <summary>
 /// 新建流程
 /// </summary>
@@ -25,10 +26,16 @@ public class MeasuredDataProcessProcedure : ProcedureBase
         GameManager.Instance.ShowUncertainty();
         base.OnEnter(lastProcedure);
     }
+
     public void ShowUncertainty(QuantityModel quantity)
     {
         Main.m_UI.CloseUI<MeasuredDataProcess>();
         Main.m_UI.OpenResidentUI<MeasuredDataProcess>(quantity);
+    }
+
+    public string GetStatisticValue(StatisticValue valueKind)
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -56,4 +63,12 @@ public class MeasuredDataProcessProcedure : ProcedureBase
     {
         base.OnUpdateSecond();
     }
+}
+
+public enum StatisticValue
+{
+    Symbol,
+    Average,
+    Uncertainty,
+    SigmaX
 }

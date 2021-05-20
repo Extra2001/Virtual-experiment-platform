@@ -217,15 +217,16 @@ namespace HT.Framework
         /// </summary>
         public void SwitchLastProcedure()
         {
-            int index = ProcedureTypes.IndexOf(CurrentProcedure.GetType());
-            if (index <= 0)
-            {
-                SwitchProcedure(ProcedureTypes[ProcedureTypes.Count - 1]);
-            }
-            else
-            {
-                SwitchProcedure(ProcedureTypes[index - 1]);
-            }
+            throw new HTFrameworkException(HTFrameworkModule.Procedure, "不允许使用此方法，请使用GameManager中的方法代替。");
+            //int index = ProcedureTypes.IndexOf(CurrentProcedure.GetType());
+            //if (index <= 0)
+            //{
+            //    SwitchProcedure(ProcedureTypes[ProcedureTypes.Count - 1]);
+            //}
+            //else
+            //{
+            //    SwitchProcedure(ProcedureTypes[index - 1]);
+            //}
         }
         /// <summary>
         /// 切换至指定序号的流程（依据编辑器面板的序号）

@@ -11,6 +11,7 @@ using UnityEngine.Networking;
 [Serializable]
 public class ObjectsModel
 {
+    [Serializable]
     public class Vector3
     {
         public float x { get; set; }

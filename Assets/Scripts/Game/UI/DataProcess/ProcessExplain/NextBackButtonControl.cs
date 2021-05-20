@@ -22,7 +22,8 @@ public class NextBackButtonControl : HTBehaviour
 
     public void Back()
     {
-        Main.m_Procedure.SwitchLastProcedure();
+        //Main.m_Procedure.SwitchLastProcedure();
+        GameManager.Instance.SwitchBackProcedure();
     }
     public void Next()
     {

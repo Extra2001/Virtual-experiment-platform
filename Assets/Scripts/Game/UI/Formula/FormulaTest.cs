@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using Newtonsoft.Json;
 
 public class FormulaTest : HTBehaviour
 {
@@ -16,17 +17,21 @@ public class FormulaTest : HTBehaviour
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
-            foreach (var item in FormulaController.Instances)
-            {
-                try
-                {
-                    Log.Info($"{item.Value.Expression} = {item.Value.ExpressionExecuted}");
-                }
-                catch
-                {
-                    Log.Info("公式未输入完整。");
-                }
-            }
+            //foreach (var item in FormulaController.Instances)
+            //{
+            //    Log.Info(JsonConvert.SerializeObject(item.Value.Serialize()));
+            //    try
+            //    {
+            //        Log.Info($"{item.Value.Expression} = {item.Value.ExpressionExecuted}");
+            //    }
+            //    catch
+            //    {
+            //        Log.Info("公式未输入完整。");
+            //    }
+            //}
+            var str = JsonConvert.SerializeObject(FormulaController.Instances.First().Value.Serialize());
+            Log.Info(str);
+            FormulaController.Instances.Last().Value.LoadFormula(JsonConvert.DeserializeObject<List<FormulaNode>>(str));
         });
     }
 

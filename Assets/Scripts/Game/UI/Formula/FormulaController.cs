@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
+using System;
 
 public class FormulaController : HTBehaviour
 {
@@ -61,7 +62,13 @@ public class FormulaController : HTBehaviour
         Mask.SetActive(false);
     }
 
-    public void SelectCell(string cellName, string value = "0")
+    /// <summary>
+    /// 在公式选择器里选择节点
+    /// </summary>
+    /// <param name="cellName"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public FormulaCell SelectCell(string cellName, string value = "0")
     {
         HideSelector();
         var cell = GetCell(cellName);
@@ -86,6 +93,83 @@ public class FormulaController : HTBehaviour
             });
         if (cellName.Equals("Customize")) HandleCustomize(hh, value);
         RefreshContentSizeFitter();
+        return hh;
+    }
+
+    /// <summary>
+    /// 获取序列化后的公式节点
+    /// </summary>
+    /// <returns></returns>
+    public List<FormulaNode> Serialize()
+    {
+        var ret = new List<FormulaNode>();
+        foreach (var item in showedCells)
+        {
+            if (!item)
+                continue;
+            var node = new FormulaNode()
+            {
+                value = item.value,
+                GUID = item.thisGUID,
+                PrefabName = item.gameObject.name.Replace("(Clone)", ""),
+                ReplaceFlags = item.ReplaceFlags.Select(x => x.Value).ToList()
+            };
+            ret.Add(node);
+        }
+        return ret;
+    }
+
+    /// <summary>
+    /// 加载序列化后的节点，调用此函数会导致本控制器下输入的公式被清空。
+    /// </summary>
+    /// <param name="nodes"></param>
+    public void LoadFormula(List<FormulaNode> nodes)
+    {
+        // 清空当前显示
+        for (int i = 1; i < showedCells.Count; i++)
+            Destroy(showedCells[i]?.gameObject);
+        for (int i = 1; i < showedCells.Count; i++)
+            showedCells.RemoveAt(i);
+        RefreshContentSizeFitter();
+
+        // 处理根节点
+        var copyNodes = nodes.DeepCopy<List<FormulaNode>>();
+        var baseNode = copyNodes[0];
+        copyNodes.RemoveAt(0);
+        baseCell.value = baseNode.value;
+        baseCell.ReplaceFlags.Clear();
+        if (baseNode.ReplaceFlags.Count >= 1)
+            baseCell.ReplaceFlags.Add(baseCell.Value1, baseNode.ReplaceFlags[0]);
+        if (baseNode.ReplaceFlags.Count >= 2)
+            baseCell.ReplaceFlags.Add(baseCell.Value2, baseNode.ReplaceFlags[1]);
+        baseCell.thisGUID = baseNode.GUID;
+
+        // 显示方块
+        RestoreCell(baseCell, nodes);
+    }
+
+    /// <summary>
+    /// 从节点恢复方块
+    /// </summary>
+    private void RestoreCell(FormulaCell cell, List<FormulaNode> nodes)
+    {
+        foreach (var item in cell.ReplaceFlags)
+        {
+            var node = nodes.Where(x => x.GUID.Equals(item.Value)).FirstOrDefault();
+            if (node == null)
+                continue;
+            clickedButton = item.Key;
+            clickedCell = cell;
+            var newCell = SelectCell(node.PrefabName, node.value);
+            newCell.value = node.value;
+            newCell.ReplaceFlags.Clear();
+            if (node.ReplaceFlags.Count >= 1)
+                newCell.ReplaceFlags.Add(newCell.Value1, node.ReplaceFlags[0]);
+            if (node.ReplaceFlags.Count >= 2)
+                newCell.ReplaceFlags.Add(newCell.Value2, node.ReplaceFlags[1]);
+            newCell.thisGUID = node.GUID;
+            RestoreCell(newCell, nodes);
+        }
     }
 
     private void ShowSelector()
@@ -119,6 +203,9 @@ public class FormulaController : HTBehaviour
     private void DeleteChild(Transform cell)
     {
         int childCnt = cell.childCount;
+        var hh = cell.gameObject.GetComponentsInChildren<FormulaCell>(true);
+        for (int i = 1; i < hh.Length; i++)
+            showedCells.Remove(hh[i]);
         for (int i = 0; i < childCnt; i++)
             Destroy(cell.transform.GetChild(i).gameObject);
     }
@@ -156,14 +243,14 @@ public class FormulaController : HTBehaviour
     {
         if (string.IsNullOrEmpty(InstanceName))
         {
-            for(int i=0; string.IsNullOrEmpty(InstanceName) ; i++)
+            for (int i = 0; string.IsNullOrEmpty(InstanceName); i++)
                 if (!Instances.ContainsKey(i.ToString()))
                     InstanceName = i.ToString();
         }
         Instances.Add(InstanceName, this);
 
-        foreach(var item in Selector.GetComponentsInChildren<FormulaSelectorCell>(true))
-            item.InstanceName = InstanceName;
+        foreach (var item in Selector.GetComponentsInChildren<FormulaSelectorCell>(true))
+            item.FormulaControllerInstance = this;
     }
 
     private void OnDestroy()

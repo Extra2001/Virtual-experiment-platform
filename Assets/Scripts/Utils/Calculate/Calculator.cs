@@ -44,6 +44,7 @@ public class CalcVariable {
     public CalcVariable(double ub, int measures) {
         this.ub = ub; values = new List<double>(measures);
     }
+    public CalcVariable() { }
     public (double, double, double) CalcUncertain() {// value,ua,u
         int n = 0;
         double sum1 = 0, sum2 = 0;
@@ -57,7 +58,7 @@ public class CalcVariable {
         return (average, Math.Sqrt(sum2), Math.Sqrt(sum2 + ub * ub));
     }
 }
-public class CalcArgs {
+public class CalcArgs {//一次计算
     private Dictionary<string, CalcVariable> vars;//变量
     private Dictionary<string, double> cons;//常量
     public int arrlen { get; private set; }
@@ -68,7 +69,7 @@ public class CalcArgs {
     public static readonly HashSet<string> keywords = new HashSet<string>(){
             "pi","e","abs","acos","asin","atan","sin","cos","tan","cot","sec","csc","j","sqrt","pow","sinh","cosh","tanh","exp","ln","lg"
         };
-    public bool ValidVarname(string v) {
+    public bool ValidVarname(string v) {//检查
         if(keywords.Contains(v)) {
             return false;
         }

@@ -48,9 +48,47 @@ public class DealComplexDataInput : HTBehaviour
     private void StartShow()
     {
         ComplexQuantityMoedel model = RecordManager.tempRecord.complexQuantityMoedel;
+
         CallButton1.image.sprite = Sprites[model.AverageState];
+        Value1.text = "=" + StaticMethods.NumberFormat(model.Average);
+        Field1.SetActive(true);
+        if (model.AverageExpression != null)
+        {
 
+            Field1.GetComponent<FormulaController>().LoadFormula(model.AverageExpression);
+        }
+        else
+        {
+            Field1.GetComponent<FormulaController>().Initialize();
+        }
+        Field1.SetActive(false);
 
+        CallButton2.image.sprite = Sprites[model.UncertainState];
+        Value2.text = "=" + StaticMethods.NumberFormat(model.Uncertain);
+        Field2.SetActive(true);
+        if (model.UncertainExpression != null)
+        {
+
+            Field2.GetComponent<FormulaController>().LoadFormula(model.UncertainExpression);
+        }
+        else
+        {
+            Field2.GetComponent<FormulaController>().Initialize();
+        }
+        Field2.SetActive(false);
+
+        CallButton3.image.sprite = Sprites[model.AnswerState];
+        Field3.SetActive(true);
+        if (model.AnswerExpression != null)
+        {
+
+            Field3.GetComponent<FormulaController>().LoadFormula(model.AnswerExpression);
+        }
+        else
+        {
+            Field3.GetComponent<FormulaController>().Initialize();
+        }
+        Field3.SetActive(false);
     }
 
     private void CallClick1()
@@ -78,7 +116,7 @@ public class DealComplexDataInput : HTBehaviour
     {
         try
         {
-            Value1.text = "=" + NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
+            Value1.text = "=" + StaticMethods.NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton1.image.sprite = Sprites[2];
             RecordManager.tempRecord.complexQuantityMoedel.AverageState = 2;
             RecordManager.tempRecord.complexQuantityMoedel.Average = Field1.GetComponent<FormulaController>().ExpressionExecuted;
@@ -115,7 +153,7 @@ public class DealComplexDataInput : HTBehaviour
     {
         try
         {
-            Value2.text = "=" + NumberFormat(Field2.GetComponent<FormulaController>().ExpressionExecuted);
+            Value2.text = "=" + StaticMethods.NumberFormat(Field2.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton2.image.sprite = Sprites[2];
             RecordManager.tempRecord.complexQuantityMoedel.UncertainState = 2;
             RecordManager.tempRecord.complexQuantityMoedel.Uncertain = Field2.GetComponent<FormulaController>().ExpressionExecuted;
@@ -163,20 +201,4 @@ public class DealComplexDataInput : HTBehaviour
         }
     }
 
-
-    private string NumberFormat(double Input)
-    {
-        string Output;
-
-        if (Input > 0.01 && Input < 1000)
-        {
-            Output = Input.ToString("f4");
-        }
-        else
-        {
-            Output = Input.ToString("E");
-        }
-
-        return Output;
-    }
 }

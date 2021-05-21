@@ -26,11 +26,11 @@ public class UncertaintyInput : HTBehaviour
     {
         var instance = quantity.InstrumentType.CreateInstrumentInstance();
 
-        _Title.text = "处理" + quantity.Name + ":" + quantity.Symbol + "/" + instance.UnitSymbol;
-        _AverageTitle.text = quantity.Name + "的平均值\n\n=";
-        _UaTitle.text = quantity.Name + "的A类不确定度\n\n=";
-        _UbTitle.text = quantity.Name + "的B类不确定度\n\n=";
-        _ComplexTitle.text = quantity.Name + "的合成不确定度\n\n=";
+        _Title.text = "澶勭悊" + quantity.Name + ":" + quantity.Symbol + "/" + instance.UnitSymbol;
+        _AverageTitle.text = quantity.Name + "鐨勫钩鍧囧�糪n\n=";
+        _UaTitle.text = quantity.Name + "鐨凙绫讳笉纭畾搴n\n=";
+        _UbTitle.text = quantity.Name + "鐨凚绫讳笉纭畾搴n\n=";
+        _ComplexTitle.text = quantity.Name + "鐨勫悎鎴愪笉纭畾搴n\n=";
 
         dataColumn.ShowQuantity(quantity, true);
     }

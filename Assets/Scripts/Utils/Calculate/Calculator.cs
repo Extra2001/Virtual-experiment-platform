@@ -74,10 +74,10 @@ public class CalcArgs {
             return false;
         }
     }
-    public bool Measure(string varname, double value) {
-        //添加一个测量值 成功返回true
+    public bool Measure(string varname, double[] values) {
+        //修改测量值 成功返回true
         if(vars.ContainsKey(varname)) {
-            vars[varname].values.Add(value); return true;
+            vars[varname].values.Clear(); vars[varname].values.AddRange(values); return true;
         }
         return false;
     }

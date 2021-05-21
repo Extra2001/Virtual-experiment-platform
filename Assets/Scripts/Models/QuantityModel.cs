@@ -21,13 +21,13 @@ public class QuantityModel
 
     
 
-    //´Ë´¦×´Ì¬0´ú±í³õÊ¼£¬1´ú±íÕıÔÚ¹¹½¨±í´ïÊ½£¬2´ú±í¹¹½¨±í´ïÊ½Íê³É
+    //æ­¤å¤„çŠ¶æ€0ä»£è¡¨åˆå§‹ï¼Œ1ä»£è¡¨æ­£åœ¨æ„å»ºè¡¨è¾¾å¼ï¼Œ2ä»£è¡¨æ„å»ºè¡¨è¾¾å¼å®Œæˆ
     public int AverageState { get; set; } = 0;
     public int UaState { get; set; } = 0;
     public int UbState { get; set; } = 0;
     public int ComplexState { get; set; } = 0;
 
-    //´æ´¢ÊäÈëµÄ¹«Ê½
+    //å­˜å‚¨è¾“å…¥çš„å…¬å¼
     public List<FormulaNode> AverageExpression { get; set; } = null;
     public List<FormulaNode> UaExpression { get; set; } = null;
     public List<FormulaNode> UbExpression { get; set; } = null;

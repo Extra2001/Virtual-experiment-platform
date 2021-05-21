@@ -16,10 +16,12 @@ public class ComplexQuantityMoedel
 
     public int AverageState { get; set; } = 0;
     public int UncertainState { get; set; } = 0;
+    public int AnswerState { get; set; } = 0;
 
     public double Average { get; set; } = 0.0;
     public double Uncertain { get; set; } = 0.0;
 
     public List<FormulaNode> AverageExpression { get; set; } = null;
     public List<FormulaNode> UncertainExpression { get; set; } = null;
+    public List<FormulaNode> AnswerExpression { get; set; } = null;
 }

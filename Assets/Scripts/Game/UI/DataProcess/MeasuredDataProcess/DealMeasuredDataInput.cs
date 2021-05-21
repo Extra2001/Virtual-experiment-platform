@@ -54,7 +54,7 @@ public class DealMeasuredDataInput : HTBehaviour
         //按钮颜色，存储的表达式等等
 
         CallButton1.image.sprite = Sprites[quantity.AverageState];
-        Value1.text = "=" + NumberFormat(quantity.Average);
+        Value1.text = "=" + StaticMethods.NumberFormat(quantity.Average);
         Field1.SetActive(true);
         if (quantity.AverageExpression != null)
         {
@@ -68,7 +68,7 @@ public class DealMeasuredDataInput : HTBehaviour
         Field1.SetActive(false);
 
         CallButton2.image.sprite = Sprites[quantity.UaState];
-        Value2.text = "=" + NumberFormat(quantity.Ua);
+        Value2.text = "=" + StaticMethods.NumberFormat(quantity.Ua);
         Field2.SetActive(true);
         if (quantity.UaExpression != null)
         {
@@ -82,7 +82,7 @@ public class DealMeasuredDataInput : HTBehaviour
         Field2.SetActive(false);
 
         CallButton3.image.sprite = Sprites[quantity.UbState];
-        Value3.text = "=" + NumberFormat(quantity.Ub);
+        Value3.text = "=" + StaticMethods.NumberFormat(quantity.Ub);
         Field3.SetActive(true);
         if (quantity.UbExpression != null)
         {
@@ -100,11 +100,11 @@ public class DealMeasuredDataInput : HTBehaviour
         if (quantity.AverageExpression != null)
         {
 
-            Field1.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);
+            Field4.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);
         }
         else
         {
-            Field1.GetComponent<FormulaController>().Initialize();
+            Field4.GetComponent<FormulaController>().Initialize();
         }
         Field4.SetActive(false);
 
@@ -134,7 +134,7 @@ public class DealMeasuredDataInput : HTBehaviour
     {
         try
         {
-            Value1.text = "=" + NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
+            Value1.text = "=" + StaticMethods.NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton1.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Average = Field1.GetComponent<FormulaController>().ExpressionExecuted;
@@ -173,7 +173,7 @@ public class DealMeasuredDataInput : HTBehaviour
     {
         try
         {
-            Value2.text = "=" + NumberFormat(Field2.GetComponent<FormulaController>().ExpressionExecuted);
+            Value2.text = "=" + StaticMethods.NumberFormat(Field2.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton2.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UaState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Ua = Field2.GetComponent<FormulaController>().ExpressionExecuted;
@@ -210,7 +210,7 @@ public class DealMeasuredDataInput : HTBehaviour
     {
         try
         {
-            Value3.text = "=" +  NumberFormat(Field3.GetComponent<FormulaController>().ExpressionExecuted);
+            Value3.text = "=" + StaticMethods.NumberFormat(Field3.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton3.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UbState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Ub = Field3.GetComponent<FormulaController>().ExpressionExecuted;
@@ -258,28 +258,6 @@ public class DealMeasuredDataInput : HTBehaviour
             CallButton4.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].ComplexState = 1;
         }
-    }
-
-
-    //使double数据展示起来更好看
-    public string NumberFormat(double Input)
-    {
-        string Output;
-
-        if (Math.Abs(Input) > 0.01 && Math.Abs(Input) < 1000)
-        {
-            Output = Input.ToString("f4");
-        }
-        else if ((Input - 0) == 0)
-        {
-            Output = "0";
-        }
-        else
-        {
-            Output = Input.ToString("E");
-        }
-
-        return Output;
     }
 
 }

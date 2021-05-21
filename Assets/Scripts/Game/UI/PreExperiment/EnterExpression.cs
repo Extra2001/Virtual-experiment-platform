@@ -17,19 +17,15 @@ public class EnterExpression : HTBehaviour
 
     private List<GameObject> quantities = new List<GameObject>();
 
-    // Start is called before the first frame update
     void Start()
     {
         LoadQuantities();
         SyncExpression();
-        StringExpressionInput.onValueChanged.AddListener(_ => Render());
-        //RenderButton.onClick.AddListener(Render);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        SaveExpression();
+        StringExpressionInput.onValueChanged.AddListener(_ =>
+        {
+            RecordManager.tempRecord.stringExpression = StringExpressionInput.text;
+            Render();
+        });
     }
 
     public void LoadSprite(Sprite sprite)
@@ -56,17 +52,12 @@ public class EnterExpression : HTBehaviour
         LatexEquationRender.Render(CalcArgs.GetSymexpr(text).ToLaTeX());
     }
 
-
     public void SyncExpression()
     {
         StringExpressionInput.text = RecordManager.tempRecord.stringExpression;
         Render();
     }
 
-    private void SaveExpression()
-    {
-        RecordManager.tempRecord.stringExpression = StringExpressionInput.text;
-    }
 
     public void LoadQuantities()
     {

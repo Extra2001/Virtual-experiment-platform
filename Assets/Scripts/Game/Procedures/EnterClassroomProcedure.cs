@@ -23,6 +23,7 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        GameManager.Instance.FPSable = true;
         showed = false;
         Main.m_UI.OpenTemporaryUI<DatatableUILogic>();
         Main.m_UI.OpenResidentUI<GameButtonUILogic>();
@@ -43,6 +44,7 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
+        GameManager.Instance.FPSable = false;
         if (showed)
             UIAPI.Instance.HideDataTable();
         KeyboardManager.Instance.UnRegister(KeyCode.T);

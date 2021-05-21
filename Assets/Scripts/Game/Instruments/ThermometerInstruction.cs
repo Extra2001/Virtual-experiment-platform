@@ -9,24 +9,22 @@ public class ThermometerInstruction : InstrumentBase
     private Vector3 Position = new Vector3();
     private GameObject Self;
 
-    public override string InstName { get => "温度计"; }
+    public override string InstName  => "温度计";
 
-    public override double URV { get => 50; }
+    public override double URV => 50; 
 
-    public override double LRV { get => -30; }
+    public override double LRV => -30; 
 
-    public override double ErrorLimit { get => 0.5; }//忘了
+    public override double ErrorLimit => 0.5; //忘了
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }
 
-    public override string Unit { get => "摄氏度"; }
+    public override string Unit=> "摄氏度"; 
 
-    public override string UnitSymbol { get => "°C"; }
+    public override string UnitSymbol=> "°C"; 
 
-    public override GameObject gameObject { get; set; }
-
-    public override Sprite previewImage { get => Resources.Load<Sprite>("Instruments/Thermometer/thermometer_preview"); }
+    public override string previewImagePath => "Instruments/Thermometer/thermometer_preview";
 
     public override double GetMeasureResult()
     {

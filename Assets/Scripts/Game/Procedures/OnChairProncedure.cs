@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HT.Framework;
 using DG.Tweening;
+using System;
 /// <summary>
 /// 新建流程
 /// </summary>
@@ -22,8 +23,13 @@ public class OnChair : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        GameManager.Instance.FPSable = true;
         base.OnEnter(lastProcedure);
         Main.m_UI.OpenResidentUI<GameButtonUILogic>();
+
+        Main.m_UI.OpenTemporaryUI<BagControl>();
+        Main.m_UI.CloseUI<BagControl>();
+        
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {
             if (Main.m_UI.GetOpenedUI<DatatableUILogic>() != null)
@@ -60,6 +66,7 @@ public class OnChair : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
+        GameManager.Instance.FPSable = false;
         base.OnLeave(nextProcedure);
         UIAPI.Instance.HideDataTable();
         Main.m_UI.CloseUI<BagControl>();

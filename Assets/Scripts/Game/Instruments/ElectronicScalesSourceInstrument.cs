@@ -10,24 +10,22 @@ public class ElectronicScalesSourceInstrument : InstrumentBase
     private Vector3 Position = new Vector3();
     private GameObject Self;
 
-    public override string InstName { get => "电子秤"; }
+    public override string InstName => "电子秤";
 
-    public override double URV { get => 9999999; }
+    public override double URV => 9999999;
 
-    public override double LRV { get => 0; }
+    public override double LRV => 0;
 
-    public override double ErrorLimit { get => 0.5; }//忘了
+    public override double ErrorLimit => 0.5; //忘了
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }
 
-    public override string Unit { get => "克"; }
+    public override string Unit=> "克";
 
-    public override string UnitSymbol { get => "g"; }
+    public override string UnitSymbol => "g";
 
-    public override GameObject gameObject { get; set; }
-
-    public override Sprite previewImage { get => Resources.Load<Sprite>("Instruments/ElectronicScales/ElectronicScales_image"); }
+    public override string previewImagePath => "Instruments/ElectronicScales/ElectronicScales_image";
 
     public override double GetMeasureResult()
     {

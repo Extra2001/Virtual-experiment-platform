@@ -5,53 +5,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
+using System.Threading.Tasks;
 
 public class EnterExpression : HTBehaviour
 {
     public GameObject _Content;
     public GameObject _QuantitySelectCell;
     public InputField StringExpressionInput;
-    public InputField LatexExpressionInput;
-    public Button StringExpressionCheckButton;
-    public Button LatexExpressionCheckButton;
-    public SegmentedControl SegmentedControl;
+    public Image image;
+    //public Button RenderButton;
 
     private List<GameObject> quantities = new List<GameObject>();
-    private InputField ExpressionInput;
-    private Button ExpressionCheckButton;
 
     // Start is called before the first frame update
     void Start()
     {
-        SegmentedControl.selectedSegmentIndex = (int)RecordManager.tempRecord.expressionKind;
         LoadQuantities();
         SyncExpression();
-        SegmentedControl.onValueChanged.AddListener(value =>
-        {
-            RecordManager.tempRecord.expressionKind = (ExpressionKind)value;
-            SyncExpression();
-        });
-    }
-
-    public void SyncExpression()
-    {
-        if (RecordManager.tempRecord.expressionKind == ExpressionKind.String)
-        {
-            StringExpressionCheckButton.gameObject.transform.parent.gameObject.SetActive(true);
-            LatexExpressionCheckButton.gameObject.transform.parent.gameObject.SetActive(false);
-            ExpressionInput = StringExpressionInput;
-            ExpressionCheckButton = StringExpressionCheckButton;
-        }
-        else if (RecordManager.tempRecord.expressionKind == ExpressionKind.Latex)
-        {
-            LatexExpressionCheckButton.gameObject.transform.parent.gameObject.SetActive(true);
-            StringExpressionCheckButton.gameObject.transform.parent.gameObject.SetActive(false);
-            ExpressionInput = LatexExpressionInput;
-            ExpressionCheckButton = LatexExpressionCheckButton;
-        }
-
-        LatexExpressionInput.text = RecordManager.tempRecord.latexExpression;
-        StringExpressionInput.text = RecordManager.tempRecord.stringExpression;
+        StringExpressionInput.onValueChanged.AddListener(_ => Render());
+        //RenderButton.onClick.AddListener(Render);
     }
 
     // Update is called once per frame
@@ -60,9 +32,42 @@ public class EnterExpression : HTBehaviour
         SaveExpression();
     }
 
+    public void LoadSprite(Sprite sprite)
+    {
+        image.sprite = sprite;
+        var hh = image.gameObject.rectTransform().sizeDelta;
+        hh.x = (float)sprite.texture.width / sprite.texture.height * hh.y;
+        image.gameObject.rectTransform().sizeDelta = hh;
+    }
+
+    public void Render()
+    {
+        var text = StringExpressionInput.text;
+
+        Task.Run(() =>
+        {
+            if (string.IsNullOrEmpty(text))
+                LatexEquationRender.Render("expr.", LoadSprite);
+            else
+                LatexEquationRender.Render(CalcArgs.GetSymexpr(text).ToLaTeX(), LoadSprite);
+        });
+    }
+
+    public void Validate()
+    {
+        var text = StringExpressionInput.text;
+        LatexEquationRender.Render(CalcArgs.GetSymexpr(text).ToLaTeX());
+    }
+
+
+    public void SyncExpression()
+    {
+        StringExpressionInput.text = RecordManager.tempRecord.stringExpression;
+        Render();
+    }
+
     private void SaveExpression()
     {
-        RecordManager.tempRecord.latexExpression = LatexExpressionInput.text;
         RecordManager.tempRecord.stringExpression = StringExpressionInput.text;
     }
 
@@ -79,7 +84,7 @@ public class EnterExpression : HTBehaviour
             var cellScript = cell.GetComponent<QuantitySelectCell>();
             var cellButton = cell.GetComponent<Button>();
             cellScript.Quantity = item;
-            cellButton.onClick.AddListener(() => ExpressionInput.text += cellScript.Quantity.Symbol);
+            cellButton.onClick.AddListener(() => StringExpressionInput.text += cellScript.Quantity.Symbol);
         }
     }
 }

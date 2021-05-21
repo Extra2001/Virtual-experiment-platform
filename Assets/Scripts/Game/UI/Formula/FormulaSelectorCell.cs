@@ -31,7 +31,7 @@ public class FormulaSelectorCell : HTBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField]
     private ValueType valueType;
     [SerializeField]
-    private MeasuredStatisticValue MeasuredStatisticValue;
+    private MeasuredStatisticValue measuredStatisticValue;
     [SerializeField]
     private ComplexStatisticValue ComplexStatisticValue;
     [Space]
@@ -39,14 +39,20 @@ public class FormulaSelectorCell : HTBehaviour, IPointerEnterHandler, IPointerEx
 
     private void Start()
     {
-        
         GetComponent<Button>().onClick.AddListener(() =>
         {
+            string name = "x";
             if (valueType == ValueType.Measured)
-                value = (Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure)?.GetStatisticValue(MeasuredStatisticValue);
+            {
+                value = (Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure)?.GetStatisticValue(measuredStatisticValue);
+                name = (Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure)?.GetStatisticValue(MeasuredStatisticValue.Symbol);
+            }
             else if (valueType == ValueType.Complex)
+            {
                 value = (Main.m_Procedure.CurrentProcedure as ComplexDataProcessProcedure)?.GetStatisticValue(Text.text, ComplexStatisticValue);
-            FormulaControllerInstance.SelectCell(gameObject.name, value);
+                name = Text.text;
+            }
+            FormulaControllerInstance.SelectCell(gameObject.name, value, name);
         });
     }
 

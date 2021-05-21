@@ -23,9 +23,8 @@ public class EnterExpressionUILogic : UILogicResident
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
-
-        UIEntity.GetComponent<EnterExpression>()?.SyncExpression();
         UIEntity.GetComponent<EnterExpression>()?.LoadQuantities();
+        UIEntity.GetComponent<EnterExpression>()?.SyncExpression();
     }
 
 	/// <summary>

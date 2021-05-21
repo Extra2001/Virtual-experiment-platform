@@ -42,6 +42,10 @@ public class FormulaController : MonoBehaviour
     private Button clickedButton;
     private FormulaCell clickedCell;
 
+    public delegate void OnSelectCell();
+
+    public event OnSelectCell onSelectCell;
+
     private void Start()
     {
         CheckActive();
@@ -79,7 +83,8 @@ public class FormulaController : MonoBehaviour
         if (cellName.Equals("Customize"))
         {
             hh.value = value;
-            hh.NameShower.text = value;
+            if (hh.NameShower)
+                hh.NameShower.text = value;
         }
         else if (cellName.StartsWith("Statistic"))
         {
@@ -88,6 +93,7 @@ public class FormulaController : MonoBehaviour
                 hh.NameShower.text = name;
         }
         RefreshContentSizeFitter();
+        onSelectCell?.Invoke();
         return hh;
     }
 
@@ -194,6 +200,7 @@ public class FormulaController : MonoBehaviour
         ComplexSelector.SetActive(true);
 
         Mask.SetActive(false);
+        onSelectCell?.Invoke();
     }
 
     private void CheckActive()

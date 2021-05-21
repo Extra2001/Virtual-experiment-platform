@@ -34,9 +34,7 @@ public class Record
 
     public int currentQuantityIndex { get; set; } = 0;
 
-    public ExpressionKind expressionKind { get; set; } = ExpressionKind.String;
     public string stringExpression { get; set; } = "";
-    public string latexExpression { get; set; } = "";
     
     public float[] InstrumentStartPosition { get; set; } = new float[3];
     public float[] ObjectStartPosition { get; set; } = new float[3];

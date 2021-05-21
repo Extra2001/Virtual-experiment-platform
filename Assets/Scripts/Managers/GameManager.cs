@@ -49,6 +49,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     private void Start()
     {
         firstPersonController = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+        FPSable = false;
         if (ProcedureStack.Count == 0)
             ProcedureStack.Add(typeof(StartProcedure));
         Main.m_Event.Subscribe<Sitdown>(WhenSitdown);
@@ -156,8 +157,21 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     private void EnterExpression()
     {
-        Main.m_Procedure.SwitchProcedure<PreviewProcedure>();
-        ProcedureStack.Add(typeof(PreviewProcedure));
+        try
+        {
+            Main.m_UI.GetOpenedUI<EnterExpressionUILogic>().UIEntity.GetComponent<EnterExpression>().Validate();
+            Main.m_Procedure.SwitchProcedure<PreviewProcedure>();
+            ProcedureStack.Add(typeof(PreviewProcedure));
+        }
+        catch
+        {
+            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            {
+                ShowCancel = false,
+                Title = new BindableString("错误"),
+                Message = new BindableString("渲染表达式错误，请检查输入。")
+            });
+        }
     }
 
     private void PreviewConfirm()

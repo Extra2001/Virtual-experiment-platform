@@ -11,24 +11,22 @@ public class MicrometerInstrument : InstrumentBase
     private Vector3 Position = new Vector3();
     private GameObject Self;
 
-    public override string InstName { get => "螺旋测微器"; }
+    public override string InstName => "螺旋测微器";
 
-    public override double URV { get => 500; }
+    public override double URV  => 500; 
 
-    public override double LRV { get => 0; }
+    public override double LRV  => 0; 
 
-    public override double ErrorLimit { get => 0.5; }
+    public override double ErrorLimit  => 0.5; 
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }
 
-    public override string Unit { get => "毫米"; }
+    public override string Unit => "毫米"; 
 
-    public override string UnitSymbol { get => "mm"; }
+    public override string UnitSymbol => "mm"; 
 
-    public override GameObject gameObject { get; set; }
-
-    public override Sprite previewImage { get => Resources.Load<Sprite>("Instruments/Micrometer/micrometer_preview"); }
+    public override string previewImagePath => "Instruments/Micrometer/micrometer_preview";
 
     public override double GetMeasureResult()
     {

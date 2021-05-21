@@ -57,4 +57,13 @@ public static class CommonTools
             return ret;
         }
     }
+
+    public static Sprite GetSprite(byte[] bytes)
+    {
+        Texture2D texture2D = new Texture2D(0, 0);
+        texture2D.LoadImage(bytes);
+
+        Sprite ret = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+        return ret;
+    }
 }

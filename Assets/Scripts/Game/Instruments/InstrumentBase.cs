@@ -68,12 +68,12 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// </summary>
     public abstract string UnitSymbol { get; }
 
-    /// <summary>
-    /// 游戏对象
-    /// </summary>
-    public abstract GameObject gameObject { get; set; }
+    public abstract string previewImagePath { get; }
 
-    public abstract Sprite previewImage { get; }
+    private Sprite prePreviewImage = null;
+
+    public virtual Sprite previewImage { get => prePreviewImage == null ? 
+            (prePreviewImage = Resources.Load<Sprite>(previewImagePath)) : prePreviewImage; }
 
     /// <summary>
     /// 测量获取数据
@@ -105,5 +105,14 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     public override void OnHide()
     {
         GameObject.Destroy(Entity.GetComponent<RightButton>());
+    }
+
+    public override void OnInit()
+    {
+        base.OnInit();
+        Main.m_Resource.LoadAsset<Sprite>(new AssetInfo(null, null, previewImagePath), loadDoneAction: x =>
+        {
+            prePreviewImage = x;
+        });
     }
 }

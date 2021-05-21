@@ -130,4 +130,8 @@ public class CalcArgs {//一次计算
         }
         return (valexpr.Evaluate(vals).RealValue, uncexpr.Evaluate(vals).RealValue);
     }
+    public static symexpr GetSymexpr(string expression)
+    {
+        return symexpr.Parse(expression);
+    }
 }

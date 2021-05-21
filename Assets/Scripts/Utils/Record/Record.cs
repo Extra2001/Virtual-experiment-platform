@@ -30,6 +30,8 @@ public class Record
 
     public List<QuantityModel> quantities { get; set; } = new List<QuantityModel>();
 
+    public ComplexQuantityMoedel complexQuantityMoedel { get; set; } = new ComplexQuantityMoedel();//用于存储最终合成量的信息
+
     public int currentQuantityIndex { get; set; } = 0;
 
     public ExpressionKind expressionKind { get; set; } = ExpressionKind.String;

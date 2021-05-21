@@ -210,7 +210,7 @@ public class DealMeasuredDataInput : HTBehaviour
     {
         try
         {
-            Value3.text = "=" + NumberFormat(Field3.GetComponent<FormulaController>().ExpressionExecuted);
+            Value3.text = "=" +  NumberFormat(Field3.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton3.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UbState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Ub = Field3.GetComponent<FormulaController>().ExpressionExecuted;
@@ -261,16 +261,16 @@ public class DealMeasuredDataInput : HTBehaviour
     }
 
 
-
-    private string NumberFormat(double Input)
+    //使double数据展示起来更好看
+    public string NumberFormat(double Input)
     {
         string Output;
 
-        if(Math.Abs(Input) > 0.01 && Math.Abs(Input) < 1000)
+        if (Math.Abs(Input) > 0.01 && Math.Abs(Input) < 1000)
         {
             Output = Input.ToString("f4");
         }
-        else if((Input-0)==0)
+        else if ((Input - 0) == 0)
         {
             Output = "0";
         }

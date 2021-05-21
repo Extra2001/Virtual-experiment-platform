@@ -39,8 +39,19 @@ public class DealComplexDataInput : HTBehaviour
         CallButton3.onClick.AddListener(CallClick3);
         SureButton3.onClick.AddListener(SureClick3);
         CurrentField = Field1;
+
+        StartShow();//加载存档中的情况
+
     }
 
+    
+    private void StartShow()
+    {
+        ComplexQuantityMoedel model = RecordManager.tempRecord.complexQuantityMoedel;
+        CallButton1.image.sprite = Sprites[model.AverageState];
+
+
+    }
 
     private void CallClick1()
     {
@@ -69,6 +80,9 @@ public class DealComplexDataInput : HTBehaviour
         {
             Value1.text = "=" + NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton1.image.sprite = Sprites[2];
+            RecordManager.tempRecord.complexQuantityMoedel.AverageState = 2;
+            RecordManager.tempRecord.complexQuantityMoedel.Average = Field1.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.complexQuantityMoedel.AverageExpression = Field1.GetComponent<FormulaController>().Serialize();
         }
         catch
         {
@@ -103,6 +117,9 @@ public class DealComplexDataInput : HTBehaviour
         {
             Value2.text = "=" + NumberFormat(Field2.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton2.image.sprite = Sprites[2];
+            RecordManager.tempRecord.complexQuantityMoedel.UncertainState = 2;
+            RecordManager.tempRecord.complexQuantityMoedel.Uncertain = Field2.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.complexQuantityMoedel.UncertainExpression = Field2.GetComponent<FormulaController>().Serialize();
         }
         catch
         {

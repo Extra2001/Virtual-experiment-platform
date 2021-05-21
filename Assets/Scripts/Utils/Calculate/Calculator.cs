@@ -11,6 +11,33 @@ using expr = MathNet.Symbolics.Expression;
 using symexpr = MathNet.Symbolics.SymbolicExpression;
 using symdiff = MathNet.Symbolics.Calculus;
 using symfuncs = MathNet.Symbolics.Function;
+
+public static class StaticMethods {
+    public static double Average(IEnumerable<double> data) {
+        return MathNet.Numerics.Statistics.Statistics.Mean(data);
+    }
+    public static double Variance(IEnumerable<double> data) {
+        return MathNet.Numerics.Statistics.Statistics.PopulationVariance(data);
+    }
+    public static double Moment(IEnumerable<double> data) {
+        throw new NotImplementedException();
+    }
+    public static string NumberFormat(double Input) {
+        string Output;
+
+        if(Math.Abs(Input) > 0.01 && Math.Abs(Input) < 1000) {
+            Output = Input.ToString("f4");
+        }
+        else if((Input - 0) == 0) {
+            Output = "0";
+        }
+        else {
+            Output = Input.ToString("E");
+        }
+
+        return Output;
+    }
+}
 public class CalcVariable {
     public List<double> values;
     public double ub;

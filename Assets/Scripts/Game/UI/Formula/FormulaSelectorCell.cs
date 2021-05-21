@@ -69,7 +69,6 @@ public class FormulaSelectorCell : HTBehaviour, IPointerEnterHandler, IPointerEx
 
     private void ShowIndicator()
     {
-        print($"ЭЃСєдк{gameObject.name}");
         FormulaControllerInstance.Indicator.ShowIndicate(Title, Desc);
     }
 }

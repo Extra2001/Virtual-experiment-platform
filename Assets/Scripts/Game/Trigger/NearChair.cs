@@ -15,10 +15,13 @@ public class NearChair : HTBehaviour
     private void OnTriggerStay(Collider other)
     {
         ShowTips();
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!(Main.m_Procedure.CurrentProcedure is OnChair))
         {
-            Position = transform.position;
-            Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill(Position.x, Position.y, Position.z));
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Position = transform.position;
+                Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill(Position.x, Position.y, Position.z));
+            }
         }
     }
 

@@ -114,6 +114,11 @@ public class Storage
         Directory.Delete(directory, true);
     }
 
+    public static void DeleteAll()
+    {
+        FileIOHelper.DeleteDirectory($"{Application.persistentDataPath}/LocalStorage");
+    }
+
     protected static class FileIOHelper
     {
         internal static string ReadJSONFile(string Path)
@@ -146,6 +151,11 @@ public class Storage
         internal static void DeleteFile(string path)
         {
             File.Delete(path);
+        }
+
+        internal static void DeleteDirectory(string path)
+        {
+            Directory.Delete(path, true);
         }
     }
 }

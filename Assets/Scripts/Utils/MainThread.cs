@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using System;
+using System.Threading;
 
 public class MainThread : SingletonBehaviorManager<MainThread>
 {
@@ -25,9 +26,17 @@ public class MainThread : SingletonBehaviorManager<MainThread>
         tasks.Add(action);
     }
 
-    public void DelayAndRun(int delay, Action action)
+    public Task DelayAndRun(int delay, Action action)
     {
-        Task.Delay(delay).ContinueWith(_ =>
+        return Task.Delay(delay).ContinueWith(_ =>
+        {
+            Run(action);
+        });
+    }
+
+    public Task DelayAndRun(int delay, CancellationToken cancellationToken, Action action)
+    {
+        return Task.Delay(delay, cancellationToken).ContinueWith(_ =>
         {
             Run(action);
         });

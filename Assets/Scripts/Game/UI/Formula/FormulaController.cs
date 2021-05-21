@@ -36,6 +36,8 @@ public class FormulaController : MonoBehaviour
     private GameObject ComplexSelector;
     [SerializeField]
     private GameObject Mask;
+    [SerializeField]
+    public FormulaIndicator Indicator;
     private List<FormulaCell> showedCells = new List<FormulaCell>();
     private Button clickedButton;
     private FormulaCell clickedCell;
@@ -163,6 +165,7 @@ public class FormulaController : MonoBehaviour
         showedCells.Add(baseCell);
         clickedButton = baseCell.Value1;
         clickedCell = baseCell;
+        Indicator.Hide();
         this.Mask.GetComponent<Button>().onClick.AddListener(() =>
         {
             HideSelector();

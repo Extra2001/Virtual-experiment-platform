@@ -7,8 +7,10 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using UnityEditor;
+using System.Threading.Tasks;
+using UnityEngine.EventSystems;
 
-public class FormulaSelectorCell : HTBehaviour
+public class FormulaSelectorCell : HTBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public enum ValueType
     {
@@ -18,6 +20,11 @@ public class FormulaSelectorCell : HTBehaviour
     }
 
     public FormulaController FormulaControllerInstance;
+    [SerializeField]
+    private string Title;
+    [SerializeField]
+    private string Desc;
+    [Space]
     [SerializeField]
     private Text Text;
     [Space]
@@ -32,6 +39,7 @@ public class FormulaSelectorCell : HTBehaviour
 
     private void Start()
     {
+        
         GetComponent<Button>().onClick.AddListener(() =>
         {
             if (valueType == ValueType.Measured)
@@ -46,5 +54,22 @@ public class FormulaSelectorCell : HTBehaviour
     {
         if (Text)
             Text.text = name;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        CancelInvoke();
+        FormulaControllerInstance.Indicator.Hide();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Invoke("ShowIndicator", 0.8f);
+    }
+
+    private void ShowIndicator()
+    {
+        print($"Õ£¡Ù‘⁄{gameObject.name}");
+        FormulaControllerInstance.Indicator.ShowIndicate(Title, Desc);
     }
 }

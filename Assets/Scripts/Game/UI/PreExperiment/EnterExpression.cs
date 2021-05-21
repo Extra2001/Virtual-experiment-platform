@@ -34,10 +34,7 @@ public class EnterExpression : HTBehaviour
 
     public void LoadSprite(Sprite sprite)
     {
-        image.sprite = sprite;
-        var hh = image.gameObject.rectTransform().sizeDelta;
-        hh.x = (float)sprite.texture.width / sprite.texture.height * hh.y;
-        image.gameObject.rectTransform().sizeDelta = hh;
+        image.FitHeight(sprite);
     }
 
     public void Render()

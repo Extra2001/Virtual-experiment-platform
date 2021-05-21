@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
+using HT.Framework;
 
 public static class CommonTools
 {
@@ -65,5 +67,23 @@ public static class CommonTools
 
         Sprite ret = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
         return ret;
+    }
+
+    // 不改变高度
+    public static void FitHeight(this Image image, Sprite sprite)
+    {
+        image.sprite = sprite;
+        var hh = image.gameObject.rectTransform().sizeDelta;
+        hh.x = (float)sprite.texture.width / sprite.texture.height * hh.y;
+        image.gameObject.rectTransform().sizeDelta = hh;
+    }
+
+    // 不改变宽度
+    public static void FitWidth(this Image image, Sprite sprite)
+    {
+        image.sprite = sprite;
+        var hh = image.gameObject.rectTransform().sizeDelta;
+        hh.y = (float)sprite.texture.height / sprite.texture.width * hh.x;
+        image.gameObject.rectTransform().sizeDelta = hh;
     }
 }

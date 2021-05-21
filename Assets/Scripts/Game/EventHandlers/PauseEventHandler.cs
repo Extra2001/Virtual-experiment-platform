@@ -33,6 +33,6 @@ public class PauseEventHandler : EventHandlerBase
     /// </summary>
     public override void Reset()
     {
-        
+        NeedOpenPauseMenu = true;
     }
 }

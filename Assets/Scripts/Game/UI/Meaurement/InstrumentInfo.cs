@@ -8,7 +8,7 @@ using System;
 
 public class InstrumentInfo : HTBehaviour
 {
-    public Button _BackGroundButton;
+    public Button _Mask;
     public Text _Name;
     public Text _LRV;
     public Text _URV;
@@ -17,13 +17,14 @@ public class InstrumentInfo : HTBehaviour
     public InputField _MainValue;
     public InputField _RandomError;
     public Button _ConfirmButton;
+    public GameObject _RootPanel;
 
     private InstrumentBase _instrument;
 
     // Start is called before the first frame update
     void Start()
     {
-        _BackGroundButton.onClick.AddListener(() =>
+        _Mask.onClick.AddListener(() =>
         {
             Main.m_UI.CloseUI<InstrmentInfoUILogic>();
         });
@@ -37,7 +38,7 @@ public class InstrumentInfo : HTBehaviour
                     ShowCancel = false,
                     Message = new BindableString("随机误差不能大于仪器误差限")
                 });
-            else if(mainValue>_instrument.URV||mainValue<_instrument.LRV)
+            else if (mainValue > _instrument.URV || mainValue < _instrument.LRV)
             {
                 UIAPI.Instance.ShowModel(new ModelDialogModel()
                 {
@@ -47,15 +48,21 @@ public class InstrumentInfo : HTBehaviour
             }
             else
             {
+                Main.m_UI.CloseUI<UILogicTemporary>();
                 _instrument.RandomErrorLimit = re;
                 _instrument.MainValue = mainValue;
-                Main.m_UI.CloseUI<UILogicTemporary>();
+                _instrument.ShowValue(mainValue);
             }
         });
     }
 
     public void ShowInstrument(Type instrument)
     {
+        var hh = Input.mousePosition;
+        hh.x += _RootPanel.rectTransform().rect.width * (hh.x > Screen.width / 2 ? -1 : 1);
+        hh.y += _RootPanel.rectTransform().rect.height * (hh.y > Screen.height / 2 ? -1 : 1);
+        _RootPanel.transform.position = hh;
+
         var instance = instrument.CreateInstrumentInstance();
         _instrument = instance;
 

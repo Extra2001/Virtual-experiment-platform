@@ -13,7 +13,6 @@ public class FormulaIndicator : HTBehaviour
     public void ShowIndicate(string title, string desc)
     {
         var hh = Input.mousePosition;
-        print(hh);
         hh.x += gameObject.rectTransform().rect.width * (hh.x > Screen.width / 2 ? -1 : 1);
         hh.y += gameObject.rectTransform().rect.height * (hh.y > Screen.height / 2 ? -1 : 1);
         transform.position = hh;

@@ -89,11 +89,25 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     public void SwitchNextProcedure()
     {
         ProcedureBase Temp;
-        Main.m_Procedure.SwitchNextProcedure();
+        try
+        {
+            Main.m_Procedure.SwitchNextProcedure();
+        }
+        catch { }
         Temp = Main.m_Procedure.CurrentProcedure;
         ProcedureStack.Add(Temp.GetType());
     }
 
+    public void ClearAll()
+    {
+
+        Storage.DeleteAll();
+        RecordManager.ClearTempRecord();
+        Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();
+        ProcedureStack.Clear();
+        ProcedureStack.Add(typeof(StartProcedure));
+
+    }
 
     public void ContinueExp()
     {
@@ -111,8 +125,11 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     private void WhenSitdown(object sender, EventHandlerBase handler)
     {
-        Main.m_Procedure.SwitchProcedure<OnChair>();
-        ProcedureStack.Add(typeof(OnChair));
+        if (!(Main.m_Procedure.CurrentProcedure is OnChair))
+        {
+            Main.m_Procedure.SwitchProcedure<OnChair>();
+            ProcedureStack.Add(typeof(OnChair));
+        }
     }
 
     private void ChooseExp(EventHandlerBase handler)

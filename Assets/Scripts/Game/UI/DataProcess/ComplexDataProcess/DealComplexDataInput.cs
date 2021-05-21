@@ -26,9 +26,7 @@ public class DealComplexDataInput : HTBehaviour
     public Button SureButton3;
     public GameObject Field3;
 
-    public Sprite StartSprite;
-    public Sprite WorkingSprite;
-    public Sprite EndSprite;
+    public Sprite[] Sprites = new Sprite[3]; //0为初始，1为编辑中，2为编辑完成
     private GameObject CurrentField;
 
     // Start is called before the first frame update
@@ -70,12 +68,12 @@ public class DealComplexDataInput : HTBehaviour
         try
         {
             Value1.text = "=" + NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
-            CallButton1.image.sprite = EndSprite;
+            CallButton1.image.sprite = Sprites[2];
         }
         catch
         {
             //弹出报错提示框
-            CallButton1.image.sprite = WorkingSprite;
+            CallButton1.image.sprite = Sprites[1];
         }
 
     }
@@ -104,12 +102,12 @@ public class DealComplexDataInput : HTBehaviour
         try
         {
             Value2.text = "=" + NumberFormat(Field2.GetComponent<FormulaController>().ExpressionExecuted);
-            CallButton2.image.sprite = EndSprite;
+            CallButton2.image.sprite = Sprites[2];
         }
         catch
         {
             //弹出报错提示框
-            CallButton2.image.sprite = WorkingSprite;
+            CallButton2.image.sprite = Sprites[1];
         }
     }
 
@@ -139,12 +137,12 @@ public class DealComplexDataInput : HTBehaviour
         {
             //检查最终结果表达式是否正确
             //~~~~~
-            CallButton3.image.sprite = EndSprite;
+            CallButton3.image.sprite = Sprites[2];
         }
         catch
         {
             //弹出报错提示框
-            CallButton3.image.sprite = WorkingSprite;
+            CallButton3.image.sprite = Sprites[1];
         }
     }
 

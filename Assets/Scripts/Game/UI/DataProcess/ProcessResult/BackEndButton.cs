@@ -22,7 +22,7 @@ public class BackEndButton : HTBehaviour
 
     public void Back()
     {
-        Main.m_Procedure.SwitchLastProcedure();
+        GameManager.Instance.SwitchBackProcedure();
     }
     public void End()
     {

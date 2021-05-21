@@ -25,7 +25,7 @@ public class InstrumentInfo : HTBehaviour
     {
         _BackGroundButton.onClick.AddListener(() =>
         {
-            Main.m_UI.CloseUI<UILogicTemporary>();
+            Main.m_UI.CloseUI<InstrmentInfoUILogic>();
         });
         _ConfirmButton.onClick.AddListener(() =>
         {

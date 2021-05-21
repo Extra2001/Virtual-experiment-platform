@@ -24,9 +24,11 @@ public class InstrmentInfoUILogic : UILogicTemporary
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
-
-        Type instument = (Type)args[0];
-        UIEntity.GetComponent<InstrumentInfo>().ShowInstrument(instument);
+        if (args.Length > 0)
+        {
+            Type instument = (Type)args[0];
+            UIEntity.GetComponent<InstrumentInfo>().ShowInstrument(instument);
+        }
     }
     
 	/// <summary>

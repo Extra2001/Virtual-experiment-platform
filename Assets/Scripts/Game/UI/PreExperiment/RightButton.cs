@@ -5,10 +5,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
+using UnityEditor;
+using System.Linq;
 
 public class RightButton : HTBehaviour
 {
     private bool MouseOn = false;
+
+    public Type InstrumentType;
 
     private Tuple<Vector3, Vector3> Max(MeshFilter[] filters)
     {
@@ -36,6 +40,11 @@ public class RightButton : HTBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 print("hit:" + hit.collider.gameObject.name);
+                //if (hit.collider.gameObject.GetInstanceID().Equals(gameObject.GetInstanceID()))
+                //    Main.m_UI.OpenTemporaryUI<InstrmentInfoUILogic>(InstrumentType);
+                foreach (var item in gameObject.transform.GetComponentsInChildren<BoxCollider>(true))
+                    if (hit.collider.gameObject.GetInstanceID().Equals(item.gameObject.GetInstanceID()))
+                        Main.m_UI.OpenTemporaryUI<InstrmentInfoUILogic>(InstrumentType);
             }
         }
     }

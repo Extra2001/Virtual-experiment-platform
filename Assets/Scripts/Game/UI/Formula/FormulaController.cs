@@ -235,10 +235,10 @@ public class FormulaController : MonoBehaviour
             var procedure = Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure;
             foreach (var item in MeasuredSelector.GetComponentsInChildren<FormulaSelectorCell>())
                 item.SetSelectorName(procedure.GetStatisticValue(MeasuredStatisticValue.Symbol));
-            UIShowHideHelper.ShowFromUp(MeasuredSelector, -132);
+            UIShowHideHelper.ShowFromButtom(MeasuredSelector, -132);
         }
         else if (Main.m_Procedure.CurrentProcedure is ComplexDataProcessProcedure)
-            UIShowHideHelper.ShowFromUp(ComplexSelector, -132);
+            UIShowHideHelper.ShowFromButtom(ComplexSelector, -132);
     }
 
     private void HideSelector()

@@ -96,9 +96,10 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         base.OnShow();
     }
 
-    private void AddRightButton()
+    protected virtual void AddRightButton()
     {
         var right = Entity.AddComponent<RightButton>();
+        right.InstrumentType = this.GetType();
     }
 
     public override void OnHide()

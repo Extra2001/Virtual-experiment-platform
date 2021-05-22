@@ -23,7 +23,7 @@ public class PreviewProcedure : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         Main.m_UI.OpenResidentUI<PreviewUILogic>();
-
+        
         base.OnEnter(lastProcedure);
     }
 

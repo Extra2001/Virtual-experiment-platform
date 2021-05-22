@@ -25,6 +25,7 @@ public class PreviewUILogic : UILogicResident
         base.OnOpen(args);
 
         UIEntity.GetComponent<PreviewExp>()?.LoadQuantities();
+        UIEntity.GetComponent<PreviewExp>()?.Render();
     }
 
 	/// <summary>

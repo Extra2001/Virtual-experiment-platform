@@ -134,7 +134,6 @@ public class FormulaController : MonoBehaviour
             Initialize();
         }
         // 清空当前显示
-        Log.Info(showedCells.Count.ToString());
         for (int i = 1; i < showedCells.Count; i++)
             Destroy(showedCells[i]?.gameObject);
         for (int i = 1; i < showedCells.Count; i++)
@@ -239,16 +238,16 @@ public class FormulaController : MonoBehaviour
         var v = Selector.transform.position;
         v.x = 0;
         Selector.transform.position = v;
-        UIShowHideHelper.ShowFromUp(Selector, 132);
+        UIShowHideHelper.ShowFromUp(Selector, 0);
         if (Main.m_Procedure.CurrentProcedure is MeasuredDataProcessProcedure)
         {
             var procedure = Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure;
             foreach (var item in MeasuredSelector.GetComponentsInChildren<FormulaSelectorCell>())
                 item.SetSelectorName(procedure.GetStatisticValue(MeasuredStatisticValue.Symbol));
-            UIShowHideHelper.ShowFromButtom(MeasuredSelector, -132);
+            UIShowHideHelper.ShowFromButtom(MeasuredSelector, 0);
         }
         else if (Main.m_Procedure.CurrentProcedure is ComplexDataProcessProcedure)
-            UIShowHideHelper.ShowFromButtom(ComplexSelector, -132);
+            UIShowHideHelper.ShowFromButtom(ComplexSelector, 0);
     }
 
     private void HideSelector()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using System.Linq;
 
 namespace HT.Framework
 {
@@ -576,6 +577,11 @@ namespace HT.Framework
                 }
             }
             return null;
+        }
+
+        public UILogicBase GetOpenedUI()
+        {
+            return OverlayUIs.Where(x => x.Value.IsOpened && (x.Value is UILogicResident)).FirstOrDefault().Value;
         }
         /// <summary>
         /// 获取已经打开的UI

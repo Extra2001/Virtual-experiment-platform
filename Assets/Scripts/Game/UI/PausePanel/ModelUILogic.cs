@@ -58,10 +58,10 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
         {
             UIShowHideHelper.HideToUp(UIEntity);
             MainThread.Instance.DelayAndRun(300, () =>
-             {
-                 NavigateBack();
-                 Data.CancelAction?.Invoke();
-             });
+            {
+                NavigateBack();
+                Data.CancelAction?.Invoke();
+            });
         });
         ConfirmButton.onClick.AddListener(() =>
         {

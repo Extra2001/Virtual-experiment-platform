@@ -75,6 +75,11 @@ namespace HT.Framework
         /// <returns>加载协程</returns>
         Coroutine OpenTemporaryUI(Type type, params object[] args);
         /// <summary>
+        /// 获取已经打开的第一个常驻UI
+        /// </summary>
+        /// <returns>UI逻辑对象</returns>
+        UILogicBase GetOpenedUI();
+        /// <summary>
         /// 获取已经打开的UI
         /// </summary>
         /// <param name="type">UI逻辑类</param>

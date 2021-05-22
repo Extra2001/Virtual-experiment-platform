@@ -190,6 +190,15 @@ namespace HT.Framework
             return _helper.OpenTemporaryUI(type, args);
         }
         /// <summary>
+        /// 获取已经打开的第一个常驻UI
+        /// </summary>
+        /// <typeparam name="T">UI逻辑类</typeparam>
+        /// <returns>UI逻辑对象</returns>
+        public UILogicBase GetOpenedUI()
+        {
+            return _helper.GetOpenedUI();
+        }
+        /// <summary>
         /// 获取已经打开的UI
         /// </summary>
         /// <typeparam name="T">UI逻辑类</typeparam>

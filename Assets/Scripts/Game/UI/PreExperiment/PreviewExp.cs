@@ -16,6 +16,11 @@ public class PreviewExp : HTBehaviour
     private void Start()
     {
         LoadQuantities();
+        Render();
+    }
+
+    public void Render()
+    {
         var exp = CalcArgs.GetSymexpr(RecordManager.tempRecord.stringExpression).ToLaTeX();
         LatexEquationRender.Render(exp, x =>
         {

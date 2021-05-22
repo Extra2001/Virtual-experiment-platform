@@ -3,21 +3,22 @@ using DG.Tweening;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class LoadingScreenManager2 : HTBehaviour
+public class LoadingScreenManager2 : MonoBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
+
+    public static LoadingScreenManager2 Instance;
 
     private Animator _animatorComponent;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
+        Instance = this;
         _animatorComponent = transform.GetComponent<Animator>();
-        MainThread.Instance.DelayAndRun(500, () =>
-        {
-            HideLoadingScreen();
-        });
-
     }
 
     public void RevealLoadingScreen()

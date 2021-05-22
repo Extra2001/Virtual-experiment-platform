@@ -58,11 +58,6 @@ public class InstrumentInfo : HTBehaviour
 
     public void ShowInstrument(Type instrument)
     {
-        var hh = Input.mousePosition;
-        hh.x += _RootPanel.rectTransform().rect.width * (hh.x > Screen.width / 2 ? -1 : 1);
-        hh.y += _RootPanel.rectTransform().rect.height * (hh.y > Screen.height / 2 ? -1 : 1);
-        _RootPanel.transform.position = hh;
-
         var instance = instrument.CreateInstrumentInstance();
         _instrument = instance;
 
@@ -73,5 +68,7 @@ public class InstrumentInfo : HTBehaviour
         _UnitSymbol.text = instance.UnitSymbol;
         _MainValue.text = instance.MainValue.ToString();
         _RandomError.text = instance.RandomError.ToString();
+
+        _RootPanel.rectTransform().SetFloat();
     }
 }

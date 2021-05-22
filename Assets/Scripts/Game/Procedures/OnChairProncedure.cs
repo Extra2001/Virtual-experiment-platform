@@ -49,16 +49,8 @@ public class OnChair : ProcedureBase
         {
             CreateObject.CreateWithoutDestory();
         }
-
-        RTEditor.EditorObjectSelection.Instance.SelectionChanged += InstrumentClicked;
-
     }
 
-    private void InstrumentClicked(RTEditor.ObjectSelectionChangedEventArgs selectionChangedEventArgs)
-    {
-        selectionChangedEventArgs.SelectedObjects.ForEach(x => Log.Info(x.name));
-        Log.Info(selectionChangedEventArgs.GizmoType.ToString());
-    }
 
     /// <summary>
     /// 离开流程

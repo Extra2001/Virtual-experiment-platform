@@ -41,6 +41,7 @@ public class StartUILogic : UILogicResident
     /// </summary>
     public override void OnOpen(params object[] args)
     {
+        LoadingScreenManager2.Instance.HideLoadingScreen();
         if (GameManager.Instance.CanContinue)
             UIEntity.FindChildren("ContinueButton").GetComponent<Button>().interactable = true;
         else

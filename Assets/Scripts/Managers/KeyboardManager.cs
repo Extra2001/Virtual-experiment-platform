@@ -38,12 +38,12 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     {
         if (registered.ContainsKey(key))
         {
-            Debug.LogError($"{key}建已被注册");
+            Debug.LogError($"{key}键已被注册");
             throw new Exception("该按键已注册");
         }
         if (registeredHoldOn.ContainsKey(key))
         {
-            Debug.LogError($"{key}建已被注册");
+            Debug.LogError($"{key}键已被注册");
             throw new Exception("该按键已注册");
         }
         //Debug.Log($"已注册{key}键");
@@ -57,12 +57,12 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     {
         if (registered.ContainsKey(key))
         {
-            Debug.LogError($"{key}建已被注册");
+            Debug.LogError($"{key}键已被注册");
             throw new Exception("该按键已注册");
         }
         if (registeredHoldOn.ContainsKey(key))
         {
-            Debug.LogError($"{key}建已被注册");
+            Debug.LogError($"{key}键已被注册");
             throw new Exception("该按键已注册");
         }
         //Debug.Log($"已注册{key}键");

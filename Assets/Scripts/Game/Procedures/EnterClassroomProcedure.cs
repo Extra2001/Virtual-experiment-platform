@@ -23,6 +23,12 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        MainThread.Instance.DelayAndRun(1000, () =>
+        {
+            var Position = NearChair.Instance.transform.position;
+            Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill(Position.x, Position.y, Position.z));
+        });
+        return;
         GameManager.Instance.FPSable = true;
         showed = false;
         Main.m_UI.OpenTemporaryUI<DatatableUILogic>();

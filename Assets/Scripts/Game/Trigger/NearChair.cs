@@ -11,6 +11,12 @@ public class NearChair : HTBehaviour
 
     private Vector3 Position = new Vector3();
 
+    public static NearChair Instance = null;
+
+    private void Start()
+    {
+        Instance = this;
+    }
 
     private void OnTriggerStay(Collider other)
     {

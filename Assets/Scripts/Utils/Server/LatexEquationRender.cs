@@ -28,7 +28,11 @@ public class LatexEquationRender
         {
             MainThread.Instance.Run(() =>
             {
-                action?.Invoke(CommonTools.GetSprite(Convert.FromBase64String(xx.Result.Replace("data:image/png;base64,", ""))));
+                try
+                {
+                    action?.Invoke(CommonTools.GetSprite(Convert.FromBase64String(xx.Result.Replace("data:image/png;base64,", ""))));
+                }
+                catch { }
             });
         });
         return;

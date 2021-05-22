@@ -30,20 +30,14 @@ public static class UIShowHideHelper
 
     public static void ShowFromUp(GameObject UIEntity, float fromUp, float x = 0)
     {
-        var rect = UIEntity.rectTransform().rect;
-        var size = GetScaledSize(rect.size);
-        // 计算初始高度
-        var from = size.y / 2 + ScreenRightTop.y + 100;
+        var (from, end) = UIEntity.rectTransform().GetUpPosition();
 
-        var position = rect.position;
-        position.x = ScreenRightTop.x / 2 + x;
+        var position = UIEntity.rectTransform().position;
         position.y = from;
-
+        position.x = (ScreenRightTop.x / 2 + x);
         UIEntity.rectTransform().position = position;
-        // 计算结束高度
-        var end = ScreenRightTop.y - fromUp - size.y / 2;
 
-        UIEntity.rectTransform().DOMoveY(end, 0.3f)
+        UIEntity.rectTransform().DOMoveY(end - fromUp, 0.3f)
             .SetUpdate(true)
             .SetEase(Ease.OutExpo)
             .WaitForCompletion();
@@ -51,20 +45,14 @@ public static class UIShowHideHelper
 
     public static void ShowFromButtom(GameObject UIEntity, float fromButtom, float x = 0)
     {
-        var rect = UIEntity.rectTransform().rect;
-        var size = GetScaledSize(rect.size);
-        // 计算初始高度
-        var from = -1 * (size.y / 2) - 100;
+        var (from, end) = UIEntity.rectTransform().GetBottomPosition();
 
-        var position = rect.position;
-        position.x = ScreenRightTop.x / 2 + x;
+        var position = UIEntity.rectTransform().position;
         position.y = from;
-
+        position.x = (ScreenRightTop.x / 2 + x);
         UIEntity.rectTransform().position = position;
-        // 计算结束高度
-        var end = fromButtom + size.y / 2;
 
-        UIEntity.rectTransform().DOMoveY(end, 0.3f)
+        UIEntity.rectTransform().DOMoveY(end + fromButtom, 0.3f)
             .SetUpdate(true)
             .SetEase(Ease.OutExpo)
             .WaitForCompletion();

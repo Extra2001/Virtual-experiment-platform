@@ -39,15 +39,11 @@ public class BagControl : UILogicTemporary
 
     public void Hide()
     {
-        var o1 = UIEntity.FindChildren("BagControl").GetComponent<BagSelectorAnimate>()?.Hide();
-        var o2 = UIEntity.FindChildren("Select_instrument").GetComponent<InstrumentChooserAnimate>()?.Hide();
+        UIEntity.FindChildren("BagControl").GetComponent<BagSelectorAnimate>()?.Hide();
+        UIEntity.FindChildren("Select_instrument").GetComponent<InstrumentChooserAnimate>()?.Hide();
         MainThread.Instance.DelayAndRun(100, () =>
         {
             Close();
-            UIEntity.FindChildren("BagControl").GetComponent<BagSelectorAnimate>()?.Kill();
-            UIEntity.FindChildren("Select_instrument").GetComponent<InstrumentChooserAnimate>()?.Kill();
-            UIEntity.FindChildren("BagControl").transform.position = (Vector3)o1;
-            UIEntity.FindChildren("Select_instrument").transform.position = (Vector3)o2;
         });
     }
 

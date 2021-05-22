@@ -7,12 +7,12 @@ using UnityEngine.UI;
 
 public static class PositionHelper
 {
-    private static Vector2 GetScaledSize(Vector2 size)
+    public static Vector2 GetScaledSize(Vector2 size)
     {
         return size * Screen.width / Main.m_UI.OverlayUIRoot.GetComponent<CanvasScaler>().referenceResolution.x;
     }
 
-    private static Vector3 ScreenRightTop
+    public static Vector3 ScreenRightTop
     {
         get
         {
@@ -22,7 +22,7 @@ public static class PositionHelper
         }
     }
 
-    public static void SetFloat(this RectTransform UIEntity)
+    public static Vector3 GetFloatPosition(this RectTransform UIEntity)
     {
         var rect = UIEntity.rect;
         var size = GetScaledSize(rect.size);
@@ -34,8 +34,44 @@ public static class PositionHelper
             position.x -= 2 * (size.x / 2 + 3);
         if (mousePosition.y > ScreenRightTop.y / 2)
             position.y -= 2 * (size.y / 2 + 3);
+        return position;
+    }
 
-        UIEntity.position = position;
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="UIEntity"></param>
+    /// <returns>屏幕外，屏幕内</returns>
+    public static (float, float) GetUpPosition(this RectTransform UIEntity)
+    {
+        var rect = UIEntity.rectTransform().rect;
+        var size = GetScaledSize(rect.size);
+        // 计算初始高度
+        var from = size.y / 2 + ScreenRightTop.y + 100;
+        // 计算结束高度
+        var end = ScreenRightTop.y - size.y / 2;
+        return (from, end);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="UIEntity"></param>
+    /// <returns>屏幕外，屏幕内</returns>
+    public static (float, float) GetBottomPosition(this RectTransform UIEntity)
+    {
+        var rect = UIEntity.rectTransform().rect;
+        var size = GetScaledSize(rect.size);
+        // 计算初始高度
+        var from = -1 * (size.y / 2) - 100;
+        // 计算结束高度
+        var end = size.y / 2;
+        return (from, end);
+    }
+
+    public static void SetFloat(this RectTransform UIEntity)
+    {
+        UIEntity.position = UIEntity.GetFloatPosition();
         UIEntity.gameObject.SetActive(true);
     }
 }

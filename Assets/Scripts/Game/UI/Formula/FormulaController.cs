@@ -138,7 +138,6 @@ public class FormulaController : MonoBehaviour
             Destroy(showedCells[i]?.gameObject);
         for (int i = 1; i < showedCells.Count; i++)
             showedCells.RemoveAt(i);
-        Log.Info(showedCells.Count.ToString());
         RefreshContentSizeFitter();
 
         // 处理根节点
@@ -194,6 +193,7 @@ public class FormulaController : MonoBehaviour
         v.y = -1000;
         ComplexSelector.transform.position = v;
 
+        HideSelector();
         Selector.SetActive(true);
         MeasuredSelector.SetActive(true);
         ComplexSelector.SetActive(true);

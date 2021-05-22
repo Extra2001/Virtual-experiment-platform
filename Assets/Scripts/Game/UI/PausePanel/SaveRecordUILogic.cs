@@ -20,8 +20,6 @@ public class SaveRecordUILogic : UILogicTemporary
     {
         base.OnInit();
         AddInnerLogic();
-
-        Log.Info("保存存档面板 已加载");
     }
 
     private void AddInnerLogic()
@@ -50,7 +48,6 @@ public class SaveRecordUILogic : UILogicTemporary
     {
         base.OnOpen(args);
         UIShowHideHelper.ShowFromUp(UIEntity);
-        Log.Info("保存存档面板 已打开");
     }
     
 	/// <summary>
@@ -59,7 +56,6 @@ public class SaveRecordUILogic : UILogicTemporary
     public override void OnClose()
     {
         base.OnClose();
-        Log.Info("保存存档面板 已关闭");
     }
 
 	/// <summary>
@@ -68,7 +64,6 @@ public class SaveRecordUILogic : UILogicTemporary
     public override void OnDestroy()
     {
         base.OnDestroy();
-        Log.Info("保存存档面板 已销毁");
     }
 
 	/// <summary>

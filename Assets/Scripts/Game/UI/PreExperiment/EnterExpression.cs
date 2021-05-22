@@ -57,7 +57,7 @@ public class EnterExpression : HTBehaviour
                 action: _ =>
                 {
                     Loading.SetActive(false);
-                    error?.Invoke(true);
+                    error?.Invoke(StaticMethods.ValidExpression(text));
                 },
                 errorHandler: () =>
                 {

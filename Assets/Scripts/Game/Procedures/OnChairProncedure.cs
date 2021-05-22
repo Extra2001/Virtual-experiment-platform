@@ -23,6 +23,7 @@ public class OnChair : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        RenderManager.Instance?.Show();
         GameManager.Instance.FPSable = true;
         base.OnEnter(lastProcedure);
         Main.m_UI.OpenResidentUI<GameButtonUILogic>();
@@ -58,6 +59,7 @@ public class OnChair : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
+        RenderManager.Instance?.Hide();
         GameManager.Instance.FPSable = false;
         base.OnLeave(nextProcedure);
         UIAPI.Instance.HideDataTable();

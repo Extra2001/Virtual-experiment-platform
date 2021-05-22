@@ -23,6 +23,7 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        RenderManager.Instance?.Show();
         MainThread.Instance.DelayAndRun(1000, () =>
         {
             var Position = NearChair.Instance.transform.position;
@@ -50,6 +51,7 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
+        RenderManager.Instance?.Hide();
         GameManager.Instance.FPSable = false;
         if (showed)
             UIAPI.Instance.HideDataTable();

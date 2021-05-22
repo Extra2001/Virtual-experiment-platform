@@ -22,6 +22,8 @@ public class GameLaunch : MonoBehaviour
         LaunchServices();
 
         LaunchManagers();
+
+        GetComponent<RenderManager>().Hide();
     }
 
     /// <summary>

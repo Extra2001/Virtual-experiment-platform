@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using System.Threading.Tasks;
+using UnityEngine.Events;
 
 public class EnterExpression : HTBehaviour
 {
@@ -14,7 +15,7 @@ public class EnterExpression : HTBehaviour
     public InputField StringExpressionInput;
     public Image image;
     //public Button RenderButton;
-
+    public GameObject Loading;
     private List<GameObject> quantities = new List<GameObject>();
 
     void Start()
@@ -46,10 +47,29 @@ public class EnterExpression : HTBehaviour
         });
     }
 
-    public void Validate()
+    public void Validate(UnityAction<bool> error)
     {
         var text = StringExpressionInput.text;
-        LatexEquationRender.Render(CalcArgs.GetSymexpr(text).ToLaTeX());
+        Loading.SetActive(true);
+        try
+        {
+            LatexEquationRender.Render(CalcArgs.GetSymexpr(text).ToLaTeX(),
+                action: _ =>
+                {
+                    Loading.SetActive(false);
+                    error?.Invoke(true);
+                },
+                errorHandler: () =>
+                {
+                    Loading.SetActive(false);
+                    error?.Invoke(false);
+                });
+        }
+        catch
+        {
+            Loading.SetActive(false);
+            error?.Invoke(false);
+        }
     }
 
     public void SyncExpression()

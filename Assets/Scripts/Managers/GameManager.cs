@@ -157,21 +157,23 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     private void EnterExpression()
     {
-        try
+        Main.m_UI.GetOpenedUI<EnterExpressionUILogic>().UIEntity.GetComponent<EnterExpression>().Validate(res =>
         {
-            Main.m_UI.GetOpenedUI<EnterExpressionUILogic>().UIEntity.GetComponent<EnterExpression>().Validate();
-            Main.m_Procedure.SwitchProcedure<PreviewProcedure>();
-            ProcedureStack.Add(typeof(PreviewProcedure));
-        }
-        catch
-        {
-            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            if (res)
             {
-                ShowCancel = false,
-                Title = new BindableString("错误"),
-                Message = new BindableString("渲染表达式错误，请检查输入。")
-            });
-        }
+                Main.m_Procedure.SwitchProcedure<PreviewProcedure>();
+                ProcedureStack.Add(typeof(PreviewProcedure));
+            }
+            else
+            {
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Title = new BindableString("错误"),
+                    Message = new BindableString("渲染表达式错误，请检查输入。")
+                });
+            }
+        });
     }
 
     private void PreviewConfirm()

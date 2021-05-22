@@ -3,17 +3,24 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PreviewExp : HTBehaviour
 {
     public GameObject _QuantityPreviewCell;
     public GameObject _Content;
+    public Image _Image;
 
     private List<GameObject> quantities = new List<GameObject>();
 
     private void Start()
     {
         LoadQuantities();
+        var exp = CalcArgs.GetSymexpr(RecordManager.tempRecord.stringExpression).ToLaTeX();
+        LatexEquationRender.Render(exp, x =>
+        {
+            _Image.FitHeight(x);
+        });
     }
 
     public void LoadQuantities()

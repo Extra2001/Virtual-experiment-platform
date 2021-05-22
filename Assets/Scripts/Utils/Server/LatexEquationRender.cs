@@ -10,16 +10,7 @@ using UnityEngine.Events;
 
 public class LatexEquationRender
 {
-    public static Sprite Render(string tex)
-    {
-        var x = $"http://expr.buaaer.top/".PostJsonAsync(new
-        {
-            equation = tex
-        }).ReceiveString().Result;
-        return CommonTools.GetSprite(Convert.FromBase64String(x.Replace("data:image/png;base64,", "")));
-    }
-
-    public static void Render(string tex, UnityAction<Sprite> action)
+    public static void Render(string tex, UnityAction<Sprite> action = null, UnityAction errorHandler = null)
     {
         var x = $"http://expr.buaaer.top/".PostJsonAsync(new
         {
@@ -32,7 +23,7 @@ public class LatexEquationRender
                 {
                     action?.Invoke(CommonTools.GetSprite(Convert.FromBase64String(xx.Result.Replace("data:image/png;base64,", ""))));
                 }
-                catch { }
+                catch { errorHandler?.Invoke(); }
             });
         });
         return;

@@ -24,8 +24,8 @@ public class CreateObject : HTBehaviour
     private Vector3 ClosestPoint = new Vector3();//最近点
     private Vector3 FarthestPoint = new Vector3();//最远点
     private Vector3 Temp = new Vector3();
-    private float MaxDistence = 2f; //物体大小的最大限度
-    private float MinDistence = 0.01f; //物体大小的最小限度
+    private float MaxDistence = 5f; //物体大小的最大限度
+    private float MinDistence = 0.05f; //物体大小的最小限度
 
     void Start()
     {
@@ -48,7 +48,7 @@ public class CreateObject : HTBehaviour
         Vector3 FarthestPoint = new Vector3();//最远点
         Vector3 Temp = new Vector3();
         float MaxDistence = 2f; //物体大小的最大限度
-        float MinDistence = 0.01f; //物体大小的最小限度
+        float MinDistence = 0.1f; //物体大小的最小限度
 
         ObjectsModel ShowedObject = RecordManager.tempRecord.ShowedObject;
 

@@ -12,7 +12,7 @@ public class Rotate_micrometer : HTBehaviour
     private int prenum;
     public void Rotatenum(int num)
     {
-        this.transform.Rotate(new Vector3(0, num*50/360, 0));
+        this.transform.Rotate(new Vector3(0, num*50.0f/360.0f, 0));
         this.transform.localPosition -= new Vector3(0, (0.53f*num)/5000f, 0);
     }
 
@@ -25,6 +25,6 @@ public class Rotate_micrometer : HTBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Rotatenum(10);
+        Rotatenum(-3);
     }
 }

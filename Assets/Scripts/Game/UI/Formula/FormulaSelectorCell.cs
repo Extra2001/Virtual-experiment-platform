@@ -21,9 +21,9 @@ public class FormulaSelectorCell : HTBehaviour, IPointerEnterHandler, IPointerEx
 
     public FormulaController FormulaControllerInstance;
     [SerializeField]
-    private string Title;
+    public string Title;
     [SerializeField]
-    private string Desc;
+    public string Desc;
     [Space]
     [SerializeField]
     private Text Text;

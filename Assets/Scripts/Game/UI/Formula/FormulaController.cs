@@ -38,6 +38,10 @@ public class FormulaController : MonoBehaviour
     private GameObject Mask;
     [SerializeField]
     public FormulaIndicator Indicator;
+    [SerializeField]
+    private GameObject ComplexPanel;
+    [SerializeField]
+    private Transform ComplexPanelRoot;
     private List<FormulaCell> showedCells = new List<FormulaCell>();
     private Button clickedButton;
     private FormulaCell clickedCell;
@@ -92,7 +96,7 @@ public class FormulaController : MonoBehaviour
             if (hh.NameShower)
                 hh.NameShower.text = name;
         }
-        RefreshContentSizeFitter();
+        RefreshContentSizeFitter(showedCells[0].gameObject);
         onSelectCell?.Invoke();
         return hh;
     }
@@ -138,7 +142,7 @@ public class FormulaController : MonoBehaviour
             Destroy(showedCells[i]?.gameObject);
         for (int i = 1; i < showedCells.Count; i++)
             showedCells.RemoveAt(i);
-        RefreshContentSizeFitter();
+        RefreshContentSizeFitter(showedCells[0].gameObject);
 
         // 处理根节点
         var copyNodes = nodes.DeepCopy<List<FormulaNode>>();
@@ -244,10 +248,17 @@ public class FormulaController : MonoBehaviour
             var procedure = Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure;
             foreach (var item in MeasuredSelector.GetComponentsInChildren<FormulaSelectorCell>())
                 item.SetSelectorName(procedure.GetStatisticValue(MeasuredStatisticValue.Symbol));
+            RefreshContentSizeFitter(MeasuredSelector.gameObject);
             UIShowHideHelper.ShowFromButtom(MeasuredSelector, 0);
         }
         else if (Main.m_Procedure.CurrentProcedure is ComplexDataProcessProcedure)
+        {
+            var procedure = Main.m_Procedure.CurrentProcedure as ComplexDataProcessProcedure;
+            foreach (var item in procedure.GetQuantitiesName())
+                Instantiate(ComplexPanel, ComplexPanelRoot).GetComponent<FormulaComplexSelectorCell>().Show(item, this);
+            RefreshContentSizeFitter(ComplexPanelRoot.gameObject);
             UIShowHideHelper.ShowFromButtom(ComplexSelector, 0);
+        }
     }
 
     private void HideSelector()
@@ -277,9 +288,9 @@ public class FormulaController : MonoBehaviour
             Destroy(cell.transform.GetChild(i).gameObject);
     }
 
-    private void RefreshContentSizeFitter()
+    private void RefreshContentSizeFitter(GameObject baseObject)
     {
-        var list = showedCells[0].GetComponentsInChildren<ContentSizeFitter>();
+        var list = baseObject.GetComponentsInChildren<ContentSizeFitter>();
         for (int i = 0; i < list.Length; i++)
             LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
         LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());

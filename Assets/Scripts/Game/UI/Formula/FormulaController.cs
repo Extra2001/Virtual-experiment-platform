@@ -118,7 +118,8 @@ public class FormulaController : MonoBehaviour
                 value = item.value,
                 GUID = item.thisGUID,
                 PrefabName = item.gameObject.name.Replace("(Clone)", ""),
-                ReplaceFlags = item.ReplaceFlags.Select(x => x.Value).ToList()
+                ReplaceFlags = item.ReplaceFlags.Select(x => x.Value).ToList(),
+                name = item.NameShower?.text
             };
             ret.Add(node);
         }
@@ -155,7 +156,6 @@ public class FormulaController : MonoBehaviour
         if (baseNode.ReplaceFlags.Count >= 2)
             baseCell.ReplaceFlags.Add(baseCell.Value2, baseNode.ReplaceFlags[1]);
         baseCell.thisGUID = baseNode.GUID;
-
         // 显示方块
         RestoreCell(baseCell, nodes);
     }
@@ -232,6 +232,8 @@ public class FormulaController : MonoBehaviour
             if (node.ReplaceFlags.Count >= 2)
                 newCell.ReplaceFlags.Add(newCell.Value2, node.ReplaceFlags[1]);
             newCell.thisGUID = node.GUID;
+            if ((!string.IsNullOrEmpty(node.name)) && (newCell.NameShower))
+                newCell.NameShower.text = node.name;
             RestoreCell(newCell, nodes);
         }
     }
@@ -314,6 +316,7 @@ public class FormulaController : MonoBehaviour
             var subCell = showedCells.Where(x => x.thisGUID.Equals(item.Value)).Last();
             value = value.Replace(item.Value, $"({GetExpression(item.Value)})");
         }
+        Log.Info(Newtonsoft.Json.JsonConvert.SerializeObject(Serialize()));
         return value;
     }
 

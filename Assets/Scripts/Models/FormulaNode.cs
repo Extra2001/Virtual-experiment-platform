@@ -11,6 +11,6 @@ public class FormulaNode
     public string PrefabName { get; set; }
     public string GUID { get; set; }
     public string value { get; set; }
-
+    public string name { get; set; }
     public List<string> ReplaceFlags { get; set; } = new List<string>();
 }

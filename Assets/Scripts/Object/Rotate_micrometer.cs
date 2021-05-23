@@ -29,6 +29,7 @@ public class Rotate_micrometer : HTBehaviour
     // Update is called once per frame
     void Update()
     {
+        print("qwqw");
         Rotatenum(num);
     }
 }

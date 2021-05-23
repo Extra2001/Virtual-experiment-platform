@@ -42,7 +42,7 @@ public class Indicator2UILogic : IndicatorBase
     /// </summary>
     public override void OnOpen(params object[] args)
     {
-        UIShowHideHelper.ShowFromRight(UIEntity);
+        UIShowHideHelper.ShowFromUpRight(UIEntity, 15, 15);
 
         base.OnOpen(args);
     }

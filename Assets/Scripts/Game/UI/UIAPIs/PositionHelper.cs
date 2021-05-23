@@ -38,7 +38,7 @@ public static class PositionHelper
     }
 
     /// <summary>
-    /// 
+    /// 从屏幕上方弹出
     /// </summary>
     /// <param name="UIEntity"></param>
     /// <returns>屏幕外，屏幕内</returns>
@@ -54,7 +54,39 @@ public static class PositionHelper
     }
 
     /// <summary>
-    /// 
+    /// 从屏幕右侧弹出
+    /// </summary>
+    /// <param name="UIEntity"></param>
+    /// <returns>屏幕外，屏幕内</returns>
+    public static (float, float) GetRightPosition(this RectTransform UIEntity)
+    {
+        var rect = UIEntity.rectTransform().rect;
+        var size = GetScaledSize(rect.size);
+        // 计算初始高度
+        var from = size.x / 2 + ScreenRightTop.x + 100;
+        // 计算结束高度
+        var end = ScreenRightTop.x - size.x / 2;
+        return (from, end);
+    }
+
+    /// <summary>
+    /// 从屏幕左侧弹出
+    /// </summary>
+    /// <param name="UIEntity"></param>
+    /// <returns>屏幕外，屏幕内</returns>
+    public static (float, float) GetLeftPosition(this RectTransform UIEntity)
+    {
+        var rect = UIEntity.rectTransform().rect;
+        var size = GetScaledSize(rect.size);
+        // 计算初始高度
+        var from = - size.x / 2 - 100;
+        // 计算结束高度
+        var end = size.x / 2;
+        return (from, end);
+    }
+
+    /// <summary>
+    /// 从屏幕下方弹出
     /// </summary>
     /// <param name="UIEntity"></param>
     /// <returns>屏幕外，屏幕内</returns>

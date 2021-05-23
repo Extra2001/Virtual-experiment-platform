@@ -28,7 +28,7 @@ public static class UIShowHideHelper
         ShowFromUp(UIEntity, fromUp);
     }
 
-    public static void ShowFromUp(GameObject UIEntity, float fromUp, float x = 0)
+    public static void ShowFromUp(GameObject UIEntity, float fromUp = 0, float x = 0)
     {
         var (from, end) = UIEntity.rectTransform().GetUpPosition();
 
@@ -43,7 +43,7 @@ public static class UIShowHideHelper
             .WaitForCompletion();
     }
 
-    public static void ShowFromButtom(GameObject UIEntity, float fromButtom, float x = 0)
+    public static void ShowFromButtom(GameObject UIEntity, float fromButtom = 0, float x = 0)
     {
         var (from, end) = UIEntity.rectTransform().GetBottomPosition();
 
@@ -60,10 +60,7 @@ public static class UIShowHideHelper
 
     public static void HideToButtom(GameObject UIEntity)
     {
-        var rect = UIEntity.rectTransform().rect;
-        var size = GetScaledSize(rect.size);
-        // 计算结束高度
-        var end = -1 * (size.y / 2) - 100;
+        var (_, end) = UIEntity.rectTransform().GetBottomPosition();
 
         UIEntity.rectTransform().DOMoveY(end, 0.3f)
             .SetUpdate(true)
@@ -73,11 +70,7 @@ public static class UIShowHideHelper
 
     public static void HideToUp(GameObject UIEntity)
     {
-        var rect = UIEntity.rectTransform().rect;
-        var size = GetScaledSize(rect.size);
-
-        // 计算结束高度
-        var end = size.y / 2 + ScreenRightTop.y + 100;
+        var (_, end) = UIEntity.rectTransform().GetUpPosition();
 
         UIEntity.rectTransform().DOMoveY(end, 0.3f)
             .SetUpdate(true)
@@ -85,12 +78,16 @@ public static class UIShowHideHelper
             .WaitForCompletion();
     }
 
-    public static void ShowFromRight(GameObject UIEntity)
+    public static void ShowFromRight(GameObject UIEntity, float fromRight = 0, float y = 0)
     {
-        var tmp = UIEntity.transform.localPosition;
-        tmp.x = 600;
-        UIEntity.transform.localPosition = tmp;
-        UIEntity.transform.DOLocalMoveX(280, 0.3f)
+        var (from, end) = UIEntity.rectTransform().GetRightPosition();
+
+        var position = UIEntity.rectTransform().position;
+        position.x = from;
+        position.y = (ScreenRightTop.y / 2 + y);
+        UIEntity.rectTransform().position = position;
+
+        UIEntity.rectTransform().DOMoveX(end - fromRight, 0.3f)
             .SetUpdate(true)
             .SetEase(Ease.OutExpo)
             .WaitForCompletion();
@@ -98,25 +95,100 @@ public static class UIShowHideHelper
 
     public static void HideToRight(GameObject UIEntity)
     {
-        UIEntity.transform.DOLocalMoveX(600, 0.3f)
+        var (_, end) = UIEntity.rectTransform().GetRightPosition();
+
+        UIEntity.rectTransform().DOMoveX(end, 0.3f)
             .SetUpdate(true)
-            .SetEase(Ease.OutExpo);
+            .SetEase(Ease.OutExpo)
+            .WaitForCompletion();
     }
 
-    public static void ShowFromLeft(GameObject UIEntity)
+    public static void ShowFromLeft(GameObject UIEntity, float fromLeft = 0, float y = 0)
     {
-        var tmp = UIEntity.transform.localPosition;
-        tmp.x = -900;
-        UIEntity.transform.localPosition = tmp;
-        UIEntity.transform.DOLocalMoveX(0, 0.5f)
+        var (from, end) = UIEntity.rectTransform().GetLeftPosition();
+
+        var position = UIEntity.rectTransform().position;
+        position.x = from;
+        position.y = (ScreenRightTop.y / 2 + y);
+        UIEntity.rectTransform().position = position;
+
+        UIEntity.rectTransform().DOMoveX(end + fromLeft, 0.3f)
             .SetUpdate(true)
-            .SetEase(Ease.OutExpo);
+            .SetEase(Ease.OutExpo)
+            .WaitForCompletion();
     }
 
     public static void HideToLeft(GameObject UIEntity)
     {
-        UIEntity.transform.DOLocalMoveX(-900, 0.5f)
+        var (_, end) = UIEntity.rectTransform().GetLeftPosition();
+
+        UIEntity.rectTransform().DOMoveX(end, 0.3f)
             .SetUpdate(true)
-            .SetEase(Ease.OutExpo);
+            .SetEase(Ease.OutExpo)
+            .WaitForCompletion();
+    }
+
+    public static void ShowFromUpLeft(GameObject UIEntity, float fromUp = 0, float fromLeft = 0)
+    {
+        var (from, end) = UIEntity.rectTransform().GetLeftPosition();
+        var (_, end1) = UIEntity.rectTransform().GetUpPosition();
+
+        var position = UIEntity.rectTransform().position;
+        position.x = from;
+        position.y = end1 - fromUp;
+        UIEntity.rectTransform().position = position;
+
+        UIEntity.rectTransform().DOMoveX(end + fromLeft, 0.3f)
+            .SetUpdate(true)
+            .SetEase(Ease.OutExpo)
+            .WaitForCompletion();
+    }
+
+    public static void ShowFromUpRight(GameObject UIEntity, float fromUp = 0, float fromRight = 0)
+    {
+        var (from, end) = UIEntity.rectTransform().GetRightPosition();
+        var (_, end1) = UIEntity.rectTransform().GetUpPosition();
+
+        var position = UIEntity.rectTransform().position;
+        position.x = from;
+        position.y = end1 - fromUp;
+        UIEntity.rectTransform().position = position;
+
+        UIEntity.rectTransform().DOMoveX(end - fromRight, 0.3f)
+            .SetUpdate(true)
+            .SetEase(Ease.OutExpo)
+            .WaitForCompletion();
+    }
+
+    public static void ShowFromBottomRight(GameObject UIEntity, float fromBottom = 0, float fromRight = 0)
+    {
+        var (from, end) = UIEntity.rectTransform().GetRightPosition();
+        var (_, end1) = UIEntity.rectTransform().GetBottomPosition();
+
+        var position = UIEntity.rectTransform().position;
+        position.x = from;
+        position.y = end1 + fromBottom;
+        UIEntity.rectTransform().position = position;
+
+        UIEntity.rectTransform().DOMoveX(end - fromRight, 0.3f)
+            .SetUpdate(true)
+            .SetEase(Ease.OutExpo)
+            .WaitForCompletion();
+    }
+
+    public static void ShowFromBottomLeft(GameObject UIEntity, float fromBottom = 0, float fromLeft = 0)
+    {
+        var (from, end) = UIEntity.rectTransform().GetLeftPosition();
+        var (_, end1) = UIEntity.rectTransform().GetBottomPosition();
+
+        var position = UIEntity.rectTransform().position;
+        position.x = from;
+        position.y = end1 + fromBottom;
+        UIEntity.rectTransform().position = position;
+
+        UIEntity.rectTransform().DOMoveX(end + fromLeft, 0.3f)
+            .SetUpdate(true)
+            .SetEase(Ease.OutExpo)
+            .WaitForCompletion();
     }
 }

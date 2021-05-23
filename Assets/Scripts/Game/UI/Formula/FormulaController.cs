@@ -256,6 +256,8 @@ public class FormulaController : MonoBehaviour
         else if (Main.m_Procedure.CurrentProcedure is ComplexDataProcessProcedure)
         {
             var procedure = Main.m_Procedure.CurrentProcedure as ComplexDataProcessProcedure;
+            for (int i = 0; i < ComplexPanelRoot.childCount; i++)
+                Destroy(ComplexPanelRoot.GetChild(i));
             foreach (var item in procedure.GetQuantitiesName())
                 Instantiate(ComplexPanel, ComplexPanelRoot).GetComponent<FormulaComplexSelectorCell>().Show(item, this);
             RefreshContentSizeFitter(ComplexPanelRoot.gameObject);

@@ -42,6 +42,7 @@ public class FormulaController : MonoBehaviour
     private GameObject ComplexPanel;
     [SerializeField]
     private Transform ComplexPanelRoot;
+
     private List<FormulaCell> showedCells = new List<FormulaCell>();
     private Button clickedButton;
     private FormulaCell clickedCell;
@@ -318,7 +319,6 @@ public class FormulaController : MonoBehaviour
             var subCell = showedCells.Where(x => x.thisGUID.Equals(item.Value)).Last();
             value = value.Replace(item.Value, $"({GetExpression(item.Value)})");
         }
-        Log.Info(Newtonsoft.Json.JsonConvert.SerializeObject(Serialize()));
         return value;
     }
 

@@ -86,4 +86,21 @@ public static class CommonTools
         hh.y = (float)sprite.texture.height / sprite.texture.width * hh.x;
         image.gameObject.rectTransform().sizeDelta = hh;
     }
+
+    public static double GetExpressionExecuted(this List<FormulaNode> nodes, string rootGUID = "base")
+    {
+        return Javascript.Eval(GetExpression(nodes, rootGUID));
+    }
+
+    public static string GetExpression(this List<FormulaNode> nodes, string rootGUID = "base")
+    {
+        var curCell = nodes.Where(x => x.GUID.Equals(rootGUID)).Last();
+        var value = curCell.value;
+        foreach (var item in curCell.ReplaceFlags)
+        {
+            var subCell = nodes.Where(x => x.GUID.Equals(item)).Last();
+            value = value.Replace(item, $"({GetExpression(nodes, item)})");
+        }
+        return value;
+    }
 }

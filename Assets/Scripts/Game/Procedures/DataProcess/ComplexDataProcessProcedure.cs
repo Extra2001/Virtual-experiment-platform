@@ -10,6 +10,8 @@ using System.Linq;
 /// </summary>
 public class ComplexDataProcessProcedure : ProcedureBase
 {
+    List<DataChart> dataChart = new List<DataChart>();
+
     /// <summary>
     /// 流程初始化
     /// </summary>
@@ -25,20 +27,49 @@ public class ComplexDataProcessProcedure : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         Main.m_UI.OpenResidentUI<ComplexData>();
+        DealData();
         base.OnEnter(lastProcedure);
+    }
+
+    private void DealData()
+    {
+        double avg, ua, u;
+        for (int i = 0; i < RecordManager.tempRecord.quantities.Count; i++)
+        {
+            dataChart.Add(new DataChart());
+            (avg, ua, u) = StaticMethods.CalcUncertain(RecordManager.tempRecord.quantities[i].Data, Main.m_Entity.GetEntities(RecordManager.tempRecord.quantities[i].InstrumentType)[0].Cast<InstrumentBase>().ErrorLimit);
+            dataChart[i].Name = RecordManager.tempRecord.quantities[i].Symbol;
+            dataChart[i].Average = avg.ToString();
+            dataChart[i].Uncertain = u.ToString();
+            dataChart[i].Ua = ua.ToString();
+        }
     }
 
     public List<string> GetQuantitiesName()
     {
-        return RecordManager.tempRecord.quantities.Select(x => x.Name).ToList();
+        return RecordManager.tempRecord.quantities.Select(x => x.Symbol).ToList();
     }
 
     public string GetStatisticValue(string quantityName, ComplexStatisticValue valueKind)
     {
-
-
-
-        throw new NotImplementedException();
+        string result = "error";
+        for (int i = 0; i < dataChart.Count; i++)
+        {
+            if(dataChart[i].Name == quantityName)
+            {
+                if (ComplexStatisticValue.Average == valueKind)
+                {
+                    result = dataChart[i].Average;
+                }else if(ComplexStatisticValue.Uncertain == valueKind)
+                {
+                    result = dataChart[i].Uncertain;
+                }
+                break;
+            }
+        }
+        Debug.Log(result);
+        return result;
+        //throw new NotImplementedException();
     }
 
     /// <summary>

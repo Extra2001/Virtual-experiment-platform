@@ -19,8 +19,14 @@ public class Micrometer_main : HTBehaviour
 
     private Camera mCamera;
     private Camera Ele;
+
+    private Vector3 Ori_place;
+    private Vector3 Ori_eulerAngles;
+    private float Ori_fieldOfView;
+
     public float time = 5.0f;
-    public bool moveable = false;
+    public bool moveable_look = false;
+    public bool moveable_back = false;
     private bool Nowin=false;
     public void Measure()
     {
@@ -38,12 +44,29 @@ public class Micrometer_main : HTBehaviour
     private void Look_back()
     {
         if (Input.GetKey(KeyCode.X) )
-        { 
-            moveable = true;
-        }
-        if (moveable)
         {
+            if (Nowin = false)
+            {
+                moveable_look = true;
+                Ori_place = Ele.transform.position;
+                Ori_eulerAngles = Ele.transform.rotation.eulerAngles;
+                Ori_fieldOfView = Ele.fieldOfView;
+            }
+            else
+            {
+                moveable_back = true;
+            }
             
+        }
+        Look();
+        Back();
+    }
+
+    private void Look()
+    {
+        if (moveable_look)
+        {
+
             mCamera.transform.position += (Ele.transform.position - mCamera.transform.position) / time;
             PLC_eulerAngles = mCamera.transform.rotation.eulerAngles;
             POS_eulerAngles = Ele.transform.rotation.eulerAngles;
@@ -51,16 +74,35 @@ public class Micrometer_main : HTBehaviour
             mCamera.transform.rotation = Quaternion.Euler(PLC_eulerAngles);
             mCamera.fieldOfView -= (mCamera.fieldOfView - Ele.gameObject.GetComponent<Camera>().fieldOfView) / time;
         }
-        if (mCamera.fieldOfView < Ele.gameObject.GetComponent<Camera>().fieldOfView + 0.01 && moveable)
+        if (mCamera.fieldOfView < Ele.gameObject.GetComponent<Camera>().fieldOfView + 0.01 && moveable_look)
         {
             mCamera.transform.position = Ele.transform.position;
             mCamera.transform.rotation = Ele.transform.rotation;
             mCamera.fieldOfView = Ele.fieldOfView;
-            moveable = false;
+            moveable_look = false;
             Nowin = true;
         }
     }
-
+    private void Back()
+    {
+        if (moveable_back)
+        {
+            mCamera.transform.position += (Ori_place - mCamera.transform.position) / time;
+            PLC_eulerAngles = mCamera.transform.rotation.eulerAngles;
+            POS_eulerAngles = Ori_eulerAngles;
+            PLC_eulerAngles += (POS_eulerAngles - PLC_eulerAngles) / time;
+            mCamera.transform.rotation = Quaternion.Euler(PLC_eulerAngles);
+            mCamera.fieldOfView -= (mCamera.fieldOfView - Ori_fieldOfView) / time;
+        }
+        if (mCamera.fieldOfView < Ori_fieldOfView + 0.01 && moveable_back)
+        {
+            mCamera.transform.position = Ori_place;
+            mCamera.transform.rotation = Quaternion.Euler(Ori_eulerAngles); 
+            mCamera.fieldOfView = Ori_fieldOfView;
+            moveable_back = false;
+            Nowin = false;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {

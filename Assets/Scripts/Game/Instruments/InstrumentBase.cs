@@ -23,6 +23,7 @@ public interface IShowValuable
 
 public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable, IShowValuable
 {
+    public Vector3 Position = new Vector3();
     /// <summary>
     /// 仪器名称
     /// </summary>
@@ -93,6 +94,14 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         Entity.layer = 11;
         Entity.tag = "Tools_Be_Moved";
         AddRightButton();
+
+        var recpos = RecordManager.tempRecord.InstrumentStartPosition;
+        Position.x = recpos[0];
+        Position.y = recpos[1];
+        Position.z = recpos[2];
+
+        Entity.transform.position = Position;
+
         base.OnShow();
     }
 

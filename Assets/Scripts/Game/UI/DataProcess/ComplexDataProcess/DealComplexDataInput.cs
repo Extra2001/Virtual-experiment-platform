@@ -38,15 +38,17 @@ public class DealComplexDataInput : HTBehaviour
         SureButton2.onClick.AddListener(SureClick2);
         CallButton3.onClick.AddListener(CallClick3);
         SureButton3.onClick.AddListener(SureClick3);
-        CurrentField = Field1;
-
-        StartShow();//加载存档中的情况
+        CurrentField = Field1;        
 
     }
 
     
-    private void StartShow()
+    public void StartShow()
     {
+        LatexEquationRender.Render(RecordManager.tempRecord.stringExpression, res=> {
+            Formula.GetComponent<Image>().FitHeight(res);
+        });
+
         ComplexQuantityMoedel model = RecordManager.tempRecord.complexQuantityMoedel;
 
         CallButton1.image.sprite = Sprites[model.AverageState];

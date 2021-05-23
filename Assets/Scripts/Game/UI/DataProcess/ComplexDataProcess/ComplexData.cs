@@ -14,7 +14,7 @@ public class ComplexData : UILogicResident
 	/// </summary>
     public override void OnInit()
     {
-        base.OnInit();
+        base.OnInit();        
     }
 
 	/// <summary>
@@ -23,6 +23,7 @@ public class ComplexData : UILogicResident
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
+        UIEntity.GetComponent<DealComplexDataInput>().StartShow();
     }
 
 	/// <summary>

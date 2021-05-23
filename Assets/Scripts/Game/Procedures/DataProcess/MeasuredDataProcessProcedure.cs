@@ -9,7 +9,8 @@ using System;
 /// </summary>
 public class MeasuredDataProcessProcedure : ProcedureBase
 {
-    private QuantityModel curQuantity;
+    private QuantityModel CurrentQuantity;
+
 
     /// <summary>
     /// 流程初始化
@@ -31,17 +32,53 @@ public class MeasuredDataProcessProcedure : ProcedureBase
 
     public void ShowUncertainty(QuantityModel quantity)
     {
-        curQuantity = quantity;
+        CurrentQuantity = quantity;
         Main.m_UI.CloseUI<MeasuredDataProcess>();
         Main.m_UI.OpenResidentUI<MeasuredDataProcess>(quantity);
     }
 
     public string GetStatisticValue(MeasuredStatisticValue valueKind)
     {
+        string result = "error";
         if (valueKind == MeasuredStatisticValue.Symbol)
-            return curQuantity.Symbol;
-        return "0";
-        throw new NotImplementedException();
+        {
+            result = CurrentQuantity.Symbol;
+        }
+        else if (valueKind == MeasuredStatisticValue.Number)
+        {
+            result = CurrentQuantity.Groups.ToString();
+        }
+        else if (valueKind == MeasuredStatisticValue.Average)
+        {
+            result = StaticMethods.Average(CurrentQuantity.Data).ToString();
+        }
+        else if (valueKind == MeasuredStatisticValue.SigmaX)
+        {
+            result = (StaticMethods.CenterMoment(CurrentQuantity.Data, 1) * CurrentQuantity.Groups).ToString();
+        }
+        else if (valueKind == MeasuredStatisticValue.SigmaXSquare)
+        {
+            result = (StaticMethods.CenterMoment(CurrentQuantity.Data, 2) * CurrentQuantity.Groups).ToString();
+        }
+        else if (valueKind == MeasuredStatisticValue.SigmaXCube)
+        {
+            result = (StaticMethods.CenterMoment(CurrentQuantity.Data, 3) * CurrentQuantity.Groups).ToString();
+        }
+        else if (valueKind == MeasuredStatisticValue.Variance)
+        {
+            result = StaticMethods.Variance(CurrentQuantity.Data).ToString();
+        }
+        else if (valueKind == MeasuredStatisticValue.StandardDeviation)
+        {
+            result = StaticMethods.StdDev(CurrentQuantity.Data).ToString();
+        }
+        else if (valueKind == MeasuredStatisticValue.InstrumentError)
+        {
+            result = Main.m_Entity.GetEntities(CurrentQuantity.InstrumentType)[0].Cast<InstrumentBase>().ErrorLimit.ToString();
+        }
+        return result;
+
+        //throw new NotImplementedException();
     }
 
     /// <summary>
@@ -73,7 +110,7 @@ public class MeasuredDataProcessProcedure : ProcedureBase
 
 public enum MeasuredStatisticValue
 {
-    Symbol,
+    Symbol,     //  符号
     Number,     //测得数据组数
     Average,    //平均值
     SigmaX,     //X_i求和

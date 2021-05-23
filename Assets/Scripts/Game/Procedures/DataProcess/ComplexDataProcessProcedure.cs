@@ -35,6 +35,9 @@ public class ComplexDataProcessProcedure : ProcedureBase
 
     public string GetStatisticValue(string quantityName, ComplexStatisticValue valueKind)
     {
+
+
+
         throw new NotImplementedException();
     }
 

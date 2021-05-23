@@ -22,6 +22,7 @@ public class ProcessResult : UILogicResident
 	/// </summary>
     public override void OnOpen(params object[] args)
     {
+        UIEntity.GetComponent<DealProcessResult>().Show();
         base.OnOpen(args);
     }
 

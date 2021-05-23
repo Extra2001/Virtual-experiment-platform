@@ -10,4 +10,5 @@ public class DataChart
     public string Average;
     public string Uncertain;
     public string Ua;
+    public string Ub;
 }

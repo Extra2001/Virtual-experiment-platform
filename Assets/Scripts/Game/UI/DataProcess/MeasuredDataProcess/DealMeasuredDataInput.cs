@@ -29,7 +29,7 @@ public class DealMeasuredDataInput : HTBehaviour
     public Button CallButton4;
     public Button SureButton4;
     public GameObject Field4;
-
+    public Text Value4;
 
     public Sprite[] Sprites = new Sprite[3];
     private GameObject CurrentField;
@@ -96,11 +96,12 @@ public class DealMeasuredDataInput : HTBehaviour
         Field3.SetActive(false);
 
         CallButton4.image.sprite = Sprites[quantity.ComplexState];
+        Value4.text = "=" + StaticMethods.NumberFormat(quantity.Uncertain);
         Field4.SetActive(true);
         if (quantity.AverageExpression != null)
         {
 
-            Field4.GetComponent<FormulaController>().LoadFormula(quantity.AverageExpression);
+            Field4.GetComponent<FormulaController>().LoadFormula(quantity.ComplexExpression);
         }
         else
         {
@@ -249,8 +250,11 @@ public class DealMeasuredDataInput : HTBehaviour
         {
             //检查不确定度表达式是否正确
             //~~~~~
+            Value4.text = "=" + StaticMethods.NumberFormat(Field4.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton4.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].ComplexState = 2;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Uncertain = Field4.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].ComplexExpression = Field4.GetComponent<FormulaController>().Serialize();
         }
         catch
         {

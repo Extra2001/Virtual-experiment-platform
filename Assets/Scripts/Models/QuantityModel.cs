@@ -18,8 +18,8 @@ public class QuantityModel
     public double Average { get; set; } = 0.0;
     public double Ua { get; set; } = 0.0;
     public double Ub { get; set; } = 0.0;
+    public double Uncertain { get; set; } = 0.0;
 
-    
 
     //此处状态0代表初始，1代表正在构建表达式，2代表构建表达式完成
     public int AverageState { get; set; } = 0;

@@ -8,6 +8,7 @@ using DG.Tweening;
 /// </summary>
 public class ProcessResultProcedure : ProcedureBase
 {
+    
     /// <summary>
     /// 流程初始化
     /// </summary>
@@ -22,9 +23,11 @@ public class ProcessResultProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenResidentUI<ProcessResult>();
+        Main.m_UI.OpenResidentUI<ProcessResult>();       
         base.OnEnter(lastProcedure);
     }
+
+    
 
     /// <summary>
     /// 离开流程

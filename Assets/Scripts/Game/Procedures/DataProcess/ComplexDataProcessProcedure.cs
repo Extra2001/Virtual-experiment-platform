@@ -10,8 +10,7 @@ using System.Linq;
 /// </summary>
 public class ComplexDataProcessProcedure : ProcedureBase
 {
-    List<DataChart> dataChart = new List<DataChart>();
-
+    private List<QuantityModel> quantities => RecordManager.tempRecord.quantities;
     /// <summary>
     /// 流程初始化
     /// </summary>
@@ -26,24 +25,9 @@ public class ComplexDataProcessProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenResidentUI<ComplexData>();
-        DealData();
+        Main.m_UI.OpenResidentUI<ComplexData>();        
         base.OnEnter(lastProcedure);
-    }
-
-    private void DealData()
-    {
-        double avg, ua, u;
-        for (int i = 0; i < RecordManager.tempRecord.quantities.Count; i++)
-        {
-            dataChart.Add(new DataChart());
-            (avg, ua, u) = StaticMethods.CalcUncertain(RecordManager.tempRecord.quantities[i].Data, Main.m_Entity.GetEntities(RecordManager.tempRecord.quantities[i].InstrumentType)[0].Cast<InstrumentBase>().ErrorLimit);
-            dataChart[i].Name = RecordManager.tempRecord.quantities[i].Symbol;
-            dataChart[i].Average = avg.ToString();
-            dataChart[i].Uncertain = u.ToString();
-            dataChart[i].Ua = ua.ToString();
-        }
-    }
+    }    
 
     public List<string> GetQuantitiesName()
     {
@@ -53,21 +37,17 @@ public class ComplexDataProcessProcedure : ProcedureBase
     public string GetStatisticValue(string quantityName, ComplexStatisticValue valueKind)
     {
         string result = "error";
-        for (int i = 0; i < dataChart.Count; i++)
-        {
-            if(dataChart[i].Name == quantityName)
+        var item = quantities.Where(x => x.Symbol.Equals(quantityName)).FirstOrDefault();
+            if(item.Name == quantityName)
             {
                 if (ComplexStatisticValue.Average == valueKind)
                 {
-                    result = dataChart[i].Average;
+                result = item.Average.ToString();
                 }else if(ComplexStatisticValue.Uncertain == valueKind)
                 {
-                    result = dataChart[i].Uncertain;
+                    result = item.Uncertain.ToString();
                 }
-                break;
             }
-        }
-        Debug.Log(result);
         return result;
         //throw new NotImplementedException();
     }

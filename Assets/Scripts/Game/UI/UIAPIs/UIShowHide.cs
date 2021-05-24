@@ -60,9 +60,9 @@ public static class UIShowHideHelper
 
     public static void HideToButtom(GameObject UIEntity)
     {
-        var (_, end) = UIEntity.rectTransform().GetBottomPosition();
+        var (from, _) = UIEntity.rectTransform().GetBottomPosition();
 
-        UIEntity.rectTransform().DOMoveY(end, 0.3f)
+        UIEntity.rectTransform().DOMoveY(from, 0.3f)
             .SetUpdate(true)
             .SetEase(Ease.OutExpo)
             .WaitForCompletion();
@@ -70,9 +70,9 @@ public static class UIShowHideHelper
 
     public static void HideToUp(GameObject UIEntity)
     {
-        var (_, end) = UIEntity.rectTransform().GetUpPosition();
+        var (from, _) = UIEntity.rectTransform().GetUpPosition();
 
-        UIEntity.rectTransform().DOMoveY(end, 0.3f)
+        UIEntity.rectTransform().DOMoveY(from, 0.3f)
             .SetUpdate(true)
             .SetEase(Ease.OutExpo)
             .WaitForCompletion();
@@ -95,9 +95,9 @@ public static class UIShowHideHelper
 
     public static void HideToRight(GameObject UIEntity)
     {
-        var (_, end) = UIEntity.rectTransform().GetRightPosition();
+        var (from, _) = UIEntity.rectTransform().GetRightPosition();
 
-        UIEntity.rectTransform().DOMoveX(end, 0.3f)
+        UIEntity.rectTransform().DOMoveX(from, 0.3f)
             .SetUpdate(true)
             .SetEase(Ease.OutExpo)
             .WaitForCompletion();
@@ -120,9 +120,9 @@ public static class UIShowHideHelper
 
     public static void HideToLeft(GameObject UIEntity)
     {
-        var (_, end) = UIEntity.rectTransform().GetLeftPosition();
+        var (from, _) = UIEntity.rectTransform().GetLeftPosition();
 
-        UIEntity.rectTransform().DOMoveX(end, 0.3f)
+        UIEntity.rectTransform().DOMoveX(from, 0.3f)
             .SetUpdate(true)
             .SetEase(Ease.OutExpo)
             .WaitForCompletion();

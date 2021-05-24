@@ -90,11 +90,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     public void SwitchNextProcedure()
     {
         ProcedureBase Temp;
-        try
-        {
-            Main.m_Procedure.SwitchNextProcedure();
-        }
-        catch { }
+        Main.m_Procedure.SwitchNextProcedure();
         Temp = Main.m_Procedure.CurrentProcedure;
         ProcedureStack.Add(Temp.GetType());
     }

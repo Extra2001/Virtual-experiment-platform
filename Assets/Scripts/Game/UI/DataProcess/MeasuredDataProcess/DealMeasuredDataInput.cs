@@ -178,6 +178,7 @@ public class DealMeasuredDataInput : HTBehaviour
             CallButton2.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UaState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Ua = Field2.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UaExpression = Field2.GetComponent<FormulaController>().Serialize();
         }
         catch
         {
@@ -215,6 +216,7 @@ public class DealMeasuredDataInput : HTBehaviour
             CallButton3.image.sprite = Sprites[2];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UbState = 2;
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].Ub = Field3.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UbExpression = Field3.GetComponent<FormulaController>().Serialize();
         }
         catch
         {

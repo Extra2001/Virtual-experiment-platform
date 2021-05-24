@@ -7,8 +7,11 @@ using UnityEngine;
 public class DataChart
 {
     public string Name;
-    public string Average;
-    public string Uncertain;
-    public string Ua;
-    public string Ub;
+    public double Average;
+    public double Uncertain;
+    public double Ua;
+    public double UserUa;
+    public double Ub;
+    public double UserUb;
+    public double UserU;
 }

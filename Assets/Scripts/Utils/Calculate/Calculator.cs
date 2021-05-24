@@ -65,6 +65,12 @@ public static class StaticMethods {
         }
         return (average, Math.Sqrt(sum2), Math.Sqrt(sum2 + ub * ub));
     }
+    public static double CalcUncertain(double ua, double ub)
+    {
+        //输入:A类不确定度ua 仪器B类不确定度ub
+        //返回:合成不确定度
+        return Math.Sqrt(ua*ua + ub * ub);
+    }
     public static bool ValidVarname(string v) {//检查v是否能作为合法物理量名
         if(keywords.Contains(v)) {//函数列表有 直接否
             return false;
@@ -133,10 +139,10 @@ public class CalcVariable {
 public class CalcArgs {//一次计算
     private Dictionary<string, CalcVariable> vars;//变量
     private Dictionary<string, double> cons;//常量
-    public int arrlen { get; private set; }
-    public CalcArgs(int measures) {
+    //public int arrlen { get; private set; }
+    public CalcArgs(/*int measures*/) {
         vars = new Dictionary<string, CalcVariable>(); cons = new Dictionary<string, double>();
-        arrlen = measures;
+        //arrlen = measures;
     }
     public static readonly HashSet<string> keywords = new HashSet<string>(){
             "pi","e","abs","acos","asin","atan","sin","cos","tan","cot","sec","csc","j","sqrt","pow","sinh","cosh","tanh","exp","ln","lg"
@@ -164,10 +170,10 @@ public class CalcArgs {//一次计算
             return true;
         }
     }
-    public bool AddVariable(string varname, double ub) {
+    public bool AddVariable(string varname, double ub, int measures) {
         //先检查变量如果没有出现过就加入
         if(ValidVarname(varname)) {
-            vars[varname] = new CalcVariable(ub, arrlen);
+            vars[varname] = new CalcVariable(ub, measures);
             return true;
         }
         else {
@@ -199,6 +205,23 @@ public class CalcArgs {//一次计算
             var unc = argobj.vars[item.Key].CalcUncertain();
             vals[item.Key] = unc.Item1;
             vals[$"u_{item.Key}"] = unc.Item3;
+        }
+        return (valexpr.Evaluate(vals).RealValue, uncexpr.Evaluate(vals).RealValue);
+    }
+    public class UserInput
+    {
+        public string name { get; set; }
+        public double value { get; set; }
+        public double u { get; set; }
+    }
+    public static (double, double) CalculateValue(symexpr valexpr, symexpr uncexpr, List<UserInput> inputs)
+    {
+        //return (value, uncertain)
+        Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(inputs.Count*2);
+        foreach (var item in inputs)
+        {
+            vals[item.name] = item.value;
+            vals[$"u_{item.name}"] = item.u;
         }
         return (valexpr.Evaluate(vals).RealValue, uncexpr.Evaluate(vals).RealValue);
     }

@@ -23,11 +23,52 @@ public class ProcessResultProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenResidentUI<ProcessResult>();       
+        var rec = RecordManager.tempRecord;
+        foreach(var item in rec.quantities)
+        {
+            if(item.UaExpression==null)
+            {
+                ShowModel($"物理量\"{item.Name}\"({item.Symbol})的A类不确定度还未计算");
+                return; 
+            }
+            if (item.UbExpression == null)
+            {
+                ShowModel($"物理量\"{item.Name}\"({item.Symbol})的B类不确定度还未计算");
+                return;
+            }
+            if (item.ComplexExpression == null)
+            {
+                ShowModel($"物理量\"{item.Name}\"({item.Symbol})的合成不确定度还未计算");
+                return;
+            }
+        }
+        if (rec.complexQuantityMoedel.AverageExpression == null)
+        {
+            ShowModel($"合成物理量的主值还未计算");
+            return;
+        }
+        if (rec.complexQuantityMoedel.UncertainExpression == null)
+        {
+            ShowModel($"合成物理量的不确定度还未计算");
+            return;
+        }
+        Main.m_UI.OpenResidentUI<ProcessResult>();
         base.OnEnter(lastProcedure);
     }
 
-    
+    private void ShowModel(string message)
+    {
+        MainThread.Instance.DelayAndRun(300, () =>
+        {
+            GameManager.Instance.SwitchBackProcedure();
+            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            {
+                ShowCancel = false,
+                Title = new BindableString("错误"),
+                Message = new BindableString(message)
+            });
+        });
+    }
 
     /// <summary>
     /// 离开流程

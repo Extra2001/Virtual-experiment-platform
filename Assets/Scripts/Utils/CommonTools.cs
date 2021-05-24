@@ -100,4 +100,9 @@ public static class CommonTools
         }
         return value;
     }
+
+    public static bool AlmostEqual(this double value1, double value2)
+    {
+        return Math.Abs(value1 - value2) < 0.0000001;
+    }
 }

@@ -59,7 +59,7 @@ public class DealProcessResult : HTBehaviour
         double avg, ua, u;
         foreach (var item in RecordManager.tempRecord.quantities)
         {
-            var Ub = Main.m_Entity.GetEntities(item.InstrumentType).First().Cast<InstrumentBase>().ErrorLimit;
+            var Ub = Main.m_Entity.GetEntities(item.InstrumentType).First().Cast<InstrumentBase>().ErrorLimit / System.Math.Sqrt(3);
             (avg, ua, u) = StaticMethods.CalcUncertain(item.Data, Ub);
             var data = new DataChart()
             {

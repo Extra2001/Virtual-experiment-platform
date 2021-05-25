@@ -21,7 +21,7 @@ public class Sitdown : EventHandlerBase
         RecordManager.tempRecord.InstrumentStartPosition[2] = z;
 
         RecordManager.tempRecord.ObjectStartPosition[0] = x;
-        RecordManager.tempRecord.ObjectStartPosition[1] = y;
+        RecordManager.tempRecord.ObjectStartPosition[1] = y + .2f;
         RecordManager.tempRecord.ObjectStartPosition[2] = z + 6f;
 
         return this;

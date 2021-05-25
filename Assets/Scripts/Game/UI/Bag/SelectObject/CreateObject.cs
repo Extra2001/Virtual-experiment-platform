@@ -76,7 +76,7 @@ public class CreateObject : HTBehaviour
         var rec = RecordManager.tempRecord;
         // 计算位置
         objectValue.Position = new Vector3(rec.ObjectStartPosition[0],
-            rec.ObjectStartPosition[1] + objectValue.BaseSize.y * scale / 2 + .2f, rec.ObjectStartPosition[2]);
+            rec.ObjectStartPosition[1] + objectValue.BaseSize.y * scale / 2, rec.ObjectStartPosition[2]);
         return obj;
     }
 

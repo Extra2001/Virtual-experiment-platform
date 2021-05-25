@@ -105,4 +105,25 @@ public static class CommonTools
     {
         return Math.Abs(value1 - value2) < 0.0000001;
     }
+
+    public static MyVector3 GetMyVector(this Vector3 vector3)
+    {
+        return new MyVector3()
+        {
+            x = vector3.x,
+            y = vector3.y,
+            z = vector3.z
+        };
+    }
+
+    public static MyVector4 GetMyVector(this Quaternion vector3)
+    {
+        return new MyVector4()
+        {
+            x = vector3.x,
+            y = vector3.y,
+            z = vector3.z,
+            w = vector3.w
+        };
+    }
 }

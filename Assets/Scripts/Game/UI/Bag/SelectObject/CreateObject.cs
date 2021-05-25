@@ -4,319 +4,94 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+using Dummiesman;
 
 public class CreateObject : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
     public ObjectsModel objects = null;
-    private ObjectsModel ShowedObject = null;
-
-    private GameObject MyObject;
-    private float Length;
-    private float Width;
-    private float Height;
-    private float Mass;//估计值
-    private float Density = 1;//密度，瞎定的一个值
-
-
-    private Vector3 ClosestPoint = new Vector3();//最近点
-    private Vector3 FarthestPoint = new Vector3();//最远点
-    private Vector3 Temp = new Vector3();
-    private float MaxDistence = 5f; //物体大小的最大限度
-    private float MinDistence = 0.05f; //物体大小的最小限度
+    private static GameObject ShowedGameObject = null;
 
     void Start()
     {
         GetComponent<Button>().onClick.AddListener(CreateWithDestory);
     }
 
+    public static GameObject Create(ObjectsModel model)
+    {
+        if (model == null) return null;
+        ObjectValue objectValue;
+        // 生成物体
+        RecordManager.tempRecord.ShowedObject = model;
+        var objLoader = new OBJLoader();
+        var obj = objLoader.Load(model.ResourcePath);
+        // 挂载组件
+        if ((objectValue = obj.GetComponent<ObjectValue>()) == null)
+            (objectValue = obj.AddComponent<ObjectValue>()).ObjectModel = model;
+        // 遍历计算点
+        Vector3 ClosestPoint = new Vector3();
+        Vector3 FarthestPoint = new Vector3();
+        foreach (Transform item in obj.transform)
+        {
+            if (item.gameObject.GetComponent<MeshCollider>() == null)
+            {
+                var meshCollider = item.gameObject.AddComponent<MeshCollider>();
+                meshCollider.convex = true;
+                meshCollider.isTrigger = true;
+            }
+            if (item.gameObject.GetComponent<Rigidbody>() == null)
+            {
+                var rigid = item.gameObject.AddComponent<Rigidbody>();
+                rigid.useGravity = false;
+                rigid.isKinematic = true;
+            }
+            // 设置Tag和Layer
+            item.gameObject.tag = ("Tools_Be_Moved");
+            item.gameObject.layer = 11;
+            //获取所有子物体中的最近点和最远点
+            var Temp = item.gameObject.GetComponent<MeshFilter>().mesh.bounds.min;
+            if (Temp.x < ClosestPoint.x)
+                ClosestPoint.x = Temp.x;
+            if (Temp.y < ClosestPoint.y)
+                ClosestPoint.y = Temp.y;
+            if (Temp.z < ClosestPoint.z)
+                ClosestPoint.z = Temp.z;
+
+            Temp = item.gameObject.GetComponent<MeshFilter>().mesh.bounds.max;
+            if (Temp.x > FarthestPoint.x)
+                FarthestPoint.x = Temp.x;
+            if (Temp.y > FarthestPoint.y)
+                FarthestPoint.y = Temp.y;
+            if (Temp.z > FarthestPoint.z)
+                FarthestPoint.z = Temp.z;
+        }
+        // 计算基础大小
+        objectValue.BaseSize = new Vector3(Mathf.Abs(FarthestPoint.x - ClosestPoint.x),
+            Mathf.Abs(FarthestPoint.y - ClosestPoint.y),
+            Mathf.Abs(FarthestPoint.z - ClosestPoint.z));
+        // 计算scale
+        var max = Mathf.Max(objectValue.BaseSize.x, objectValue.BaseSize.y, objectValue.BaseSize.z);
+        var scale = 2f / max;
+        objectValue.Scale = scale;
+        var rec = RecordManager.tempRecord;
+        // 计算位置
+        objectValue.Position = new Vector3(rec.ObjectStartPosition[0],
+            rec.ObjectStartPosition[1] + objectValue.BaseSize.y * scale / 2 + .2f, rec.ObjectStartPosition[2]);
+        return obj;
+    }
+
     public static void CreateWithoutDestory()
     {
-        //变量复用
-
-        GameObject MyObject;
-        float Length;
-        float Width;
-        float Height;
-        float Mass;//估计值
-        float Density = 1;//密度，瞎定的一个值
-
-
-        Vector3 ClosestPoint = new Vector3();//最近点
-        Vector3 FarthestPoint = new Vector3();//最远点
-        Vector3 Temp = new Vector3();
-        float MaxDistence = 2f; //物体大小的最大限度
-        float MinDistence = 0.1f; //物体大小的最小限度
-
-        ObjectsModel ShowedObject = RecordManager.tempRecord.ShowedObject;
-
-        //
-
-        MyObject = Main.m_ObjectPool.Spawn(ShowedObject.id.ToString());
-        if (MyObject.GetComponent<ObjectValue>() == null)
-        {
-            MyObject.AddComponent<ObjectValue>();
-        }
-        
-        GameManager.Instance.MyObject = MyObject;
-
-
-        //初始化被测物体设置
-        List<Transform> GameObjectList = new List<Transform>();
-        foreach (Transform child in MyObject.transform)
-        {
-            GameObjectList.Add(child);
-        }
-        for (int i = 0; i < GameObjectList.Count; i++)
-        {
-            //加组件
-            GameObjectList[i].gameObject.tag = ("Tools_Be_Moved");
-            GameObjectList[i].gameObject.layer = 11;                    //layer的序号
-            if (GameObjectList[i].gameObject.GetComponent<MeshCollider>() == null)
-            {
-                GameObjectList[i].gameObject.AddComponent<MeshCollider>();
-                GameObjectList[i].gameObject.GetComponent<MeshCollider>().convex = true;
-                GameObjectList[i].gameObject.GetComponent<MeshCollider>().isTrigger = true;
-            }
-            if (GameObjectList[i].gameObject.GetComponent<Rigidbody>() == null)
-            {
-                GameObjectList[i].gameObject.AddComponent<Rigidbody>();
-                GameObjectList[i].gameObject.GetComponent<Rigidbody>().useGravity = false;
-                GameObjectList[i].gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            }
-           
-            //获取所有子物体中的最近点和最远点
-            Temp = GameObjectList[i].gameObject.GetComponent<MeshFilter>().mesh.bounds.min;
-            if (Temp.x < ClosestPoint.x)
-            {
-                ClosestPoint.x = Temp.x;
-            }
-            if (Temp.y < ClosestPoint.y)
-            {
-                ClosestPoint.y = Temp.y;
-            }
-            if (Temp.z < ClosestPoint.z)
-            {
-                ClosestPoint.z = Temp.z;
-            }
-            Temp = GameObjectList[i].gameObject.GetComponent<MeshFilter>().mesh.bounds.max;
-            if (Temp.x > FarthestPoint.x)
-            {
-                FarthestPoint.x = Temp.x;
-            }
-            if (Temp.y > FarthestPoint.y)
-            {
-                FarthestPoint.y = Temp.y;
-            }
-            if (Temp.z > FarthestPoint.z)
-            {
-                FarthestPoint.z = Temp.z;
-            }
-
-        }
-        Length = Mathf.Abs(FarthestPoint.x - ClosestPoint.x);
-        Width = Mathf.Abs(FarthestPoint.y - ClosestPoint.y);
-        Height = Mathf.Abs(FarthestPoint.z - ClosestPoint.z);
-
-
-
-
-        //将物体缩放至合适大小
-        while (Length > MaxDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x / 10f, MyObject.transform.localScale.y / 10f, MyObject.transform.localScale.z / 10f);
-            Length /= 10f;
-            Width /= 10f;
-            Height /= 10f;
-        }
-        while (Length < MinDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x * 10f, MyObject.transform.localScale.y * 10f, MyObject.transform.localScale.z * 10f);
-            Length *= 10f;
-            Width *= 10f;
-            Height *= 10f;
-        }
-        while (Width > MaxDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x / 10f, MyObject.transform.localScale.y / 10f, MyObject.transform.localScale.z / 10f);
-            Length /= 10f;
-            Width /= 10f;
-            Height /= 10f;
-        }
-        while (Width < MinDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x * 10f, MyObject.transform.localScale.y * 10f, MyObject.transform.localScale.z * 10f);
-            Length *= 10f;
-            Width *= 10f;
-            Height *= 10f;
-        }
-        while (Height > MaxDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x / 10f, MyObject.transform.localScale.y / 10f, MyObject.transform.localScale.z / 10f);
-            Length /= 10f;
-            Width /= 10f;
-            Height /= 10f;
-        }
-        while (Height < MinDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x * 10f, MyObject.transform.localScale.y * 10f, MyObject.transform.localScale.z * 10f);
-            Length *= 10f;
-            Width *= 10f;
-            Height *= 10f;
-        }
-
-        //移到合适位置
-        MyObject.transform.position = new Vector3(RecordManager.tempRecord.ObjectStartPosition[0], RecordManager.tempRecord.ObjectStartPosition[1] + Width, RecordManager.tempRecord.ObjectStartPosition[2]);
-
-        //记录赋值
-
-
-        Mass = Density * Length * Width * Height;
-        MyObject.GetComponent<ObjectValue>().Length = Length;
-        MyObject.GetComponent<ObjectValue>().Width = Width;
-        MyObject.GetComponent<ObjectValue>().Height = Height;
-        MyObject.GetComponent<ObjectValue>().Mass = Mass;
-
+        ShowedGameObject = Create(RecordManager.tempRecord.ShowedObject);
     }
 
     private void CreateWithDestory()
     {
-        ShowedObject = RecordManager.tempRecord.ShowedObject;
+        if(ShowedGameObject != null)
+            Destroy(ShowedGameObject);
 
-        if (ShowedObject != null)
-        {
-            Main.m_ObjectPool.Despawn(ShowedObject.id.ToString(), GameManager.Instance.MyObject);
-            Main.m_ObjectPool.Clear(ShowedObject.id.ToString());
-        }
-        RecordManager.tempRecord.ShowedObject = objects;
-        MyObject = Main.m_ObjectPool.Spawn(objects.id.ToString());
-        if (MyObject.GetComponent<ObjectValue>() == null)
-        {
-            MyObject.AddComponent<ObjectValue>();
-        }
-        
-        GameManager.Instance.MyObject = MyObject;
-
-        //初始化被测物体设置
-        List<Transform> GameObjectList = new List<Transform>();
-        foreach (Transform child in MyObject.transform)
-        {
-            GameObjectList.Add(child);
-        }
-        for (int i = 0; i < GameObjectList.Count; i++)
-        {
-            //加组件
-            GameObjectList[i].gameObject.tag = ("Tools_Be_Moved");
-            GameObjectList[i].gameObject.layer = 11;                    //layer的序号
-            if (GameObjectList[i].gameObject.GetComponent<MeshCollider>() == null)
-            {
-                GameObjectList[i].gameObject.AddComponent<MeshCollider>();
-                GameObjectList[i].gameObject.GetComponent<MeshCollider>().convex = true;
-                GameObjectList[i].gameObject.GetComponent<MeshCollider>().isTrigger = true;
-            }
-            if (GameObjectList[i].gameObject.GetComponent<Rigidbody>() == null)
-            {
-                GameObjectList[i].gameObject.AddComponent<Rigidbody>();
-                GameObjectList[i].gameObject.GetComponent<Rigidbody>().useGravity = false;
-                GameObjectList[i].gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            }
-
-            //获取所有子物体中的最近点和最远点
-            Temp = GameObjectList[i].gameObject.GetComponent<MeshFilter>().mesh.bounds.min;
-            if (Temp.x < ClosestPoint.x)
-            {
-                ClosestPoint.x = Temp.x;
-            }
-            if (Temp.y < ClosestPoint.y)
-            {
-                ClosestPoint.y = Temp.y;
-            }
-            if (Temp.z < ClosestPoint.z)
-            {
-                ClosestPoint.z = Temp.z;
-            }
-            Temp = GameObjectList[i].gameObject.GetComponent<MeshFilter>().mesh.bounds.max;
-            if (Temp.x > FarthestPoint.x)
-            {
-                FarthestPoint.x = Temp.x;
-            }
-            if (Temp.y > FarthestPoint.y)
-            {
-                FarthestPoint.y = Temp.y;
-            }
-            if (Temp.z > FarthestPoint.z)
-            {
-                FarthestPoint.z = Temp.z;
-            }
-
-        }
-        Length = Mathf.Abs(FarthestPoint.x - ClosestPoint.x);
-        Width = Mathf.Abs(FarthestPoint.y - ClosestPoint.y);
-        Height = Mathf.Abs(FarthestPoint.z - ClosestPoint.z);
-
-
-
-        //将物体缩放至合适大小
-        while (Length > MaxDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x / 10f, MyObject.transform.localScale.y / 10f, MyObject.transform.localScale.z / 10f);
-            Length /= 10f;
-            Width /= 10f;
-            Height /= 10f;
-        }
-        while (Length < MinDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x * 10f, MyObject.transform.localScale.y * 10f, MyObject.transform.localScale.z * 10f);
-            Length *= 10f;
-            Width *= 10f;
-            Height *= 10f;
-        }
-        while (Width > MaxDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x / 10f, MyObject.transform.localScale.y / 10f, MyObject.transform.localScale.z / 10f);
-            Length /= 10f;
-            Width /= 10f;
-            Height /= 10f;
-        }
-        while (Width < MinDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x * 10f, MyObject.transform.localScale.y * 10f, MyObject.transform.localScale.z * 10f);
-            Length *= 10f;
-            Width *= 10f;
-            Height *= 10f;
-        }
-        while (Height > MaxDistence)
-        {
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x / 10f, MyObject.transform.localScale.y / 10f, MyObject.transform.localScale.z / 10f);
-            Length /= 10f;
-            Width /= 10f;
-            Height /= 10f;
-        }
-        while (Height < MinDistence)
-        {            
-            MyObject.transform.localScale = new Vector3(MyObject.transform.localScale.x * 10f, MyObject.transform.localScale.y * 10f, MyObject.transform.localScale.z * 10f);
-            Length *= 10f;
-            Width *= 10f;
-            Height *= 10f;
-        }
-
-        //移到合适位置
-        MyObject.transform.position = new Vector3(RecordManager.tempRecord.ObjectStartPosition[0], RecordManager.tempRecord.ObjectStartPosition[1] + Width, RecordManager.tempRecord.ObjectStartPosition[2]);
-
-        //记录赋值
-
-
-        Mass = Density * Length * Width * Height;
-        MyObject.GetComponent<ObjectValue>().Length = Length;
-        MyObject.GetComponent<ObjectValue>().Width = Width;
-        MyObject.GetComponent<ObjectValue>().Height = Height;
-        MyObject.GetComponent<ObjectValue>().Mass = Mass;
-
+        ShowedGameObject = Create(objects);
 
         Main.m_UI.CloseUI<BagControl>();
-        
     }
-
 }

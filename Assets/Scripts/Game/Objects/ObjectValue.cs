@@ -6,19 +6,39 @@ using UnityEngine;
 
 public class ObjectValue : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
+    public ObjectsModel ObjectModel;
 
-    public float Length;
-    public float Width;
-    public float Height;
-    public float Mass;
-
-    private void Update()
+    public Vector3 BaseSize { get => ObjectModel.baseSize; set => ObjectModel.baseSize = value.GetMyVector(); }
+    public Vector3 Size { get => BaseSize * Scale; }
+    public Vector3 Position
     {
-        //Debug.Log("长度：" + Length);
-        //Debug.Log("宽度:" + Width);
-        //Debug.Log("高度：" + Height);
-        //Debug.Log("质量：" + Mass);
+        get => ObjectModel.position; set
+        {
+            gameObject.transform.position = value;
+            ObjectModel.position = value.GetMyVector();
+        }
+    }
+    public Quaternion Rotation
+    {
+        get => ObjectModel.rotation; set
+        {
+            gameObject.transform.rotation = value;
+            ObjectModel.rotation = value.GetMyVector();
+        }
+    }
+    public float Scale
+    {
+        get => ObjectModel.scale; set
+        {
+            gameObject.transform.localScale = new Vector3(value, value, value);
+            ObjectModel.scale = value;
+        }
+    }
+    public float Mass { get => ObjectModel.mass; set => ObjectModel.mass = value; }
+
+    private void OnDestroy()
+    {
+        Position = gameObject.transform.position;
+        Rotation = gameObject.transform.rotation;
     }
 }

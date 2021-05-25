@@ -34,18 +34,6 @@ public class GameLaunch : MonoBehaviour
         // 加载仪器
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
-
-
-        //加载被测物体
-        
-        foreach (var item in RecordManager.tempRecord.objects)
-            if (File.Exists(item.ResourcePath))
-            {
-                var objLoader = new OBJLoader();
-                var obj = objLoader.Load(item.ResourcePath);
-                obj.SetActive(false);
-                Main.m_ObjectPool.RegisterSpawnPool(item.id.ToString(), obj);
-            }
     }
 
     private void LaunchServices()

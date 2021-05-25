@@ -14,7 +14,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 
         void Start()
         {
-            if (RecordManager.tempRecord.objects.Count == 0)
+            if (RecordManager.tempRecord.objects.Count == 0 || true)
             {
                 RecordManager.tempRecord.objects = new List<ObjectsModel>()
                 {
@@ -62,6 +62,15 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                         Integrated = true,
                         PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
                         ResourcePath = $"{Application.streamingAssetsPath}/Objects/object5.obj"
+                    },
+                    new ObjectsModel()
+                    {
+                        id = 5,
+                        Name = "正四面体",
+                        DetailMessage = "标准的正四面体",
+                        Integrated = true,
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
+                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object6.obj"
                     },
                 };
             }

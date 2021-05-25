@@ -35,6 +35,23 @@ public class ObjectValue : HTBehaviour
         }
     }
     public float Mass { get => ObjectModel.mass; set => ObjectModel.mass = value; }
+    public bool Gravity
+    {
+        get => gameObject.GetComponentInChildren<Rigidbody>().useGravity;
+        set => gameObject.GetComponentsInChildren<Rigidbody>().Foreach((x, y) =>
+        {
+            x.useGravity = value;
+            x.isKinematic = !value;
+            x.GetComponent<MeshCollider>().isTrigger = !value;
+        });
+    }
+
+    public bool Collider
+    {
+        get => !gameObject.GetComponentInChildren<MeshCollider>().isTrigger;
+        set => gameObject.GetComponentsInChildren<MeshCollider>().Foreach((x, y) =>
+            x.isTrigger = !value);
+    }
 
     private void OnDestroy()
     {

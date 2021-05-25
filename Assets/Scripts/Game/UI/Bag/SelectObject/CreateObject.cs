@@ -20,6 +20,7 @@ public class CreateObject : HTBehaviour
     public static GameObject Create(ObjectsModel model)
     {
         if (model == null) return null;
+        bool setPosition = true;
         ObjectValue objectValue;
         // 生成物体
         RecordManager.tempRecord.ShowedObject = model;
@@ -28,6 +29,12 @@ public class CreateObject : HTBehaviour
         // 挂载组件
         if ((objectValue = obj.GetComponent<ObjectValue>()) == null)
             (objectValue = obj.AddComponent<ObjectValue>()).ObjectModel = model;
+        else
+        {
+            setPosition = false;
+            obj.transform.position = objectValue.Position;
+            obj.transform.rotation = objectValue.Rotation;
+        }
         // 遍历计算点
         Vector3 ClosestPoint = new Vector3();
         Vector3 FarthestPoint = new Vector3();
@@ -44,6 +51,10 @@ public class CreateObject : HTBehaviour
                 var rigid = item.gameObject.AddComponent<Rigidbody>();
                 rigid.useGravity = false;
                 rigid.isKinematic = true;
+            }
+            if (item.gameObject.GetComponent<RightButtonObject>() == null)
+            {
+                item.gameObject.AddComponent<RightButtonObject>().objectValue = objectValue;
             }
             // 设置Tag和Layer
             item.gameObject.tag = ("Tools_Be_Moved");
@@ -73,10 +84,13 @@ public class CreateObject : HTBehaviour
         var max = Mathf.Max(objectValue.BaseSize.x, objectValue.BaseSize.y, objectValue.BaseSize.z);
         var scale = 2f / max;
         objectValue.Scale = scale;
-        var rec = RecordManager.tempRecord;
-        // 计算位置
-        objectValue.Position = new Vector3(rec.ObjectStartPosition[0],
-            rec.ObjectStartPosition[1] + objectValue.BaseSize.y * scale / 2, rec.ObjectStartPosition[2]);
+        if (setPosition)
+        {
+            var rec = RecordManager.tempRecord;
+            // 计算位置
+            objectValue.Position = new Vector3(rec.ObjectStartPosition[0],
+                rec.ObjectStartPosition[1] + objectValue.BaseSize.y * scale / 2, rec.ObjectStartPosition[2]);
+        }
         return obj;
     }
 
@@ -87,7 +101,7 @@ public class CreateObject : HTBehaviour
 
     private void CreateWithDestory()
     {
-        if(ShowedGameObject != null)
+        if (ShowedGameObject != null)
             Destroy(ShowedGameObject);
 
         ShowedGameObject = Create(objects);

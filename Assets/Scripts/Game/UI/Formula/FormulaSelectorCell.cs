@@ -75,6 +75,11 @@ public class FormulaSelectorCell : HTBehaviour, IPointerEnterHandler, IPointerEx
 
     private void ShowIndicator()
     {
-        FormulaControllerInstance.Indicator.ShowIndicate(Title, Desc);
+        if (valueType == ValueType.Measured)
+            value = (Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure)?.GetStatisticValue(measuredStatisticValue);
+        else if (valueType == ValueType.Complex)
+            value = (Main.m_Procedure.CurrentProcedure as ComplexDataProcessProcedure)?.GetStatisticValue(Text.text, ComplexStatisticValue);
+        FormulaControllerInstance.Indicator.ShowIndicate(Title, Desc, value);
+        FormulaControllerInstance.RefreshContentSizeFitter(FormulaControllerInstance.Indicator.gameObject);
     }
 }

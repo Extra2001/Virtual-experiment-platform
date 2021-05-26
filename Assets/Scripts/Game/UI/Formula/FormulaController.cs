@@ -293,7 +293,7 @@ public class FormulaController : MonoBehaviour
             Destroy(cell.transform.GetChild(i).gameObject);
     }
 
-    private void RefreshContentSizeFitter(GameObject baseObject)
+    public void RefreshContentSizeFitter(GameObject baseObject)
     {
         var list = baseObject.GetComponentsInChildren<ContentSizeFitter>();
         for (int i = 0; i < list.Length; i++)

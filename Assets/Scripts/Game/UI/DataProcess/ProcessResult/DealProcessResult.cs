@@ -112,7 +112,7 @@ public class DealProcessResult : HTBehaviour
             calc.Measure(item.Key.Symbol, item.Key.Data.ToArray());
             input.Add(new CalcArgs.UserInput()
             {
-                name = item.Key.Name,
+                name = item.Key.Symbol,
                 u = item.Value.UserU,
                 value = item.Value.Average
             });

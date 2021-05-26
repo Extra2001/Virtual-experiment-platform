@@ -16,7 +16,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
     /// </summary>
     public override void OnInit()
     {
-		base.OnInit();
+        base.OnInit();
     }
 
     /// <summary>
@@ -25,9 +25,9 @@ public class ComplexDataProcessProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenResidentUI<ComplexData>();        
+        Main.m_UI.OpenResidentUI<ComplexData>();
         base.OnEnter(lastProcedure);
-    }    
+    }
 
     public List<string> GetQuantitiesName()
     {
@@ -38,19 +38,15 @@ public class ComplexDataProcessProcedure : ProcedureBase
     {
         string result = "error";
         var item = quantities.Where(x => x.Symbol.Equals(quantityName)).FirstOrDefault();
-            if(item.Name == quantityName)
-            {
-                if (ComplexStatisticValue.Average == valueKind)
-                {
-                result = item.Average.ToString();
-                }else if(ComplexStatisticValue.Uncertain == valueKind)
-                {
-                    result = item.Uncertain.ToString();
-                }
-            }
-        Debug.Log("getstaticvalue的返回值:"+result);
+        if (ComplexStatisticValue.Average == valueKind)
+        {
+            result = item.Average.ToString();
+        }
+        else if (ComplexStatisticValue.Uncertain == valueKind)
+        {
+            result = item.Uncertain.ToString();
+        }
         return result;
-        //throw new NotImplementedException();
     }
 
     /// <summary>

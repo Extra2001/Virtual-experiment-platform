@@ -48,6 +48,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
                     result = item.Uncertain.ToString();
                 }
             }
+        Debug.Log("getstaticvalue的返回值:"+result);
         return result;
         //throw new NotImplementedException();
     }

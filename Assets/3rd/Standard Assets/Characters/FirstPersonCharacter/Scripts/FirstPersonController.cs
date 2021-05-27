@@ -42,6 +42,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 
+
         // Use this for initialization
         private void Start()
         {
@@ -128,7 +129,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_CollisionFlags = m_CharacterController.Move(m_MoveDir*Time.fixedDeltaTime);
 
             ProgressStepCycle(speed);
+
             UpdateCameraPosition(speed);
+
 
             m_MouseLook.UpdateCursorLock();
         }
@@ -237,6 +240,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void RotateView()
         {
             m_MouseLook.LookRotation (transform, m_Camera.transform);
+            m_MouseLook.LookField(m_Camera);
         }
 
 

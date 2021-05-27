@@ -50,7 +50,7 @@ public class DealComplexDataInput : HTBehaviour
             Formula.GetComponent<Image>().FitHeight(res);
         });
 
-        ComplexQuantityMoedel model = RecordManager.tempRecord.complexQuantityMoedel;
+        ComplexQuantityMoedel model = RecordManager.tempRecord.complexQuantityModel;
 
         CallButton1.image.sprite = Sprites[model.AverageState];
         Value1.text = "=" + StaticMethods.NumberFormat(model.Average);
@@ -121,9 +121,9 @@ public class DealComplexDataInput : HTBehaviour
         {
             Value1.text = "=" + StaticMethods.NumberFormat(Field1.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton1.image.sprite = Sprites[2];
-            RecordManager.tempRecord.complexQuantityMoedel.AverageState = 2;
-            RecordManager.tempRecord.complexQuantityMoedel.Average = Field1.GetComponent<FormulaController>().ExpressionExecuted;
-            RecordManager.tempRecord.complexQuantityMoedel.AverageExpression = Field1.GetComponent<FormulaController>().Serialize();
+            RecordManager.tempRecord.complexQuantityModel.AverageState = 2;
+            RecordManager.tempRecord.complexQuantityModel.Average = Field1.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.complexQuantityModel.AverageExpression = Field1.GetComponent<FormulaController>().Serialize();
         }
         catch
         {
@@ -158,9 +158,9 @@ public class DealComplexDataInput : HTBehaviour
         {
             Value2.text = "=" + StaticMethods.NumberFormat(Field2.GetComponent<FormulaController>().ExpressionExecuted);
             CallButton2.image.sprite = Sprites[2];
-            RecordManager.tempRecord.complexQuantityMoedel.UncertainState = 2;
-            RecordManager.tempRecord.complexQuantityMoedel.Uncertain = Field2.GetComponent<FormulaController>().ExpressionExecuted;
-            RecordManager.tempRecord.complexQuantityMoedel.UncertainExpression = Field2.GetComponent<FormulaController>().Serialize();
+            RecordManager.tempRecord.complexQuantityModel.UncertainState = 2;
+            RecordManager.tempRecord.complexQuantityModel.Uncertain = Field2.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.complexQuantityModel.UncertainExpression = Field2.GetComponent<FormulaController>().Serialize();
         }
         catch
         {

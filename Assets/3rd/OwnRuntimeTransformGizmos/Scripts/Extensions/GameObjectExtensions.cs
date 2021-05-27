@@ -732,18 +732,26 @@ namespace RTEditor
 
         public static Mesh GetMeshFromMeshFilter(this GameObject gameObject)
         {
-            MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
-            if (meshFilter != null && meshFilter.sharedMesh != null) return meshFilter.sharedMesh;
+            try
+            {
+                MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
+                if (meshFilter != null && meshFilter.sharedMesh != null) return meshFilter.sharedMesh;
 
-            return null;
+                return null;
+            }
+            catch { return null; }
         }
 
         public static Mesh GetMeshFromSkinnedMeshRenderer(this GameObject gameObject)
         {
-            SkinnedMeshRenderer skinnedMeshRenderer = gameObject.GetComponent<SkinnedMeshRenderer>();
-            if (skinnedMeshRenderer != null && skinnedMeshRenderer.sharedMesh != null) return skinnedMeshRenderer.sharedMesh;
+            try
+            {
+                SkinnedMeshRenderer skinnedMeshRenderer = gameObject.GetComponent<SkinnedMeshRenderer>();
+                if (skinnedMeshRenderer != null && skinnedMeshRenderer.sharedMesh != null) return skinnedMeshRenderer.sharedMesh;
 
-            return null;
+                return null;
+            }
+            catch { return null; }
         }
 
         public static bool HasMesh(this GameObject gameObject)

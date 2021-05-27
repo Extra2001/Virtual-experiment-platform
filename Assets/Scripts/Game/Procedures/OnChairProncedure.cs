@@ -24,13 +24,17 @@ public class OnChair : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         RenderManager.Instance?.Show();
+
         GameManager.Instance.FPSable = true;
+        GameManager.Instance.PersonPosition = RecordManager.tempRecord.FPSPosition;
+        GameManager.Instance.PersonRotation = RecordManager.tempRecord.FPSRotation;
+
         base.OnEnter(lastProcedure);
         Main.m_UI.OpenResidentUI<GameButtonUILogic>();
 
         Main.m_UI.OpenTemporaryUI<BagControl>();
         Main.m_UI.CloseUI<BagControl>();
-        
+
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {
             if (Main.m_UI.GetOpenedUI<DatatableUILogic>() != null)
@@ -45,13 +49,9 @@ public class OnChair : ProcedureBase
             else
                 Main.m_UI.GetUI<BagControl>().Hide();
         });
-
-        if (RecordManager.tempRecord.ShowedObject != null)
-        {
-            CreateObject.CreateWithoutDestory();
-        }
+        CreateObject.CreateRecord();
+        CreateInstrument.CreateRecord();
     }
-
 
     /// <summary>
     /// 离开流程
@@ -75,6 +75,8 @@ public class OnChair : ProcedureBase
     public override void OnUpdate()
     {
         base.OnUpdate();
+        RecordManager.tempRecord.FPSPosition = GameManager.Instance.PersonPosition.GetMyVector();
+        RecordManager.tempRecord.FPSRotation = GameManager.Instance.PersonRotation.GetMyVector();
     }
 
     /// <summary>

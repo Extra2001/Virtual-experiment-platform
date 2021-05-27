@@ -44,6 +44,18 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         }
     }
 
+    public Vector3 PersonPosition
+    {
+        get => firstPersonController.transform.position;
+        set => firstPersonController.transform.position = value;
+    }
+
+    public Quaternion PersonRotation
+    {
+        get => firstPersonController.transform.rotation;
+        set => firstPersonController.transform.rotation = value;
+    }
+
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController firstPersonController = null;
 
     private void Start()
@@ -113,6 +125,9 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     private void StartNewExp()
     {
+        Main.m_Entity.HideEntity(Main.m_Entity.GetEntity(RecordManager.tempRecord.showedInstrument.instrumentType, 
+            RecordManager.tempRecord.showedInstrument.instrumentType.Name));
+        CreateObject.DestroyObjecthh();
         RecordManager.ClearTempRecord();
         Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();
         ProcedureStack.Clear();

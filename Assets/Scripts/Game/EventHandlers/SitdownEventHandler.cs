@@ -16,13 +16,13 @@ public class Sitdown : EventHandlerBase
     {
         Debug.Log("Sitdown");
 
-        RecordManager.tempRecord.InstrumentStartPosition[0] = x;
-        RecordManager.tempRecord.InstrumentStartPosition[1] = y;
-        RecordManager.tempRecord.InstrumentStartPosition[2] = z;
+        RecordManager.tempRecord.instrumentStartPosition[0] = x;
+        RecordManager.tempRecord.instrumentStartPosition[1] = y;
+        RecordManager.tempRecord.instrumentStartPosition[2] = z;
 
-        RecordManager.tempRecord.ObjectStartPosition[0] = x;
-        RecordManager.tempRecord.ObjectStartPosition[1] = y + .2f;
-        RecordManager.tempRecord.ObjectStartPosition[2] = z + 6f;
+        RecordManager.tempRecord.objectStartPosition[0] = x;
+        RecordManager.tempRecord.objectStartPosition[1] = y + .2f;
+        RecordManager.tempRecord.objectStartPosition[2] = z + 6f;
 
         return this;
     }

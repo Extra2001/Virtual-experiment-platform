@@ -8,16 +8,13 @@ using UnityEngine;
 [Serializable]
 public class InstrumentInfoModel
 {
-    [Serializable]
-    public class Vector3
-    {
-        public float x { get; set; }
-        public float y { get; set; }
-        public float z { get; set; }
-    }
+    public bool Valid = false;
+
     public Type instrumentType = null;
 
-    public Vector3 position = new Vector3();
+    public MyVector3 position = new MyVector3();
+    public MyVector4 rotation = new MyVector4();
 
-    public Vector3 rotation = new Vector3();
+    public double MainValue = double.MinValue;
+    public double RandomErrorLimit = double.MinValue;
 }

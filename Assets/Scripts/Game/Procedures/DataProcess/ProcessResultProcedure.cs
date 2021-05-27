@@ -42,12 +42,12 @@ public class ProcessResultProcedure : ProcedureBase
                 return;
             }
         }
-        if (rec.complexQuantityMoedel.AverageExpression == null)
+        if (rec.complexQuantityModel.AverageExpression == null)
         {
             ShowModel($"合成物理量的主值还未计算");
             return;
         }
-        if (rec.complexQuantityMoedel.UncertainExpression == null)
+        if (rec.complexQuantityModel.UncertainExpression == null)
         {
             ShowModel($"合成物理量的不确定度还未计算");
             return;

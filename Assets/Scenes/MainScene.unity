@@ -5784,7 +5784,7 @@ MonoBehaviour:
   m_IsWalking: 0
   m_WalkSpeed: 30
   m_RunSpeed: 50
-  m_RunstepLenghten: 0.7
+  m_RunstepLenghten: 0.25
   m_JumpSpeed: 10
   m_StickToGroundForce: 10
   m_GravityMultiplier: 4
@@ -5799,6 +5799,9 @@ MonoBehaviour:
     smoothTime: 8
     lockCursor: 0
     mouseOffset: 0.01
+    fieldStep: 1
+    fieldMin: 10
+    fieldMax: 70
   m_UseFovKick: 0
   m_FovKick:
     Camera: {fileID: 0}

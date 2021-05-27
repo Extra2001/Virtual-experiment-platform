@@ -122,19 +122,19 @@ public class DealProcessResult : HTBehaviour
         var (e, f) = CalcArgs.CalculateValue(a, b, input);
         ComplexAverage = c; ComplexUncertainty = d; UserComplexAverage = e; UserComplexUncertainty = f;
         // 记录错误
-        if (!RecordManager.tempRecord.complexQuantityMoedel.AverageExpression.GetExpressionExecuted().AlmostEqual(UserComplexAverage))
+        if (!RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted().AlmostEqual(UserComplexAverage))
             quantityErrors.Add(new QuantityError()
             {
                 Title = $"合成量均值计算错误",
                 Message = $"合成量均值计算错误。左侧为你输入的公式，右侧为正确的公式，请详细对比。\n可以返回并改正错误。",
-                User = RecordManager.tempRecord.complexQuantityMoedel.AverageExpression
+                User = RecordManager.tempRecord.complexQuantityModel.AverageExpression
             });
-        if (!RecordManager.tempRecord.complexQuantityMoedel.UncertainExpression.GetExpressionExecuted().AlmostEqual(UserComplexUncertainty))
+        if (!RecordManager.tempRecord.complexQuantityModel.UncertainExpression.GetExpressionExecuted().AlmostEqual(UserComplexUncertainty))
             quantityErrors.Add(new QuantityError()
             {
                 Title = $"合成量不确定度计算错误",
                 Message = $"合成不确定度计算错误。左侧为你输入的公式，右侧为正确的公式，请详细对比。\n可以返回并改正错误。",
-                User = RecordManager.tempRecord.complexQuantityMoedel.UncertainExpression
+                User = RecordManager.tempRecord.complexQuantityModel.UncertainExpression
             });
     }
 

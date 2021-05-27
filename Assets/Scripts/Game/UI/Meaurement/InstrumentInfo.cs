@@ -64,7 +64,6 @@ public class InstrumentInfo : HTBehaviour
                 catch { }
             if (gameobj != null)
             {
-                Log.Info(item.Name);
                 infoItem.Add(item.Name, new IntrumentInfoItem()
                 {
                     GameObject = gameobj.gameObject

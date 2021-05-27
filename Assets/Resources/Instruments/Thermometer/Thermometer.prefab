@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 756845181444614140}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Thermometer
-  m_TagString: Tools_Be_Moved
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,6 +201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1218274114395510274}
   - component: {fileID: 5416003821362257393}
+  - component: {fileID: 4415756877618556600}
   m_Layer: 11
   m_Name: Thermometer_son
   m_TagString: Tools_Be_Moved
@@ -237,3 +238,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 29.40178, y: 174.78836, z: 9.781158}
   m_Center: {x: -13.87043, y: 86.349525, z: -4.390579}
+--- !u!54 &4415756877618556600
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6740260265707697302}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

@@ -26,6 +26,11 @@ public class ObjectValue : HTBehaviour
             ObjectModel.rotation = value.GetMyVector();
         }
     }
+
+    public List<MyVector3> childrenPostition => ObjectModel.childrenPostition;
+
+    public List<MyVector4> childrenRotation => ObjectModel.childrenRotation;
+
     public float Scale
     {
         get => ObjectModel.scale; set
@@ -53,7 +58,7 @@ public class ObjectValue : HTBehaviour
             x.isTrigger = !value);
     }
 
-    private void OnDestroy()
+    private void Update()
     {
         Position = gameObject.transform.position;
         Rotation = gameObject.transform.rotation;

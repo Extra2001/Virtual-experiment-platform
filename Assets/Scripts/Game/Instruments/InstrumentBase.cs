@@ -88,47 +88,24 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// <returns>测量数据</returns>
     public abstract double GetMeasureResult();
 
+    public abstract void ShowValue(double value);
+
     /// <summary>
     /// 重置仪器状态
     /// </summary>
-    public abstract void InstReset();
-
-    public abstract void ShowValue(double value);
-
-    public override void OnShow()
+    public virtual void InstReset()
     {
-        Entity.layer = 11;
-        Entity.tag = "Tools_Be_Moved";
-        AddRightButton();
-
-        var recpos = RecordManager.tempRecord.InstrumentStartPosition;
-        Position.x = recpos[0];
-        Position.y = recpos[1];
-        Position.z = recpos[2];
-
-        Entity.transform.position = Position;
-
-        base.OnShow();
+        MainValue = 0;
+        RandomErrorLimit = 0;
+        ShowValue(0);
     }
-
+    
     protected virtual void AddRightButton()
     {
-        var right = Entity.AddComponent<RightButton>();
+        RightButton right;
+        if ((right = Entity.GetComponent<RightButton>()) == null)
+            right = Entity.AddComponent<RightButton>();
         right.InstrumentType = this.GetType();
-    }
-
-    public override void OnHide()
-    {
-        GameObject.Destroy(Entity.GetComponent<RightButton>());
-    }
-
-    public override void OnInit()
-    {
-        base.OnInit();
-        Main.m_Resource.LoadAsset<Sprite>(new AssetInfo(null, null, previewImagePath), loadDoneAction: x =>
-        {
-            prePreviewImage = x;
-        });
     }
 
     public virtual void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
@@ -165,5 +142,46 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
                 ShowValue(mainValue);
             }
         });
+    }
+
+    public override void OnShow()
+    {
+        AddRightButton();
+        Entity.transform.GetChild(0).gameObject.SetActive(true);
+        base.OnShow();
+    }
+
+    public override void OnUpdate()
+    {
+        base.OnUpdate();
+        if (Entity.activeSelf)
+        {
+            RecordManager.tempRecord.showedInstrument.Valid = true;
+            RecordManager.tempRecord.showedInstrument.MainValue = MainValue;
+            RecordManager.tempRecord.showedInstrument.RandomErrorLimit = RandomErrorLimit;
+            RecordManager.tempRecord.showedInstrument.position = Entity.transform.GetChild(0).position.GetMyVector();
+            RecordManager.tempRecord.showedInstrument.rotation = Entity.transform.GetChild(0).rotation.GetMyVector();
+        }
+    }
+
+    public override void OnHide()
+    {
+        Entity.transform.GetChild(0).gameObject.SetActive(false);
+        GameObject.Destroy(Entity.GetComponent<RightButton>());
+    }
+
+    public override void OnInit()
+    {
+        base.OnInit();
+        Main.m_Resource.LoadAsset<Sprite>(new AssetInfo(null, null, previewImagePath), loadDoneAction: x =>
+        {
+            prePreviewImage = x;
+        });
+    }
+
+    public override void Reset()
+    {
+        base.Reset();
+        InstReset();
     }
 }

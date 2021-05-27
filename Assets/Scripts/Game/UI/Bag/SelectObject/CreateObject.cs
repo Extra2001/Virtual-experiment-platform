@@ -12,7 +12,7 @@ public class CreateObject : HTBehaviour
     public ObjectsModel objects = null;
     private static GameObject ShowedGameObject = null;
 
-    void Start()
+    private void Start()
     {
         GetComponent<Button>().onClick.AddListener(CreateWithDestory);
     }
@@ -23,7 +23,7 @@ public class CreateObject : HTBehaviour
         bool setPosition = true;
         ObjectValue objectValue;
         // 生成物体
-        RecordManager.tempRecord.ShowedObject = model;
+        RecordManager.tempRecord.showedObject = model;
         var objLoader = new OBJLoader();
         var obj = objLoader.Load(model.ResourcePath);
         // 挂载组件
@@ -38,6 +38,7 @@ public class CreateObject : HTBehaviour
         // 遍历计算点
         Vector3 ClosestPoint = new Vector3();
         Vector3 FarthestPoint = new Vector3();
+        int cnt = 0;
         foreach (Transform item in obj.transform)
         {
             if (item.gameObject.GetComponent<MeshCollider>() == null)
@@ -54,7 +55,19 @@ public class CreateObject : HTBehaviour
             }
             if (item.gameObject.GetComponent<RightButtonObject>() == null)
             {
-                item.gameObject.AddComponent<RightButtonObject>().objectValue = objectValue;
+                if (model.childrenPostition.Count == cnt)
+                    model.childrenPostition.Add(item.localPosition.GetMyVector());
+                else if (model.childrenPostition.Count > cnt)
+                    item.localPosition = model.childrenPostition[cnt];
+
+                if (model.childrenRotation.Count == cnt)
+                    model.childrenRotation.Add(item.localRotation.GetMyVector());
+                else if (model.childrenRotation.Count > cnt)
+                    item.localRotation = model.childrenRotation[cnt];
+
+                var right = item.gameObject.AddComponent<RightButtonObject>();
+                right.objectValue = objectValue;
+                right.index = cnt;
             }
             // 设置Tag和Layer
             item.gameObject.tag = ("Tools_Be_Moved");
@@ -75,6 +88,8 @@ public class CreateObject : HTBehaviour
                 FarthestPoint.y = Temp.y;
             if (Temp.z > FarthestPoint.z)
                 FarthestPoint.z = Temp.z;
+
+            cnt++;
         }
         // 计算基础大小
         objectValue.BaseSize = new Vector3(Mathf.Abs(FarthestPoint.x - ClosestPoint.x),
@@ -88,24 +103,38 @@ public class CreateObject : HTBehaviour
         {
             var rec = RecordManager.tempRecord;
             // 计算位置
-            objectValue.Position = new Vector3(rec.ObjectStartPosition[0],
-                rec.ObjectStartPosition[1] + objectValue.BaseSize.y * scale / 2, rec.ObjectStartPosition[2]);
+            objectValue.Position = new Vector3(rec.objectStartPosition[0],
+                rec.objectStartPosition[1] + objectValue.BaseSize.y * scale / 2, rec.objectStartPosition[2]);
         }
         return obj;
     }
 
-    public static void CreateWithoutDestory()
+    public static void CreateRecord()
     {
-        ShowedGameObject = Create(RecordManager.tempRecord.ShowedObject);
+        if (RecordManager.tempRecord.showedObject != null)
+            ShowedGameObject = Create(RecordManager.tempRecord.showedObject);
     }
 
     private void CreateWithDestory()
     {
         if (ShowedGameObject != null)
-            Destroy(ShowedGameObject);
-
+        {
+            foreach (Transform item in ShowedGameObject.transform)
+                item.gameObject.SetActive(false);
+            ShowedGameObject.SetActive(false);
+        }
         ShowedGameObject = Create(objects);
 
         Main.m_UI.CloseUI<BagControl>();
+    }
+    public static void DestroyObjecthh()
+    {
+        if (ShowedGameObject != null)
+        {
+            foreach (Transform item in ShowedGameObject.transform)
+                item.gameObject.SetActive(false);
+            ShowedGameObject.SetActive(false);
+        }
+        ShowedGameObject = null;
     }
 }

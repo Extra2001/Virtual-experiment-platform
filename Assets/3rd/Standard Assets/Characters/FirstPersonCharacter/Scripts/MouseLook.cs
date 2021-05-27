@@ -17,6 +17,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public float smoothTime = 5f;
         public bool lockCursor = true;
         public float mouseOffset = 0.01f;
+        public float fieldStep = 1f;
+        public float fieldMin = 10f;
+        public float fieldMax = 70f;
 
 
         private Quaternion m_CharacterTargetRot;
@@ -29,12 +32,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_CameraTargetRot = camera.localRotation;
         }
 
+        public void LookField(Camera camera)
+        {
+            if (!Enabled) return;
+            
+            if (Input.GetAxis("Mouse ScrollWheel") > 0 && camera.fieldOfView > fieldMin)
+                camera.fieldOfView -= fieldStep;
+            if (Input.GetAxis("Mouse ScrollWheel") < 0 && camera.fieldOfView < fieldMax)
+                camera.fieldOfView += fieldStep;
+        }
 
         public void LookRotation(Transform character, Transform camera)
         {
             if (!Enabled) return;
             Vector3 v1 = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            if (!((v1.y >= 1 - mouseOffset) || (v1.y <= mouseOffset) || (v1.x <= mouseOffset) || (v1.x >= 1 - mouseOffset)||Input.GetMouseButton(2)))
+            if (!((v1.y >= 1 - mouseOffset) || (v1.y <= mouseOffset) || (v1.x <= mouseOffset) || (v1.x >= 1 - mouseOffset) || Input.GetMouseButton(2)))
                 return;
 
             float yRot = CrossPlatformInputManager.GetAxis("Mouse X") * XSensitivity;

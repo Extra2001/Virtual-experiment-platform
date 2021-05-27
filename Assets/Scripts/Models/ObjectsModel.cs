@@ -46,7 +46,9 @@ public class ObjectsModel
     public bool Integrated { get; set; } = false;
 
     public MyVector3 position { get; set; } = new MyVector3();
+    public List<MyVector3> childrenPostition = new List<MyVector3>();
     public MyVector4 rotation { get; set; } = new MyVector4();
+    public List<MyVector4> childrenRotation = new List<MyVector4>();
     public MyVector3 baseSize { get; set; } = new MyVector3();
     public float scale { get; set; } = 1;
     public float mass { get; set; } = 0;

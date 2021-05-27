@@ -11,6 +11,7 @@ using System.Linq;
 public class RightButtonObject : HTBehaviour
 {
     public ObjectValue objectValue;
+    public int index;
 
     private void Update()
     {
@@ -24,5 +25,8 @@ public class RightButtonObject : HTBehaviour
                         Main.m_UI.OpenTemporaryUI<ObjectInfoUILogic>(objectValue);
             }
         }
+
+        objectValue.childrenPostition[index] = transform.localPosition.GetMyVector();
+        objectValue.childrenRotation[index] = transform.localRotation.GetMyVector();
     }
 }

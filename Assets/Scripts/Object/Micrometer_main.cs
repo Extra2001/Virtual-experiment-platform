@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Micrometer_main : HTBehaviour
 {
@@ -12,7 +13,6 @@ public class Micrometer_main : HTBehaviour
     public float ZeroPointError = 0.0f;
 
     private bool IsKaKaed=false;//别骂了别骂了，这个名字搞笑的。
-
 
     private Vector3 PLC_eulerAngles;
     private Vector3 POS_eulerAngles;
@@ -50,8 +50,8 @@ public class Micrometer_main : HTBehaviour
             {
 
                 //Player_S.GetComponent<FirstPersonController>().AbleCameraControl = false;
-                //Player_S.GetComponent<FirstPersonController>().WalkSpeed = 5;
-
+                Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 5;
+               
                 moveable_look = true;
                 mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
                 Ori_place = mCamera.transform.position;

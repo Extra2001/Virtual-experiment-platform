@@ -125,8 +125,9 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     private void StartNewExp()
     {
-        Main.m_Entity.HideEntity(Main.m_Entity.GetEntity(RecordManager.tempRecord.showedInstrument.instrumentType, 
-            RecordManager.tempRecord.showedInstrument.instrumentType.Name));
+        if (RecordManager.tempRecord.showedInstrument != null && RecordManager.tempRecord.showedInstrument.instrumentType != null)
+            Main.m_Entity.HideEntity(Main.m_Entity.GetEntity(RecordManager.tempRecord.showedInstrument.instrumentType,
+                RecordManager.tempRecord.showedInstrument.instrumentType.Name));
         CreateObject.DestroyObjecthh();
         RecordManager.ClearTempRecord();
         Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();

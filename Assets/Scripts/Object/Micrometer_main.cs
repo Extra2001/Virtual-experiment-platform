@@ -19,7 +19,7 @@ public class Micrometer_main : HTBehaviour
 
     private Camera mCamera;
     private GameObject Ele;
-    //private GameObject Player_S;
+    private GameObject Player_S;
 
     public Vector3 Ori_place;
     public Vector3 Ori_eulerAngles;
@@ -48,7 +48,10 @@ public class Micrometer_main : HTBehaviour
         {
             if (Nowin == false)
             {
-               // GameObject.Find("FPSController").gGetComponent<FirstPersonController>().AbleCameraControl = false;
+
+                //Player_S.GetComponent<FirstPersonController>().AbleCameraControl = false;
+                //Player_S.GetComponent<FirstPersonController>().WalkSpeed = 5;
+
                 moveable_look = true;
                 mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
                 Ori_place = mCamera.transform.position;
@@ -104,6 +107,7 @@ public class Micrometer_main : HTBehaviour
             moveable_back = false;
             Nowin = false;
             //Player_S.GetComponent<FirstPersonController>().AbleCameraControl = true;
+           // Player_S.GetComponent<FirstPersonController>().WalkSpeed = 30;
         }
     }
     // Start is called before the first frame update
@@ -112,7 +116,7 @@ public class Micrometer_main : HTBehaviour
 
         mCamera= GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
         Ele = this.transform.Find("Micrometer_grandson").Find("014").Find("Camera").gameObject;
-        //Player_S = GameObject.Find("FPSController").gameObject;
+        Player_S = GameObject.Find("FPSController").gameObject;
         this.transform.Find("Micrometer_grandson").Find("rotatebody_main").Find("srick").transform.localPosition -= new Vector3(0, (0.53f * ZeroPointError) / 5000f, 0);
     }
 

@@ -19,7 +19,7 @@ public class RightButton : HTBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                foreach (var item in gameObject.transform.GetComponentsInChildren<BoxCollider>(true))
+                foreach (var item in gameObject.transform.GetComponentsInChildren<Collider>(true))
                     if (hit.collider.gameObject.GetInstanceID().Equals(item.gameObject.GetInstanceID()))
                         Main.m_UI.OpenTemporaryUI<InstrmentInfoUILogic>(InstrumentType);
             }

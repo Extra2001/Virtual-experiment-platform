@@ -5,70 +5,98 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.Events;
+using System.Linq;
+using UnityEngine.EventSystems;
+using System.Reflection;
 
 public class InstrumentInfo : HTBehaviour
 {
-    public Button _Mask;
-    public Text _Name;
-    public Text _LRV;
-    public Text _URV;
-    public Text _UnitSymbol;
-    public Text _Unit;
-    public InputField _MainValue;
-    public InputField _RandomError;
-    public Button _ConfirmButton;
-    public GameObject _RootPanel;
+    [SerializeField]
+    private Button _Mask;
+    [SerializeField]
+    private Text _Name;
+    [SerializeField]
+    private Text _LRV;
+    [SerializeField]
+    private Text _URV;
+    [SerializeField]
+    private Text _UnitSymbol;
+    [SerializeField]
+    private Text _Unit;
+    [SerializeField]
+    private InputField _MainValue;
+    [SerializeField]
+    private InputField _RandomError;
+    [SerializeField]
+    private Button _ConfirmButton;
+    [SerializeField]
+    private GameObject _RootPanel;
 
+    private Dictionary<string, IntrumentInfoItem> infoItem = new Dictionary<string, IntrumentInfoItem>();
     private InstrumentBase _instrument;
+    private bool initialized = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        _Mask.onClick.AddListener(() =>
-        {
-            Main.m_UI.CloseUI<InstrmentInfoUILogic>();
-        });
-        _ConfirmButton.onClick.AddListener(() =>
-        {
-            double re = Convert.ToDouble(_RandomError.text);
-            double mainValue = Convert.ToDouble(_MainValue.text);
-            if (re > _instrument.ErrorLimit)
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
-                {
-                    ShowCancel = false,
-                    Message = new BindableString("随机误差不能大于仪器误差限")
-                });
-            else if (mainValue > _instrument.URV || mainValue < _instrument.LRV)
-            {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
-                {
-                    ShowCancel = false,
-                    Message = new BindableString("主值不能超过量程")
-                });
-            }
-            else
-            {
-                Main.m_UI.CloseUI<UILogicTemporary>();
-                _instrument.RandomErrorLimit = re;
-                _instrument.MainValue = mainValue;
-                _instrument.ShowValue(mainValue);
-            }
-        });
+        if (!initialized)
+            Initialize();
     }
 
     public void ShowInstrument(Type instrument)
     {
-        var instance = instrument.CreateInstrumentInstance();
-        _instrument = instance;
-
-        _Name.text = instance.InstName;
-        _LRV.text = instance.LRV.ToString();
-        _URV.text = instance.URV.ToString();
-        _Unit.text = instance.Unit;
-        _UnitSymbol.text = instance.UnitSymbol;
-        _MainValue.text = instance.MainValue.ToString();
-        _RandomError.text = instance.RandomError.ToString();
+        if (!initialized)
+            Initialize();
+        _instrument = Main.m_Entity.GetEntities(instrument).First().Cast<InstrumentBase>();
+        _instrument.ShowInfoPanel(infoItem);
 
         _RootPanel.rectTransform().SetFloat();
     }
+
+    private void Initialize()
+    {
+        infoItem.Clear();
+        foreach (var item in typeof(InstrumentInfo).GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
+        {
+            UIBehaviour gameobj = null;
+                try { gameobj = item.GetValue(this) as UIBehaviour; }
+                catch { }
+            if (gameobj != null)
+            {
+                Log.Info(item.Name);
+                infoItem.Add(item.Name, new IntrumentInfoItem()
+                {
+                    GameObject = gameobj.gameObject
+                });
+            }
+        }
+        _Mask.onClick.AddListener(() =>
+        {
+            foreach (var item in infoItem)
+                item.Value.onValueChanged.Clear();
+            Main.m_UI.CloseUI<InstrmentInfoUILogic>();
+        });
+        _MainValue.onValueChanged.AddListener(x =>
+        {
+            infoItem[nameof(_MainValue)].onValueChanged.ForEach(y => y.Invoke());
+        });
+        _RandomError.onValueChanged.AddListener(x =>
+        {
+            infoItem[nameof(_RandomError)].onValueChanged.ForEach(y => y.Invoke());
+        });
+        _ConfirmButton.onClick.AddListener(() =>
+        {
+            infoItem[nameof(_ConfirmButton)].onValueChanged.ForEach(y => y.Invoke());
+            Main.m_UI.CloseUI<InstrmentInfoUILogic>();
+        });
+        initialized = true;
+    }
+}
+
+
+public class IntrumentInfoItem
+{
+    public GameObject GameObject { get; set; }
+    public List<Action> onValueChanged { get; set; } = new List<Action>();
 }

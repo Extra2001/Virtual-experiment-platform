@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HT.Framework;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public interface IMeasurable
@@ -21,7 +22,12 @@ public interface IShowValuable
     void ShowValue(double value);
 }
 
-public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable, IShowValuable
+public interface IShowInfoPanelable
+{
+    void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems);
+}
+
+public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable, IShowValuable, IShowInfoPanelable
 {
     public Vector3 Position = new Vector3();
     /// <summary>
@@ -122,6 +128,42 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         Main.m_Resource.LoadAsset<Sprite>(new AssetInfo(null, null, previewImagePath), loadDoneAction: x =>
         {
             prePreviewImage = x;
+        });
+    }
+
+    public virtual void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
+    {
+        infoItems["_Name"].GameObject.GetComponent<Text>().text = InstName;
+        infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
+        infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
+        infoItems["_Unit"].GameObject.GetComponent<Text>().text = Unit;
+        infoItems["_UnitSymbol"].GameObject.GetComponent<Text>().text = UnitSymbol;
+        infoItems["_MainValue"].GameObject.GetComponent<InputField>().text = MainValue.ToString();
+        infoItems["_RandomError"].GameObject.GetComponent<InputField>().text = RandomErrorLimit.ToString();
+        infoItems["_ConfirmButton"].onValueChanged.Add(() =>
+        {
+            double re = Convert.ToDouble(infoItems["_RandomError"].GameObject.GetComponent<InputField>().text);
+            double mainValue = Convert.ToDouble(infoItems["_MainValue"].GameObject.GetComponent<InputField>().text);
+            if (re > ErrorLimit)
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Message = new BindableString("随机误差不能大于仪器误差限")
+                });
+            else if (mainValue > URV || mainValue < LRV)
+            {
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Message = new BindableString("主值不能超过量程")
+                });
+            }
+            else
+            {
+                RandomErrorLimit = re;
+                MainValue = mainValue;
+                ShowValue(mainValue);
+            }
         });
     }
 }

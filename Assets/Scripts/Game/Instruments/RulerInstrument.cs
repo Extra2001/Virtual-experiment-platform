@@ -38,4 +38,5 @@ public class RulerInstrument : InstrumentBase
     {
         throw new System.NotImplementedException();
     }
+
 }

@@ -10,9 +10,9 @@ public class Micrometer_main : HTBehaviour
     //启用自动化
     protected override bool IsAutomate => true;
 
-    public float ZeroPointError = 0.0f;
+    private bool IsKaKaed=false;//别骂了别骂了，这个名字搞笑的
 
-    private bool IsKaKaed=false;//别骂了别骂了，这个名字搞笑的。
+    public AudioClip kakaka;//咔咔声
 
     private Vector3 PLC_eulerAngles;
     private Vector3 POS_eulerAngles;
@@ -34,6 +34,7 @@ public class Micrometer_main : HTBehaviour
         if (IsKaKaed)
         {
             //播放螺旋测微计kaka的声音
+            Main.m_Audio.PlaySingleSound(kakaka);
         }
         else
         {
@@ -117,7 +118,7 @@ public class Micrometer_main : HTBehaviour
         mCamera= GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
         Ele = this.transform.Find("Micrometer_grandson").Find("014").Find("Camera").gameObject;
         Player_S = GameObject.Find("FPSController").gameObject;
-        this.transform.Find("Micrometer_grandson").Find("rotatebody_main").Find("srick").transform.localPosition -= new Vector3(0, (0.53f * ZeroPointError) / 5000f, 0);
+        //this.transform.Find("Micrometer_grandson").Find("rotatebody_main").Find("srick").transform.localPosition -= new Vector3(0, (0.53f * ZeroPointError) / 5000f, 0);
     }
 
     // Update is called once per frame

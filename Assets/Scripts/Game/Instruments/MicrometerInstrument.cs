@@ -13,7 +13,9 @@ public class MicrometerInstrument : InstrumentBase
 
     public override double LRV  => 0; 
 
-    public override double ErrorLimit  => 0.5; 
+    public override double ErrorLimit  => 0.5;
+    
+    public double ZeroPointError = 0.0f;//零点误差
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }

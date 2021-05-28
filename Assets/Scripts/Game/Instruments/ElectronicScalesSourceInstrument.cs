@@ -3,9 +3,13 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 [EntityResource(null, null, "Instruments/ElectronicScales/ElectronicScalesSource")]
 public class ElectronicScalesSourceInstrument : InstrumentBase
 {
+    [ObjectPath("ElectronicScalesSource_son/num")]
+    private GameObject Num;
+
     public override string InstName => "电子秤";
 
     public override double URV => 9999999;
@@ -35,6 +39,15 @@ public class ElectronicScalesSourceInstrument : InstrumentBase
 
     public override void ShowValue(double value)
     {
-        throw new System.NotImplementedException();
+        Num.GetComponent<manager_num>().qwq = MainValue;
+    }
+
+    public override void OnShow()
+    {
+        AddRightButton();
+        Entity.transform.GetChild(0).gameObject.SetActive(true);
+        MainValue = Random.Range((float)LRV, (float)URV);
+        ShowValue(MainValue);
+        base.OnShow();
     }
 }

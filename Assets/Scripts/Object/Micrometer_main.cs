@@ -118,7 +118,7 @@ public class Micrometer_main : HTBehaviour
         mCamera= GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
         Ele = this.transform.Find("Micrometer_grandson").Find("014").Find("Camera").gameObject;
         Player_S = GameObject.Find("FPSController").gameObject;
-        //this.transform.Find("Micrometer_grandson").Find("rotatebody_main").Find("srick").transform.localPosition -= new Vector3(0, (0.53f * ZeroPointError) / 5000f, 0);
+        this.transform.Find("Micrometer_grandson").Find("rotatebody_main").Find("srick").transform.localPosition -= new Vector3(0, (0.53f * (float)(GameManager.Instance.CurrentInstrument as MicrometerInstrument).ZeroPointError) / 5000f, 0);
     }
 
     // Update is called once per frame

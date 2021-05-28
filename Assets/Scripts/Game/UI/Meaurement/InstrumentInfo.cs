@@ -48,7 +48,7 @@ public class InstrumentInfo : HTBehaviour
     {
         if (!initialized)
             Initialize();
-        _instrument = Main.m_Entity.GetEntities(instrument).First().Cast<InstrumentBase>();
+        _instrument = GameManager.Instance.GetInstrument(instrument);
         _instrument.ShowInfoPanel(infoItem);
 
         _RootPanel.rectTransform().SetFloat();

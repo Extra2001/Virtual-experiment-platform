@@ -74,7 +74,7 @@ public class MeasuredDataProcessProcedure : ProcedureBase
         }
         else if (valueKind == MeasuredStatisticValue.InstrumentError)
         {
-            result = Main.m_Entity.GetEntities(CurrentQuantity.InstrumentType)[0].Cast<InstrumentBase>().ErrorLimit.ToString();
+            result = GameManager.Instance.GetInstrument(CurrentQuantity.InstrumentType).ErrorLimit.ToString();
         }
         return result;
 

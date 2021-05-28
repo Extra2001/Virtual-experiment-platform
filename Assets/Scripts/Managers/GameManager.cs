@@ -19,6 +19,19 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         get => RecordManager.tempRecord.quantities[_currentQuantityIndex];
     }
 
+    public InstrumentBase CurrentInstrument =>
+        GetInstrument(RecordManager.tempRecord.showedInstrument);
+
+    public InstrumentBase GetInstrument(InstrumentInfoModel model)
+    {
+        return GetInstrument(model.instrumentType);
+    }
+
+    public InstrumentBase GetInstrument(Type type)
+    {
+        return Main.m_Entity.GetEntity(type, type.Name) as InstrumentBase;
+    }
+
     public bool FPSable
     {
         get => firstPersonController.gameObject.activeSelf;
@@ -126,8 +139,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     private void StartNewExp()
     {
         if (RecordManager.tempRecord.showedInstrument != null && RecordManager.tempRecord.showedInstrument.instrumentType != null)
-            Main.m_Entity.HideEntity(Main.m_Entity.GetEntity(RecordManager.tempRecord.showedInstrument.instrumentType,
-                RecordManager.tempRecord.showedInstrument.instrumentType.Name));
+            Main.m_Entity.HideEntity(GameManager.Instance.CurrentInstrument);
         CreateObject.DestroyObjecthh();
         RecordManager.ClearTempRecord();
         Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();

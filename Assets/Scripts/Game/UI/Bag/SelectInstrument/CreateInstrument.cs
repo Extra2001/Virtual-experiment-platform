@@ -22,7 +22,7 @@ public class CreateInstrument : HTBehaviour
 
     private static InstrumentBase Create(InstrumentInfoModel model)
     {
-        var instrument = Main.m_Entity.GetEntity(model.instrumentType, model.instrumentType.Name) as InstrumentBase;
+        var instrument = GameManager.Instance.GetInstrument(model);
         var recpos = RecordManager.tempRecord.instrumentStartPosition;
         var position = new Vector3();
         position.x = recpos[0];
@@ -45,7 +45,7 @@ public class CreateInstrument : HTBehaviour
     {
         var inst = RecordManager.tempRecord.showedInstrument;
         if (inst != null && inst.instrumentType != null)
-            Main.m_Entity.HideEntity(Main.m_Entity.GetEntity(inst.instrumentType, inst.instrumentType.Name));
+            Main.m_Entity.HideEntity(GameManager.Instance.GetInstrument(inst));
         Create(new InstrumentInfoModel()
         {
             instrumentType = InstrumentType,

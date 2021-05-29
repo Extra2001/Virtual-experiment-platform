@@ -31,6 +31,10 @@ public class Micrometer_main : HTBehaviour
     public bool Nowin=false;
     public void Measure()
     {
+        if (this.transform.localPosition[1] >= 1.3156f)
+        {
+            IsKaKaed = true;
+        }
         if (IsKaKaed)
         {
             //播放螺旋测微计kaka的声音
@@ -40,6 +44,7 @@ public class Micrometer_main : HTBehaviour
         {
             IsKaKaed = true;
         }
+
         this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = -3;
     }
 
@@ -50,8 +55,8 @@ public class Micrometer_main : HTBehaviour
             if (Nowin == false)
             {
 
-                //Player_S.GetComponent<FirstPersonController>().AbleCameraControl = false;
-                Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 5;
+                Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = false;
+                Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 1;
                
                 moveable_look = true;
                 mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
@@ -107,8 +112,9 @@ public class Micrometer_main : HTBehaviour
             mCamera.fieldOfView = Ori_fieldOfView;
             moveable_back = false;
             Nowin = false;
-            //Player_S.GetComponent<FirstPersonController>().AbleCameraControl = true;
-           // Player_S.GetComponent<FirstPersonController>().WalkSpeed = 30;
+            Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = true;
+            Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 30;
+
         }
     }
     // Start is called before the first frame update
@@ -124,7 +130,14 @@ public class Micrometer_main : HTBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        Look_back();
+        if (Input.GetKey(KeyCode.P))
+        {
+            Measure();
+        }
+            Look_back();
+        if (this.transform.localPosition[1] >= 1.3156f)
+        {
+            this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = 0;
+        }
     }
 }

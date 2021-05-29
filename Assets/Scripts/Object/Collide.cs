@@ -14,7 +14,8 @@ public class Collide : HTBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if ((collision.collider.tag == "Mesured")&& this.transform.parent.transform.Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num<=-0.5f)
+        print("qwq");
+        if ((collision.collider.tag == "Mesured"|| collision.collider.tag == "Anvil") && this.transform.parent.transform.Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num<=-0.5f)
         {
             this.transform.parent.transform.Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num += 0.5f;
         }

@@ -255,6 +255,7 @@ GameObject:
   - component: {fileID: 6215633117173911684}
   - component: {fileID: 3542818219101175721}
   - component: {fileID: 7835226860100043991}
+  - component: {fileID: 1283900898026341239}
   m_Layer: 11
   m_Name: Voltmeter_son
   m_TagString: Tools_Be_Moved
@@ -324,6 +325,26 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1283900898026341239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4649021490349978517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c2f7cd118df0cd4fa18cf5256c06825, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RedNormal: {fileID: 2100000, guid: 91a8947eefc3a5a4d87ed36cb33275d5, type: 2}
+  RedHighlight: {fileID: 2100000, guid: a0e06c40a505078428b1a1c1f170a908, type: 2}
+  BlackNormal: {fileID: 2100000, guid: cbb1e29fe597c5546a9b04f43483b8c7, type: 2}
+  BlackHighlight: {fileID: 2100000, guid: 2118364cf59799b468ca0dc4f2979f2e, type: 2}
+  Cylinder:
+  - {fileID: 319336287433105232}
+  - {fileID: 20935350506506213}
+  - {fileID: 3595865379164293729}
 --- !u!1 &5280109305618096492
 GameObject:
   m_ObjectHideFlags: 0

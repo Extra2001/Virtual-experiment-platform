@@ -7,9 +7,8 @@ using UnityEngine;
 public class RotateAmmeter : HTBehaviour
 {
     //启用自动化
-    public float MaxA = 0.6f;
-    private float PreA = 0.0f;
-    private float NowA;
+    public float MaxA = 3.0f;
+    private float NowA=0.0f;
     private float TarA;
     private bool OnGoing = false;
     public float times = 15.0f;
@@ -17,44 +16,21 @@ public class RotateAmmeter : HTBehaviour
 
     private void ChangeTheRotate(float num)
     {
-        transform.Find("Cylinder005").transform.DOLocalRotate(new Vector3(0, -num * 110.0f * 5.0f / 6.0f / (MaxA * 4.0f / 3.0f), 0), .3f)
+        transform.Find("Cylinder005").transform.DOLocalRotate(new Vector3(0, num * 110.0f * 5.0f / 6.0f / (MaxA * 4.0f / 3.0f), 0), .3f)
             .SetEase(Ease.OutExpo);
     }
 
 
     public void ShowNum(float num)
     {
-        TarA = num;
-        OnGoing = true;
-        NowA = PreA;
-        Debug.Log(num);
+
+        ChangeTheRotate((num - NowA));
+        NowA = num;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Update()
     {
+        ChangeTheRotate(0.1f);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-        if (Input.GetKey(KeyCode.Q))
-        {
-            ShowNum(2f);
-        }
-        //测试样例
-        if (OnGoing)
-        {
-            ChangeTheRotate((TarA - NowA) / times);
-            NowA = NowA + (TarA - NowA) / times;
-            if ((TarA - NowA) <= 0.001 && (TarA - NowA) >= -0.001)
-            {
-                ChangeTheRotate((TarA - NowA));
-                NowA = TarA;
-                PreA = TarA;
-                OnGoing = false;
-            }
-        }
-    }
 }

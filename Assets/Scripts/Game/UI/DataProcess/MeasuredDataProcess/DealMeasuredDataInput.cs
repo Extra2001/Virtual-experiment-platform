@@ -144,6 +144,7 @@ public class DealMeasuredDataInput : HTBehaviour
         catch
         {
             //弹出报错提示框
+            ShowModel($"输入公式无法求解，请重新输入");
             CallButton1.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].AverageState = 1;
         }
@@ -183,6 +184,7 @@ public class DealMeasuredDataInput : HTBehaviour
         catch
         {
             //弹出报错提示框
+            ShowModel($"输入公式无法求解，请重新输入");
             CallButton2.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UaState = 1;
         }
@@ -221,6 +223,7 @@ public class DealMeasuredDataInput : HTBehaviour
         catch
         {
             //弹出报错提示框
+            ShowModel($"输入公式无法求解，请重新输入");
             CallButton3.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].UbState = 1;
         }
@@ -261,9 +264,22 @@ public class DealMeasuredDataInput : HTBehaviour
         catch
         {
             //弹出报错提示框
+            ShowModel($"输入公式无法求解，请重新输入");
+
             CallButton4.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].ComplexState = 1;
         }
+    }
+
+
+    private void ShowModel(string message)
+    {
+        UIAPI.Instance.ShowModel(new ModelDialogModel()
+        {
+            ShowCancel = false,
+            Title = new BindableString("错误"),
+            Message = new BindableString(message)
+        });
     }
 
 }

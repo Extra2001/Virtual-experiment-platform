@@ -129,9 +129,10 @@ public class DealComplexDataInput : HTBehaviour
         catch
         {
             //弹出报错提示框
-            ShowModel($"合成物理量的不确定度还未计算");
+            ShowModel($"输入公式无法求解，请重新输入");
 
             CallButton1.image.sprite = Sprites[1];
+            RecordManager.tempRecord.complexQuantityModel.AverageState = 1;
         }
 
     }
@@ -168,7 +169,10 @@ public class DealComplexDataInput : HTBehaviour
         catch
         {
             //弹出报错提示框
+            ShowModel($"输入公式无法求解，请重新输入");
+
             CallButton2.image.sprite = Sprites[1];
+            RecordManager.tempRecord.complexQuantityModel.UncertainState = 1;
         }
     }
 
@@ -203,7 +207,9 @@ public class DealComplexDataInput : HTBehaviour
         catch
         {
             //弹出报错提示框
+            ShowModel($"输入公式无法求解，请重新输入");
             CallButton3.image.sprite = Sprites[1];
+            RecordManager.tempRecord.complexQuantityModel.AnswerState = 1;
         }
     }
 

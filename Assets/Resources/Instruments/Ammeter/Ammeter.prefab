@@ -363,6 +363,7 @@ GameObject:
   - component: {fileID: 2960383469079274586}
   - component: {fileID: 862809522619221936}
   - component: {fileID: 3961194763573642286}
+  - component: {fileID: 5301257334966905032}
   m_Layer: 11
   m_Name: Ammeter_son
   m_TagString: Tools_Be_Moved
@@ -432,6 +433,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5301257334966905032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804401894040815333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c2f7cd118df0cd4fa18cf5256c06825, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RedNormal: {fileID: 2100000, guid: 91a8947eefc3a5a4d87ed36cb33275d5, type: 2}
+  RedHighlight: {fileID: 2100000, guid: a0e06c40a505078428b1a1c1f170a908, type: 2}
+  BlackNormal: {fileID: 2100000, guid: cbb1e29fe597c5546a9b04f43483b8c7, type: 2}
+  BlackHighlight: {fileID: 2100000, guid: 2118364cf59799b468ca0dc4f2979f2e, type: 2}
+  Cylinder:
+  - {fileID: 7859430801069526064}
+  - {fileID: 6384934974480603393}
+  - {fileID: 1347126343439433249}
 --- !u!1 &7859430801069526064
 GameObject:
   m_ObjectHideFlags: 0

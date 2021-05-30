@@ -41,6 +41,7 @@ public class DealComplexDataInput : HTBehaviour
         SureButton3.onClick.AddListener(SureClick3);
         CurrentField = Field1;        
 
+        
     }
 
     
@@ -128,6 +129,8 @@ public class DealComplexDataInput : HTBehaviour
         catch
         {
             //弹出报错提示框
+            ShowModel($"合成物理量的不确定度还未计算");
+
             CallButton1.image.sprite = Sprites[1];
         }
 
@@ -202,6 +205,17 @@ public class DealComplexDataInput : HTBehaviour
             //弹出报错提示框
             CallButton3.image.sprite = Sprites[1];
         }
+    }
+
+
+    private void ShowModel(string message)
+    {
+        UIAPI.Instance.ShowModel(new ModelDialogModel()
+        {
+            ShowCancel = false,
+            Title = new BindableString("错误"),
+            Message = new BindableString(message)
+        });
     }
 
 }

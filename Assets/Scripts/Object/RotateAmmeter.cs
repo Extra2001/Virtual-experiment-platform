@@ -17,7 +17,7 @@ public class RotateAmmeter : HTBehaviour
 
     private void ChangeTheRotate(float num)
     {
-        transform.Find("Cylinder005").transform.DORotate(new Vector3(0, -num * 110.0f * 5.0f / 6.0f / (MaxA * 4.0f / 3.0f), 0), .3f)
+        transform.Find("Cylinder005").transform.DOLocalRotate(new Vector3(0, -num * 110.0f * 5.0f / 6.0f / (MaxA * 4.0f / 3.0f), 0), .3f)
             .SetEase(Ease.OutExpo);
     }
 
@@ -27,6 +27,7 @@ public class RotateAmmeter : HTBehaviour
         TarA = num;
         OnGoing = true;
         NowA = PreA;
+        Debug.Log(num);
     }
 
     // Start is called before the first frame update
@@ -38,12 +39,11 @@ public class RotateAmmeter : HTBehaviour
     void Update()
     {
 
-        //if (Input.GetKey(KeyCode.Q))
-        //{
-        //    ShowNum(0.2f);
-        //}
+        if (Input.GetKey(KeyCode.Q))
+        {
+            ShowNum(2f);
+        }
         //测试样例
-        
         if (OnGoing)
         {
             ChangeTheRotate((TarA - NowA) / times);

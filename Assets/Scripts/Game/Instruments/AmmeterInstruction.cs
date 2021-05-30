@@ -10,9 +10,9 @@ public class AmmeterInstruction : InstrumentBase
 {
     public override string InstName => "电流表";
 
-    public override double URV => 15;
+    public override double URV => 3;
 
-    public override double LRV => -3;
+    public override double LRV => -1;
 
     public override double ErrorLimit => 0.5; //忘了
 

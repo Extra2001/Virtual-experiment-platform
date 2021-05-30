@@ -37,6 +37,17 @@ public class AmmeterInstruction : InstrumentBase
 
     public override void ShowValue(double value)
     {
-        throw new System.NotImplementedException();
+        Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
+    }
+
+    public override double GenMainValue()
+    {
+        return Random.Range((float)LRV, (float)URV);
+    }
+
+    public override void OnShow()
+    {
+        base.OnShow();
+        ShowValue(GenMainValue());
     }
 }

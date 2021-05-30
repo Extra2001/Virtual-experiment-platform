@@ -17,7 +17,8 @@ public class RotateAmmeter : HTBehaviour
 
     private void ChangeTheRotate(float num)
     {
-        this.transform.Find("Cylinder005").transform.Rotate(new Vector3(0, -num * 110.0f * 5.0f / 6.0f / (MaxA * 4.0f / 3.0f), 0));
+        transform.Find("Cylinder005").transform.DORotate(new Vector3(0, -num * 110.0f * 5.0f / 6.0f / (MaxA * 4.0f / 3.0f), 0), .3f)
+            .SetEase(Ease.OutExpo);
     }
 
 
@@ -42,7 +43,7 @@ public class RotateAmmeter : HTBehaviour
         //    ShowNum(0.2f);
         //}
         //测试样例
-
+        
         if (OnGoing)
         {
             ChangeTheRotate((TarA - NowA) / times);

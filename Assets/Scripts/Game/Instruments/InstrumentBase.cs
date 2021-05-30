@@ -90,6 +90,11 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public abstract void ShowValue(double value);
 
+    public virtual double GenMainValue()
+    {
+        return (new System.Random().NextDouble() * (URV - LRV)) + LRV;
+    }
+
     /// <summary>
     /// 重置仪器状态
     /// </summary>

@@ -40,6 +40,7 @@ public class AmmeterInstruction : InstrumentBase
 
     public override void ShowValue(double value)
     {
+        Debug.Log("eee");
         Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
     }
 
@@ -55,6 +56,7 @@ public class AmmeterInstruction : InstrumentBase
         GenMainValueAndRandomErrorLimit();
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
         Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState1();
+        Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;
         RangeState = 0;
         URV = 0.6;
         LRV = -0.2;
@@ -74,6 +76,7 @@ public class AmmeterInstruction : InstrumentBase
                 infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
                 infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
                 Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState2();
+                Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 3f;
                 ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
             }
             else if (RangeState == 1)
@@ -84,6 +87,7 @@ public class AmmeterInstruction : InstrumentBase
                 infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
                 infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
                 Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState1();
+                Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;
                 ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
             }
         });

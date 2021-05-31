@@ -76,6 +76,7 @@ public class VoltmeterInstruction : InstrumentBase
                 infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
                 infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
                 Entity.FindChildren("Voltmeter_son").GetComponent<VAStateChange>().SwitchState2();
+                Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().MaxV = 15;
                 ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
             }
             else if (RangeState == 1)
@@ -86,6 +87,7 @@ public class VoltmeterInstruction : InstrumentBase
                 infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
                 infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
                 Entity.FindChildren("Voltmeter_son").GetComponent<VAStateChange>().SwitchState1();
+                Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().MaxV = 3;
                 ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
             }
         });

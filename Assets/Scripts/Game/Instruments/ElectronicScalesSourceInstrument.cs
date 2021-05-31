@@ -44,8 +44,6 @@ public class ElectronicScalesSourceInstrument : InstrumentBase
 
     public override void OnShow()
     {
-        AddRightButton();
-        Entity.transform.GetChild(0).gameObject.SetActive(true);
         MainValue = Random.Range((float)LRV, (float)URV);
         ShowValue(MainValue);
         base.OnShow();

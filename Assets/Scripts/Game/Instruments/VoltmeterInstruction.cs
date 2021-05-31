@@ -37,6 +37,6 @@ public class VoltmeterInstruction : InstrumentBase
 
     public override void ShowValue(double value)
     {
-        throw new System.NotImplementedException();
+        Entity.GetComponentInChildren<RotateVoltmeter>().ShowNum((float)value);
     }
 }

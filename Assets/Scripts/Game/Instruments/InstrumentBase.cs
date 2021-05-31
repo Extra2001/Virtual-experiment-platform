@@ -38,17 +38,17 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// <summary>
     /// 上限
     /// </summary>
-    public abstract double URV { get; }
+    public abstract double URV { get; set; }
 
     /// <summary>
     /// 下限
     /// </summary>
-    public abstract double LRV { get; }
+    public abstract double LRV { get; set; }
 
     /// <summary>
     /// 仪器误差限
     /// </summary>
-    public abstract double ErrorLimit { get; }
+    public abstract double ErrorLimit { get; set; }
 
     /// <summary>
     /// 随机误差
@@ -90,9 +90,9 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public abstract void ShowValue(double value);
 
-    public virtual double GenMainValue()
+    public virtual void GenMainValueAndRandomErrorLimit()
     {
-        return (new System.Random().NextDouble() * (URV - LRV)) + LRV;
+        MainValue = (new System.Random().NextDouble() * (URV - LRV)) + LRV;
     }
 
     /// <summary>

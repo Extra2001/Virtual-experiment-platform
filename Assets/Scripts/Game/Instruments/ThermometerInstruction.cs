@@ -8,11 +8,11 @@ public class ThermometerInstruction : InstrumentBase
 {
     public override string InstName  => "温度计";
 
-    public override double URV => 50; 
+    public override double URV { get; set; } = 50; 
 
-    public override double LRV => -30; 
+    public override double LRV { get; set; } = -30; 
 
-    public override double ErrorLimit => 0.5; //忘了
+    public override double ErrorLimit { get; set; } = 0.5; //忘了
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }

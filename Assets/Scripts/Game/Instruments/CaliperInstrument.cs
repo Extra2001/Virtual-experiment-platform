@@ -9,11 +9,11 @@ public class CaliperInstrument : InstrumentBase
 {
     public override string InstName => "游标卡尺";
 
-    public override double URV => 500;
+    public override double URV { get; set; } = 500;
 
-    public override double LRV => 0;
+    public override double LRV { get; set; } = 0;
 
-    public override double ErrorLimit => 0.5;
+    public override double ErrorLimit { get; set; } = 0.5;
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }

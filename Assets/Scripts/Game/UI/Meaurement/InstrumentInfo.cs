@@ -32,6 +32,8 @@ public class InstrumentInfo : HTBehaviour
     private Button _ConfirmButton;
     [SerializeField]
     private GameObject _RootPanel;
+    [SerializeField]
+    private Button _SwitchRange;
 
     private Dictionary<string, IntrumentInfoItem> infoItem = new Dictionary<string, IntrumentInfoItem>();
     private InstrumentBase _instrument;

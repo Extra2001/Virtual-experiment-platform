@@ -36,15 +36,12 @@ public class VoltmeterInstruction : InstrumentBase
     }
     public override void ShowValue(double value)
     {
-        Entity.FindChildren("Voltmeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
+        Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().ShowNum((float)value);
     }
-    public override double GenMainValue()
-    {
-        return Random.Range((float)LRV, (float)URV);
-    }
+
     public override void InstReset()
     {
-        Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().ShowNum((float)value);
+        Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().ShowNum(0.0f);
     }
 
     public override void GenMainValueAndRandomErrorLimit()

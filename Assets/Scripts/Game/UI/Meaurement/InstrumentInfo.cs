@@ -50,6 +50,8 @@ public class InstrumentInfo : HTBehaviour
     {
         if (!initialized)
             Initialize();
+        foreach (var item in infoItem)
+            item.Value.onValueChanged.Clear();
         _instrument = GameManager.Instance.GetInstrument(instrument);
         _instrument.ShowInfoPanel(infoItem);
 

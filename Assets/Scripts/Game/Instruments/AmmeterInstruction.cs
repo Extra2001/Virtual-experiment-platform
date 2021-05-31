@@ -40,7 +40,6 @@ public class AmmeterInstruction : InstrumentBase
 
     public override void ShowValue(double value)
     {
-        Debug.Log("eee");
         Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
     }
 

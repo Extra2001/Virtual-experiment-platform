@@ -56,6 +56,7 @@ public class VoltmeterInstruction : InstrumentBase
         GenMainValueAndRandomErrorLimit();
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
         Entity.FindChildren("Voltmeter_son").GetComponent<VAStateChange>().SwitchState1();
+        Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().MaxV = 3;
         RangeState = 0;
         URV = 3;
         LRV = -1;

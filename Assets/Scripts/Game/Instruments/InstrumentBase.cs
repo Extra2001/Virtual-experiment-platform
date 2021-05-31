@@ -79,8 +79,11 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     private Sprite prePreviewImage = null;
 
-    public virtual Sprite previewImage { get => prePreviewImage == null ? 
-            (prePreviewImage = Resources.Load<Sprite>(previewImagePath)) : prePreviewImage; }
+    public virtual Sprite previewImage
+    {
+        get => prePreviewImage == null ?
+(prePreviewImage = Resources.Load<Sprite>(previewImagePath)) : prePreviewImage;
+    }
 
     /// <summary>
     /// 测量获取数据
@@ -104,7 +107,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         RandomErrorLimit = 0;
         ShowValue(0);
     }
-    
+
     protected virtual void AddRightButton()
     {
         RightButton right;
@@ -115,6 +118,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public virtual void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
     {
+        var keys = new string[] { "_Name", "_LRV", "_URV", "_Unit", "_UnitSymbol", "_MainValue", "_RandomError", "_ConfirmButton", "_Mask", "_RootPanel" };
         infoItems["_Name"].GameObject.GetComponent<Text>().text = InstName;
         infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
         infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
@@ -147,13 +151,19 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
                 ShowValue(mainValue);
             }
         });
+        foreach (var item in infoItems)
+        {
+            if (!keys.Contains(item.Key))
+                item.Value.GameObject.SetActive(false);
+        }
     }
 
     public override void OnShow()
     {
-        AddRightButton();
+        Debug.Log("??");
         Entity.transform.GetChild(0).gameObject.SetActive(true);
         base.OnShow();
+        AddRightButton();
     }
 
     public override void OnUpdate()
@@ -171,6 +181,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public override void OnHide()
     {
+        Debug.Log("???");
         Entity.transform.GetChild(0).gameObject.SetActive(false);
         GameObject.Destroy(Entity.GetComponent<RightButton>());
     }

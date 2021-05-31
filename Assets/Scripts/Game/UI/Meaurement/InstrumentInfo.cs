@@ -62,8 +62,8 @@ public class InstrumentInfo : HTBehaviour
         foreach (var item in typeof(InstrumentInfo).GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
         {
             UIBehaviour gameobj = null;
-                try { gameobj = item.GetValue(this) as UIBehaviour; }
-                catch { }
+            try { gameobj = item.GetValue(this) as UIBehaviour; }
+            catch { }
             if (gameobj != null)
             {
                 infoItem.Add(item.Name, new IntrumentInfoItem()
@@ -90,6 +90,10 @@ public class InstrumentInfo : HTBehaviour
         {
             infoItem[nameof(_ConfirmButton)].onValueChanged.ForEach(y => y.Invoke());
             Main.m_UI.CloseUI<InstrmentInfoUILogic>();
+        });
+        _SwitchRange.onClick.AddListener(() =>
+        {
+            infoItem[nameof(_SwitchRange)].onValueChanged.ForEach(y => y.Invoke());
         });
         initialized = true;
     }

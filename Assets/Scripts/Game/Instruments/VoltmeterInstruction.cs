@@ -29,14 +29,17 @@ public class VoltmeterInstruction : InstrumentBase
     {
         throw new System.NotImplementedException();
     }
-
+    public override void ShowValue(double value)
+    {
+        Entity.FindChildren("Voltmeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
+    }
+    public override double GenMainValue()
+    {
+        return Random.Range((float)LRV, (float)URV);
+    }
     public override void InstReset()
     {
         throw new System.NotImplementedException();
     }
 
-    public override void ShowValue(double value)
-    {
-        throw new System.NotImplementedException();
-    }
 }

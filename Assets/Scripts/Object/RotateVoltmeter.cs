@@ -15,17 +15,9 @@ public class RotateVoltmeter : HTBehaviour
     public float times = 15.0f;
     protected override bool IsAutomate => true;
 
-    private void ChangeTheRotate(float num)
-    {
-        this.transform.Find("Cylinder004").transform.Rotate(new Vector3(0,num* 110.0f*2.0f/3.0f / (MaxV*4.0f/3.0f),0));
-    }
-
-
     public void ShowNum(float num)
     {
-        TarV = num;
-        OnGoing = true;
-        NowV = PreV;
+        transform.Find("Cylinder004").transform.DOLocalRotate(new Vector3(0, 207.5f - 82.5f * num / MaxV, 0), 1f).SetEase(Ease.OutExpo);
     }
 
     // Start is called before the first frame update
@@ -37,23 +29,6 @@ public class RotateVoltmeter : HTBehaviour
     void Update()
     {
         
-        //if (Input.GetKey(KeyCode.Q))
-        //{
-        //    ShowNum(3);
-        //}
-        //测试样例
-
-            if (OnGoing)
-        {
-            ChangeTheRotate((TarV - NowV) / times);
-            NowV=NowV+(TarV-NowV)/ times;
-            if ((TarV - NowV) <= 0.01 && (TarV - NowV) >= -0.01)
-            {
-                ChangeTheRotate((TarV - NowV));
-                NowV = TarV;
-                PreV = TarV;
-                OnGoing = false;
-            }
-        }
+      
     }
 }

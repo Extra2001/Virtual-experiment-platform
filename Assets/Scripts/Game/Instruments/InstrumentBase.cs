@@ -160,7 +160,6 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public override void OnShow()
     {
-        Debug.Log("??");
         Entity.transform.GetChild(0).gameObject.SetActive(true);
         base.OnShow();
         AddRightButton();
@@ -181,9 +180,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public override void OnHide()
     {
-        Debug.Log("???");
         Entity.transform.GetChild(0).gameObject.SetActive(false);
-        GameObject.Destroy(Entity.GetComponent<RightButton>());
     }
 
     public override void OnInit()

@@ -28,7 +28,7 @@ public class VoltmeterInstruction : InstrumentBase
 
     public override string UnitSymbol => "V";
 
-    public override string previewImagePath => "Instruments/Ruler/ruler_preview";
+    public override string previewImagePath => "Instruments/Voltmeter/Voltmeter";
 
     public override double GetMeasureResult()
     {

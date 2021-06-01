@@ -26,7 +26,7 @@ public class AmmeterInstruction : InstrumentBase
 
     public override string UnitSymbol => "A";
 
-    public override string previewImagePath => "Instruments/Thermometer/thermometer_preview";
+    public override string previewImagePath => "Instruments/Ammeter/ammeter";
 
     public override double GetMeasureResult()
     {

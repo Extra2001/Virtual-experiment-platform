@@ -48,19 +48,19 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                     new ObjectsModel()
                     {
                         id = 3,
-                        Name = "被测物体4",
-                        DetailMessage = "被测物体4",
+                        Name = "圆环",
+                        DetailMessage = "圆环",
                         Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object4.png",
                         ResourcePath = $"{Application.streamingAssetsPath}/Objects/object4.obj"
                     },
                     new ObjectsModel()
                     {
                         id = 4,
-                        Name = "被测物体5",
-                        DetailMessage = "被测物体5",
+                        Name = "圆筒",
+                        DetailMessage = "带底的一个圆筒",
                         Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object5.png",
                         ResourcePath = $"{Application.streamingAssetsPath}/Objects/object5.obj"
                     },
                     new ObjectsModel()
@@ -69,8 +69,26 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
                         Name = "正四面体",
                         DetailMessage = "标准的正四面体",
                         Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object6.png",
                         ResourcePath = $"{Application.streamingAssetsPath}/Objects/object6.obj"
+                    },
+                    new ObjectsModel()
+                    {
+                        id = 6,
+                        Name = "杯子",
+                        DetailMessage = "户外用杯子。可以用来测内径",
+                        Integrated = true,
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object7.png",
+                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object7.obj"
+                    },
+                    new ObjectsModel()
+                    {
+                        id = 7,
+                        Name = "杯盖",
+                        DetailMessage = "与杯子匹配的杯盖",
+                        Integrated = true,
+                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object8.png",
+                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object8.obj"
                     },
                 };
             }

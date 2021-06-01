@@ -18,7 +18,6 @@ public class thermometer_main : HTBehaviour
 
     void Start()
     {
-        ShowNum(23);
     }
 
     // Update is called once per frame

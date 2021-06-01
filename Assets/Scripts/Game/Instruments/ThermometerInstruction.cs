@@ -35,6 +35,12 @@ public class ThermometerInstruction : InstrumentBase
 
     public override void ShowValue(double value)
     {
-        throw new System.NotImplementedException();
+        Entity.FindChildren("Thermometer_son").GetComponent<thermometer_main>().ShowNum((float)value);
+    }
+
+    public override void OnShow()
+    {
+        base.OnShow();
+        ShowValue(27 );
     }
 }

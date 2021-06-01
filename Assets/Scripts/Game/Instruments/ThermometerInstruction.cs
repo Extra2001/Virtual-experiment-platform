@@ -23,7 +23,7 @@ public class ThermometerInstruction : InstrumentBase
 
     public override string Unit=> "摄氏度"; 
 
-    public override string UnitSymbol=> "°C"; 
+    public override string UnitSymbol=> "℃"; 
 
     public override string previewImagePath => "Instruments/Thermometer/thermometer_preview";
 

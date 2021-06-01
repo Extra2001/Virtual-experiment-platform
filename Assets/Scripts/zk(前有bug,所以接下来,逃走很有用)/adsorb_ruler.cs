@@ -16,8 +16,7 @@ public class adsorb_ruler : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject RU = GameObject.Find("ruler");
-        m_Desk = GameObject.FindGameObjectsWithTag("Measured");
+
     }
 
     // Update is called once per frame

@@ -23,5 +23,6 @@ public class Move_Caliper : HTBehaviour
     void Update()
     {
         Movenum(num);
+
     }
 }

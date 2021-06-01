@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
-public class RotateAmmeter : HTBehaviour
+public class Ruler_main : HTBehaviour
 {
     private Vector3 PLC_eulerAngles;
     private Vector3 POS_eulerAngles;
@@ -21,19 +21,7 @@ public class RotateAmmeter : HTBehaviour
     public bool moveable_back = false;
     public bool Nowin = false;
     //启用自动化
-    public float MaxA = 3.0f;
-    public float NowA=0.0f;
-    private float TarA;
-    private bool OnGoing = false;
-    public float times = 15.0f;
-    public float ii;
-
     protected override bool IsAutomate => true;
-
-    public void ShowNum(float num)
-    {
-        transform.Find("Cylinder005").transform.DOLocalRotate(new Vector3(0, 207.5f-82.5f*num /MaxA, 0), 1f).SetEase(Ease.OutExpo);
-    }
     private void Look_back()
     {
         if (Input.GetKey(KeyCode.X))
@@ -103,19 +91,17 @@ public class RotateAmmeter : HTBehaviour
 
         }
     }
-
-
+    // Start is called before the first frame update
     void Start()
     {
-
         mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
         Ele = this.transform.Find("Camera").gameObject;
         Player_S = GameObject.Find("FPSController").gameObject;
     }
 
-    private void Update()
+    // Update is called once per frame
+    void Update()
     {
         Look_back();
     }
-
 }

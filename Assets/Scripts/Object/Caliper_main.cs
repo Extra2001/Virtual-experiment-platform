@@ -26,6 +26,10 @@ public class Caliper_main : HTBehaviour
     {
         this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num = -0.1f;
     }
+    public void BackMeasure()
+    {
+        this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num = 0.1f;
+    }
 
     private void Look_back()
     {
@@ -112,8 +116,16 @@ public class Caliper_main : HTBehaviour
         {
             Measure();
         }
+        if (Input.GetKey(KeyCode.O))
+        {
+            BackMeasure();
+        }
         Look_back();
-        if (this.transform.Find("MeasureHead").gameObject.transform.localPosition[0] >=0)
+        if (this.transform.Find("MeasureHead").gameObject.transform.localPosition[0] >=0&& this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num<0)
+        { 
+            this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num = 0;
+        }
+        if (this.transform.Find("MeasureHead").gameObject.transform.localPosition[0] <= -0.45f&& this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num > 0)
         {
             this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num = 0;
         }

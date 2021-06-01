@@ -45,13 +45,13 @@ public class CreateObject : HTBehaviour
             {
                 var meshCollider = item.gameObject.AddComponent<MeshCollider>();
                 meshCollider.convex = true;
-                meshCollider.isTrigger = true;
+                meshCollider.isTrigger = false;
             }
             if (item.gameObject.GetComponent<Rigidbody>() == null)
             {
                 var rigid = item.gameObject.AddComponent<Rigidbody>();
                 rigid.useGravity = false;
-                rigid.isKinematic = true;
+                rigid.isKinematic = false;
             }
             if (item.gameObject.GetComponent<RightButtonObject>() == null)
             {

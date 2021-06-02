@@ -27,6 +27,13 @@ public class DealComplexDataInput : HTBehaviour
     public Button SureButton3;
     public GameObject Field3;
 
+    public Text Value34;
+
+    public Button CallButton4;
+    public Button SureButton4;
+    public GameObject Field4;
+
+
     public Sprite[] Sprites = new Sprite[3]; //0为初始，1为编辑中，2为编辑完成
     private GameObject CurrentField;
 
@@ -39,6 +46,8 @@ public class DealComplexDataInput : HTBehaviour
         SureButton2.onClick.AddListener(SureClick2);
         CallButton3.onClick.AddListener(CallClick3);
         SureButton3.onClick.AddListener(SureClick3);
+        CallButton4.onClick.AddListener(CallClick4);
+        SureButton4.onClick.AddListener(SureClick4);
         CurrentField = Field1;        
 
         
@@ -81,18 +90,32 @@ public class DealComplexDataInput : HTBehaviour
         }
         Field2.SetActive(false);
 
-        CallButton3.image.sprite = Sprites[model.AnswerState];
+        CallButton3.image.sprite = Sprites[model.AnswerAverageState];
+        Value34.text = "=" + StaticMethods.NumberFormat(model.AnswerAverage) + "±" + StaticMethods.NumberFormat(model.AnswerUncertain);
         Field3.SetActive(true);
-        if (model.AnswerExpression != null)
+        if (model.AnswerAverageExpression != null)
         {
 
-            Field3.GetComponent<FormulaController>().LoadFormula(model.AnswerExpression);
+            Field3.GetComponent<FormulaController>().LoadFormula(model.AnswerAverageExpression);
         }
         else
         {
             Field3.GetComponent<FormulaController>().Initialize();
         }
         Field3.SetActive(false);
+
+        CallButton4.image.sprite = Sprites[model.AnswerUncertainState];
+        Field4.SetActive(true);
+        if (model.AnswerUncertainExpression != null)
+        {
+
+            Field4.GetComponent<FormulaController>().LoadFormula(model.AnswerUncertainExpression);
+        }
+        else
+        {
+            Field4.GetComponent<FormulaController>().Initialize();
+        }
+        Field4.SetActive(false);
     }
 
     private void CallClick1()
@@ -201,15 +224,58 @@ public class DealComplexDataInput : HTBehaviour
         try
         {
             //检查最终结果表达式是否正确
-            //~~~~~
+            Value34.text = "=" + StaticMethods.NumberFormat(Field3.GetComponent<FormulaController>().ExpressionExecuted) + "±" + StaticMethods.NumberFormat(RecordManager.tempRecord.complexQuantityModel.AnswerUncertain);
             CallButton3.image.sprite = Sprites[2];
+            RecordManager.tempRecord.complexQuantityModel.AnswerAverageState = 2;
+            RecordManager.tempRecord.complexQuantityModel.AnswerAverage = Field3.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.complexQuantityModel.AnswerAverageExpression = Field3.GetComponent<FormulaController>().Serialize();
         }
         catch
         {
             //弹出报错提示框
             ShowModel($"输入公式无法求解，请重新输入");
             CallButton3.image.sprite = Sprites[1];
-            RecordManager.tempRecord.complexQuantityModel.AnswerState = 1;
+            RecordManager.tempRecord.complexQuantityModel.AnswerAverageState = 1;
+        }
+    }
+
+    private void CallClick4()
+    {
+        if (CurrentField == Field4)
+        {
+            if (CurrentField.activeInHierarchy == true)
+            {
+                CurrentField.SetActive(false);
+            }
+            else
+            {
+                CurrentField.SetActive(true);
+            }
+        }
+        else
+        {
+            CurrentField.SetActive(false);
+            Field4.SetActive(true);
+            CurrentField = Field4;
+        }
+    }
+    private void SureClick4()
+    {
+        try
+        {
+            //检查最终结果表达式是否正确
+            Value34.text = "=" + StaticMethods.NumberFormat(RecordManager.tempRecord.complexQuantityModel.AnswerAverage) + "±" + StaticMethods.NumberFormat(Field4.GetComponent<FormulaController>().ExpressionExecuted);
+            CallButton4.image.sprite = Sprites[2];
+            RecordManager.tempRecord.complexQuantityModel.AnswerUncertainState = 2;
+            RecordManager.tempRecord.complexQuantityModel.AnswerUncertain = Field4.GetComponent<FormulaController>().ExpressionExecuted;
+            RecordManager.tempRecord.complexQuantityModel.AnswerUncertainExpression = Field4.GetComponent<FormulaController>().Serialize();
+        }
+        catch
+        {
+            //弹出报错提示框
+            ShowModel($"输入公式无法求解，请重新输入");
+            CallButton4.image.sprite = Sprites[1];
+            RecordManager.tempRecord.complexQuantityModel.AnswerUncertainState = 1;
         }
     }
 

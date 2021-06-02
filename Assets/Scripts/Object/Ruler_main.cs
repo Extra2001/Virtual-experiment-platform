@@ -24,7 +24,7 @@ public class Ruler_main : HTBehaviour
     protected override bool IsAutomate => true;
     private void Look_back()
     {
-        if (Input.GetKey(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             if (Nowin == false)
             {

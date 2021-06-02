@@ -36,7 +36,7 @@ public class RotateAmmeter : HTBehaviour
     }
     private void Look_back()
     {
-        if (Input.GetKey(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             if (Nowin == false)
             {

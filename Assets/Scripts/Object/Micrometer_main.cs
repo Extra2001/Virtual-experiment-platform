@@ -50,19 +50,18 @@ public class Micrometer_main : HTBehaviour
 
     private void Look_back()
     {
-        if (Input.GetKey(KeyCode.X) )
+        if (Input.GetKeyDown(KeyCode.X) )
         {
             if (Nowin == false)
             {
 
                 Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = false;
-                Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 1;
-               
-                moveable_look = true;
-                mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
+                Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 0.3f;
                 Ori_place = mCamera.transform.position;
                 Ori_eulerAngles = mCamera.transform.rotation.eulerAngles;
                 Ori_fieldOfView = mCamera.GetComponent<Camera>().fieldOfView;
+                moveable_look = true;
+                mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
             }
             else
             {

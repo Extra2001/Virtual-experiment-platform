@@ -3,26 +3,22 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Data;
 
-public class ElectronicScalesSource_changenum : HTBehaviour
+public class ELEStateChange : HTBehaviour
 {
+   // 这是一个迷惑脚本，我也不知道干什么，也许未来需要做电子秤的转量程
     //启用自动化
     protected override bool IsAutomate => true;
-    public double num;
-    public int accuracy_ratings;
-
-
+    
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        this.transform.Find("num").gameObject.GetComponent<manager_num>().accuracy_rating = accuracy_ratings;
-        this.transform.Find("num").gameObject.GetComponent<manager_num>().Show_num(num);
+        
     }
 }

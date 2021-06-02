@@ -1006,7 +1006,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 239378781582670930, guid: c6649864d6cf69e44a19eae9e967564a, type: 3}
+  - {fileID: 5629084884208175553, guid: c6649864d6cf69e44a19eae9e967564a, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3666,10 +3666,8 @@ GameObject:
   - component: {fileID: 5945982112749046444}
   - component: {fileID: 5945982112749046450}
   - component: {fileID: 5945982112749046451}
-  - component: {fileID: 5945982112749046448}
-  - component: {fileID: 5945982112749046449}
   m_Layer: 0
-  m_Name: FlagCamera_disable
+  m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3740,33 +3738,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5945982112749046445}
   m_Enabled: 0
---- !u!114 &5945982112749046448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5945982112749046445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef704704aec55544799540b43129652c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 5
---- !u!114 &5945982112749046449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5945982112749046445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 125d6e182c110be4197cec4aa28427b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 5
-  FieldView: 60
 --- !u!1 &5945982112884575406
 GameObject:
   m_ObjectHideFlags: 0
@@ -3985,7 +3956,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6129089337144029396}
   m_Layer: 0
-  m_Name: ElectronicScalesSource
+  m_Name: ElectronicScales
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4031,8 +4002,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6816795048817371937}
   m_LocalRotation: {x: 0.8191521, y: -0, z: -0, w: 0.57357645}
-  m_LocalPosition: {x: 0.08020001, y: 0.0626, z: 0.0014000019}
-  m_LocalScale: {x: 0.70000005, y: 0.6999999, z: 0.7}
+  m_LocalPosition: {x: 2.02, y: 2.89, z: -0.36}
+  m_LocalScale: {x: 18, y: 18, z: 18}
   m_Children:
   - {fileID: 1530322430910292490}
   - {fileID: 5945982112884575405}
@@ -4704,8 +4675,9 @@ GameObject:
   - component: {fileID: 8649091124003213686}
   - component: {fileID: 352432130398397395}
   - component: {fileID: 6253959247672857812}
+  - component: {fileID: 647423073836737457}
   m_Layer: 11
-  m_Name: ElectronicScalesSource_son
+  m_Name: ElectronicScales_son
   m_TagString: Tools_Be_Moved
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4743,6 +4715,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46888b15d8e866e468648fbe02238d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Ori_place: {x: 0, y: 0, z: 0}
+  Ori_eulerAngles: {x: 0, y: 0, z: 0}
+  Ori_fieldOfView: 0
+  time: 15
+  moveable_look: 0
+  moveable_back: 0
+  Nowin: 0
   num: 32.45
   accuracy_ratings: 2
 --- !u!65 &352432130398397395
@@ -4774,6 +4753,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &647423073836737457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7753611095084040598}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b003b924ea8a22499104f70aa87e548, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7999550913591581641
 GameObject:
   m_ObjectHideFlags: 0

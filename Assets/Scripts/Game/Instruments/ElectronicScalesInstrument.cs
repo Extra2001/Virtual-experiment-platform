@@ -3,18 +3,19 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
-[EntityResource(null, null, "Instruments/ElectronicScales/ElectronicScalesSource")]
-public class ElectronicScalesSourceInstrument : InstrumentBase
+[EntityResource(null, null, "Instruments/ElectronicScales/ElectronicScales")]
+public class ElectronicScalesInstrument : InstrumentBase
 {
-    [ObjectPath("ElectronicScalesSource_son/num")]
-    private GameObject Num;
-
     public override string InstName => "电子秤";
 
     public override double URV { get; set; } = 9999999;
 
     public override double LRV { get; set; } = 0;
+
+    private int RangeState = 0;//0代表g,1还是代表g
 
     public override double ErrorLimit { get; set; } = 0.5; //忘了
 
@@ -27,9 +28,15 @@ public class ElectronicScalesSourceInstrument : InstrumentBase
 
     public override string previewImagePath => "Instruments/ElectronicScales/ElectronicScales_image";
 
+    private int accuracy_rating = 3;//显示小数点后三位
+
     public override double GetMeasureResult()
     {
         throw new System.NotImplementedException();
+    }
+    public override void ShowValue(double value)
+    {
+
     }
 
     public override void InstReset()
@@ -37,15 +44,17 @@ public class ElectronicScalesSourceInstrument : InstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override void ShowValue(double value)
+    public override void GenMainValueAndRandomErrorLimit()
     {
-        Num.GetComponent<manager_num>().qwq = MainValue;
+        MainValue = UnityEngine.Random.Range((float)LRV, (float)URV);
+        RandomErrorLimit = ErrorLimit * UnityEngine.Random.Range(-1f, 1f);
     }
 
     public override void OnShow()
     {
-        MainValue = Random.Range((float)LRV, (float)URV);
-        ShowValue(MainValue);
-        base.OnShow();
+// base.OnShow();
+        GenMainValueAndRandomErrorLimit();
     }
+
+    
 }

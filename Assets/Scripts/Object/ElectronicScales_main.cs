@@ -113,7 +113,7 @@ public class ElectronicScales_main : HTBehaviour
     void Start()
     {
         mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
-        Ele = this.transform.Find("Micrometer_grandson").Find("014").Find("Camera").gameObject;
+        Ele = this.transform.Find("Camera").gameObject;
         Player_S = GameObject.Find("FPSController").gameObject;
     }
 

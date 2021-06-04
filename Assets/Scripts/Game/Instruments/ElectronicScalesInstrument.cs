@@ -52,7 +52,7 @@ public class ElectronicScalesInstrument : InstrumentBase
 
     public override void OnShow()
     {
-// base.OnShow();
+        base.OnShow();
         GenMainValueAndRandomErrorLimit();
     }
 

@@ -36,7 +36,7 @@ public class ElectronicScalesInstrument : InstrumentBase
     }
     public override void ShowValue(double value)
     {
-
+        Entity.FindChildren("ElectronicScales_son").GetComponent<manager_num>().Show_num(value);
     }
 
     public override void InstReset()

@@ -53,8 +53,4 @@ public class ThermometerInstruction : InstrumentBase
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 
-    public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
-    {
-        base.ShowInfoPanel(infoItems);     
-    }
 }

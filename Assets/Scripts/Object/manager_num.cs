@@ -11,7 +11,6 @@ public class manager_num : HTBehaviour
     //启用自动化
     protected override bool IsAutomate => true;
     public int accuracy_rating; // 小数点后多少位
-    public double qwq;
     /// </summary>
     // Start is called before the first frame update
     void Start()

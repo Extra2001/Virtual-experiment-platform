@@ -36,7 +36,8 @@ public class ElectronicScalesInstrument : InstrumentBase
     }
     public override void ShowValue(double value)
     {
-        Entity.FindChildren("ElectronicScales_son").GetComponent<manager_num>().Show_num(value);
+        int test = 1;
+        Entity.FindChildren("ElectronicScales_son").FindChildren("num").GetComponent<manager_num>().Show_num(test);
     }
 
     public override void InstReset()
@@ -54,6 +55,7 @@ public class ElectronicScalesInstrument : InstrumentBase
     {
         base.OnShow();
         GenMainValueAndRandomErrorLimit();
+        //ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 
     

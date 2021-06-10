@@ -25,9 +25,9 @@ public class InstrumentInfo : HTBehaviour
     [SerializeField]
     private Text _Unit;
     [SerializeField]
-    private InputField _MainValue;
+    private GameObject _MainValue;
     [SerializeField]
-    private InputField _RandomError;
+    private GameObject _RandomError;
     [SerializeField]
     private Button _ConfirmButton;
     [SerializeField]
@@ -80,11 +80,11 @@ public class InstrumentInfo : HTBehaviour
                 item.Value.onValueChanged.Clear();
             Main.m_UI.CloseUI<InstrmentInfoUILogic>();
         });
-        _MainValue.onValueChanged.AddListener(x =>
+        _MainValue.transform.Find("MainValue").GetComponent<InputField>().onValueChanged.AddListener(x =>
         {
             infoItem[nameof(_MainValue)].onValueChanged.ForEach(y => y.Invoke());
         });
-        _RandomError.onValueChanged.AddListener(x =>
+        _RandomError.transform.Find("RandomError").GetComponent<InputField>().onValueChanged.AddListener(x =>
         {
             infoItem[nameof(_RandomError)].onValueChanged.ForEach(y => y.Invoke());
         });

@@ -118,12 +118,13 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public virtual void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
     {
-        var keys = new string[] { "_Name", "_LRV", "_URV", "_Unit", "_UnitSymbol", "_MainValue", "_RandomError", "_ConfirmButton", "_Mask", "_RootPanel" };
+        var keys = new string[] { "_Name", "_LRV", "_URV", "_Unit", "_UnitSymbol", "_Mask", "_RootPanel" };
         infoItems["_Name"].GameObject.GetComponent<Text>().text = InstName;
         infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
         infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
         infoItems["_Unit"].GameObject.GetComponent<Text>().text = Unit;
         infoItems["_UnitSymbol"].GameObject.GetComponent<Text>().text = UnitSymbol;
+        /*
         infoItems["_MainValue"].GameObject.GetComponent<InputField>().text = MainValue.ToString();
         infoItems["_RandomError"].GameObject.GetComponent<InputField>().text = RandomErrorLimit.ToString();
         infoItems["_ConfirmButton"].onValueChanged.Add(() =>
@@ -150,11 +151,14 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
                 MainValue = mainValue;
                 ShowValue(mainValue);
             }
-        });
+        });*/
         foreach (var item in infoItems)
         {
-            if (!keys.Contains(item.Key))
+            if (!keys.Contains(item.Key)) 
+            {
+                Debug.Log(item.Value.GameObject.name);
                 item.Value.GameObject.SetActive(false);
+            }               
         }
     }
 

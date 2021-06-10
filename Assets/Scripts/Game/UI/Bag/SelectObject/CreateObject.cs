@@ -51,8 +51,9 @@ public class CreateObject : HTBehaviour
             {
                 var rigid = item.gameObject.AddComponent<Rigidbody>();
                 rigid.useGravity = false;
-                rigid.drag=1;
-                rigid.angularDrag = 1;
+                rigid.drag=10;
+                rigid.mass = 10;
+                rigid.angularDrag = 10;
                 rigid.isKinematic = false;
             }
             if (item.gameObject.GetComponent<RightButtonObject>() == null)

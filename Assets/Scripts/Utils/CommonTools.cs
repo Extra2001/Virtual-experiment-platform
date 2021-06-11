@@ -17,13 +17,13 @@ public static class CommonTools
         var assemblyAllTypes = assembly.GetTypes();
         foreach (var itemType in assemblyAllTypes)
         {
-            var baseType = itemType.BaseType;
-            if (baseType != null)
+            List<string> hh = new List<string>();
+            Type tmp = itemType;
+            for (; tmp.BaseType != null; tmp = tmp.BaseType)
+                hh.Add(tmp.BaseType.Name);
+            if (hh.Contains(parentType.Name))
             {
-                if (baseType.Name == parentType.Name)
-                {
-                    subTypeList.Add(itemType);
-                }
+                subTypeList.Add(itemType);
             }
         }
         return subTypeList;

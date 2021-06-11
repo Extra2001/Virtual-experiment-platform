@@ -82,7 +82,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     public virtual Sprite previewImage
     {
         get => prePreviewImage == null ?
-(prePreviewImage = Resources.Load<Sprite>(previewImagePath)) : prePreviewImage;
+            (prePreviewImage = Resources.Load<Sprite>(previewImagePath)) : prePreviewImage;
     }
 
     /// <summary>
@@ -154,12 +154,12 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         });*/
         foreach (var item in infoItems)
         {
-            if (!keys.Contains(item.Key)) 
+            if (!keys.Contains(item.Key))
             {
                 Debug.Log(item.Value.GameObject.name);
                 item.Value.GameObject.SetActive(false);
-            }               
-        } 
+            }
+        }
     }
 
     public override void OnShow()

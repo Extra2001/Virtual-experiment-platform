@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Dummiesman;
 using System.IO;
 using UnityEngine;
+using System.Linq;
 
 public class GameLaunch : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class GameLaunch : MonoBehaviour
     private void PreLoadingAssets()
     {
         // 加载仪器
-        foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)))
+        foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
     }
 

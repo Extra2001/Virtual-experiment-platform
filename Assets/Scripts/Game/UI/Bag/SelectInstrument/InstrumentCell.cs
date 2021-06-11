@@ -3,6 +3,7 @@ using DG.Tweening;
 using UnityEngine.Sprites;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 {
@@ -22,7 +23,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
         //private string image_source = "UI/Resources/Select_instruments/image";
         //private string imageLarge_source = "UI/Resources/Select_instruments/imageLarge";
 
-        private List<Type> instrumentsTypes => CommonTools.GetSubClassNames(typeof(InstrumentBase));
+        private List<Type> instrumentsTypes => CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract).ToList();
 
         static class AnimatorHash
         {

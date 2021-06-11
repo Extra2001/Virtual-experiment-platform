@@ -11,7 +11,7 @@ public class ElectronicScalesInstrument : InstrumentBase
 {
     public override string InstName => "电子秤";
 
-    public override double URV { get; set; } = 9999999;
+    public override double URV { get; set; } = 9999;
 
     public override double LRV { get; set; } = 0;
 
@@ -36,8 +36,14 @@ public class ElectronicScalesInstrument : InstrumentBase
     }
     public override void ShowValue(double value)
     {
-        int test = 1;
-        Entity.FindChildren("ElectronicScales_son").FindChildren("num").GetComponent<manager_num>().Show_num(test);
+        if (value < 0)
+        {
+            value = 0;
+        }else if (value > 9999)
+        {
+            value = 9999;
+        }
+        Entity.FindChildren("ElectronicScales_son").FindChildren("num").GetComponent<manager_num>().Show_num(value);
     }
 
     public override void InstReset()

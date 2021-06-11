@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [EntityResource(null, null, "Instruments/Ruler/Ruler")]
-public class RulerInstrument : InstrumentBase
+public class RulerInstrument : DirectMeasurementInstrumentBase
 {
     public override string InstName => "钢板尺"; 
 

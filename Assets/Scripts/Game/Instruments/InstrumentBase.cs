@@ -159,7 +159,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
                 Debug.Log(item.Value.GameObject.name);
                 item.Value.GameObject.SetActive(false);
             }               
-        }
+        } 
     }
 
     public override void OnShow()

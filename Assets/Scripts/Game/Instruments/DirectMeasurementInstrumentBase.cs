@@ -11,7 +11,7 @@ public abstract class DirectMeasurementInstrumentBase : InstrumentBase
     public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
     {
         base.ShowInfoPanel(infoItems);
-
+        Debug.Log("hh");
         infoItems["_MainValue"].GameObject.SetActive(true);
         infoItems["_MainValue"].GameObject.GetComponent<InputField>().text = MainValue.ToString();
         infoItems["_RandomError"].GameObject.SetActive(true);

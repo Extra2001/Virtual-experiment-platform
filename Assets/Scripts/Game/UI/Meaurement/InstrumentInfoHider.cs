@@ -6,13 +6,15 @@ using UnityEngine;
 
 public class InstrumentInfoHider : HTBehaviour
 {
-    private void OnEnable()
-    {
-        transform.parent.gameObject.SetActive(true);
-    }
+    [ReorderableList]
+    public List<GameObject> Operate = new List<GameObject>();
+    [ReorderableList]
+    public List<GameObject> Watch = new List<GameObject>();
 
-    private void OnDisable()
+
+    private void Update()
     {
-        transform.parent.gameObject.SetActive(false);
+        for(int i = 0; i < Watch.Count; i++)
+            Operate[i].SetActive(Watch[i].activeSelf);
     }
 }

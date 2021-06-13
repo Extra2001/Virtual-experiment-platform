@@ -43,7 +43,8 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
         {
             value = 9999;
         }
-        Entity.FindChildren("ElectronicScales_son").FindChildren("num").GetComponent<manager_num>().Show_num(value);
+        Entity.FindChildren("ElectronicScales_son").GetComponent<ElectronicScales_main>().ShowNum((float)value);
+
     }
 
     public override void InstReset()
@@ -59,9 +60,10 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
 
     public override void OnShow()
     {
+        //Entity.FindChildren("ElectronicScales_son").GetComponent<ElectronicScales_main>().ShowNum(1000f);
         base.OnShow();
         GenMainValueAndRandomErrorLimit();
-        //ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 
     

@@ -6,6 +6,7 @@ using HT.Framework;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public interface IMeasurable
 {
@@ -163,7 +164,10 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public virtual void ShowGameButton(List<GameButtonItem> buttonItems)
     {
-        
+        //buttonItems.Where(x => x.GameObject.name.Equals("balabala")).FirstOrDefault().OnClick.Add(() =>
+        //{
+        //    // 点击后的操作。
+        //});
     }
 
     public override void OnShow()

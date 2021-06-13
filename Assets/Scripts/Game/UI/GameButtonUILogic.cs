@@ -28,8 +28,8 @@ public class GameButtonUILogic : UILogicResident
             };
             item.onClick.AddListener(() =>
             {
-                foreach (var item in it.OnClick)
-                    item?.Invoke();
+                foreach (var itemm in it.OnClick)
+                    itemm?.Invoke();
             });
             gameButtonItems.Add(it);
         }

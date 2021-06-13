@@ -73,7 +73,7 @@ public class CreateObject : HTBehaviour
                 right.index = cnt;
             }
             // 设置Tag和Layer
-            item.gameObject.tag = ("Tools_Be_Moved");
+            item.gameObject.tag = ("Mesured");
             item.gameObject.layer = 11;
             //获取所有子物体中的最近点和最远点
             var Temp = item.gameObject.GetComponent<MeshFilter>().mesh.bounds.min;

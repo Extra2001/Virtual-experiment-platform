@@ -20,13 +20,13 @@ public class show_num : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
-         f1 = this.transform.Find("1").gameObject;
-         f2 = this.transform.Find("2").gameObject;
-         f3 = this.transform.Find("3").gameObject;
-         f4 = this.transform.Find("4").gameObject;
-         f5 = this.transform.Find("5").gameObject;
-         f6 = this.transform.Find("6").gameObject;
-         f7 = this.transform.Find("7").gameObject;
+        f1 = this.transform.Find("1").gameObject;
+        f2 = this.transform.Find("2").gameObject;
+        f3 = this.transform.Find("3").gameObject;
+        f4 = this.transform.Find("4").gameObject;
+        f5 = this.transform.Find("5").gameObject;
+        f6 = this.transform.Find("6").gameObject;
+        f7 = this.transform.Find("7").gameObject;
         f1.layer = 12;
         f2.layer = 12;
         f3.layer = 12;

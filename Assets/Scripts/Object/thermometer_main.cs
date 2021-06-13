@@ -14,7 +14,6 @@ public class thermometer_main : HTBehaviour
     public void ShowNum(float num)
     {
         transform.Find("Cylinder001").transform.DOScaleZ(0.67f + num * 1.1f / 50f, 1f).SetEase(Ease.OutExpo);
-    
     }
 
 

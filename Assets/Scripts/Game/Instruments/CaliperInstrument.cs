@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [EntityResource(null, null, "Instruments/Caliper/Caliper")]
-public class CaliperInstrument : InstrumentBase
+public class CaliperInstrument : DirectMeasurementInstrumentBase
 {
     public override string InstName => "游标卡尺";
 

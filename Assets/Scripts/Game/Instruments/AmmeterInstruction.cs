@@ -8,14 +8,14 @@ using System;
 
 [EntityResource(null, null, "Instruments/Ammeter/Ammeter")]
 
-public class AmmeterInstruction : InstrumentBase
+public class AmmeterInstruction : IndirectMeasurementInstrumentBase
 {
     public override string InstName => "电流表";
 
     public override double URV { get; set; } = 0.6;
     public override double LRV { get; set; } = -0.2;
 
-    private int RangeState = 0;//0代表小量程，1代表大量程
+    public int RangeState = 0;//0代表小量程，1代表大量程
 
     public override double ErrorLimit { get; set; } = 0.5; //忘了
 
@@ -60,7 +60,7 @@ public class AmmeterInstruction : InstrumentBase
         URV = 0.6;
         LRV = -0.2;
     }
-
+    
     public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
     {
         base.ShowInfoPanel(infoItems);

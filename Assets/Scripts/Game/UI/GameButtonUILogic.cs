@@ -4,6 +4,7 @@ using UnityEngine;
 using HT.Framework;
 using DG.Tweening;
 using UnityEngine.UI;
+using System;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
@@ -15,7 +16,7 @@ public class GameButtonUILogic : UILogicResident
     /// </summary>
     public override void OnInit()
     {
-        base.OnInit();
+        base.OnInit();        
 
         UIEntity.FindChildren("PauseButton").GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -44,6 +45,7 @@ public class GameButtonUILogic : UILogicResident
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
+        Main.m_Event.Subscribe<SelectInstrumentEventHandler>(ShowButtons);
     }
 
     /// <summary>
@@ -60,6 +62,7 @@ public class GameButtonUILogic : UILogicResident
     public override void OnClose()
     {
         base.OnClose();
+        Main.m_Event.Unsubscribe<SelectInstrumentEventHandler>(ShowButtons);
     }
 
     /// <summary>
@@ -77,4 +80,11 @@ public class GameButtonUILogic : UILogicResident
     {
         base.OnUpdate();
     }
+
+    private void ShowButtons(EventHandlerBase handler)
+    {
+        InstrumentInfoModel model = (handler as SelectInstrumentEventHandler).ActiveInstrument;
+        Debug.Log(model.instrumentType);
+    }
+
 }

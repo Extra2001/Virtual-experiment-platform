@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 [EntityResource(null, null, "Instruments/Thermometer/Thermometer")]
-public class ThermometerInstruction : InstrumentBase
+public class ThermometerInstruction : IndirectMeasurementInstrumentBase
 {
     public override string InstName  => "温度计";
 

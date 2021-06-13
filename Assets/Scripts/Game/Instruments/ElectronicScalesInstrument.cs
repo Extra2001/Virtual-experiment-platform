@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using System;
 
 [EntityResource(null, null, "Instruments/ElectronicScales/ElectronicScales")]
-public class ElectronicScalesInstrument : InstrumentBase
+public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
 {
     public override string InstName => "电子秤";
 
@@ -15,7 +15,7 @@ public class ElectronicScalesInstrument : InstrumentBase
 
     public override double LRV { get; set; } = 0;
 
-    private int RangeState = 0;//0代表g,1还是代表g
+    public int RangeState = 0;//0代表g,1还是代表g
 
     public override double ErrorLimit { get; set; } = 0.5; //忘了
 

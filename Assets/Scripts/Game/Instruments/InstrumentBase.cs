@@ -151,12 +151,11 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
                 MainValue = mainValue;
                 ShowValue(mainValue);
             }
-        });*/
+        });*/  //已迁移至IndirectInstrumentBase
         foreach (var item in infoItems)
         {
             if (!keys.Contains(item.Key))
             {
-                Debug.Log(item.Value.GameObject.name);
                 item.Value.GameObject.SetActive(false);
             }
         }

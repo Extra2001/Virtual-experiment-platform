@@ -8,7 +8,7 @@ using System;
 
 [EntityResource(null, null, "Instruments/Voltmeter/Voltmeter")]
 
-public class VoltmeterInstruction : InstrumentBase
+public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
 {
     //启用自动化
     public override string InstName => "电压表";
@@ -17,7 +17,7 @@ public class VoltmeterInstruction : InstrumentBase
 
     public override double LRV { get; set; } = -1;
 
-    private int RangeState = 0;//0代表小量程，1代表大量程
+    public int RangeState = 0;//0代表小量程，1代表大量程
 
     public override double ErrorLimit { get; set; } = 0.5;//忘了
 

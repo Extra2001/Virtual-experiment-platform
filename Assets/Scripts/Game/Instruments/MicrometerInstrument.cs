@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [EntityResource(null, null, "Instruments/Micrometer/Micrometer")]
-public class MicrometerInstrument : InstrumentBase
+public class MicrometerInstrument : DirectMeasurementInstrumentBase
 {
     public override string InstName => "螺旋测微器";
 

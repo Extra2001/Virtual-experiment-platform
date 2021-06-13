@@ -38,7 +38,7 @@ public class CreateInstrument : HTBehaviour
         }
         Main.m_Entity.ShowEntity(instrument);
         RecordManager.tempRecord.showedInstrument = model;
-        Main.m_Event.Throw(Main.m_ReferencePool.Spawn<SelectInstrumentEventHandler>().Fill(model));
+        Main.m_Event.Throw(Main.m_ReferencePool.Spawn<SelectInstrumentEventHandler>().Fill(instrument));
         return instrument;
     }
 

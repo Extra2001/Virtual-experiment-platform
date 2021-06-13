@@ -161,6 +161,11 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         }
     }
 
+    public virtual void ShowGameButton(List<GameButtonItem> buttonItems)
+    {
+        
+    }
+
     public override void OnShow()
     {
         Entity.transform.GetChild(0).gameObject.SetActive(true);

@@ -11,12 +11,28 @@ using System;
 [UIResource(null, null, "UI/GameButton")]
 public class GameButtonUILogic : UILogicResident
 {
+    public List<GameButtonItem> gameButtonItems = new List<GameButtonItem>();
+
     /// <summary>
     /// 初始化
     /// </summary>
     public override void OnInit()
     {
-        base.OnInit();        
+        base.OnInit();
+
+        foreach(var item in UIEntity.GetComponentsInChildren<Button>(true))
+        {
+            var it = new GameButtonItem()
+            {
+                GameObject = item
+            };
+            item.onClick.AddListener(() =>
+            {
+                foreach (var item in it.OnClick)
+                    item?.Invoke();
+            });
+            gameButtonItems.Add(it);
+        }
 
         UIEntity.FindChildren("PauseButton").GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -83,8 +99,21 @@ public class GameButtonUILogic : UILogicResident
 
     private void ShowButtons(EventHandlerBase handler)
     {
-        InstrumentInfoModel model = (handler as SelectInstrumentEventHandler).ActiveInstrument;
-        Debug.Log(model.instrumentType);
+        var instrument = (handler as SelectInstrumentEventHandler).ActiveInstrument;
+        gameButtonItems.ForEach(x =>
+        {
+            x.OnClick.Clear();
+            x.OnTap.Clear();
+        });
+        instrument.ShowGameButton(gameButtonItems);
     }
+}
 
+public class GameButtonItem
+{
+    public Button GameObject { get; set; }
+
+    public List<Action> OnClick { get; set; } = new List<Action>();
+
+    public List<Action> OnTap { get; set; } = new List<Action>();
 }

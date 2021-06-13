@@ -8,11 +8,11 @@ using DG.Tweening;
 /// </summary>
 public class SelectInstrumentEventHandler : EventHandlerBase
 {
-    public InstrumentInfoModel ActiveInstrument;
+    public InstrumentBase ActiveInstrument;
     /// <summary>
     /// 填充数据，所有属性、字段的初始化工作可以在这里完成
     /// </summary>
-    public SelectInstrumentEventHandler Fill(InstrumentInfoModel instrument)
+    public SelectInstrumentEventHandler Fill(InstrumentBase instrument)
     {
         ActiveInstrument = instrument;
         return this;

@@ -64,6 +64,11 @@ public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
         LRV = -1;
     }
 
+    public override void ReshowValue()
+    {
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+    }
+
     public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
     {
         base.ShowInfoPanel(infoItems);
@@ -105,7 +110,7 @@ public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
         });
         buttonItems.Where(x => x.GameObject.name.Equals("ResetButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            Debug.Log("重置读数");
+            ReshowValue();
         });
         buttonItems.Where(x => x.GameObject.name.Equals("SwitchButton")).FirstOrDefault().OnClick.Add(() =>
         {

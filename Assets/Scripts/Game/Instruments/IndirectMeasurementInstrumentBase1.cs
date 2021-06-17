@@ -44,4 +44,6 @@ public abstract class IndirectMeasurementInstrumentBase : InstrumentBase
 
     }
 
+    public abstract void ReshowValue();
+
 }

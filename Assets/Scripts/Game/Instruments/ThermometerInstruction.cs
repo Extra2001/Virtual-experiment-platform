@@ -54,6 +54,11 @@ public class ThermometerInstruction : IndirectMeasurementInstrumentBase
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 
+    public override void ReshowValue()
+    {
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+    }
+
     public override void ShowGameButton(List<GameButtonItem> buttonItems)
     {
         base.ShowGameButton(buttonItems);
@@ -63,7 +68,7 @@ public class ThermometerInstruction : IndirectMeasurementInstrumentBase
         });
         buttonItems.Where(x => x.GameObject.name.Equals("ResetButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            Debug.Log("重置读数");
+            ReshowValue();
         });
     }
 }

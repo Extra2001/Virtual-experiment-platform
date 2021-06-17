@@ -55,7 +55,6 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
 
     public override void GenMainValueAndRandomErrorLimit()
     {
-        MainValue = UnityEngine.Random.Range((float)LRV, (float)URV);
         RandomErrorLimit = ErrorLimit * UnityEngine.Random.Range(-1f, 1f);
     }
 
@@ -63,6 +62,12 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
     {
         //Entity.FindChildren("ElectronicScales_son").GetComponent<ElectronicScales_main>().ShowNum(1000f);
         base.OnShow();
+        GenMainValueAndRandomErrorLimit();
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+    }
+
+    public override void ReshowValue()
+    {
         GenMainValueAndRandomErrorLimit();
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
@@ -76,7 +81,7 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
         });
         buttonItems.Where(x => x.GameObject.name.Equals("ResetButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            Debug.Log("重置读数");
+            ReshowValue();
         });
     }
 }

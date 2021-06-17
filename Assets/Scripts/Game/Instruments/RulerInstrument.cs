@@ -3,10 +3,12 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [EntityResource(null, null, "Instruments/Ruler/Ruler")]
 public class RulerInstrument : DirectMeasurementInstrumentBase
 {
+
     public override string InstName => "钢板尺"; 
 
     public override double URV { get; set; } = 500; 
@@ -38,5 +40,15 @@ public class RulerInstrument : DirectMeasurementInstrumentBase
     {
         throw new System.NotImplementedException();
     }
+
+    public override void ShowGameButton(List<GameButtonItem> buttonItems)
+    {
+        base.ShowGameButton(buttonItems);
+        buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            KeyboardManager.Keybd_event(88, 0, 0, 0);
+        });
+    }
+
 
 }

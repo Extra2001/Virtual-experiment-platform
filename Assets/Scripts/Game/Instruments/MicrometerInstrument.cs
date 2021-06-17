@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [EntityResource(null, null, "Instruments/Micrometer/Micrometer")]
 public class MicrometerInstrument : DirectMeasurementInstrumentBase
@@ -39,5 +40,22 @@ public class MicrometerInstrument : DirectMeasurementInstrumentBase
     public override void ShowValue(double value)
     {
         throw new System.NotImplementedException();
+    }
+
+    public override void ShowGameButton(List<GameButtonItem> buttonItems)
+    {
+        base.ShowGameButton(buttonItems);
+        buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            KeyboardManager.Keybd_event(88, 0, 0, 0);
+        });
+        buttonItems.Where(x => x.GameObject.name.Equals("OutwardButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            KeyboardManager.Keybd_event(80, 0, 0, 0);
+        });
+        buttonItems.Where(x => x.GameObject.name.Equals("InwardButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            KeyboardManager.Keybd_event(79, 0, 0, 0);
+        });
     }
 }

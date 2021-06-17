@@ -126,5 +126,9 @@ public class Ruler_main : HTBehaviour
     void Update()
     {
         Look_back();
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Debug.Log("X");
+        }
     }
 }

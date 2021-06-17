@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
 [EntityResource(null, null, "Instruments/Voltmeter/Voltmeter")]
 
 public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
 {
+
     //启用自动化
     public override string InstName => "电压表";
 
@@ -94,4 +96,20 @@ public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
         });
     }
 
+    public override void ShowGameButton(List<GameButtonItem> buttonItems)
+    {
+        base.ShowGameButton(buttonItems);
+        buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            KeyboardManager.Keybd_event(88, 0, 0, 0);
+        });
+        buttonItems.Where(x => x.GameObject.name.Equals("ResetButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            Debug.Log("重置读数");
+        });
+        buttonItems.Where(x => x.GameObject.name.Equals("SwitchButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            Debug.Log("切换量程");
+        });
+    }
 }

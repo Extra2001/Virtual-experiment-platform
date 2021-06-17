@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
 [EntityResource(null, null, "Instruments/Ammeter/Ammeter")]
 
@@ -89,6 +90,23 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
                 Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;
                 ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
             }
+        });
+    }
+
+    public override void ShowGameButton(List<GameButtonItem> buttonItems)
+    {
+        base.ShowGameButton(buttonItems);
+        buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            KeyboardManager.Keybd_event(88, 0, 0, 0);
+        });
+        buttonItems.Where(x => x.GameObject.name.Equals("ResetButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            Debug.Log("重置读数");
+        });
+        buttonItems.Where(x => x.GameObject.name.Equals("SwitchButton")).FirstOrDefault().OnClick.Add(() =>
+        {
+            Debug.Log("切换量程");
         });
     }
 }

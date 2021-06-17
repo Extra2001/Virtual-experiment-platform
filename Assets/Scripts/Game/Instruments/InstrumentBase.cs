@@ -164,9 +164,9 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public virtual void ShowGameButton(List<GameButtonItem> buttonItems)
     {
-        //buttonItems.Where(x => x.GameObject.name.Equals("balabala")).FirstOrDefault().OnClick.Add(() =>
+        //buttonItems.Where(x => x.GameObject.name.Equals("AmmeterInstruction")).FirstOrDefault().OnClick.Add(() =>
         //{
-        //    // 点击后的操作。
+        //    Debug.Log("...");
         //});
     }
 

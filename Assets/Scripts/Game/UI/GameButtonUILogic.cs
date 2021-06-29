@@ -20,7 +20,7 @@ public class GameButtonUILogic : UILogicResident
     {
         base.OnInit();
 
-        foreach(var item in UIEntity.GetComponentsInChildren<Button>(true))
+        foreach (var item in UIEntity.GetComponentsInChildren<Button>(true))
         {
             var it = new GameButtonItem()
             {
@@ -100,11 +100,15 @@ public class GameButtonUILogic : UILogicResident
     private void ShowButtons(EventHandlerBase handler)
     {
         var instrument = (handler as SelectInstrumentEventHandler).ActiveInstrument;
+        string[] names = new string[] { "PauseButton", "BagButton", "TableButton", "UncertaintyButton" };
+
         gameButtonItems.ForEach(x =>
         {
             x.OnClick.Clear();
             x.OnTap.Clear();
+            if (!names.Contains(x.GameObject.name)) x.GameObject.gameObject.SetActive(false);
         });
+
         instrument.ShowGameButton(gameButtonItems);
     }
 }

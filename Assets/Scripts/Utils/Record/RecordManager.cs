@@ -69,6 +69,7 @@ public static class RecordManager
     /// <returns></returns>
     private static Record LoadToTempRecord(this Record record)
     {
+        Initializer.InitializeObjects();
         var ret = record.DeepCopy<Record>();
         ret.info = tempRecord.info;
         _tempRecord = ret;

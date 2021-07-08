@@ -26,6 +26,7 @@ public class CreateObject : HTBehaviour
         RecordManager.tempRecord.showedObject = model;
         var objLoader = new OBJLoader();
         var obj = objLoader.Load(model.ResourcePath);
+        print(model);
         // 挂载组件
         if ((objectValue = obj.GetComponent<ObjectValue>()) == null)
             (objectValue = obj.AddComponent<ObjectValue>()).ObjectModel = model;
@@ -41,12 +42,14 @@ public class CreateObject : HTBehaviour
         int cnt = 0;
         foreach (Transform item in obj.transform)
         {
+            
             if (item.gameObject.GetComponent<MeshCollider>() == null)
             {
                 var meshCollider = item.gameObject.AddComponent<MeshCollider>();
                 meshCollider.convex = true;
                 meshCollider.isTrigger = false;
             }
+            MyResetModelPivot(item.gameObject);
             if (item.gameObject.GetComponent<Rigidbody>() == null)
             {
                 var rigid = item.gameObject.AddComponent<Rigidbody>();
@@ -110,6 +113,33 @@ public class CreateObject : HTBehaviour
                 rec.objectStartPosition[1] + objectValue.BaseSize.y * scale / 2, rec.objectStartPosition[2]);
         }
         return obj;
+    }
+
+    static void MyResetModelPivot(GameObject Model)
+    {
+        //获得模型的中心
+        Vector3 center = Model.GetComponent<MeshCollider>().sharedMesh.bounds.center;
+
+        Mesh mesh = Model.GetComponent<MeshFilter>().mesh;
+        Vector3[] vertices = mesh.vertices;
+
+        //网格顶点是本地坐标
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            vertices[i] -= center;
+        }
+
+        mesh.vertices = vertices;
+
+        mesh.RecalculateBounds();
+        mesh.RecalculateTangents();
+
+        Model.GetComponent<MeshFilter>().mesh = mesh;
+
+        Destroy(Model.GetComponent<MeshCollider>());
+        var meshCollider = Model.AddComponent<MeshCollider>();
+        meshCollider.convex = true;
+        meshCollider.isTrigger = false;
     }
 
     public static void CreateRecord()

@@ -103,5 +103,16 @@ public class Initializer
                     },
                 };
         }
+        else
+        {
+            foreach(var item in GameManager.Instance.objectsModels)
+            {
+                item.baseSize = new MyVector3();
+                item.childrenPostition = new List<MyVector3>();
+                item.childrenRotation = new List<MyVector4>();
+                item.position = new MyVector3();
+                item.rotation = new MyVector4();
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ public class Collide_Caliper : HTBehaviour
     {
         if ((collision.collider.tag == "Mesured") && this.transform.parent.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num <= -0.01f)
         {
-            this.transform.parent.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num += 0.02f;
+            this.transform.parent.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num += 0.05f;
         }
         if (this.transform.parent.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num <= 0.0001f && this.transform.parent.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num >= -0.0001f)
         {

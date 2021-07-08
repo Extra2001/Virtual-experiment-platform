@@ -112,6 +112,10 @@ public class Caliper_main : HTBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.Y))
+        {
+            this.transform.Find("MeasureHead").gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0,0 , -1), ForceMode.VelocityChange);
+        }
         if (Input.GetKey(KeyCode.P))
         {
             Measure();

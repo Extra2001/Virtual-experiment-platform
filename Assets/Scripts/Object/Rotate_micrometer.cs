@@ -13,15 +13,13 @@ public class Rotate_micrometer : HTBehaviour
     public void Rotatenum(float num)
     {
         num = num / 5.0f;
-        if (this.transform.localPosition[1] < 1.3156f)
-        {
+
             this.transform.localPosition -= new Vector3(0, (0.53f * num) / 5000f, 0);
 
             //this.transform.parent.Find("对象014").Find("Camera").localPosition -= new Vector3(0, (0.53f*num)/5000f, 0);
             //神秘bug
 
             this.transform.Rotate(new Vector3(0, num / 50.0f * 360.0f, 0));
-        }
     }
 
     // Start is called before the first frame update

@@ -48,6 +48,11 @@ public class Micrometer_main : HTBehaviour
         this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = -3;
     }
 
+    public void BackMeasure()
+    {
+        this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = 3;
+    }
+
     private void Look_back()
     {
         if (Input.GetKeyDown(KeyCode.X) )
@@ -133,8 +138,17 @@ public class Micrometer_main : HTBehaviour
         {
             Measure();
         }
-            Look_back();
-        if (this.transform.localPosition[1] >= 1.3156f)
+        if (Input.GetKey(KeyCode.O))
+        {
+            BackMeasure();
+        }
+        Look_back();
+
+        if (this.transform.Find("Micrometer_grandson").Find("rotatebody_main").transform.localPosition[1] >= 1.3156f && this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num < 0)
+        {
+            this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = 0;
+        }
+        if (this.transform.Find("Micrometer_grandson").Find("rotatebody_main").transform.localPosition[1] <=1.227f&& this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num > 0)
         {
             this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = 0;
         }

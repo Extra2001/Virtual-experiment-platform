@@ -265,7 +265,6 @@ public class DealMeasuredDataInput : HTBehaviour
         {
             //弹出报错提示框
             ShowModel($"输入公式无法求解，请重新输入");
-
             CallButton4.image.sprite = Sprites[1];
             RecordManager.tempRecord.quantities[RecordManager.tempRecord.currentQuantityIndex].ComplexState = 1;
         }

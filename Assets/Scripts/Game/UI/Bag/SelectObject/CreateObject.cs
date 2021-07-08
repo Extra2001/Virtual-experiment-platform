@@ -59,6 +59,10 @@ public class CreateObject : HTBehaviour
                 rigid.angularDrag = 10;
                 rigid.isKinematic = false;
             }
+            if (item.gameObject.GetComponent<SelfRotate>() == null)
+            {
+                var selfRotate = item.gameObject.AddComponent<SelfRotate>();
+            }
             if (item.gameObject.GetComponent<RightButtonObject>() == null)
             {
                 if (model.childrenPostition.Count == cnt)

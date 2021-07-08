@@ -110,6 +110,10 @@ public class GameButtonUILogic : UILogicResident
         });
 
         instrument.ShowGameButton(gameButtonItems);
+
+        foreach (var item in gameButtonItems)
+            if (item.OnClick.Count != 0 || item.OnTap.Count != 0)
+                item.GameObject.gameObject.SetActive(true);
     }
 }
 

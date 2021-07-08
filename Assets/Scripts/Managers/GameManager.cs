@@ -19,6 +19,16 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         get => RecordManager.tempRecord.quantities[_currentQuantityIndex];
     }
 
+    private List<ObjectsModel> _objectsModels = null;
+
+    public List<ObjectsModel> objectsModels
+    {
+        get => _objectsModels == null ? 
+            _objectsModels = Storage.CommonStorage.GetStorage<List<ObjectsModel>>("objectsModels") : 
+            _objectsModels;
+        set => _objectsModels = value;
+    }
+
     public InstrumentBase CurrentInstrument =>
         GetInstrument(RecordManager.tempRecord.showedInstrument);
 
@@ -242,5 +252,6 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     public override void OnDestroy()
     {
         RecordManager.tempRecord.Save();
+        Storage.CommonStorage.SetStorage("objectsModels", _objectsModels);
     }
 }

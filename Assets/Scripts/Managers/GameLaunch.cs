@@ -32,6 +32,9 @@ public class GameLaunch : MonoBehaviour
     /// </summary>
     private void PreLoadingAssets()
     {
+        Initializer.InitializeObjects();
+        Initializer.InitializeExperiments();
+
         // 加载仪器
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));

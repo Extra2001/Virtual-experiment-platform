@@ -142,8 +142,6 @@ public static class RecordManager
         return true;
     }
 
-
-
     /// <summary>
     /// 获取存档信息列表
     /// </summary>

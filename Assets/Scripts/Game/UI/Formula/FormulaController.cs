@@ -141,7 +141,9 @@ public class FormulaController : MonoBehaviour
         }
         // 清空当前显示
         for (int i = 1; i < showedCells.Count; i++)
-            Destroy(showedCells[i]?.gameObject);
+        {
+            try { Destroy(showedCells[i]?.gameObject); } catch { }
+        }
         for (int i = 1; i < showedCells.Count; i++)
             showedCells.RemoveAt(i);
         RefreshContentSizeFitter(showedCells[0].gameObject);

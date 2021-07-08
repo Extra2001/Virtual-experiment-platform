@@ -14,7 +14,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 
         void Start()
         {
-            var items = new ItemData[RecordManager.tempRecord.objects.Count];
+            var items = new ItemData[GameManager.Instance.objectsModels.Count];
             scrollView.UpdateData(items);
             scrollView.SelectCell(0);
         }

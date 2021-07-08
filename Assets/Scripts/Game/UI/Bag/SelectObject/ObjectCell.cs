@@ -15,7 +15,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
         [SerializeField] Image imageLarge = default;
         [SerializeField] Button button = default;
 
-        private List<ObjectsModel> objects => RecordManager.tempRecord.objects;
+        private List<ObjectsModel> objects => GameManager.Instance.objectsModels;
 
         static class AnimatorHash
         {

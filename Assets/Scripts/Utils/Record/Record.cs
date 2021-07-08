@@ -42,8 +42,6 @@ public class Record
     public InstrumentInfoModel showedInstrument { get; set; } = null;
     public ObjectsModel showedObject { get; set; } = null;
 
-    public List<ObjectsModel> objects { get; set; } = new List<ObjectsModel>();
-
     public MyVector3 FPSPosition = new MyVector3()
     {
         x = -58.759f,

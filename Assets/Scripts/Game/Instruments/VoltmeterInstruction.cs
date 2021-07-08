@@ -115,6 +115,24 @@ public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
         buttonItems.Where(x => x.GameObject.name.Equals("SwitchButton")).FirstOrDefault().OnClick.Add(() =>
         {
             Debug.Log("切换量程");
+            if (RangeState == 0)
+            {
+                URV = 15;
+                LRV = -3;
+                RangeState = 1;
+                Entity.FindChildren("Voltmeter_son").GetComponent<VAStateChange>().SwitchState2();
+                Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().MaxV = 15;
+                ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+            }
+            else if (RangeState == 1)
+            {
+                URV = 3;
+                LRV = -1;
+                RangeState = 0;
+                Entity.FindChildren("Voltmeter_son").GetComponent<VAStateChange>().SwitchState1();
+                Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().MaxV = 3;
+                ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+            }
         });
     }
 }

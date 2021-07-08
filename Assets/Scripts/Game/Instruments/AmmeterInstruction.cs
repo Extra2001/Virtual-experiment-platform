@@ -111,7 +111,24 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
         });
         buttonItems.Where(x => x.GameObject.name.Equals("SwitchButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            Debug.Log("切换量程");
+            if (RangeState == 0)
+            {
+                URV = 3;
+                LRV = -1;
+                RangeState = 1;
+                Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState2();
+                Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 3f;
+                ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+            }
+            else if (RangeState == 1)
+            {
+                URV = 0.6;
+                LRV = -0.2;
+                RangeState = 0;
+                Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState1();
+                Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;
+                ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+            }
         });
     }
 }

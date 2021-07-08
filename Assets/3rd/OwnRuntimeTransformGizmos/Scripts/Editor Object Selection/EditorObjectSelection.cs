@@ -32,6 +32,11 @@ namespace RTEditor
         public delegate void GameObjectClickedHandler(GameObject clickedObject);
         public event GameObjectClickedHandler GameObjectClicked;
 
+        public int Skode_Press()
+        {
+            return _selectedObjects.Count;
+        }
+
         #region Private Variables
         /// <summary>
         /// Holds all object selection related settings.

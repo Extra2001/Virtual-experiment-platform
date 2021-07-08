@@ -31,7 +31,7 @@ public class Ruler_main : HTBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if (Nowin == false)
+            if (!Nowin && !moveable_look)
             {
 
                 Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = false;
@@ -43,7 +43,7 @@ public class Ruler_main : HTBehaviour
                 Ori_eulerAngles = mCamera.transform.rotation.eulerAngles;
                 Ori_fieldOfView = mCamera.GetComponent<Camera>().fieldOfView;
             }
-            else
+            else if (Nowin)
             {
                 moveable_back = true;
             }

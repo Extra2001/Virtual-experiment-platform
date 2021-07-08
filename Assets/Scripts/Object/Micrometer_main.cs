@@ -57,7 +57,7 @@ public class Micrometer_main : HTBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X) )
         {
-            if (Nowin == false)
+            if (!Nowin && !moveable_look)
             {
 
                 Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = false;
@@ -68,7 +68,7 @@ public class Micrometer_main : HTBehaviour
                 moveable_look = true;
                 mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
             }
-            else
+            else if (Nowin)
             {
                 moveable_back = true;
             }

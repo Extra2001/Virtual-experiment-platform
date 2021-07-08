@@ -19,7 +19,7 @@ public class DataInput : HTBehaviour
         set => _Value.readOnly = value;
     }
 
-    public double Value { get => Convert.ToDouble(_Value.text); set => _Value.text = value.ToString(); }
+    public string Value { get => _Value.text; set => _Value.text = value; }
     public int GroupNumber { get => Convert.ToInt32(_GroupNumber.text.Remove(_GroupNumber.text.Length - 1, 1)); 
         set => _GroupNumber.text = $"{value}."; }
     
@@ -28,7 +28,7 @@ public class DataInput : HTBehaviour
         GroupNumber = groupNumber;
     }
 
-    public void Show(int groupNumber, double value)
+    public void Show(int groupNumber, string value)
     {
         Value = value;
         GroupNumber = groupNumber;

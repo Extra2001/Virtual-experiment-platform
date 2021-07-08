@@ -126,4 +126,9 @@ public static class CommonTools
             w = vector3.w
         };
     }
+
+    public static List<double> ToDouble(this List<string> list)
+    {
+        return list.Select(x => Convert.ToDouble(x)).ToList();
+    }
 }

@@ -13,7 +13,7 @@ public class QuantityModel
     public Type InstrumentType { get; set; } = typeof(RulerInstrument);
     public int Groups { get; set; } = 8;
 
-    public List<double> Data { get; set; } = new List<double>();
+    public List<string> Data { get; set; } = new List<string>();
 
     public double Average { get; set; } = 0.0;
     public double Ua { get; set; } = 0.0;

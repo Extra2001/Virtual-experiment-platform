@@ -29,7 +29,7 @@ public class DataColumn : HTBehaviour
             quantity.Data.Clear();
             for (int i = 0; i < quantity.Groups; i++)
             {
-                quantity.Data.Add(0);
+                quantity.Data.Add("0");
                 var showed = Instantiate(_dataInput, _Content.transform);
                 showed.Inputable = inputable;
                 showedInputs.Add(showed);

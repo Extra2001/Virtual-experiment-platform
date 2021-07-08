@@ -40,7 +40,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
         var item = quantities.Where(x => x.Symbol.Equals(quantityName)).FirstOrDefault();
         if (ComplexStatisticValue.Average == valueKind)
         {
-            result = StaticMethods.Average(item.Data).ToString();
+            result = StaticMethods.Average(item.Data.ToDouble()).ToString();
         }
         else if (ComplexStatisticValue.Uncertain == valueKind)
         {

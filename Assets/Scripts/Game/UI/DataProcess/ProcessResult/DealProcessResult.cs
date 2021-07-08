@@ -60,7 +60,7 @@ public class DealProcessResult : HTBehaviour
         foreach (var item in RecordManager.tempRecord.quantities)
         {
             var Ub = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / System.Math.Sqrt(3);
-            (avg, ua, u) = StaticMethods.CalcUncertain(item.Data, Ub);
+            (avg, ua, u) = StaticMethods.CalcUncertain(item.Data.ToDouble(), Ub);
             var data = new DataChart()
             {
                 Name = item.Symbol,
@@ -109,7 +109,7 @@ public class DealProcessResult : HTBehaviour
         foreach (var item in quantities)
         {
             calc.AddVariable(item.Key.Symbol, item.Key.UbExpression.GetExpressionExecuted(), item.Key.Groups);
-            calc.Measure(item.Key.Symbol, item.Key.Data.ToArray());
+            calc.Measure(item.Key.Symbol, item.Key.Data.ToDouble().ToArray());
             input.Add(new CalcArgs.UserInput()
             {
                 name = item.Key.Symbol,

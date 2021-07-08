@@ -50,27 +50,27 @@ public class MeasuredDataProcessProcedure : ProcedureBase
         }
         else if (valueKind == MeasuredStatisticValue.Average)
         {
-            result = StaticMethods.Average(CurrentQuantity.Data).ToString();
+            result = StaticMethods.Average(CurrentQuantity.Data.ToDouble()).ToString();
         }
         else if (valueKind == MeasuredStatisticValue.SigmaX)
         {
-            result = (StaticMethods.CenterMoment(CurrentQuantity.Data, 1) * CurrentQuantity.Groups).ToString();
+            result = (StaticMethods.CenterMoment(CurrentQuantity.Data.ToDouble(), 1) * CurrentQuantity.Groups).ToString();
         }
         else if (valueKind == MeasuredStatisticValue.SigmaXSquare)
         {
-            result = (StaticMethods.CenterMoment(CurrentQuantity.Data, 2) * CurrentQuantity.Groups).ToString();
+            result = (StaticMethods.CenterMoment(CurrentQuantity.Data.ToDouble(), 2) * CurrentQuantity.Groups).ToString();
         }
         else if (valueKind == MeasuredStatisticValue.SigmaXCube)
         {
-            result = (StaticMethods.CenterMoment(CurrentQuantity.Data, 3) * CurrentQuantity.Groups).ToString();
+            result = (StaticMethods.CenterMoment(CurrentQuantity.Data.ToDouble(), 3) * CurrentQuantity.Groups).ToString();
         }
         else if (valueKind == MeasuredStatisticValue.Variance)
         {
-            result = StaticMethods.Variance(CurrentQuantity.Data).ToString();
+            result = StaticMethods.Variance(CurrentQuantity.Data.ToDouble()).ToString();
         }
         else if (valueKind == MeasuredStatisticValue.StandardDeviation)
         {
-            result = StaticMethods.StdDev(CurrentQuantity.Data).ToString();
+            result = StaticMethods.StdDev(CurrentQuantity.Data.ToDouble()).ToString();
         }
         else if (valueKind == MeasuredStatisticValue.InstrumentError)
         {

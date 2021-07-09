@@ -5689,6 +5689,7 @@ GameObject:
   - component: {fileID: 5896963658150820327}
   - component: {fileID: 5896963658150820326}
   - component: {fileID: 5896963658150820329}
+  - component: {fileID: 5896963658150820330}
   m_Layer: 0
   m_Name: FPSController
   m_TagString: Untagged
@@ -5792,6 +5793,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &5896963658150820330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5896963658150820328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86a045ef21b91ac458c1507d8cc05e4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ori_place: {x: 0, y: 0, z: 0}
+  Ori_eulerAngles: {x: 0, y: 0, z: 0}
+  Ori_fieldOfView: 0
+  moveable_look: 0
+  moveable_back: 0
+  Nowin: 0
 --- !u!1 &5896963658175989644
 GameObject:
   m_ObjectHideFlags: 0

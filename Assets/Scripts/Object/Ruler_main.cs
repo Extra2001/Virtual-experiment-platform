@@ -31,6 +31,9 @@ public class Ruler_main : HTBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Nowin = Player_S.GetComponent<MirrorPlayer>().Nowin;
+            moveable_look = Player_S.GetComponent<MirrorPlayer>().moveable_look;
+            moveable_back = Player_S.GetComponent<MirrorPlayer>().moveable_back;
             if (!Nowin && !moveable_look)
             {
 
@@ -38,17 +41,17 @@ public class Ruler_main : HTBehaviour
                 Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 1;
 
                 moveable_look = true;
-                mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
-                Ori_place = mCamera.transform.position;
-                Ori_eulerAngles = mCamera.transform.rotation.eulerAngles;
-                Ori_fieldOfView = mCamera.GetComponent<Camera>().fieldOfView;
+
+                Player_S.GetComponent<MirrorPlayer>().updateMirror();
             }
             else if (Nowin)
             {
                 moveable_back = true;
             }
-
         }
+        Ori_place = Player_S.GetComponent<MirrorPlayer>().Ori_place;
+        Ori_eulerAngles = Player_S.GetComponent<MirrorPlayer>().Ori_eulerAngles;
+        Ori_fieldOfView = Player_S.GetComponent<MirrorPlayer>().Ori_fieldOfView;
         Look();
         Back();
     }
@@ -71,6 +74,9 @@ public class Ruler_main : HTBehaviour
             mCamera.fieldOfView = Ele.GetComponent<Camera>().fieldOfView;
             moveable_look = false;
             Nowin = true;
+            Player_S.GetComponent<MirrorPlayer>().Nowin = Nowin;
+            Player_S.GetComponent<MirrorPlayer>().moveable_look = moveable_look;
+            Player_S.GetComponent<MirrorPlayer>().moveable_back = moveable_back;
         }
     }
     private void Back()
@@ -93,6 +99,9 @@ public class Ruler_main : HTBehaviour
             Nowin = false;
             Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = true;
             Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 30;
+            Player_S.GetComponent<MirrorPlayer>().Nowin = Nowin;
+            Player_S.GetComponent<MirrorPlayer>().moveable_look = moveable_look;
+            Player_S.GetComponent<MirrorPlayer>().moveable_back = moveable_back;
 
         }
     }

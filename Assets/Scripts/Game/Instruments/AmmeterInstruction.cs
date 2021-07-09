@@ -18,7 +18,7 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
 
     public int RangeState = 0;//0代表小量程，1代表大量程
 
-    public override double ErrorLimit { get; set; } = 0.5; //忘了
+    public override double ErrorLimit { get; set; } = 0.04; //4格最小刻度，为了相对明显一点
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }
@@ -77,6 +77,7 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
             {
                 URV = 3;
                 LRV = -1;
+                ErrorLimit = 0.2;
                 RangeState = 1;
                 infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
                 infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
@@ -88,6 +89,7 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
             {
                 URV = 0.6;
                 LRV = -0.2;
+                ErrorLimit = 0.04;
                 RangeState = 0;
                 infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
                 infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
@@ -115,6 +117,7 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
             {
                 URV = 3;
                 LRV = -1;
+                ErrorLimit = 0.2;
                 RangeState = 1;
                 Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState2();
                 Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 3f;
@@ -124,6 +127,7 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
             {
                 URV = 0.6;
                 LRV = -0.2;
+                ErrorLimit = 0.04;
                 RangeState = 0;
                 Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState1();
                 Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;

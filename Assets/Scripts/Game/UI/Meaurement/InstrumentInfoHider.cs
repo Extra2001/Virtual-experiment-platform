@@ -1,6 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：仪器信息自动隐藏器
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +12,6 @@ public class InstrumentInfoHider : HTBehaviour
     public List<GameObject> Operate = new List<GameObject>();
     [ReorderableList]
     public List<GameObject> Watch = new List<GameObject>();
-
 
     private void Update()
     {

@@ -1,7 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：公式编辑器自定义方块显示数据
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 

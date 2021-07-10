@@ -1,12 +1,9 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：右键单击被测物体处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using System;
-using UnityEditor;
-using System.Linq;
 
 public class RightButtonObject : HTBehaviour
 {

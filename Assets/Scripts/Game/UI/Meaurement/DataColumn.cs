@@ -1,6 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：数据记录表格的列
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +17,9 @@ public class DataColumn : HTBehaviour
     private QuantityModel quantity;
     private List<DataInput> showedInputs = new List<DataInput>();
 
+    /// <summary>
+    /// 一列代表一个物理量，显示这个物理量的值和名称单位
+    /// </summary>
     public void ShowQuantity(QuantityModel quantity, bool inputable = false)
     {
         foreach (var item in showedInputs)

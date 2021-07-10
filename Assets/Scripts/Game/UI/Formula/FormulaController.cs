@@ -1,11 +1,12 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：公式编辑器中央控制器
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
-using System;
 
 public class FormulaController : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class FormulaController : MonoBehaviour
     /// 实例名称
     /// </summary>
     public string InstanceName;
-
+    #region Unity序列化配置
     [SerializeField]
     private FormulaCell baseCell;
     [SerializeField]
@@ -42,7 +43,7 @@ public class FormulaController : MonoBehaviour
     private GameObject ComplexPanel;
     [SerializeField]
     private Transform ComplexPanelRoot;
-
+    #endregion
     private List<FormulaCell> showedCells = new List<FormulaCell>();
     private Button clickedButton;
     private FormulaCell clickedCell;
@@ -55,7 +56,6 @@ public class FormulaController : MonoBehaviour
     {
         CheckActive();
     }
-
     /// <summary>
     /// 在公式选择器里选择节点
     /// </summary>
@@ -101,7 +101,6 @@ public class FormulaController : MonoBehaviour
         onSelectCell?.Invoke();
         return hh;
     }
-
     /// <summary>
     /// 获取序列化后的公式节点
     /// </summary>
@@ -126,7 +125,6 @@ public class FormulaController : MonoBehaviour
         }
         return ret;
     }
-
     /// <summary>
     /// 加载序列化后的节点，调用此函数会导致本控制器下输入的公式被清空。
     /// </summary>
@@ -162,7 +160,6 @@ public class FormulaController : MonoBehaviour
         // 显示方块
         RestoreCell(baseCell, nodes);
     }
-
     /// <summary>
     /// 初始化公式编辑器，此操作会清空其中所有内容。
     /// </summary>
@@ -208,13 +205,14 @@ public class FormulaController : MonoBehaviour
         Mask.SetActive(false);
         onSelectCell?.Invoke();
     }
-
+    /// <summary>
+    /// 检查节点是否存在
+    /// </summary>
     private void CheckActive()
     {
         if (showedCells.Count == 0)
             Initialize();
     }
-
     /// <summary>
     /// 从节点恢复方块
     /// </summary>
@@ -240,7 +238,9 @@ public class FormulaController : MonoBehaviour
             RestoreCell(newCell, nodes);
         }
     }
-
+    /// <summary>
+    /// 显示选择器
+    /// </summary>
     private void ShowSelector()
     {
         Mask.SetActive(true);
@@ -267,7 +267,9 @@ public class FormulaController : MonoBehaviour
             UIShowHideHelper.ShowFromButtom(ComplexSelector, 0);
         }
     }
-
+    /// <summary>
+    /// 隐藏选择器
+    /// </summary>
     private void HideSelector()
     {
         Mask.SetActive(false);
@@ -277,14 +279,18 @@ public class FormulaController : MonoBehaviour
         else if (Main.m_Procedure.CurrentProcedure is ComplexDataProcessProcedure)
             UIShowHideHelper.HideToButtom(ComplexSelector);
     }
-
+    /// <summary>
+    /// 获取方块对象
+    /// </summary>
     private FormulaCell GetCell(string cellName)
     {
         var obj = Resources.Load<GameObject>($"UI/Formula/Cells/{cellName}");
         var ret = obj.GetComponent<FormulaCell>();
         return ret;
     }
-
+    /// <summary>
+    /// 删除该节点从属的所有节点
+    /// </summary>
     private void DeleteChild(Transform cell)
     {
         int childCnt = cell.childCount;
@@ -294,7 +300,10 @@ public class FormulaController : MonoBehaviour
         for (int i = 0; i < childCnt; i++)
             Destroy(cell.transform.GetChild(i).gameObject);
     }
-
+    /// <summary>
+    /// 刷新UI适应布局
+    /// </summary>
+    /// <param name="baseObject"></param>
     public void RefreshContentSizeFitter(GameObject baseObject)
     {
         var list = baseObject.GetComponentsInChildren<ContentSizeFitter>();
@@ -311,7 +320,9 @@ public class FormulaController : MonoBehaviour
             LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
         LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
     }
-
+    /// <summary>
+    /// 递归获取当前表达式
+    /// </summary>
     private string GetExpression(string guid)
     {
         var curCell = showedCells.Where(x => x.thisGUID.Equals(guid)).Last();
@@ -323,7 +334,9 @@ public class FormulaController : MonoBehaviour
         }
         return value;
     }
-
+    /// <summary>
+    /// 添加至所有FormulaInstance
+    /// </summary>
     private void AddInstance()
     {
         if (string.IsNullOrEmpty(InstanceName))
@@ -338,7 +351,6 @@ public class FormulaController : MonoBehaviour
         foreach (var item in Selector.GetComponentsInChildren<FormulaSelectorCell>(true))
             item.FormulaControllerInstance = this;
     }
-
     private void OnDestroy()
     {
         Instances.Remove(InstanceName);

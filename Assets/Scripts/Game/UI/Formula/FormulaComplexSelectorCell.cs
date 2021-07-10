@@ -1,14 +1,22 @@
-using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
+/************************************************************************************
+    作者：荆煦添
+    描述：公式编辑器合成统计量方块绑定数据
+*************************************************************************************/
 using UnityEngine;
 
 public class FormulaComplexSelectorCell : MonoBehaviour
 {
+    /// <summary>
+    /// 直接测量量的统计不确定度
+    /// </summary>
     public FormulaSelectorCell StatisticUncertainty;
+    /// <summary>
+    /// 直接测量量的平均值
+    /// </summary>
     public FormulaSelectorCell StatisticAverage;
-
+    /// <summary>
+    /// 将数值和物理量名称加载到方块
+    /// </summary>
     public void Show(string quantityName, FormulaController controller)
     {
         StatisticUncertainty.SetSelectorName(quantityName);

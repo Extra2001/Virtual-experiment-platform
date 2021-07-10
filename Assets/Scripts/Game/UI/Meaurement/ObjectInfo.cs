@@ -1,10 +1,10 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：右键物体信息数据模型
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class ObjectInfo : HTBehaviour
 {

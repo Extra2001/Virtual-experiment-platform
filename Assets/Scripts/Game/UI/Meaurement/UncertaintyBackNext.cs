@@ -1,8 +1,8 @@
+/************************************************************************************
+    作者：张峻凡
+    描述：计算不确定度下一步上一步处理
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class UncertaintyBackNext : HTBehaviour

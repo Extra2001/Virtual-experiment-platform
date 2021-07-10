@@ -1,10 +1,9 @@
+/************************************************************************************
+    作者：张峻凡
+    描述：计算不确定度的数据显示器
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class UncertaintyInput : HTBehaviour
 {
@@ -15,12 +14,6 @@ public class UncertaintyInput : HTBehaviour
     public Text _ComplexTitle;
 
     public DataColumn dataColumn;
-
-
-    private void Start()
-    {
-        
-    }
 
     public void Show(QuantityModel quantity)
     {

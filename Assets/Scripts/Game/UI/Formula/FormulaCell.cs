@@ -10,18 +10,34 @@ using UnityEngine.UI;
 
 public class FormulaCell : HTBehaviour
 {
+    /// <summary>
+    /// 方块的唯一ID
+    /// </summary>
     public string thisGUID = "";
-
+    /// <summary>
+    /// 方块的替换部分GUIDs
+    /// </summary>
     public Dictionary<Button, string> ReplaceFlags = new Dictionary<Button, string>();
-
+    /// <summary>
+    /// 方块的第一个可点击部分
+    /// </summary>
     public Button Value1;
-
+    /// <summary>
+    /// 方块的第二个可点击部分
+    /// </summary>
     public Button Value2;
-
+    /// <summary>
+    /// 方块内部计算值
+    /// </summary>
     public string value;
-
+    /// <summary>
+    /// 方块名称显示器
+    /// </summary>
     public Text NameShower;
-
+    /// <summary>
+    /// 生成方块替换GUID
+    /// </summary>
+    /// <returns></returns>
     public string GenerateReplaceFlags()
     {
         ReplaceFlags.Clear();

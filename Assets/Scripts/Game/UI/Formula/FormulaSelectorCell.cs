@@ -1,13 +1,10 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：公式编辑器选择器方框绑定数据
+*************************************************************************************/
 using HT.Framework;
-using Jint;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UnityEngine.UI;
-using UnityEditor;
-using System.Threading.Tasks;
 using UnityEngine.EventSystems;
 
 public class FormulaSelectorCell : HTBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -55,24 +52,35 @@ public class FormulaSelectorCell : HTBehaviour, IPointerEnterHandler, IPointerEx
             FormulaControllerInstance.SelectCell(gameObject.name, value, name);
         });
     }
-
+    /// <summary>
+    /// 设置选择器的名称
+    /// </summary>
+    /// <param name="name"></param>
     public void SetSelectorName(string name)
     {
         if (Text)
             Text.text = name;
     }
-
+    /// <summary>
+    /// 鼠标离开
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData)
     {
         CancelInvoke();
         FormulaControllerInstance.Indicator.Hide();
     }
-
+    /// <summary>
+    /// 鼠标进入
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
     {
         Invoke("ShowIndicator", 0.8f);
     }
-
+    /// <summary>
+    /// 显示属性面板
+    /// </summary>
     private void ShowIndicator()
     {
         if (valueType == ValueType.Measured)

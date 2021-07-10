@@ -1,6 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：数据记录表格
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +24,10 @@ public class DataTable : HTBehaviour
             UIAPI.Instance.HideDataTable();
         });
     }
-
+    /// <summary>
+    /// 将物理量显示在数据表格上
+    /// </summary>
+    /// <param name="filter"></param>
     private void Show(Func<Type, bool> filter)
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(gameObject.rectTransform());

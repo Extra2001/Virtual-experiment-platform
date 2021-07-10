@@ -1,8 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：公式编辑器选择器自定义方块绑定数据
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class FormulaCustomizeCell : HTBehaviour
@@ -11,7 +11,6 @@ public class FormulaCustomizeCell : HTBehaviour
     public FormulaSelectorCell FormulaSelectorCell;
     public InputField input;
     
-    // Start is called before the first frame update
     void Start()
     {
         input.onValueChanged.AddListener(value =>

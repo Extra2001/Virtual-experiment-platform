@@ -1,6 +1,7 @@
-﻿using HT.Framework;
-using System.Collections;
-using System.Collections.Generic;
+﻿/************************************************************************************
+    来源：CSDN
+    描述：配置单例模式运行的MonoBehavior
+*************************************************************************************/
 using UnityEngine;
 
 public class SingletonBehaviorManager<T> : MonoBehaviour where T: Component

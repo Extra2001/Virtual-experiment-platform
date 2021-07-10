@@ -1,13 +1,16 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：打开关闭仪器抽屉的动画
+*************************************************************************************/
 using HT.Framework;
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 
 public class BagSelectorAnimate : MonoBehaviour
 {
+    /// <summary>
+    /// 显示动画
+    /// </summary>
     public void Show()
     {
         CancelInvoke();
@@ -16,12 +19,16 @@ public class BagSelectorAnimate : MonoBehaviour
             .SetEase(Ease.OutExpo);
         Invoke(nameof(ResetRotation), .55f);
     }
-
+    /// <summary>
+    /// 隐藏动画
+    /// </summary>
     public void Hide()
     {
         UIShowHideHelper.HideToUp(gameObject);
     }
-
+    /// <summary>
+    /// 重置旋转角以至正常角度
+    /// </summary>
     private void ResetRotation()
     {
         gameObject.rectTransform().rotation = new Quaternion();

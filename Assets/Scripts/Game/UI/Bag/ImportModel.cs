@@ -1,7 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：导入自定义模型的处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Common;
 using System.IO;
@@ -9,15 +10,14 @@ using UnityEngine.UI;
 
 public class ImportModel : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
-    // Start is called before the first frame update
     void Start()
     {
         GetComponent<Button>().onClick.AddListener(OpenFile);
     }
 
+    /// <summary>
+    /// 打开模型文件并导入
+    /// </summary>
     public void OpenFile()
     {
         OpenFileDlg pth = new OpenFileDlg();

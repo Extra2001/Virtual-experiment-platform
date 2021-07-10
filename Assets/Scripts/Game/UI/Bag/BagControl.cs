@@ -1,22 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张峻凡
+    描述：仪器和被测物体UI逻辑类
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
+
 /// <summary>
-/// 新建UI逻辑类
+/// 仪器和被测物体UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/Bag/Bag")]
 public class BagControl : UILogicTemporary
 {
-	/// <summary>
-	/// 初始化
-	/// </summary>
-    public override void OnInit()
-    {
-        base.OnInit();
-    }
-
 	/// <summary>
 	/// 打开UI
 	/// </summary>
@@ -37,6 +30,9 @@ public class BagControl : UILogicTemporary
         base.OnClose();
     }
 
+    /// <summary>
+    /// 隐藏并关闭UI(显示动画)
+    /// </summary>
     public void Hide()
     {
         UIEntity.FindChildren("BagControl").GetComponent<BagSelectorAnimate>()?.Hide();
@@ -45,21 +41,5 @@ public class BagControl : UILogicTemporary
         {
             Close();
         });
-    }
-
-	/// <summary>
-	/// 销毁UI
-	/// </summary>
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-	/// <summary>
-	/// UI逻辑刷新
-	/// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
     }
 }

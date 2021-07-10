@@ -1,10 +1,8 @@
-using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
+/************************************************************************************
+    ×÷Õß£º¾£ìãÌí
+    ÃèÊö£º³éÌë¶¯»­
+*************************************************************************************/
 using UnityEngine;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 
 public class InstrumentChooserAnimate : MonoBehaviour
 {

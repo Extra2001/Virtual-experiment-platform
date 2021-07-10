@@ -1,22 +1,23 @@
+/************************************************************************************
+    作者：张峻凡
+    描述：关闭抽屉的处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class CloseBag : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-    
-    // Start is called before the first frame update
+    /// <summary>
+    /// 订阅点击事件
+    /// </summary>
     void Start()
     {
         Button btn = GetComponent<Button>();
         btn.onClick.AddListener(CloseIt);
     }
-
+    /// <summary>
+    /// 关闭BagUI
+    /// </summary>
     private void CloseIt()
     {
         Main.m_UI.GetUI<BagControl>().Hide();

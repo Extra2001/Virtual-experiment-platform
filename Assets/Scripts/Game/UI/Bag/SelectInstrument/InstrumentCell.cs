@@ -1,6 +1,7 @@
-using HT.Framework;
-using DG.Tweening;
-using UnityEngine.Sprites;
+/************************************************************************************
+    作者：张峻凡
+    描述：测量仪器Cells
+*************************************************************************************/
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -66,8 +67,6 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
             animator.speed = 0;
         }
 
-        // GameObject が非アクティブになると Animator がリセットされてしまうため
-        // 現在位置を保持しておいて OnEnable のタイミングで現在位置を再設定します
         float currentPosition = 0;
 
         void OnEnable() => UpdatePosition(currentPosition);

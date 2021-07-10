@@ -1,10 +1,10 @@
+/************************************************************************************
+    作者：张峻凡、荆煦添
+    描述：生成被测物体脚本
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
 using Dummiesman;
 
 public class CreateObject : HTBehaviour
@@ -17,6 +17,9 @@ public class CreateObject : HTBehaviour
         GetComponent<Button>().onClick.AddListener(CreateWithDestory);
     }
 
+    /// <summary>
+    /// 生成主程序
+    /// </summary>
     public static GameObject Create(ObjectsModel model)
     {
         if (model == null) return null;
@@ -49,7 +52,7 @@ public class CreateObject : HTBehaviour
                 meshCollider.convex = true;
                 meshCollider.isTrigger = false;
             }
-            MyResetModelPivot(item.gameObject);
+            ResetModelPivot(item.gameObject);
             if (item.gameObject.GetComponent<Rigidbody>() == null)
             {
                 var rigid = item.gameObject.AddComponent<Rigidbody>();
@@ -119,7 +122,10 @@ public class CreateObject : HTBehaviour
         return obj;
     }
 
-    static void MyResetModelPivot(GameObject Model)
+    /// <summary>
+    /// 重新计算模型中心点
+    /// </summary>
+    static void ResetModelPivot(GameObject Model)
     {
         //获得模型的中心
         Vector3 center = Model.GetComponent<MeshCollider>().sharedMesh.bounds.center;
@@ -145,13 +151,17 @@ public class CreateObject : HTBehaviour
         meshCollider.convex = true;
         meshCollider.isTrigger = false;
     }
-
+    /// <summary>
+    /// 生成存档中保存的物体
+    /// </summary>
     public static void CreateRecord()
     {
         if (RecordManager.tempRecord.showedObject != null)
             ShowedGameObject = Create(RecordManager.tempRecord.showedObject);
     }
-
+    /// <summary>
+    /// 生成新物体前销毁旧物体
+    /// </summary>
     private void CreateWithDestory()
     {
         if (ShowedGameObject != null)
@@ -164,6 +174,9 @@ public class CreateObject : HTBehaviour
 
         Main.m_UI.CloseUI<BagControl>();
     }
+    /// <summary>
+    /// 销毁已生成的物体
+    /// </summary>
     public static void DestroyObjecthh()
     {
         if (ShowedGameObject != null)

@@ -1,25 +1,25 @@
+/************************************************************************************
+    作者：张峻凡
+    描述：生成被测物体
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
 
 public class CreateInstrument : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
     public Type InstrumentType;
     private Button btn;
 
-    // Start is called before the first frame update
     void Start()
     {
         btn = GetComponent<Button>();
         btn.onClick.AddListener(CreateWithDestroy);
     }
-
+    /// <summary>
+    /// 生成测量仪器
+    /// </summary>
     private static InstrumentBase Create(InstrumentInfoModel model)
     {
         var instrument = GameManager.Instance.GetInstrument(model);
@@ -41,7 +41,9 @@ public class CreateInstrument : HTBehaviour
         Main.m_Event.Throw(Main.m_ReferencePool.Spawn<SelectInstrumentEventHandler>().Fill(instrument));
         return instrument;
     }
-
+    /// <summary>
+    /// 生成前销毁旧仪器
+    /// </summary>
     private void CreateWithDestroy()
     {
         var inst = RecordManager.tempRecord.showedInstrument;
@@ -53,7 +55,9 @@ public class CreateInstrument : HTBehaviour
         });
         Main.m_UI.CloseUI<BagControl>();
     }
-
+    /// <summary>
+    /// 生成存档中的仪器
+    /// </summary>
     public static void CreateRecord()
     {
         var inst = RecordManager.tempRecord.showedInstrument;

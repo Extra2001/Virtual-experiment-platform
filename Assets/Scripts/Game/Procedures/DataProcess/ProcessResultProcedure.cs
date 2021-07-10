@@ -1,27 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张峻凡
+    描述：系统对用户指出错误并给出评价流程
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建流程
+/// 系统对用户指出错误并给出评价流程
 /// </summary>
 public class ProcessResultProcedure : ProcedureBase
 {
-    //该流程系统对用户指出错误并给出评价
-
-    /// <summary>
-    /// 流程初始化
-    /// </summary>
-    public override void OnInit()
-    {
-		base.OnInit();
-    }
-
     /// <summary>
     /// 进入流程
     /// </summary>
-    /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         //如果有数据未输入则不能进入
@@ -77,26 +66,9 @@ public class ProcessResultProcedure : ProcedureBase
     /// <summary>
     /// 离开流程
     /// </summary>
-    /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
         Main.m_UI.CloseUI<ProcessResult>();
         base.OnLeave(nextProcedure);
-    }
-
-    /// <summary>
-    /// 流程帧刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
-
-    /// <summary>
-    /// 流程帧刷新（秒）
-    /// </summary>
-    public override void OnUpdateSecond()
-    {
-        base.OnUpdateSecond();
     }
 }

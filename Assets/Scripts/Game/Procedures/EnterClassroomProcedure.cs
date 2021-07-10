@@ -1,23 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+/************************************************************************************
+    作者：张柯
+    描述：离开数据生声明阶段，进入教室，本阶段选择测量所在的桌子
+*************************************************************************************/
 using UnityEngine;
 using HT.Framework;
-using DG.Tweening;
+
 /// <summary>
-/// 新建流程
+/// 离开数据生声明阶段，进入教室，本阶段选择测量所在的桌子
 /// </summary>
 public class EnterClassroomProcedure : ProcedureBase
 {
-    //离开数据生声明阶段，进入教室，本阶段选择测量所在的桌子
-
     bool showed = false;
-    /// <summary>
-    /// 流程初始化
-    /// </summary>
-    public override void OnInit()
-    {
-        base.OnInit();
-    }
 
     /// <summary>
     /// 进入流程
@@ -33,19 +26,19 @@ public class EnterClassroomProcedure : ProcedureBase
             Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill(Position.x, Position.y, Position.z));
         });
         return;
-        GameManager.Instance.FPSable = true;
-        showed = false;
-        Main.m_UI.OpenTemporaryUI<DatatableUILogic>();
-        Main.m_UI.OpenResidentUI<GameButtonUILogic>();
-        KeyboardManager.Instance.Register(KeyCode.T, () =>
-        {
-            if (showed)
-                UIAPI.Instance.HideDataTable();
-            else
-                UIAPI.Instance.ShowDataTable();
-            showed = !showed;
-        });
-        base.OnEnter(lastProcedure);
+        //GameManager.Instance.FPSable = true;
+        //showed = false;
+        //Main.m_UI.OpenTemporaryUI<DatatableUILogic>();
+        //Main.m_UI.OpenResidentUI<GameButtonUILogic>();
+        //KeyboardManager.Instance.Register(KeyCode.T, () =>
+        //{
+        //    if (showed)
+        //        UIAPI.Instance.HideDataTable();
+        //    else
+        //        UIAPI.Instance.ShowDataTable();
+        //    showed = !showed;
+        //});
+        //base.OnEnter(lastProcedure);
     }
 
     /// <summary>
@@ -62,21 +55,5 @@ public class EnterClassroomProcedure : ProcedureBase
         KeyboardManager.Instance.UnRegister(KeyCode.T);
         Main.m_UI.CloseUI<GameButtonUILogic>();
         base.OnLeave(nextProcedure);
-    }
-
-    /// <summary>
-    /// 流程帧刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
-
-    /// <summary>
-    /// 流程帧刷新（秒）
-    /// </summary>
-    public override void OnUpdateSecond()
-    {
-        base.OnUpdateSecond();
     }
 }

@@ -1,25 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张峻凡
+    描述：直接测量量的处理流程
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System;
 /// <summary>
-/// 新建流程
+/// 直接测量量的处理流程
 /// </summary>
 public class MeasuredDataProcessProcedure : ProcedureBase
 {
-    //直接测量量的处理流程
-    private QuantityModel CurrentQuantity;//用于判别当前是哪一种直接测量量
-
-
-    /// <summary>
-    /// 流程初始化
-    /// </summary>
-    public override void OnInit()
-    {
-		base.OnInit();
-    }
+    private QuantityModel CurrentQuantity; //用于判别当前是哪一种直接测量量
 
     /// <summary>
     /// 进入流程
@@ -91,22 +80,6 @@ public class MeasuredDataProcessProcedure : ProcedureBase
     {
         Main.m_UI.CloseUI<MeasuredDataProcess>();
         base.OnLeave(nextProcedure);
-    }
-
-    /// <summary>
-    /// 流程帧刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
-
-    /// <summary>
-    /// 流程帧刷新（秒）
-    /// </summary>
-    public override void OnUpdateSecond()
-    {
-        base.OnUpdateSecond();
     }
 }
 

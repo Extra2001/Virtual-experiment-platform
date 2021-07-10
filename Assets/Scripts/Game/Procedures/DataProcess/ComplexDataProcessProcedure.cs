@@ -1,25 +1,16 @@
-using System.Collections;
+/************************************************************************************
+    作者：张峻凡
+    描述：最终合成量的处理流程
+*************************************************************************************/
 using System.Collections.Generic;
-using UnityEngine;
 using HT.Framework;
-using DG.Tweening;
-using System;
 using System.Linq;
 /// <summary>
-/// 新建流程
+/// 最终合成量的处理流程
 /// </summary>
 public class ComplexDataProcessProcedure : ProcedureBase
 {
-    //最终合成量的处理流程
-
     private List<QuantityModel> quantities => RecordManager.tempRecord.quantities;
-    /// <summary>
-    /// 流程初始化
-    /// </summary>
-    public override void OnInit()
-    {
-        base.OnInit();
-    }
 
     /// <summary>
     /// 进入流程
@@ -60,22 +51,6 @@ public class ComplexDataProcessProcedure : ProcedureBase
     {
         Main.m_UI.CloseUI<ComplexData>();
         base.OnLeave(nextProcedure);
-    }
-
-    /// <summary>
-    /// 流程帧刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
-
-    /// <summary>
-    /// 流程帧刷新（秒）
-    /// </summary>
-    public override void OnUpdateSecond()
-    {
-        base.OnUpdateSecond();
     }
 }
 

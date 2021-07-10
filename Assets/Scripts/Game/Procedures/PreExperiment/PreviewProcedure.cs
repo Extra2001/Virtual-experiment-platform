@@ -1,21 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张柯
+    描述：预览实验数据流程
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建流程
+/// 预览实验数据流程
 /// </summary>
 public class PreviewProcedure : ProcedureBase
 {
-    /// <summary>
-    /// 流程初始化
-    /// </summary>
-    public override void OnInit()
-    {
-		base.OnInit();
-    }
-
     /// <summary>
     /// 进入流程
     /// </summary>
@@ -23,7 +15,6 @@ public class PreviewProcedure : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         Main.m_UI.OpenResidentUI<PreviewUILogic>();
-        
         base.OnEnter(lastProcedure);
     }
 
@@ -34,23 +25,6 @@ public class PreviewProcedure : ProcedureBase
     public override void OnLeave(ProcedureBase nextProcedure)
     {
         Main.m_UI.CloseUI<PreviewUILogic>();
-
         base.OnLeave(nextProcedure);
-    }
-
-    /// <summary>
-    /// 流程帧刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
-
-    /// <summary>
-    /// 流程帧刷新（秒）
-    /// </summary>
-    public override void OnUpdateSecond()
-    {
-        base.OnUpdateSecond();
     }
 }

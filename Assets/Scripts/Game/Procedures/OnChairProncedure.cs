@@ -1,24 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+/************************************************************************************
+    作者：张峻凡
+    描述：选定位置，进入测量阶段
+*************************************************************************************/
 using UnityEngine;
 using HT.Framework;
-using DG.Tweening;
-using System;
+
 /// <summary>
-/// 新建流程
+/// 选定位置，进入测量阶段
 /// </summary>
 public class OnChair : ProcedureBase
 {
-    //选定位置，进入测量阶段
-
-    /// <summary>
-    /// 流程初始化
-    /// </summary>
-    public override void OnInit()
-    {
-        base.OnInit();
-    }
-
     /// <summary>
     /// 进入流程
     /// </summary>
@@ -27,8 +18,10 @@ public class OnChair : ProcedureBase
     {
         RenderManager.Instance?.Show();
 
-        GameManager.Instance.FPSable = true;//人物可否移动
-        GameManager.Instance.PersonPosition = RecordManager.tempRecord.FPSPosition;//记录人物位置
+        //人物可否移动
+        GameManager.Instance.FPSable = true;
+        //记录人物位置
+        GameManager.Instance.PersonPosition = RecordManager.tempRecord.FPSPosition;
         GameManager.Instance.PersonRotation = RecordManager.tempRecord.FPSRotation;
 
         base.OnEnter(lastProcedure);
@@ -38,7 +31,8 @@ public class OnChair : ProcedureBase
         Main.m_UI.OpenTemporaryUI<BagControl>();
         Main.m_UI.CloseUI<BagControl>();
 
-        KeyboardManager.Instance.Register(KeyCode.T, () =>  //注册按键
+        //注册按键
+        KeyboardManager.Instance.Register(KeyCode.T, () =>
         {
             if (Main.m_UI.GetOpenedUI<DatatableUILogic>() != null)
                 UIAPI.Instance.HideDataTable();
@@ -52,7 +46,9 @@ public class OnChair : ProcedureBase
             else
                 Main.m_UI.GetUI<BagControl>().Hide();
         });
-        CreateObject.CreateRecord();   //复现存档仪器被测物体位置等信息
+
+        //复现存档仪器被测物体位置等信息
+        CreateObject.CreateRecord();
         CreateInstrument.CreateRecord();
     }
 
@@ -80,15 +76,8 @@ public class OnChair : ProcedureBase
     public override void OnUpdate()
     {
         base.OnUpdate();
-        RecordManager.tempRecord.FPSPosition = GameManager.Instance.PersonPosition.GetMyVector();//将当前人物位置存入存档
+        //将当前人物位置存入存档
+        RecordManager.tempRecord.FPSPosition = GameManager.Instance.PersonPosition.GetMyVector();
         RecordManager.tempRecord.FPSRotation = GameManager.Instance.PersonRotation.GetMyVector();
-    }
-
-    /// <summary>
-    /// 流程帧刷新（秒）
-    /// </summary>
-    public override void OnUpdateSecond()
-    {
-        base.OnUpdateSecond();
     }
 }

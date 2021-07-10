@@ -1,23 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张峻凡
+    描述：数据处理前的说明流程
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建流程
+/// 数据处理前的说明流程
 /// </summary>
 public class ProcessExplainProcedure : ProcedureBase
 {
-    //数据处理前的说明
-
-    /// <summary>
-    /// 流程初始化
-    /// </summary>
-    public override void OnInit()
-    {
-		base.OnInit();
-    }
-
     /// <summary>
     /// 进入流程
     /// </summary>
@@ -36,21 +26,5 @@ public class ProcessExplainProcedure : ProcedureBase
     {
         base.OnLeave(nextProcedure);
         Main.m_UI.CloseUI<ProcessExplain>();
-    }
-
-    /// <summary>
-    /// 流程帧刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
-
-    /// <summary>
-    /// 流程帧刷新（秒）
-    /// </summary>
-    public override void OnUpdateSecond()
-    {
-        base.OnUpdateSecond();
     }
 }

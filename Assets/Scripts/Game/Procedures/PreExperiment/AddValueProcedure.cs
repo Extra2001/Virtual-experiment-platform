@@ -1,21 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张柯
+    描述：添加物理量流程
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建流程
+/// 进入添加物理量流程
 /// </summary>
 public class AddValueProcedure : ProcedureBase
 {
-    /// <summary>
-    /// 流程初始化
-    /// </summary>
-    public override void OnInit()
-    {
-		base.OnInit();
-    }
-
     /// <summary>
     /// 进入流程
     /// </summary>
@@ -23,7 +15,6 @@ public class AddValueProcedure : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         Main.m_UI.OpenResidentUI<AddValueUILogic>();
-
         base.OnEnter(lastProcedure);
     }
 
@@ -34,23 +25,6 @@ public class AddValueProcedure : ProcedureBase
     public override void OnLeave(ProcedureBase nextProcedure)
     {
         Main.m_UI.CloseUI<AddValueUILogic>();
-
         base.OnLeave(nextProcedure);
-    }
-
-    /// <summary>
-    /// 流程帧刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
-
-    /// <summary>
-    /// 流程帧刷新（秒）
-    /// </summary>
-    public override void OnUpdateSecond()
-    {
-        base.OnUpdateSecond();
     }
 }

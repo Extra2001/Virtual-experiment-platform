@@ -12,7 +12,7 @@ public class Sitdown : EventHandlerBase
     /// <summary>
     /// 填充数据，所有属性、字段的初始化工作可以在这里完成
     /// </summary>
-    public Sitdown Fill(float x, float y, float z)
+    public Sitdown Fill(float x, float y, float z)//获得人所在位置，确保仪器和被测物体生成在人面前
     {
         Debug.Log("Sitdown");
 

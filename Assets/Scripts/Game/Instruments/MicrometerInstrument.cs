@@ -8,6 +8,7 @@ using System.Linq;
 [EntityResource(null, null, "Instruments/Micrometer/Micrometer")]
 public class MicrometerInstrument : DirectMeasurementInstrumentBase
 {
+    //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "螺旋测微器";
 
     public override double URV { get; set; } = 500; 

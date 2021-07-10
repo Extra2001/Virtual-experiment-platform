@@ -8,7 +8,8 @@ using DG.Tweening;
 /// </summary>
 public class ProcessResultProcedure : ProcedureBase
 {
-    
+    //该流程系统对用户指出错误并给出评价
+
     /// <summary>
     /// 流程初始化
     /// </summary>
@@ -23,6 +24,8 @@ public class ProcessResultProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        //如果有数据未输入则不能进入
+
         var rec = RecordManager.tempRecord;
         foreach(var item in rec.quantities)
         {
@@ -58,6 +61,7 @@ public class ProcessResultProcedure : ProcedureBase
 
     private void ShowModel(string message)
     {
+        //弹出报错信息UI
         MainThread.Instance.DelayAndRun(300, () =>
         {
             GameManager.Instance.SwitchBackProcedure();

@@ -10,6 +10,7 @@ using System.Linq;
 [EntityResource(null, null, "Instruments/ElectronicScales/ElectronicScales")]
 public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
 {
+    //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "电子秤";
 
     public override double URV { get; set; } = 9999;
@@ -60,7 +61,6 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
 
     public override void OnShow()
     {
-        //Entity.FindChildren("ElectronicScales_son").GetComponent<ElectronicScales_main>().ShowNum(1000f);
         base.OnShow();
         GenMainValueAndRandomErrorLimit();
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);

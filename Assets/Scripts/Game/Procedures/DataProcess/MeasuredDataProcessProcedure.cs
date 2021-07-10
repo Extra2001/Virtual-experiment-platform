@@ -9,7 +9,8 @@ using System;
 /// </summary>
 public class MeasuredDataProcessProcedure : ProcedureBase
 {
-    private QuantityModel CurrentQuantity;
+    //直接测量量的处理流程
+    private QuantityModel CurrentQuantity;//用于判别当前是哪一种直接测量量
 
 
     /// <summary>
@@ -39,6 +40,7 @@ public class MeasuredDataProcessProcedure : ProcedureBase
 
     public string GetStatisticValue(MeasuredStatisticValue valueKind)
     {
+        //根据记录的数据给公式编辑器传值
         string result = "error";
         if (valueKind == MeasuredStatisticValue.Symbol)
         {

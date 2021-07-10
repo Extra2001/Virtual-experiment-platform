@@ -8,7 +8,7 @@ using System.Linq;
 [EntityResource(null, null, "Instruments/Caliper/Caliper")]
 public class CaliperInstrument : DirectMeasurementInstrumentBase
 {
-
+    //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "游标卡尺";
 
     public override double URV { get; set; } = 500;
@@ -46,7 +46,7 @@ public class CaliperInstrument : DirectMeasurementInstrumentBase
         base.ShowGameButton(buttonItems);
         buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(88, 0, 0, 0);
+            KeyboardManager.Keybd_event(88, 0, 0, 0);//模拟快捷键输入
         });
         buttonItems.Where(x => x.GameObject.name.Equals("OutwardButton")).FirstOrDefault().OnClick.Add(() =>
         {

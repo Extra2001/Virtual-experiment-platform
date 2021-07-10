@@ -1,10 +1,11 @@
+/************************************************************************************
+    作者：张柯、张峻凡
+    描述：电压表的数据和行为
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 using System.Linq;
 
 [EntityResource(null, null, "Instruments/Voltmeter/Voltmeter")]
@@ -12,7 +13,6 @@ using System.Linq;
 public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
 {
     //override的变量和函数请参考基类InstrumentBase中的说明
-    //启用自动化
     public override string InstName => "电压表";
 
     public override double URV { get; set; } = 3;

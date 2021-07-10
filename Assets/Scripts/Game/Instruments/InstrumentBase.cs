@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿/************************************************************************************
+    作者：张柯、张峻凡、荆煦添
+    描述：所有仪器的公共属性和行为
+*************************************************************************************/
 using System.Collections.Generic;
 using UnityEngine;
 using HT.Framework;
-using System.Threading.Tasks;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Linq;
 
 public interface IMeasurable

@@ -1,12 +1,12 @@
+/************************************************************************************
+    作者：张峻凡
+    描述：电压表电流表不同量程的展示动画
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class VAStateChange : HTBehaviour
 {
-    //电压表电流表不同量程的展示动画
     [SerializeField]
     Material RedNormal;
     [SerializeField]

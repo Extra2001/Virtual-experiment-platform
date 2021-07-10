@@ -1,17 +1,16 @@
+/************************************************************************************
+    作者：张峻凡、张柯
+    描述：电流表数据和行为
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
-using System;
 using System.Linq;
 
 [EntityResource(null, null, "Instruments/Ammeter/Ammeter")]
 
 public class AmmeterInstruction : IndirectMeasurementInstrumentBase
 {
-
     //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "电流表";
 

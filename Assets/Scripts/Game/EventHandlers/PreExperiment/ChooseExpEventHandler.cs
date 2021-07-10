@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张峻凡
+    描述：选择实验事件
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建事件
+/// 选择实验事件
 /// </summary>
 public class ChooseExpEventHandler : EventHandlerBase
 {

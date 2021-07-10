@@ -1,10 +1,9 @@
+/************************************************************************************
+    作者：张柯、张峻凡
+    描述：电子秤的数据和行为
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using System;
 using System.Linq;
 
 [EntityResource(null, null, "Instruments/ElectronicScales/ElectronicScales")]

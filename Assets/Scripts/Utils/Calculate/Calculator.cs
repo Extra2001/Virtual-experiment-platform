@@ -16,7 +16,7 @@ using expr = MathNet.Symbolics.Expression;
 using symexpr = MathNet.Symbolics.SymbolicExpression;
 using symdiff = MathNet.Symbolics.Calculus;
 using symfuncs = MathNet.Symbolics.Function;
-public struct CheckFloat {
+public struct CheckFloat {//带有效数字的小数
     public decimal Value { get; private set; }
     public decimal TrueValue => Value * (decimal)Math.Pow(10, HiDigit);
     public int EffectiveDigit { get; private set; }
@@ -78,10 +78,10 @@ public struct CheckFloat {
         }
         return Math.Round(d, n);
     }
-    public static decimal KeepTo(decimal truevalue, int n) {
+    public static decimal KeepTo(decimal truevalue, int n) {//保留到第n位有效数字
         return Math.Truncate(truevalue / (decimal)Math.Pow(10, n)) * (decimal)Math.Pow(10, n);
     }
-    public static int Effectiveness(string num) {
+    public static int Effectiveness(string num) {//计算一个字符串表示的小数有多少位有效数字
         int digits = 0; bool lead0 = true;
         foreach(var item in num) {
             if(item == 'E' || item == 'e') {
@@ -99,44 +99,44 @@ public struct CheckFloat {
     public static CheckFloat operator +(CheckFloat num) {
         return num;
     }
-    public static CheckFloat operator -(CheckFloat num) {
+    public static CheckFloat operator -(CheckFloat num) {//取相反数
         return new CheckFloat() { EffectiveDigit = num.EffectiveDigit, HiDigit = num.HiDigit, LoDigit = num.LoDigit, Value = -num.Value };
     }
-    public static CheckFloat operator +(CheckFloat lhs, CheckFloat rhs) {
+    public static CheckFloat operator +(CheckFloat lhs, CheckFloat rhs) {//有效数字的加法
         int lo = Math.Max(lhs.LoDigit, rhs.LoDigit);
         int keep1 = lhs.HiDigit - lo + 1, keep2 = rhs.HiDigit - lo + 1;
         decimal tmp = lhs.TrueValue + rhs.TrueValue;
         return new CheckFloat(KeepTo(tmp, lo).ToString($"G{Math.Max(lhs.HiDigit, rhs.HiDigit)}"));
     }
-    public static CheckFloat operator -(CheckFloat lhs, CheckFloat rhs) {
+    public static CheckFloat operator -(CheckFloat lhs, CheckFloat rhs) {//有效数字的减法
         int lo = Math.Max(lhs.LoDigit, rhs.LoDigit);
         int keep1 = lhs.HiDigit - lo + 1, keep2 = rhs.HiDigit - lo + 1;
         decimal tmp = lhs.TrueValue - rhs.TrueValue;
         return new CheckFloat(KeepTo(tmp, lo).ToString($"E{Math.Max(keep1, keep2) - 1}"));
     }
-    public static CheckFloat operator *(CheckFloat lhs, CheckFloat rhs) {
+    public static CheckFloat operator *(CheckFloat lhs, CheckFloat rhs) {//有效数字的乘法
         decimal tmp = KeepEffective((lhs.TrueValue * rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));
         return new CheckFloat(tmp.ToString());
     }
-    public static CheckFloat operator /(CheckFloat lhs, CheckFloat rhs) {
+    public static CheckFloat operator /(CheckFloat lhs, CheckFloat rhs) {//除
         decimal tmp = KeepEffective((lhs.TrueValue / rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));
         return new CheckFloat(tmp.ToString());
     }
-    public override string ToString() {
+    public override string ToString() {//显示
         return $"值为{TrueValue},{EffectiveDigit}位有效数字,小数部分:{Value}";
     }
 }
 public static class StaticMethods {
-    public static readonly HashSet<string> keywords = new HashSet<string>(){
+    public static readonly HashSet<string> keywords = new HashSet<string>(){//符号计算的关键字
             "pi","e","abs","acos","asin","atan","sin","cos","tan","cot","sec","csc","j","sqrt","pow","sinh","cosh","tanh","exp","ln","lg"
         };
-    public static double Average(IEnumerable<double> data) {
+    public static double Average(IEnumerable<double> data) {//平均数
         return MathNet.Numerics.Statistics.Statistics.Mean(data);
     }
     public static double VarianceN(IEnumerable<double> data) {//除N的方差
         return MathNet.Numerics.Statistics.Statistics.PopulationVariance(data);
     }
-    public static double Variance(IEnumerable<double> data) {
+    public static double Variance(IEnumerable<double> data) {//除N-1的方差
         return MathNet.Numerics.Statistics.Statistics.Variance(data);
     }
     public static double StdDev(IEnumerable<double> data) {//除N-1的标准差
@@ -270,7 +270,7 @@ public class CalcArgs {//一次计算
             return true;
         }
     }
-    public bool SetConstant(string varname, double val) {
+    public bool SetConstant(string varname, double val) {//添加一个常量
         if(!cons.ContainsKey(varname)) {
             if(ValidVarname(varname)) {
                 cons[varname] = val; return true;
@@ -299,7 +299,7 @@ public class CalcArgs {//一次计算
         }
         return false;
     }
-    public static (symexpr, symexpr) Calculate(string expression, CalcArgs argobj) {//return (value,uncertain)
+    public static (symexpr, symexpr) Calculate(string expression, CalcArgs argobj) {//return (value,uncertain) 符号计算不确定度
         symexpr val = symexpr.Parse(expression), unc = 0;
         foreach(var item in argobj.vars) {
             symexpr uncvar = symexpr.Parse($"u_{item.Key}");
@@ -307,7 +307,7 @@ public class CalcArgs {//一次计算
         }
         return (val, unc.Sqrt());
     }
-    public static (double, double) CalculateValue(symexpr valexpr, symexpr uncexpr, CalcArgs argobj) {
+    public static (double, double) CalculateValue(symexpr valexpr, symexpr uncexpr, CalcArgs argobj) {//代入数据
         //return (value, uncertain)
         Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
         foreach(var item in argobj.cons) {

@@ -1,19 +1,15 @@
+/************************************************************************************
+    作者：张峻凡
+    描述：下一步上一步点击处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class NextBackButtonControl : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
     public Button BackButton;
     public Button NextButton;
 
-    // Start is called before the first frame update
     void Start()
     {
         BackButton.onClick.AddListener(Back);
@@ -22,7 +18,6 @@ public class NextBackButtonControl : HTBehaviour
 
     public void Back()
     {
-        //Main.m_Procedure.SwitchLastProcedure();
         GameManager.Instance.SwitchBackProcedure();
     }
     public void Next()

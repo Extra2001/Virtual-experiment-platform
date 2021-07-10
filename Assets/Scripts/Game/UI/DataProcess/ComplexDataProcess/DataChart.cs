@@ -1,9 +1,7 @@
-using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/************************************************************************************
+    作者：张峻凡
+    描述：显示数据处理结果的表格数据模型
+*************************************************************************************/
 public class DataChart
 {
     public string Name;

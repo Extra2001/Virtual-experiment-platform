@@ -1,15 +1,12 @@
+/************************************************************************************
+    作者：张峻凡
+    描述：下一步上一步点击处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class BackEndButton : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
     public Button BackButton;
     public Button EndButton;
 
@@ -24,6 +21,7 @@ public class BackEndButton : HTBehaviour
     {
         GameManager.Instance.SwitchBackProcedure();
     }
+
     public void End()
     {
         

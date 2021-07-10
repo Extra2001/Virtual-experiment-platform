@@ -1,9 +1,11 @@
-﻿using HT.Framework;
+﻿/************************************************************************************
+    作者：荆煦添
+    描述：公式编辑器方块绑定数据
+*************************************************************************************/
+using HT.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine.UI;
 
 public class FormulaCell : HTBehaviour

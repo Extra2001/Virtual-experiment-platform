@@ -1,9 +1,9 @@
+/************************************************************************************
+    作者：张峻凡、荆煦添、曹北健
+    描述：计算并比对最终数据结果的程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
 using UnityEngine.UI;
 
 public class DealProcessResult : HTBehaviour

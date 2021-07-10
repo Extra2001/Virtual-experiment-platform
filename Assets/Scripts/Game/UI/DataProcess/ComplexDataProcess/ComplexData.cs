@@ -1,22 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张峻凡
+    描述：合成量数据处理的UI逻辑类
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
+
 /// <summary>
-/// 新建UI逻辑类
+/// 合成量数据处理的UI逻辑类
 /// </summary>
-[UIResource("AssetBundleName", "AssetPath", "UI/DataProcess/ComplexDataProcess")]
+[UIResource(null, null, "UI/DataProcess/ComplexDataProcess")]
 public class ComplexData : UILogicResident
 {
-	/// <summary>
-	/// 初始化
-	/// </summary>
-    public override void OnInit()
-    {
-        base.OnInit();        
-    }
-
 	/// <summary>
 	/// 打开UI
 	/// </summary>
@@ -24,37 +17,5 @@ public class ComplexData : UILogicResident
     {
         base.OnOpen(args);
         UIEntity.GetComponent<DealComplexDataInput>().StartShow();
-    }
-
-	/// <summary>
-    /// 置顶UI
-    /// </summary>
-    public override void OnPlaceTop()
-    {
-        base.OnPlaceTop();
-	}
-    
-	/// <summary>
-	/// 关闭UI
-	/// </summary>
-    public override void OnClose()
-    {
-        base.OnClose();
-    }
-
-	/// <summary>
-	/// 销毁UI
-	/// </summary>
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-	/// <summary>
-	/// UI逻辑刷新
-	/// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
     }
 }

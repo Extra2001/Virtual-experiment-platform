@@ -1,10 +1,10 @@
+/************************************************************************************
+    作者：张峻凡
+    描述：处理合成量的数据输入
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class DealComplexDataInput : HTBehaviour
 {

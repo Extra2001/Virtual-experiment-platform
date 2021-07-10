@@ -1,22 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张峻凡
+    描述：直接测量量数据处理的UI逻辑类
+*************************************************************************************/
+
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建UI逻辑类
+/// 直接测量量数据处理的UI逻辑类
 /// </summary>
-[UIResource("AssetBundleName", "AssetPath", "UI/DataProcess/MeasuredDataProcess")]
+[UIResource(null, null, "UI/DataProcess/MeasuredDataProcess")]
 public class MeasuredDataProcess : UILogicResident
 {
-	/// <summary>
-	/// 初始化
-	/// </summary>
-    public override void OnInit()
-    {
-        base.OnInit();
-    }
-
 	/// <summary>
 	/// 打开UI
 	/// </summary>
@@ -26,37 +19,5 @@ public class MeasuredDataProcess : UILogicResident
         QuantityModel quantity = (QuantityModel)args[0];
         UIEntity.GetComponent<UncertaintyInput>().Show(quantity);
         UIEntity.GetComponent<DealMeasuredDataInput>().Show(quantity);
-    }
-
-	/// <summary>
-    /// 置顶UI
-    /// </summary>
-    public override void OnPlaceTop()
-    {
-        base.OnPlaceTop();
-	}
-    
-	/// <summary>
-	/// 关闭UI
-	/// </summary>
-    public override void OnClose()
-    {
-        base.OnClose();
-    }
-
-	/// <summary>
-	/// 销毁UI
-	/// </summary>
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-	/// <summary>
-	/// UI逻辑刷新
-	/// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
     }
 }

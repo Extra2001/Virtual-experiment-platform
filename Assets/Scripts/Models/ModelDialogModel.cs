@@ -1,9 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：模态提示框的数据模型，用于显示模态提示窗
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
 using UnityEngine.Events;
 
 public class ModelDialogModel

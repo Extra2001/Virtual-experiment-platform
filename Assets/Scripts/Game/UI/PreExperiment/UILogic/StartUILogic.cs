@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using HT.Framework;
-using DG.Tweening;
 using UnityEngine.UI;
-using System.Threading.Tasks;
+
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
@@ -48,29 +45,5 @@ public class StartUILogic : UILogicResident
             UIEntity.FindChildren("ContinueButton").GetComponent<Button>().interactable = false;
 
         base.OnOpen(args);
-    }
-
-    /// <summary>
-    /// 关闭UI
-    /// </summary>
-    public override void OnClose()
-    {
-        base.OnClose();
-    }
-
-    /// <summary>
-    /// 销毁UI
-    /// </summary>
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-    /// <summary>
-    /// UI逻辑刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
     }
 }

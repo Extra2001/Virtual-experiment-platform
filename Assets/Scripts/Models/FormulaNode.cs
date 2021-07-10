@@ -1,8 +1,8 @@
-using HT.Framework;
-using DG.Tweening;
-using System.Collections;
+/************************************************************************************
+    作者：荆煦添
+    描述：公式编辑器的节点信息
+*************************************************************************************/
 using System.Collections.Generic;
-using UnityEngine;
 using System;
 
 [Serializable]

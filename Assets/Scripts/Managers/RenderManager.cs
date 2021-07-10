@@ -1,6 +1,7 @@
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
+/************************************************************************************
+    作者：荆煦添
+    描述：节省显示计算资源，动态开关灯光和内饰渲染。
+*************************************************************************************/
 using UnityEngine;
 
 public class RenderManager : MonoBehaviour

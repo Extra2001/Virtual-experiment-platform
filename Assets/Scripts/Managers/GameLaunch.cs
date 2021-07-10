@@ -1,8 +1,8 @@
-﻿using HT.Framework;
-using System.Collections;
-using System.Collections.Generic;
-using Dummiesman;
-using System.IO;
+﻿/************************************************************************************
+    作者：荆煦添
+    描述：启动器，在程序启动时预加载资源和配置
+*************************************************************************************/
+using HT.Framework;
 using UnityEngine;
 using System.Linq;
 
@@ -26,7 +26,6 @@ public class GameLaunch : MonoBehaviour
 
         GetComponent<RenderManager>().Hide();
     }
-
     /// <summary>
     /// 预加载资产
     /// </summary>
@@ -39,18 +38,16 @@ public class GameLaunch : MonoBehaviour
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
     }
-
+    /// <summary>
+    /// 启动服务程序
+    /// </summary>
     private void LaunchServices()
     {
-        // 启动服务程序
-
-        //ProcessManager.StartService();
-
         Main.m_Event.Throw<ServiceStartedEventHandler>();
     }
 
     /// <summary>
-    /// 启动MonoBeheavior管理器
+    /// 启动单例模式的MonoBeheavior管理器
     /// </summary>
     private void LaunchManagers()
     {
@@ -61,10 +58,5 @@ public class GameLaunch : MonoBehaviour
         PauseManager.Enable();
 
         KeyboardManager.Enable();
-    }
-
-    private void OnDestroy()
-    {
-        // ProcessManager.StopService();
     }
 }

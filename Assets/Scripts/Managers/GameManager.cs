@@ -1,47 +1,35 @@
-﻿using HT.Framework;
+﻿/************************************************************************************
+    作者：张峻凡、荆煦添
+    描述：游戏核心管理器，管理游戏的所有资源和配置缓存
+*************************************************************************************/
+using HT.Framework;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : SingletonBehaviorManager<GameManager>
 {
+    #region 属性访问器
     List<Type> ProcedureStack { get => RecordManager.tempRecord.procedureStack; }
-
-    public GameObject MyObject = null;
-
     public bool CanContinue { get => ProcedureStack.Count > 1; }
-
-    public int _currentQuantityIndex { get => RecordManager.tempRecord.currentQuantityIndex; set => RecordManager.tempRecord.currentQuantityIndex = value; }
-
+    public int _currentQuantityIndex
+    {
+        get => RecordManager.tempRecord.currentQuantityIndex;
+        set => RecordManager.tempRecord.currentQuantityIndex = value;
+    }
     public QuantityModel CurrentQuantity
     {
         get => RecordManager.tempRecord.quantities[_currentQuantityIndex];
     }
-
     private List<ObjectsModel> _objectsModels = null;
-
     public List<ObjectsModel> objectsModels
     {
-        get => _objectsModels == null ? 
-            _objectsModels = Storage.CommonStorage.GetStorage<List<ObjectsModel>>("objectsModels") : 
+        get => _objectsModels == null ?
+            _objectsModels = Storage.CommonStorage.GetStorage<List<ObjectsModel>>("objectsModels") :
             _objectsModels;
         set => _objectsModels = value;
     }
-
-    public InstrumentBase CurrentInstrument =>
-        GetInstrument(RecordManager.tempRecord.showedInstrument);
-
-    public InstrumentBase GetInstrument(InstrumentInfoModel model)
-    {
-        return GetInstrument(model.instrumentType);
-    }
-
-    public InstrumentBase GetInstrument(Type type)
-    {
-        return Main.m_Entity.GetEntity(type, type.Name) as InstrumentBase;
-    }
-
+    public InstrumentBase CurrentInstrument => GetInstrument(RecordManager.tempRecord.showedInstrument);
     public bool FPSable
     {
         get => firstPersonController.gameObject.activeSelf;
@@ -51,7 +39,6 @@ public class GameManager : SingletonBehaviorManager<GameManager>
             firstPersonController.enabled = value;
         }
     }
-
     public bool Movable
     {
         get => firstPersonController.m_WalkSpeed > 0.1;
@@ -66,21 +53,23 @@ public class GameManager : SingletonBehaviorManager<GameManager>
                 firstPersonController.m_RunSpeed = firstPersonController.m_WalkSpeed = 0;
         }
     }
-
     public Vector3 PersonPosition
     {
         get => firstPersonController.transform.position;
         set => firstPersonController.transform.position = value;
     }
-
     public Quaternion PersonRotation
     {
         get => firstPersonController.transform.rotation;
         set => firstPersonController.transform.rotation = value;
     }
-
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController firstPersonController = null;
+    #endregion
 
+    #region Unity生命周期函数
+    /// <summary>
+    /// 初始化
+    /// </summary>
     private void Start()
     {
         firstPersonController = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
@@ -96,6 +85,27 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         Main.m_Event.Subscribe<ProcessExplainEventHandler>(ProcessTips);
         Main.m_Event.Subscribe<StartUncertaintyEventHandler>(EnterUncertainty);
     }
+
+    /// <summary>
+    /// 自动保存
+    /// </summary>
+    public override void OnDestroy()
+    {
+        RecordManager.tempRecord.Save();
+        Storage.CommonStorage.SetStorage("objectsModels", _objectsModels);
+    }
+    #endregion
+
+    public InstrumentBase GetInstrument(InstrumentInfoModel model)
+    {
+        return GetInstrument(model.instrumentType);
+    }
+    public InstrumentBase GetInstrument(Type type)
+    {
+        return Main.m_Entity.GetEntity(type, type.Name) as InstrumentBase;
+    }
+
+    #region 流程控制
 
     public void SwitchBackToStart()
     {
@@ -132,14 +142,13 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     public void ClearAll()
     {
-
         Storage.DeleteAll();
         RecordManager.ClearTempRecord();
         Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();
         ProcedureStack.Clear();
         ProcedureStack.Add(typeof(StartProcedure));
-
     }
+    
 
     public void ContinueExp()
     {
@@ -245,13 +254,5 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         var pro = Main.m_Procedure.GetProcedure<MeasuredDataProcessProcedure>();
         pro.ShowUncertainty(CurrentQuantity);
     }
-
-    /// <summary>
-    /// 自动保存
-    /// </summary>
-    public override void OnDestroy()
-    {
-        RecordManager.tempRecord.Save();
-        Storage.CommonStorage.SetStorage("objectsModels", _objectsModels);
-    }
+    #endregion
 }

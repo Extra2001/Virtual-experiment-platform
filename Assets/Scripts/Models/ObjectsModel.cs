@@ -1,12 +1,29 @@
-﻿using HT.Framework;
+﻿/************************************************************************************
+    作者：张峻凡、荆煦添
+    描述：被测物体的信息
+*************************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
+
+[Serializable]
+public class ObjectsModel
+{
+    public int id { get; set; }
+    public string Name { get; set; } = "";
+    public string ResourcePath { get; set; } = "";
+    public string PreviewImage { get; set; } = "";
+    public string DetailMessage { get; set; } = "";
+    public bool Integrated { get; set; } = false;
+
+    public MyVector3 position { get; set; } = new MyVector3();
+    public List<MyVector3> childrenPostition = new List<MyVector3>();
+    public MyVector4 rotation { get; set; } = new MyVector4();
+    public List<MyVector4> childrenRotation = new List<MyVector4>();
+    public MyVector3 baseSize { get; set; } = new MyVector3();
+    public float scale { get; set; } = 1;
+    public float mass { get; set; } = 0;
+}
 
 [Serializable]
 public class MyVector3
@@ -33,23 +50,4 @@ public class MyVector4
     {
         return new Quaternion(vector3.x, vector3.y, vector3.z, vector3.w);
     }
-}
-
-[Serializable]
-public class ObjectsModel
-{
-    public int id { get; set; }
-    public string Name { get; set; } = "";
-    public string ResourcePath { get; set; } = "";
-    public string PreviewImage { get; set; } = "";
-    public string DetailMessage { get; set; } = "";
-    public bool Integrated { get; set; } = false;
-
-    public MyVector3 position { get; set; } = new MyVector3();
-    public List<MyVector3> childrenPostition = new List<MyVector3>();
-    public MyVector4 rotation { get; set; } = new MyVector4();
-    public List<MyVector4> childrenRotation = new List<MyVector4>();
-    public MyVector3 baseSize { get; set; } = new MyVector3();
-    public float scale { get; set; } = 1;
-    public float mass { get; set; } = 0;
 }

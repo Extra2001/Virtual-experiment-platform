@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿/************************************************************************************
+    作者：荆煦添
+    描述：仪器信息基础模型，用于右键显示
+*************************************************************************************/
+using System;
 
 [Serializable]
 public class InstrumentInfoModel

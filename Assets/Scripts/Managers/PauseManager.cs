@@ -1,9 +1,9 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：游戏暂停开始控制器
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
 
 public class PauseManager : SingletonBehaviorManager<PauseManager>
 {

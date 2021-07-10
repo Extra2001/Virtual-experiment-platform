@@ -11,7 +11,7 @@ using System.Linq;
 
 public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
 {
-
+    //override的变量和函数请参考基类InstrumentBase中的说明
     //启用自动化
     public override string InstName => "电压表";
 
@@ -72,7 +72,7 @@ public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
     public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
     {
         base.ShowInfoPanel(infoItems);
-
+        //电压表和电流表还具有额外的切换量程功能
         infoItems["_SwitchRange"].GameObject.SetActive(true);
         infoItems["_SwitchRange"].onValueChanged.Add(() =>
         {

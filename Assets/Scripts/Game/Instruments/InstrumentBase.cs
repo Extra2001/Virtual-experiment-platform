@@ -76,11 +76,11 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// </summary>
     public abstract string UnitSymbol { get; }
 
-    public abstract string previewImagePath { get; }
+    public abstract string previewImagePath { get; }//缩略图路径
 
-    private Sprite prePreviewImage = null;
+    private Sprite prePreviewImage = null;//仪器缩略图
 
-    public virtual Sprite previewImage
+    public virtual Sprite previewImage//仪器缩略图
     {
         get => prePreviewImage == null ?
             (prePreviewImage = Resources.Load<Sprite>(previewImagePath)) : prePreviewImage;
@@ -92,9 +92,9 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// <returns>测量数据</returns>
     public abstract double GetMeasureResult();
 
-    public abstract void ShowValue(double value);
+    public abstract void ShowValue(double value);//将数据动画形式展现
 
-    public virtual void GenMainValueAndRandomErrorLimit()
+    public virtual void GenMainValueAndRandomErrorLimit()//随机生成主值和误差
     {
         MainValue = (new System.Random().NextDouble() * (URV - LRV)) + LRV;
     }
@@ -109,7 +109,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         ShowValue(0);
     }
 
-    protected virtual void AddRightButton()
+    protected virtual void AddRightButton()//添加右键菜单功能
     {
         RightButton right;
         if ((right = Entity.GetComponent<RightButton>()) == null)
@@ -117,7 +117,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         right.InstrumentType = this.GetType();
     }
 
-    public virtual void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
+    public virtual void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)//右键菜单展示哪些信息
     {
         var keys = new string[] { "_Name", "_LRV", "_URV", "_Unit", "_UnitSymbol", "_Mask", "_RootPanel" };
         infoItems["_Name"].GameObject.GetComponent<Text>().text = InstName;
@@ -125,34 +125,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
         infoItems["_Unit"].GameObject.GetComponent<Text>().text = Unit;
         infoItems["_UnitSymbol"].GameObject.GetComponent<Text>().text = UnitSymbol;
-        /*
-        infoItems["_MainValue"].GameObject.GetComponent<InputField>().text = MainValue.ToString();
-        infoItems["_RandomError"].GameObject.GetComponent<InputField>().text = RandomErrorLimit.ToString();
-        infoItems["_ConfirmButton"].onValueChanged.Add(() =>
-        {
-            double re = Convert.ToDouble(infoItems["_RandomError"].GameObject.GetComponent<InputField>().text);
-            double mainValue = Convert.ToDouble(infoItems["_MainValue"].GameObject.GetComponent<InputField>().text);
-            if (re > ErrorLimit)
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
-                {
-                    ShowCancel = false,
-                    Message = new BindableString("随机误差不能大于仪器误差限")
-                });
-            else if (mainValue > URV || mainValue < LRV)
-            {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
-                {
-                    ShowCancel = false,
-                    Message = new BindableString("主值不能超过量程")
-                });
-            }
-            else
-            {
-                RandomErrorLimit = re;
-                MainValue = mainValue;
-                ShowValue(mainValue);
-            }
-        });*/  //已迁移至IndirectInstrumentBase
+
         foreach (var item in infoItems)
         {
             if (!keys.Contains(item.Key))
@@ -162,7 +135,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         }
     }
 
-    public virtual void ShowGameButton(List<GameButtonItem> buttonItems)
+    public virtual void ShowGameButton(List<GameButtonItem> buttonItems)//屏幕右下角快捷键按钮
     {
         //buttonItems.Where(x => x.GameObject.name.Equals("AmmeterInstruction")).FirstOrDefault().OnClick.Add(() =>
         //{
@@ -170,14 +143,14 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         //});
     }
 
-    public override void OnShow()
+    public override void OnShow()//仪器展示的时候调用一次
     {
         Entity.transform.GetChild(0).gameObject.SetActive(true);
         base.OnShow();
         AddRightButton();
     }
 
-    public override void OnUpdate()
+    public override void OnUpdate()//每帧调用一次
     {
         base.OnUpdate();
         if (Entity.activeSelf)
@@ -190,12 +163,12 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         }
     }
 
-    public override void OnHide()
+    public override void OnHide()//仪器隐藏时调用
     {
         Entity.transform.GetChild(0).gameObject.SetActive(false);
     }
 
-    public override void OnInit()
+    public override void OnInit()//初始化时调用
     {
         base.OnInit();
         Main.m_Resource.LoadAsset<Sprite>(new AssetInfo(null, null, previewImagePath), loadDoneAction: x =>
@@ -204,7 +177,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         });
     }
 
-    public override void Reset()
+    public override void Reset()//重置时调用
     {
         base.Reset();
         InstReset();

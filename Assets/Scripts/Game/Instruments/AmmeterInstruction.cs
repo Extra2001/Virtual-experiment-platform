@@ -11,6 +11,8 @@ using System.Linq;
 
 public class AmmeterInstruction : IndirectMeasurementInstrumentBase
 {
+
+    //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "电流表";
 
     public override double URV { get; set; } = 0.6;
@@ -69,6 +71,7 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
 
     public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
     {
+        //电压表和电流表还具有额外的切换量程功能
         base.ShowInfoPanel(infoItems);
         infoItems["_SwitchRange"].GameObject.SetActive(true);
         infoItems["_SwitchRange"].onValueChanged.Add(() =>

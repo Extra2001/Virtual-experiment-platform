@@ -10,6 +10,8 @@ using System.Linq;
 /// </summary>
 public class ComplexDataProcessProcedure : ProcedureBase
 {
+    //最终合成量的处理流程
+
     private List<QuantityModel> quantities => RecordManager.tempRecord.quantities;
     /// <summary>
     /// 流程初始化
@@ -36,6 +38,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
 
     public string GetStatisticValue(string quantityName, ComplexStatisticValue valueKind)
     {
+        //根据记录的数据给公式编辑器传值
         string result = "error";
         var item = quantities.Where(x => x.Symbol.Equals(quantityName)).FirstOrDefault();
         if (ComplexStatisticValue.Average == valueKind)

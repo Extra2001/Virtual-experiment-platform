@@ -8,6 +8,8 @@ using DG.Tweening;
 /// </summary>
 public class EnterClassroomProcedure : ProcedureBase
 {
+    //离开数据生声明阶段，进入教室，本阶段选择测量所在的桌子
+
     bool showed = false;
     /// <summary>
     /// 流程初始化
@@ -23,6 +25,7 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        //此处指定位置为左上角，后续会开放至所有桌子
         RenderManager.Instance?.Show();
         MainThread.Instance.DelayAndRun(1000, () =>
         {
@@ -51,6 +54,7 @@ public class EnterClassroomProcedure : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
+        //关闭UI,取消注册按钮
         RenderManager.Instance?.Hide();
         GameManager.Instance.FPSable = false;
         if (showed)

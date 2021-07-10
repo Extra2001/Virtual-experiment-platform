@@ -8,7 +8,7 @@ using System;
 
 public abstract class IndirectMeasurementInstrumentBase : InstrumentBase
 {
-    public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
+    public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)//读数类仪器添加手动设置主值和随机误差的功能
     {
         base.ShowInfoPanel(infoItems);
         infoItems["_MainValue"].GameObject.SetActive(true);
@@ -44,6 +44,6 @@ public abstract class IndirectMeasurementInstrumentBase : InstrumentBase
 
     }
 
-    public abstract void ReshowValue();
+    public abstract void ReshowValue();//主值不变，随机误差变化重新生成读数
 
 }

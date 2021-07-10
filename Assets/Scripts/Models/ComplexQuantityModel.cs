@@ -6,7 +6,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class ComplexQuantityMoedel
+public class ComplexQuantityModel
 {
     //用于存储最终合成量的信息
 

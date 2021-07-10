@@ -1,3 +1,7 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：存档管理器
+*************************************************************************************/
 using System.Collections.Generic;
 using System;
 using HT.Framework;
@@ -39,6 +43,9 @@ public static class RecordManager
     private static Record _tempRecord = null;
 
     // 以下为存档的扩展方法
+    /// <summary>
+    /// 写入该存档到硬盘
+    /// </summary>
     public static void Save(this Record record)
     {
         if (record.info.id.Equals(-2))
@@ -48,6 +55,9 @@ public static class RecordManager
         }
         SaveRecord(record);
     }
+    /// <summary>
+    /// 删除该存档
+    /// </summary>
     public static void Delete(this Record record)
     {
         record = new Record()
@@ -56,6 +66,9 @@ public static class RecordManager
         };
         DeleteRecord(record.info.id);
     }
+    /// <summary>
+    /// 加载该存档到工作存档并取消暂停状态
+    /// </summary>
     public static void Load(this Record record)
     {
         LoadToTempRecord(record);
@@ -63,10 +76,8 @@ public static class RecordManager
         GameManager.Instance.ContinueExp();
     }
     /// <summary>
-    /// 加载到工作存档
+    /// 加载该存档到工作存档
     /// </summary>
-    /// <param name="record"></param>
-    /// <returns></returns>
     private static Record LoadToTempRecord(this Record record)
     {
         Initializer.InitializeObjects();
@@ -76,11 +87,9 @@ public static class RecordManager
         Main.m_Event.Throw<ChangeRecordEventHandler>();
         return ret;
     }
-
     /// <summary>
     /// 清空工作存档
     /// </summary>
-    /// <returns></returns>
     public static void ClearTempRecord()
     {
         _tempRecord = new Record(-2);
@@ -117,7 +126,6 @@ public static class RecordManager
         }
         return (T)retval;
     }
-
     /// <summary>
     /// 获取第一个没有存档的ID
     /// </summary>

@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/************************************************************************************
+    来源：CSDN
+    描述：调用Win32 API实现打开文件对话框
+*************************************************************************************/
+using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System;

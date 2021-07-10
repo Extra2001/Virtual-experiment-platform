@@ -60,7 +60,7 @@ public class DealComplexDataInput : HTBehaviour
             Formula.GetComponent<Image>().FitHeight(res);
         });
 
-        ComplexQuantityMoedel model = RecordManager.tempRecord.complexQuantityModel;
+        ComplexQuantityModel model = RecordManager.tempRecord.complexQuantityModel;
 
         CallButton1.image.sprite = Sprites[model.AverageState];
         Value1.text = "=" + StaticMethods.NumberFormat(model.Average);

@@ -1,15 +1,20 @@
-using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
+/************************************************************************************
+    作者：荆煦添
+    描述：Latex公式渲染器
+*************************************************************************************/
 using UnityEngine;
 using Flurl.Http;
-using System.Threading.Tasks;
 using System;
 using UnityEngine.Events;
 
 public class LatexEquationRender
 {
+    /// <summary>
+    /// 渲染Latex到Sprite
+    /// </summary>
+    /// <param name="tex">公式字符串</param>
+    /// <param name="action">渲染成功回调</param>
+    /// <param name="errorHandler">渲染失败回调</param>
     public static void Render(string tex, UnityAction<Sprite> action = null, UnityAction errorHandler = null)
     {
         var x = $"http://expr.buaaer.top/".PostJsonAsync(new

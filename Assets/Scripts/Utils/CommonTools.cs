@@ -1,15 +1,20 @@
-﻿using System;
+﻿/************************************************************************************
+    作者：荆煦添
+    描述：公共工具函数
+*************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using HT.Framework;
 
 public static class CommonTools
 {
+    /// <summary>
+    /// 获取一个类的所有子类，主要用于获取已定义的所有仪器
+    /// </summary>
     public static List<Type> GetSubClassNames(Type parentType)
     {
         var subTypeList = new List<Type>();
@@ -28,19 +33,20 @@ public static class CommonTools
         }
         return subTypeList;
     }
-
-    public static object CreateInstance(this Type instrument)
-    {
-        return Activator.CreateInstance(instrument);
-    }
-
+    /// <summary>
+    /// 根据Type创建仪器模型的实例
+    /// </summary>
     public static InstrumentBase CreateInstrumentInstance(this Type instrument)
     {
         return Activator.CreateInstance(instrument) as InstrumentBase;
     }
-
+    /// <summary>
+    /// 图片缓存，防止产生大量IO造成程序卡死
+    /// </summary>
     private static Dictionary<string, Sprite> spritePool = new Dictionary<string, Sprite>();
-
+    /// <summary>
+    /// 根据路径加载图片到Sprite
+    /// </summary>
     public static Sprite GetSprite(string path)
     {
         if (spritePool.ContainsKey(path))
@@ -56,7 +62,9 @@ public static class CommonTools
             return ret;
         }
     }
-
+    /// <summary>
+    /// 根据二进制信息加载图片到Sprite
+    /// </summary>
     public static Sprite GetSprite(byte[] bytes)
     {
         Texture2D texture2D = new Texture2D(0, 0);
@@ -65,8 +73,11 @@ public static class CommonTools
         Sprite ret = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
         return ret;
     }
-
-    // 不改变高度
+    /// <summary>
+    /// 不改变高度适应图片大小
+    /// </summary>
+    /// <param name="image"></param>
+    /// <param name="sprite"></param>
     public static void FitHeight(this Image image, Sprite sprite)
     {
         image.sprite = sprite;
@@ -74,8 +85,11 @@ public static class CommonTools
         hh.x = (float)sprite.texture.width / sprite.texture.height * hh.y;
         image.gameObject.rectTransform().sizeDelta = hh;
     }
-
-    // 不改变宽度
+    /// <summary>
+    /// 不改变宽度适应图片大小
+    /// </summary>
+    /// <param name="image"></param>
+    /// <param name="sprite"></param>
     public static void FitWidth(this Image image, Sprite sprite)
     {
         image.sprite = sprite;
@@ -83,12 +97,16 @@ public static class CommonTools
         hh.y = (float)sprite.texture.height / sprite.texture.width * hh.x;
         image.gameObject.rectTransform().sizeDelta = hh;
     }
-
+    /// <summary>
+    /// 公式编辑器获取计算后的结果
+    /// </summary>
     public static double GetExpressionExecuted(this List<FormulaNode> nodes, string rootGUID = "base")
     {
         return Javascript.Eval(GetExpression(nodes, rootGUID));
     }
-
+    /// <summary>
+    /// 公式编辑器获取最终式子
+    /// </summary>
     public static string GetExpression(this List<FormulaNode> nodes, string rootGUID = "base")
     {
         var curCell = nodes.Where(x => x.GUID.Equals(rootGUID)).Last();
@@ -101,6 +119,9 @@ public static class CommonTools
         return value;
     }
 
+    /// <summary>
+    /// 判断两个数误差是否在可接受范围内
+    /// </summary>
     public static bool AlmostEqual(this double value1, double value2)
     {
         return Math.Abs(value1 - value2) < (value1 * 0.005);//误差允许0.5%

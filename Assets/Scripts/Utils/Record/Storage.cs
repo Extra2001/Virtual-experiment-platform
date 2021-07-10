@@ -1,8 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿/************************************************************************************
+    作者：荆煦添
+    描述：提供游戏本地存储
+*************************************************************************************/
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using UnityEngine;
-
+/// <summary>
+/// 提供游戏本地存储
+/// </summary>
 public class Storage
 {
     public int id { get; }
@@ -24,17 +30,23 @@ public class Storage
         directory = $"{Application.persistentDataPath}/LocalStorage/{this.name}/";
     }
     /// <summary>
-    /// 游戏通用Storage
+    /// 公共Storage
     /// </summary>
     public static Storage CommonStorage
     {
         get => new Storage("common");
     }
+    /// <summary>
+    /// 用指定的key访问存储的索引器
+    /// </summary>
     public object this[string key, Type t]
     {
         get => JsonConvert.DeserializeObject(FileIOHelper.ReadJSONFile(directory + key), t);
         set => SetStorage(key, value);
     }
+    /// <summary>
+    /// 用指定的key访问存储的索引器
+    /// </summary>
     public object this[string key]
     {
         set => SetStorage(key, value);
@@ -60,6 +72,12 @@ public class Storage
             return new T();
         return ret;
     }
+    /// <summary>
+    /// 获取Storage存储的对象，并使用自定义错误处理程序
+    /// </summary>
+    /// <typeparam name="T">映射的对象类型</typeparam>
+    /// <param name="key">键</param>
+    /// <returns></returns>
     public T GetStorage<T>(string key, Func<T> initializer) where T : new()
     {
         string path = directory + key;
@@ -94,6 +112,11 @@ public class Storage
             }
         }));
     }
+    /// <summary>
+    /// 将对象存储到Storage中，并使用自定义错误处理程序
+    /// </summary>
+    /// <param name="key">键</param>
+    /// <param name="values">对象值，不可为自包含属性类型</param>
     public void SetStorage(string key, object values, EventHandler<Newtonsoft.Json.Serialization.ErrorEventArgs> errorHandler)
     {
         string path = directory + key;
@@ -103,22 +126,31 @@ public class Storage
             Error = errorHandler
         }));
     }
+    /// <summary>
+    /// 删除存储
+    /// </summary>
     public void DeleteStorage(string key)
     {
         string path = directory + key;
         FileIOHelper.DeleteFile(path);
     }
-
+    /// <summary>
+    /// 删除自己
+    /// </summary>
     public void DeleteSelf()
     {
         Directory.Delete(directory, true);
     }
-
+    /// <summary>
+    /// 删除所有本地存储
+    /// </summary>
     public static void DeleteAll()
     {
         FileIOHelper.DeleteDirectory($"{Application.persistentDataPath}/LocalStorage");
     }
-
+    /// <summary>
+    /// 文件IO
+    /// </summary>
     protected static class FileIOHelper
     {
         internal static string ReadJSONFile(string Path)

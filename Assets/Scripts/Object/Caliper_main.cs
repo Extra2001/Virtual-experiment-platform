@@ -23,6 +23,7 @@ public class Caliper_main : HTBehaviour
     public bool moveable_look = false;
     public bool moveable_back = false;
     public bool Nowin = false;
+    //定义游标卡尺行为
     public void Measure()
     {
         this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num = -0.1f;
@@ -34,6 +35,8 @@ public class Caliper_main : HTBehaviour
 
     private void Look_back()
     {
+        //控制逻辑，按X键进行缩放/复原，调用FPScontrol中存放的之前位置
+        //已修正
         if (Input.GetKeyDown(KeyCode.X))
         {
             Nowin = Player_S.GetComponent<MirrorPlayer>().Nowin;
@@ -59,7 +62,7 @@ public class Caliper_main : HTBehaviour
         Look();
         Back();
     }
-
+    //通用，视角拉近行为
     private void Look()
     {
         if (moveable_look)
@@ -83,6 +86,7 @@ public class Caliper_main : HTBehaviour
             Player_S.GetComponent<MirrorPlayer>().moveable_back = moveable_back;
         }
     }
+    //通用，视角拉回行为
     private void Back()
     {
         if (moveable_back)
@@ -130,6 +134,7 @@ public class Caliper_main : HTBehaviour
             this.transform.Find("MeasureHead").gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 0.2f), ForceMode.VelocityChange);
         }
         Look_back();
+        //判断游标卡尺是否到两侧顶点
         if (this.transform.Find("MeasureHead").gameObject.transform.localPosition[0] >=0&& this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num<0)
         { 
             this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num = 0;

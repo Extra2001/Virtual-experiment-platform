@@ -1,7 +1,8 @@
+/************************************************************************************
+    来源：CSDN
+    描述：左上角显示帧率
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FPS : HTBehaviour

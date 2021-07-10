@@ -1,15 +1,12 @@
+/************************************************************************************
+    作者：张柯
+    描述：温度计行为处理程序
+*************************************************************************************/
 using HT.Framework;
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Runtime.CompilerServices;
 
 public class thermometer_main : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
     // Start is called before the first frame update、
     public void ShowNum(float num)
     {

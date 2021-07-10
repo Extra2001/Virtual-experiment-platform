@@ -1,8 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：读取存档单元格
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class RecordCell : HTBehaviour
@@ -24,7 +24,6 @@ public class RecordCell : HTBehaviour
         set => _time.text = value;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         if (_LoadButton != null)

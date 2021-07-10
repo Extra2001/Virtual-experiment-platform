@@ -1,8 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：物理量预览页面的单元格
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class QuantityPreviewCell : HTBehaviour

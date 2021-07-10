@@ -1,7 +1,9 @@
+/************************************************************************************
+    作者：张柯
+    描述：电压表行为处理程序
+*************************************************************************************/
 using HT.Framework;
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 public class RotateVoltmeter : HTBehaviour
@@ -20,14 +22,13 @@ public class RotateVoltmeter : HTBehaviour
     public bool moveable_look = false;
     public bool moveable_back = false;
     public bool Nowin = false;
-    //启用自动化
+
     public float MaxV=3.0f;
     private float PreV=0.0f;
     private float NowV;
     private float TarV;
     private bool OnGoing = false;
     public float times = 15.0f;
-    protected override bool IsAutomate => true;
 
     public void ShowNum(float num)
     {

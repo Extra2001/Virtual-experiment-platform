@@ -1,8 +1,9 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：物理量校验合法性
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class ValueValidator
 {

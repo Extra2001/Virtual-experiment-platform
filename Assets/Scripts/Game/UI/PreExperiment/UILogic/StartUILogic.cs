@@ -1,9 +1,13 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：开始UI逻辑类
+*************************************************************************************/
 using UnityEngine;
 using HT.Framework;
 using UnityEngine.UI;
 
 /// <summary>
-/// 新建UI逻辑类
+/// 开始UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/Start")]
 public class StartUILogic : UILogicResident

@@ -1,15 +1,12 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：保存存档单元格
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class SaveRecordCell : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
     public ChooseRecord chooseRecord;
 
     public Text _title;

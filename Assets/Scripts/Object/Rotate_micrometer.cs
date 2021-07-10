@@ -1,13 +1,12 @@
+/************************************************************************************
+    作者：张柯
+    描述：螺旋测微器行为处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Rotate_micrometer : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
     public float num;
     private int prenum;
     public void Rotatenum(float num)

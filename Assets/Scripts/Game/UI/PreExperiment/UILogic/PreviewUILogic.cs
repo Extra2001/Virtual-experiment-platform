@@ -1,22 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：荆煦添
+    描述：预览物理量UI逻辑类
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建UI逻辑类
+/// 预览物理量UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/PreExperiment/PreviewPanel")]
 public class PreviewUILogic : UILogicResident
 {
-	/// <summary>
-	/// 初始化
-	/// </summary>
-    public override void OnInit()
-    {
-        base.OnInit();
-    }
-
 	/// <summary>
 	/// 打开UI
 	/// </summary>
@@ -26,37 +18,5 @@ public class PreviewUILogic : UILogicResident
 
         UIEntity.GetComponent<PreviewExp>()?.LoadQuantities();
         UIEntity.GetComponent<PreviewExp>()?.Render();
-    }
-
-	/// <summary>
-    /// 置顶UI
-    /// </summary>
-    public override void OnPlaceTop()
-    {
-        base.OnPlaceTop();
-	}
-    
-	/// <summary>
-	/// 关闭UI
-	/// </summary>
-    public override void OnClose()
-    {
-        base.OnClose();
-    }
-
-	/// <summary>
-	/// 销毁UI
-	/// </summary>
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-	/// <summary>
-	/// UI逻辑刷新
-	/// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
     }
 }

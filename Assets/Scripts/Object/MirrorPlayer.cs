@@ -1,7 +1,8 @@
+/************************************************************************************
+    作者：张柯
+    描述：切换测量视角处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MirrorPlayer : HTBehaviour

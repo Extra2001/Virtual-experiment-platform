@@ -1,9 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：UI公共API
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Threading.Tasks;
 using System;
 
 public class UIAPI : SingletonBehaviorManager<UIAPI>

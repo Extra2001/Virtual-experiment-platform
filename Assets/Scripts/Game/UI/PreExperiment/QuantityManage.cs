@@ -1,6 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：物理量管理器
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,7 +31,9 @@ public class QuantityManage : HTBehaviour
             item.GetComponent<QuantityCell>().SyncQuantity();
         }
     }
-
+    /// <summary>
+    /// 加载存档中的物理量
+    /// </summary>
     public void LoadQuantities()
     {
         foreach (var item in gameObjects)

@@ -1,8 +1,8 @@
+/************************************************************************************
+    作者：张柯
+    描述：物体数据模型
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class Object_data : HTBehaviour
 {

@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+/************************************************************************************
+    作者：荆煦添
+    描述：暂停面板UI逻辑类
+*************************************************************************************/
 using UnityEngine;
 using HT.Framework;
-using DG.Tweening;
-using System;
-using System.Threading.Tasks;
 using UnityEngine.UI;
 /// <summary>
-/// 新建UI逻辑类
+/// 暂停面板UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/PauseMenu")]
 public class PauseUILogic : UILogicTemporary
@@ -123,29 +122,5 @@ public class PauseUILogic : UILogicTemporary
             SaveRecordButton.interactable = false;
         else SaveRecordButton.interactable = true;
         UIShowHideHelper.ShowFromUp(UIEntity);
-    }
-
-    /// <summary>
-    /// 关闭UI
-    /// </summary>
-    public override void OnClose()
-    {
-        base.OnClose();
-    }
-
-    /// <summary>s
-    /// 销毁UI
-    /// </summary>
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-    /// <summary>
-    /// UI逻辑刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
     }
 }

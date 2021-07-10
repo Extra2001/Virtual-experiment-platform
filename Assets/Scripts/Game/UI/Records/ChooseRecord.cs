@@ -1,6 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：选择存档并保存
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,9 +10,6 @@ using System;
 
 public class ChooseRecord : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
     public GameObject RecordObj;
     public SaveRecordCell AddNewObj;
     public InputField NameInput;

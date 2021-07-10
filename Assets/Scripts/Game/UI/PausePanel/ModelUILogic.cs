@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：荆煦添
+    描述：模态提示框UI逻辑类
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 using UnityEngine.UI;
-using System.Threading.Tasks;
 /// <summary>
-/// 新建UI逻辑类
+/// 模态提示框UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/ModelPanel")]
 public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
@@ -105,7 +104,6 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
-
         UIShowHideHelper.ShowFromUp(UIEntity);
     }
 
@@ -115,25 +113,7 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
     public override void OnClose()
     {
         if (needToRecover)
-        {
             PauseManager.Instance.Continue(false);
-        }
         base.OnClose();
-    }
-
-    /// <summary>
-    /// 销毁UI
-    /// </summary>
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-    /// <summary>
-    /// UI逻辑刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
     }
 }

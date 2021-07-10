@@ -1,14 +1,12 @@
+/************************************************************************************
+    作者：张柯
+    描述：螺旋测微器行为处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class Rotate_micrometer_father : HTBehaviour
 {
-    //启用自动化
     public int RotatePerTime;
-    protected override bool IsAutomate => true;
     
     // Start is called before the first frame update
     void Start()

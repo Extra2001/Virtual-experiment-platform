@@ -1,15 +1,13 @@
+/************************************************************************************
+    作者：张柯
+    描述：螺旋测微器行为处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 
 public class Micrometer_main : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
     private bool IsKaKaed=false;//别骂了别骂了，这个名字搞笑的
 
     public AudioClip kakaka;//咔咔声

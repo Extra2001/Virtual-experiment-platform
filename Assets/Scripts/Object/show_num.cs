@@ -1,14 +1,12 @@
+/************************************************************************************
+    作者：张柯
+    描述：数码管行为处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class show_num : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
     GameObject f1;
     GameObject f2;
     GameObject f3;

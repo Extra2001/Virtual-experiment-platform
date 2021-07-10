@@ -1,7 +1,8 @@
+/************************************************************************************
+    作者：张柯
+    描述：直尺行为处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 
@@ -25,8 +26,7 @@ public class Ruler_main : HTBehaviour
     public float mindis = 0;
     GameObject TarOBJ;
     GameObject[] MeasureOBJ;
-    //启用自动化
-    protected override bool IsAutomate => true;
+
     private void Look_back()
     {
         if (Input.GetKeyDown(KeyCode.X))

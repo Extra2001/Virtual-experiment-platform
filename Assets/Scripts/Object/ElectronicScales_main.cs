@@ -1,17 +1,12 @@
+/************************************************************************************
+    作者：张柯
+    描述：电子秤行为处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Data;
 using UnityStandardAssets.Characters.FirstPerson;
 public class ElectronicScales_main : HTBehaviour
 {
-    //启用自动化
-
-    protected override bool IsAutomate => true;
-
-
     private Vector3 PLC_eulerAngles;
     private Vector3 POS_eulerAngles;
 

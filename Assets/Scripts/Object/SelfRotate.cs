@@ -1,14 +1,14 @@
+/************************************************************************************
+    作者：张柯
+    描述：旋转物体
+*************************************************************************************/
 using HT.Framework;
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using RTEditor;
 
 public class SelfRotate : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
     GameObject RTF;
     Tweener tw;
     float TarX;

@@ -1,59 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：荆煦添
+    描述：添加物理量UI逻辑类
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建UI逻辑类
+/// 添加物理量UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/PreExperiment/AddQuantityPanel")]
 public class AddValueUILogic : UILogicResident
 {
-	/// <summary>
-	/// 初始化
-	/// </summary>
-    public override void OnInit()
-    {
-        base.OnInit();
-    }
 
-	/// <summary>
-	/// 打开UI
-	/// </summary>
-    public override void OnOpen(params object[] args)
-    {
-        base.OnOpen(args);
-    }
-
-	/// <summary>
-    /// 置顶UI
-    /// </summary>
-    public override void OnPlaceTop()
-    {
-        base.OnPlaceTop();
-	}
-    
-	/// <summary>
-	/// 关闭UI
-	/// </summary>
-    public override void OnClose()
-    {
-        base.OnClose();
-    }
-
-	/// <summary>
-	/// 销毁UI
-	/// </summary>
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-	/// <summary>
-	/// UI逻辑刷新
-	/// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
 }

@@ -1,7 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：清楚程序所有本地数据
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 

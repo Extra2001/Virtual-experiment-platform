@@ -1,18 +1,13 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：自定义实验处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class CustomizeExp : HTBehaviour
 {
     public int ExpId;
-
-    //启用自动化
-    protected override bool IsAutomate => true;
-    
-    // Start is called before the first frame update
     void Start()
     {
         GetComponent<Button>().onClick.AddListener(() =>

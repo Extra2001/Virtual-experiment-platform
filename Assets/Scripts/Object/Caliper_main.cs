@@ -1,7 +1,8 @@
+/************************************************************************************
+    作者：张柯
+    描述：游标卡尺行为处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 public class Caliper_main : HTBehaviour

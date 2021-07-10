@@ -1,10 +1,10 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：物理量单元格的处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
-using System;
 using System.Linq;
 using UnityEngine.UI.Extensions;
 
@@ -24,7 +24,10 @@ public class QuantityCell : HTBehaviour
     public QuantityModel Quantity { get => GetQuantity(); set => SetQuantity(value); }
 
     private QuantityModel QuantityReference = null;
-
+    /// <summary>
+    /// 显示物理量
+    /// </summary>
+    /// <param name="model"></param>
     private void SetQuantity(QuantityModel model)
     {
         instruments.Clear();
@@ -48,7 +51,9 @@ public class QuantityCell : HTBehaviour
 
         QuantityReference = model;
     }
-
+    /// <summary>
+    /// 同步物理量
+    /// </summary>
     public void SyncQuantity()
     {
         _GroupIndicator.text = _Group.value.ToString();
@@ -57,7 +62,10 @@ public class QuantityCell : HTBehaviour
         QuantityReference.Symbol = _Symbol.text;
         QuantityReference.Name = _Name.text;
     }
-
+    /// <summary>
+    /// 获取当前单元格物理量的Model
+    /// </summary>
+    /// <returns></returns>
     private QuantityModel GetQuantity()
     {
         SyncQuantity();

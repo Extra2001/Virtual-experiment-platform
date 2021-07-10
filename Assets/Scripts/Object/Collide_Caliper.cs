@@ -1,14 +1,12 @@
+/************************************************************************************
+    作者：张柯
+    描述：游标卡尺行为处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Collide_Caliper : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-
     void OnCollisionStay(Collision collision)
     {
         if ((collision.collider.tag == "Mesured") && this.transform.parent.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num <= -0.01f)

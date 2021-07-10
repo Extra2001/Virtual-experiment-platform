@@ -1,6 +1,8 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：预览实验数据
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +20,9 @@ public class PreviewExp : HTBehaviour
         LoadQuantities();
         Render();
     }
-
+    /// <summary>
+    /// 渲染合成量表达式图片
+    /// </summary>
     public void Render()
     {
         var exp = CalcArgs.GetSymexpr(RecordManager.tempRecord.stringExpression).ToLaTeX();
@@ -27,7 +31,9 @@ public class PreviewExp : HTBehaviour
             _Image.FitHeight(x);
         });
     }
-
+    /// <summary>
+    /// 加载所有的物理量到列表
+    /// </summary>
     public void LoadQuantities()
     {
         foreach (var item in quantities)

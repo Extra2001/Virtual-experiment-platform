@@ -1,21 +1,13 @@
+/************************************************************************************
+    作者：张柯
+    描述：数码管行为处理程序
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.UI.Extensions;
 
 public class manager_num : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
     public int accuracy_rating; // 小数点后多少位
-    /// </summary>
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+
     public void Show_num(double num)
     {
         for (int i = 1; i < 8; i++)

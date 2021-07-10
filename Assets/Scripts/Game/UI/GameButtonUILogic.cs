@@ -1,12 +1,13 @@
-using System.Collections;
+/************************************************************************************
+    作者：张峻凡
+    描述：面板按钮UI逻辑类
+*************************************************************************************/
 using System.Collections.Generic;
-using UnityEngine;
 using HT.Framework;
-using DG.Tweening;
 using UnityEngine.UI;
 using System;
 /// <summary>
-/// 新建UI逻辑类
+/// 面板按钮UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/GameButton")]
 public class GameButtonUILogic : UILogicResident
@@ -65,14 +66,6 @@ public class GameButtonUILogic : UILogicResident
     }
 
     /// <summary>
-    /// 置顶UI
-    /// </summary>
-    public override void OnPlaceTop()
-    {
-        base.OnPlaceTop();
-    }
-
-    /// <summary>
     /// 关闭UI
     /// </summary>
     public override void OnClose()
@@ -82,21 +75,9 @@ public class GameButtonUILogic : UILogicResident
     }
 
     /// <summary>
-    /// 销毁UI
+    /// 调用仪器类接口决定显示哪些按钮
     /// </summary>
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-    /// <summary>
-    /// UI逻辑刷新
-    /// </summary>
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
-
+    /// <param name="handler"></param>
     private void ShowButtons(EventHandlerBase handler)
     {
         var instrument = (handler as SelectInstrumentEventHandler).ActiveInstrument;

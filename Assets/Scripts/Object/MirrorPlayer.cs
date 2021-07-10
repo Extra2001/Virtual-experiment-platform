@@ -16,7 +16,8 @@ public class MirrorPlayer : HTBehaviour
     public bool moveable_look = false;
     public bool moveable_back = false;
     public bool Nowin = false;
-
+    //生成先前位置镜像并保存，供外界调用
+    //为避免用户在视角拉近下 退出实验/存档/更换器材导致bug
     public void updateMirror()
     {
         mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();

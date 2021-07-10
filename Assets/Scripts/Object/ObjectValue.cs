@@ -7,6 +7,8 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//通用物体效应包，包含位置，角度，质量速度碰撞等等
+//详细实现见子函数
 
 public class ObjectValue : HTBehaviour
 {

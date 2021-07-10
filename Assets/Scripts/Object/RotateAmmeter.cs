@@ -36,8 +36,10 @@ public class RotateAmmeter : HTBehaviour
 
     public void ShowNum(float num)
     {
+        //插值导入旋转动画，详见内部实现
         transform.Find("Cylinder005").transform.DOLocalRotate(new Vector3(0, 207.5f-82.5f*num /MaxA, 0), 1f).SetEase(Ease.OutExpo);
     }
+    //通用缩放视角函数
     private void Look_back()
     {
         if (Input.GetKeyDown(KeyCode.X))

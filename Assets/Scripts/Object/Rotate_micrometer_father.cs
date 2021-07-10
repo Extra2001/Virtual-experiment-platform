@@ -3,7 +3,7 @@
     描述：螺旋测微器行为处理程序
 *************************************************************************************/
 using HT.Framework;
-
+//父逻辑，保存一致性，详见子函数
 public class Rotate_micrometer_father : HTBehaviour
 {
     public int RotatePerTime;

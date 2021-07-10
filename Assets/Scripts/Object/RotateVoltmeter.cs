@@ -6,6 +6,7 @@ using HT.Framework;
 using DG.Tweening;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
+//基本与电流表相同
 public class RotateVoltmeter : HTBehaviour
 {
     private Vector3 PLC_eulerAngles;
@@ -32,6 +33,7 @@ public class RotateVoltmeter : HTBehaviour
 
     public void ShowNum(float num)
     {
+        
         transform.Find("Cylinder004").transform.DOLocalRotate(new Vector3(0, 207.5f - 82.5f * num / MaxV, 0), 1f).SetEase(Ease.OutExpo);
     }
     private void Look_back()

@@ -5,10 +5,10 @@
 using HT.Framework;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
-
+//注：由于unity中精度限制，游标卡尺的测量逻辑和千分尺完全不同
 public class Micrometer_main : HTBehaviour
 {
-    private bool IsKaKaed=false;//别骂了别骂了，这个名字搞笑的
+    private bool IsKaKaed=false;//
 
     public AudioClip kakaka;//咔咔声
 
@@ -51,6 +51,7 @@ public class Micrometer_main : HTBehaviour
         this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = 3;
     }
 
+    //通用行为
     private void Look_back()
     {
         if (Input.GetKeyDown(KeyCode.X) )

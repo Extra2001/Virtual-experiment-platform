@@ -4,7 +4,7 @@
 *************************************************************************************/
 using HT.Framework;
 using UnityEngine;
-
+//特殊行为逻辑
 public class Collide_Caliper : HTBehaviour
 {
     void OnCollisionStay(Collision collision)

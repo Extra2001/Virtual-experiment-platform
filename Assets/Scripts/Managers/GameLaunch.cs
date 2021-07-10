@@ -20,8 +20,6 @@ public class GameLaunch : MonoBehaviour
 
         PreLoadingAssets();
 
-        LaunchServices();
-
         LaunchManagers();
 
         GetComponent<RenderManager>().Hide();
@@ -37,13 +35,6 @@ public class GameLaunch : MonoBehaviour
         // 加载仪器
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
-    }
-    /// <summary>
-    /// 启动服务程序
-    /// </summary>
-    private void LaunchServices()
-    {
-        Main.m_Event.Throw<ServiceStartedEventHandler>();
     }
 
     /// <summary>

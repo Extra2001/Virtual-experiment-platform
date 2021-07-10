@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张峻凡
+    描述：离开测量，进入数据处理阶段事件
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建事件
+/// 离开测量，进入数据处理阶段事件
 /// </summary>
 public class ProcessExplainEventHandler : EventHandlerBase
 {
-    //离开测量，进入数据处理阶段
-
     /// <summary>
     /// 填充数据，所有属性、字段的初始化工作可以在这里完成
     /// </summary>

@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：张峻凡
+    描述：用户选择仪器事件
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建事件
+/// 用户选择仪器事件
 /// </summary>
 public class SelectInstrumentEventHandler : EventHandlerBase
 {
@@ -17,7 +17,6 @@ public class SelectInstrumentEventHandler : EventHandlerBase
         ActiveInstrument = instrument;
         return this;
     }
-
     /// <summary>
     /// 重置引用，当被引用池回收时调用
     /// </summary>

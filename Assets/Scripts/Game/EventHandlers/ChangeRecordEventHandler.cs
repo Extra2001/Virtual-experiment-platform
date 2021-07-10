@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：荆煦添
+    描述：工作存档变更事件
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建事件
+/// 工作存档变更事件
 /// </summary>
 public class ChangeRecordEventHandler : EventHandlerBase
 {

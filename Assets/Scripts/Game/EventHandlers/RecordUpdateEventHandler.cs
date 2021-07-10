@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/************************************************************************************
+    作者：荆煦添
+    描述：存档更新事件
+*************************************************************************************/
 using HT.Framework;
-using DG.Tweening;
 /// <summary>
-/// 新建事件
+/// 存档更新事件
 /// </summary>
 public class RecordUpdateEventHandler : EventHandlerBase
 {
@@ -13,8 +13,6 @@ public class RecordUpdateEventHandler : EventHandlerBase
     /// </summary>
     public RecordUpdateEventHandler Fill()
     {
-
-
         return this;
     }
 

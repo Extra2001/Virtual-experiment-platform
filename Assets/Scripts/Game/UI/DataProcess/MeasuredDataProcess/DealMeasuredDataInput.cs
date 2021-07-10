@@ -98,7 +98,7 @@ public class DealMeasuredDataInput : HTBehaviour
         CallButton4.image.sprite = Sprites[quantity.ComplexState];
         Value4.text = "=" + StaticMethods.NumberFormat(quantity.Uncertain);
         Field4.SetActive(true);
-        if (quantity.AverageExpression != null)
+        if (quantity.ComplexExpression != null)
         {
 
             Field4.GetComponent<FormulaController>().LoadFormula(quantity.ComplexExpression);

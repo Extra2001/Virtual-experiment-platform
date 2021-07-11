@@ -27,7 +27,7 @@ public class Ruler_main : HTBehaviour
     GameObject TarOBJ;
     GameObject[] MeasureOBJ;
 
-    private void Look_back()
+    private void Look_back()//通用视角处理函数
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
@@ -105,7 +105,7 @@ public class Ruler_main : HTBehaviour
 
         }
     }
-
+    //自动吸附函数，已舍弃
     //private void Abs()
     //{
     //      mindis = -1f;
@@ -135,9 +135,5 @@ public class Ruler_main : HTBehaviour
     void Update()
     {
         Look_back();
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            Debug.Log("X");
-        }
     }
 }

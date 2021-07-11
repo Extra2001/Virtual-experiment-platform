@@ -24,16 +24,17 @@ public class ElectronicScales_main : HTBehaviour
     public bool Nowin = false;
     public double num;
     public int accuracy_ratings;
+    //调用子函数，显示数字
     public void ShowNum(float num)
     {
         this.transform.Find("num").gameObject.GetComponent<manager_num>().Show_num(num);
     }
-
+    //更改保留位数（暂无调用
     public void ChangeACC(int acc)
     {
         this.transform.Find("num").gameObject.GetComponent<manager_num>().accuracy_rating = acc;
     }
-
+    //通用，视角行为
     private void Look_back()
     {
         if (Input.GetKeyDown(KeyCode.X))

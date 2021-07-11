@@ -6,6 +6,9 @@ using HT.Framework;
 using DG.Tweening;
 using UnityEngine;
 using RTEditor;
+//实现物体自身在三欧拉角接近90倍数时，自旋转到
+//保证在无选中操作时方可启用
+//欧拉角换算四元数在换回
 
 public class SelfRotate : HTBehaviour
 {

@@ -4,7 +4,9 @@
 *************************************************************************************/
 using HT.Framework;
 using UnityEngine;
-
+//螺旋测微计旋转效应
+//注：为了防止在旋钮中触碰物体导致可能的问题，将旋转独立执行
+//采用旋钮模拟方式完成
 public class Rotate_micrometer : HTBehaviour
 {
     public float num;

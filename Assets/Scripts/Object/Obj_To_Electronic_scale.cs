@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+//电子秤吸附行为
 public class Obj_To_Electronic_scale : HTBehaviour
 {
     //启用自动化

@@ -10,6 +10,8 @@ public class manager_num : HTBehaviour
 
     public void Show_num(double num)
     {
+        //模拟数码管行为，设置未显示数码管为相机禁止渲染层级
+       //详见子函数
         for (int i = 1; i < 8; i++)
         {
             this.transform.Find("point").gameObject.transform.Find(i.ToString()).gameObject.layer = 12;
@@ -26,7 +28,7 @@ public class manager_num : HTBehaviour
         int num_int=(int) num;
         if (num_int > 9999999)
         {
-            //
+            //弹出报错行为
         }
         else
         {

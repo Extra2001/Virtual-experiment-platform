@@ -183,6 +183,12 @@ public static class StaticMethods {
         //返回:合成不确定度
         return Math.Sqrt(ua * ua + ub * ub);
     }
+    public static double MakeWrongUncertain(double ua,double ub) {
+        return Math.Abs(ua + ub);//制作错误的不确定度
+    }
+    public static (double,double) MakeWrongUb(double ie) {//仪器误差限
+        return (ie,ie/Math.Sqrt(2));//制作错误的b类不确定度
+    }
     public static bool ValidVarname(string v) {//检查v是否能作为合法物理量名
         if(keywords.Contains(v)) {//函数列表有 直接否
             return false;
@@ -325,14 +331,15 @@ public class CalcArgs {//一次计算
         public double value { get; set; }
         public double u { get; set; }
     }
-    public static (double, double) CalculateValue(symexpr valexpr, symexpr uncexpr, List<UserInput> inputs) {
-        //return (value, uncertain)
+    public static (double, double,double) CalculateValue(symexpr valexpr, symexpr uncexpr, List<UserInput> inputs) {
+        //return (value, uncertain,错的)
         Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(inputs.Count * 2);
         foreach(var item in inputs) {
             vals[item.name] = item.value;
             vals[$"u_{item.name}"] = item.u;
         }
-        return (valexpr.Evaluate(vals).RealValue, uncexpr.Evaluate(vals).RealValue);
+        double x = valexpr.Evaluate(vals).RealValue;
+        return (x, uncexpr.Evaluate(vals).RealValue,x/Math.Sqrt(2));
     }
     public static symexpr GetSymexpr(string expression) {
         return symexpr.Parse(expression);

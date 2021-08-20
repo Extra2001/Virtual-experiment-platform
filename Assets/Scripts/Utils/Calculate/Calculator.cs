@@ -16,6 +16,8 @@ using expr = MathNet.Symbolics.Expression;
 using symexpr = MathNet.Symbolics.SymbolicExpression;
 using symdiff = MathNet.Symbolics.Calculus;
 using symfuncs = MathNet.Symbolics.Function;
+using static DealProcessResult;
+
 public struct CheckFloat {//带有效数字的小数
     public decimal Value { get; private set; }
     public decimal TrueValue => Value * (decimal)Math.Pow(10, HiDigit);
@@ -36,12 +38,12 @@ public struct CheckFloat {//带有效数字的小数
             HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
             LoDigit = HiDigit - EffectiveDigit + 1;
             if(HiDigit > 0) {
-                for(int i = 0;i < HiDigit;i++) {
+                for(int i = 0; i < HiDigit; i++) {
                     Value /= 10;
                 }
             }
             else if(HiDigit < 0) {
-                for(int i = 0;i < -HiDigit;i++) {
+                for(int i = 0; i < -HiDigit; i++) {
                     Value *= 10;
                 }
             }
@@ -183,11 +185,11 @@ public static class StaticMethods {
         //返回:合成不确定度
         return Math.Sqrt(ua * ua + ub * ub);
     }
-    public static double MakeWrongUncertain(double ua,double ub) {
+    public static double MakeWrongUncertain(double ua, double ub) {
         return Math.Abs(ua + ub);//制作错误的不确定度
     }
-    public static (double,double) MakeWrongUb(double ie) {//仪器误差限
-        return (ie,ie/Math.Sqrt(2));//制作错误的b类不确定度
+    public static (double, double) MakeWrongUb(double ie) {//仪器误差限
+        return (ie, ie / Math.Sqrt(2));//制作错误的b类不确定度
     }
     public static bool ValidVarname(string v) {//检查v是否能作为合法物理量名
         if(keywords.Contains(v)) {//函数列表有 直接否
@@ -234,14 +236,15 @@ public static class StaticMethods {
         }
     }
 }
-public class CalcVariable {
+public class CalcVariable {//2021.8.20
     public List<double> values;
     public double ub;
-    public CalcVariable(double ub, int measures) {
+    public double userua, userub, userunc;//用户测量的ua,ub,用户的合成的不确定度
+
+    public CalcVariable(double ub, int measures) {//测量了measures个数据
         this.ub = ub; values = new List<double>(measures);
     }
-    public CalcVariable() { }
-    public (double, double, double) CalcUncertain() {// value,ua,u
+    public (double average, double ua, double unc) CalcUncertain() {// value,ua,u
         int n = 0;
         double sum1 = 0, sum2 = 0;
         foreach(var item in values) {
@@ -253,6 +256,34 @@ public class CalcVariable {
         }
         return (average, Math.Sqrt(sum2), Math.Sqrt(sum2 + ub * ub));
     }
+    //下面的是8月20号加的
+    public (double average, double ua, double unc, string err) CheckInfo() {
+        var uu = CalcUncertain();
+        bool flag = false;
+        StringBuilder sb = new StringBuilder();
+        if(!ub.AlmostEqual(userub)) {
+            flag = true;
+            sb.Append("b类不确定度计算有误\r\n");
+            if(userub.AlmostEqual(ub * Math.Sqrt(3))) {
+                sb.Append("是否忘除根号3?\r\n");
+            }
+        }
+        if(!userua.AlmostEqual(uu.ua)) {
+            flag = true;
+            sb.Append("a类不确定度计算有误\r\n");
+        }
+        if(!userunc.AlmostEqual(uu.unc)) {
+            flag = true;
+            sb.Append("合成不确定度有误\r\n");
+        }
+        if(flag) {
+            return (uu.average, uu.ua, uu.unc, string.Concat("检查出以下错误\r\n", sb.ToString()));
+        }
+        else {
+            return (uu.average, uu.ua, uu.unc, null);//没有错
+        }
+    }
+
 }
 public class CalcArgs {//一次计算
     private Dictionary<string, CalcVariable> vars;//变量
@@ -276,7 +307,7 @@ public class CalcArgs {//一次计算
             return true;
         }
     }
-    public bool SetConstant(string varname, double val) {//添加一个常量
+    public bool SetConstant(string varname, double val) {//添加或修改一个常量
         if(!cons.ContainsKey(varname)) {
             if(ValidVarname(varname)) {
                 cons[varname] = val; return true;
@@ -313,35 +344,49 @@ public class CalcArgs {//一次计算
         }
         return (val, unc.Sqrt());
     }
-    public static (double, double) CalculateValue(symexpr valexpr, symexpr uncexpr, CalcArgs argobj) {//代入数据
+    public static CalcResult CalculateValue(string expression, CalcArgs argobj) {//代入数据
+        //获取符号表达式
+        (symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
+        List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
+        bool flag = false;
+        var res = new CalcResult {
+            err = errors,
+            status = flag ? "计算有误" : "计算无误",
+        };
         //return (value, uncertain)
         Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
         foreach(var item in argobj.cons) {
             vals[item.Key] = argobj.cons[item.Key];
         }
         foreach(var item in argobj.vars) {
-            var unc = argobj.vars[item.Key].CalcUncertain();
-            vals[item.Key] = unc.Item1;
-            vals[$"u_{item.Key}"] = unc.Item3;
+            var unc = argobj.vars[item.Key].CheckInfo();
+            vals[item.Key] = unc.average;
+            vals[$"u_{item.Key}"] = unc.unc;
+            if(unc.err != null) {
+                flag = true;
+            }
         }
-        return (valexpr.Evaluate(vals).RealValue, uncexpr.Evaluate(vals).RealValue);
-    }
-    public class UserInput {
-        public string name { get; set; }
-        public double value { get; set; }
-        public double u { get; set; }
-    }
-    public static (double, double,double) CalculateValue(symexpr valexpr, symexpr uncexpr, List<UserInput> inputs) {
-        //return (value, uncertain,错的)
-        Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(inputs.Count * 2);
-        foreach(var item in inputs) {
-            vals[item.name] = item.value;
-            vals[$"u_{item.name}"] = item.u;
+        res.val=valexpr.Evaluate(vals).RealValue;
+        res.unc = uncexpr.Evaluate(vals).RealValue;
+        foreach(var item in argobj.vars) {
+            var av = StaticMethods.Average(item.Value.values);
+            vals[item.Key] = av;
+            vals[$"u_{item.Key}"] = item.Value.userunc;
         }
-        double x = valexpr.Evaluate(vals).RealValue;
-        return (x, uncexpr.Evaluate(vals).RealValue,x/Math.Sqrt(2));
+        res.userval= valexpr.Evaluate(vals).RealValue;
+        res.userunc = uncexpr.Evaluate(vals).RealValue;
+        return res;
     }
+    
     public static symexpr GetSymexpr(string expression) {
         return symexpr.Parse(expression);
     }
 }
+public class CalcResult {
+    public string status;
+    public List<QuantityError> err;//变量不确定度检查结果
+    public double val, unc, userval, userunc;//值 不确定度 用户计算值 用户计算不确定度
+    public symexpr calcexpr, uncexpr;
+}
+
+

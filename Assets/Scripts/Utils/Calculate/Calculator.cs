@@ -349,10 +349,7 @@ public class CalcArgs {//一次计算
         (symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
         List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
         bool flag = false;
-        var res = new CalcResult {
-            err = errors,
-            status = flag ? "计算有误" : "计算无误",
-        };
+        var res = new CalcResult();
         //return (value, uncertain)
         Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
         foreach(var item in argobj.cons) {
@@ -364,6 +361,10 @@ public class CalcArgs {//一次计算
             vals[$"u_{item.Key}"] = unc.unc;
             if(unc.err != null) {
                 flag = true;
+                errors.Add(new QuantityError { Message = unc.err, Title = $"{item.Key}不确定度" });
+            }
+            else {
+                errors.Add(new QuantityError { Message = "正确", Title = $"{item.Key}不确定度" });
             }
         }
         res.val=valexpr.Evaluate(vals).RealValue;
@@ -373,8 +374,10 @@ public class CalcArgs {//一次计算
             vals[item.Key] = av;
             vals[$"u_{item.Key}"] = item.Value.userunc;
         }
+        res.status = flag ? "计算有误" : "计算无误";
         res.userval= valexpr.Evaluate(vals).RealValue;
         res.userunc = uncexpr.Evaluate(vals).RealValue;
+        res.err = errors;
         return res;
     }
     

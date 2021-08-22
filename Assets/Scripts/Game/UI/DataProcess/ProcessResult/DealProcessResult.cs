@@ -5,11 +5,13 @@
 using HT.Framework;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine;
 
 public class DealProcessResult : HTBehaviour
 {
-    public FormulaController WrongFormula;
-    public FormulaController RightFormula;
+    public GameObject formula1;
+    public GameObject formula2;
+    public GameObject formula3;
 
     public Text Title;
     public Text SuccessMessage;
@@ -161,7 +163,15 @@ public class DealProcessResult : HTBehaviour
         }
 
         result = CalcArgs.CalculateMeasureValue(calc);
-        quantityErrors = result.err;
+        quantityErrors = new List<QuantityError>();
+        foreach (var item in result.err)
+        {
+            if (item.Message != "正确")
+            {                
+                quantityErrors.Add(item);
+            }
+
+        }
     }
 
     public void Show()
@@ -186,24 +196,34 @@ public class DealProcessResult : HTBehaviour
             Title.text = $"你的错误{curError + 1}/{quantityErrors.Count}";
             ErrorTitle.text = current.Title;
             ErrorMessage.text = current.Message;
-            if (current.User != null)
+            formula1.SetActive(true);
+            LatexEquationRender.Render(RecordManager.tempRecord.stringExpression, res =>
             {
-                WrongFormula.gameObject.SetActive(true);
-                WrongFormula.LoadFormula(current.User);
-            }
-            else WrongFormula.gameObject.SetActive(false);
-            if (current.Right != null)
+                formula1.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+            });
+            formula2.SetActive(true);
+            LatexEquationRender.Render(RecordManager.tempRecord.stringExpression, res =>
+            {
+                formula2.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+            });
+            formula3.SetActive(true);
+            LatexEquationRender.Render(RecordManager.tempRecord.stringExpression, res =>
+            {
+                formula3.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+            });
+            /*if (current.Right != null)
             {
                 RightFormula.gameObject.SetActive(true);
                 RightFormula.LoadFormula(current.Right);
             }
-            else RightFormula.gameObject.SetActive(false);
+            else RightFormula.gameObject.SetActive(false);*/
             curError++;
         }
         else if (curError == quantityErrors.Count)
         {
-            RightFormula.gameObject.SetActive(false);
-            WrongFormula.gameObject.SetActive(false);
+            formula1.SetActive(false);
+            formula2.SetActive(false);
+            formula3.SetActive(false);
             Title.text = quantityErrors.Count == 0 ? "正确无误！" : "你已查看了所有的错误！";
             SuccessMessage.text = quantityErrors.Count == 0 ? "你的实验已全部正确地完成！恭喜你掌握了本次误差理论的知识。" :
                 "你实验中所有的错误如上，请认真记录并思考。";

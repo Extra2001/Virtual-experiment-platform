@@ -20,13 +20,14 @@ public class DealProcessResult : HTBehaviour
     public Button NextButton;
     public Button BackButton;
 
-    Dictionary<QuantityModel, DataChart> quantities = new Dictionary<QuantityModel, DataChart>();
+    //Dictionary<QuantityModel, DataChart> quantities = new Dictionary<QuantityModel, DataChart>();
 
     List<QuantityError> quantityErrors = new List<QuantityError>();
 
     double ComplexAverage = 0, ComplexUncertainty = 0, UserComplexAverage = 0, UserComplexUncertainty;
 
     int curError = 0;
+    CalcMeasureResult result = new CalcMeasureResult();
 
     public class QuantityError
     {
@@ -51,7 +52,7 @@ public class DealProcessResult : HTBehaviour
         });
     }
 
-    private void DealMeausredQuantities()
+    /*private void DealMeausredQuantities()
     {
         quantities.Clear();
         quantityErrors.Clear();
@@ -61,6 +62,7 @@ public class DealProcessResult : HTBehaviour
         {
             var Ub = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / System.Math.Sqrt(3);
             (avg, ua, u) = StaticMethods.CalcUncertain(item.Data.ToDouble(), Ub);
+            //（quantityerrors",null,"   null）= f([8],Ub,[ua,ub,u])
             var data = new DataChart()
             {
                 Name = item.Symbol,
@@ -117,9 +119,19 @@ public class DealProcessResult : HTBehaviour
                 value = item.Value.Average
             });
         }
+        
+         变量名
+        double[]
+        正确ub
+        用户ua
+        用户ub
+        用户u
+         
         var (a, b) = CalcArgs.Calculate(RecordManager.tempRecord.stringExpression, calc);
         var (c, d) = CalcArgs.CalculateValue(a, b, calc);
-        var (e, f) = CalcArgs.CalculateValue(a, b, input);
+        //var (e, f) = CalcArgs.CalculateValue(a, b, input);
+        var e = 0;
+        var f = 0;
         ComplexAverage = c; ComplexUncertainty = d; UserComplexAverage = e; UserComplexUncertainty = f;
         // 记录错误
         if (!RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted().AlmostEqual(UserComplexAverage))
@@ -136,12 +148,27 @@ public class DealProcessResult : HTBehaviour
                 Message = $"合成不确定度计算错误。左侧为你输入的公式，右侧为正确的公式，请详细对比。\n可以返回并改正错误。",
                 User = RecordManager.tempRecord.complexQuantityModel.UncertainExpression
             });
+    }*/
+
+    private void CheckRightOrWrong()
+    {
+        CalcArgs calc = new CalcArgs();
+        foreach (var item in RecordManager.tempRecord.quantities)
+        {
+            calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / System.Math.Sqrt(3), item.Groups);
+            calc.Measure(item.Symbol, item.Data.ToDouble().ToArray());
+            calc.UserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
+        }
+
+        result = CalcArgs.CalculateMeasureValue(calc);
+        quantityErrors = result.err;
     }
 
     public void Show()
     {
-        DealMeausredQuantities();
-        DealComplexData();
+        //DealMeausredQuantities();
+        //DealComplexData();
+        CheckRightOrWrong();
         curError = 0;
         Next();
     }

@@ -258,6 +258,11 @@ public class CalcVariable {//2021.8.20
     }
     //下面的是8月20号加的
     public (double average, double ua, double unc, string err) CheckInfo() {
+        /*values = _values;
+        ub = _ub;
+        userua = _userua;
+        userub = _userub;
+        userunc = _userunc;*/
         var uu = CalcUncertain();
         bool flag = false;
         StringBuilder sb = new StringBuilder();
@@ -336,6 +341,20 @@ public class CalcArgs {//一次计算
         }
         return false;
     }
+
+    public bool UserUnput(string varname, double _userua, double _userub, double _userunc)
+    {
+        //添加用户计算的值
+        if (vars.ContainsKey(varname))
+        {
+            vars[varname].userua = _userua;
+            vars[varname].userub = _userub;
+            vars[varname].userunc = _userunc;
+            return true;
+        }
+        return false;
+    }
+
     public static (symexpr, symexpr) Calculate(string expression, CalcArgs argobj) {//return (value,uncertain) 符号计算不确定度
         symexpr val = symexpr.Parse(expression), unc = 0;
         foreach(var item in argobj.vars) {
@@ -344,12 +363,14 @@ public class CalcArgs {//一次计算
         }
         return (val, unc.Sqrt());
     }
-    public static CalcResult CalculateValue(string expression, CalcArgs argobj) {//代入数据
+    public static CalcMeasureResult CalculateMeasureValue(CalcArgs argobj) {//代入数据
         //获取符号表达式
-        (symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
+        //(symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
         List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
+        List<symexpr> calcexprs=new List<symexpr>(argobj.vars.Count);
+        List<symexpr> uncexprs = new List<symexpr>(argobj.vars.Count);
         bool flag = false;
-        var res = new CalcResult();
+        var res = new CalcMeasureResult();
         //return (value, uncertain)
         Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
         foreach(var item in argobj.cons) {
@@ -367,16 +388,16 @@ public class CalcArgs {//一次计算
                 errors.Add(new QuantityError { Message = "正确", Title = $"{item.Key}不确定度" });
             }
         }
-        res.val=valexpr.Evaluate(vals).RealValue;
-        res.unc = uncexpr.Evaluate(vals).RealValue;
+        //res.val=valexpr.Evaluate(vals).RealValue;
+        //res.unc = uncexpr.Evaluate(vals).RealValue;
         foreach(var item in argobj.vars) {
             var av = StaticMethods.Average(item.Value.values);
             vals[item.Key] = av;
             vals[$"u_{item.Key}"] = item.Value.userunc;
         }
         res.status = flag ? "计算有误" : "计算无误";
-        res.userval= valexpr.Evaluate(vals).RealValue;
-        res.userunc = uncexpr.Evaluate(vals).RealValue;
+        //res.userval= valexpr.Evaluate(vals).RealValue;
+        //res.userunc = uncexpr.Evaluate(vals).RealValue;
         res.err = errors;
         return res;
     }
@@ -385,11 +406,11 @@ public class CalcArgs {//一次计算
         return symexpr.Parse(expression);
     }
 }
-public class CalcResult {
+public class CalcMeasureResult {
     public string status;
     public List<QuantityError> err;//变量不确定度检查结果
-    public double val, unc, userval, userunc;//值 不确定度 用户计算值 用户计算不确定度
-    public symexpr calcexpr, uncexpr;
+    //public double val, unc, userval, userunc;//值 不确定度 用户计算值 用户计算不确定度
+    public List<symexpr> calcexpr, uncexpr;
 }
 
 

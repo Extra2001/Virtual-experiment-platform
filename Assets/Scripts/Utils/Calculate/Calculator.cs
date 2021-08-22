@@ -258,28 +258,32 @@ public class CalcVariable {//2021.8.20
     }
     //下面的是8月20号加的
     public (double average, double ua, double unc, string err) CheckInfo() {
-        /*values = _values;
-        ub = _ub;
-        userua = _userua;
-        userub = _userub;
-        userunc = _userunc;*/
         var uu = CalcUncertain();
         bool flag = false;
         StringBuilder sb = new StringBuilder();
-        if(!ub.AlmostEqual(userub)) {
+        if (!userua.AlmostEqual(uu.ua))
+        {
+            flag = true;
+            sb.Append("a类不确定度计算有误\r\n");
+            if(userua.AlmostEqual(uu.ua * Math.Sqrt(1.0 * values.Count/(values.Count - 1))))
+            {
+                sb.Append("是否将根号下分母除成了k-1,S^2代表的样本方差的分母也是k-1哟\r\n");
+            }
+        }
+        if (!ub.AlmostEqual(userub)) {
             flag = true;
             sb.Append("b类不确定度计算有误\r\n");
             if(userub.AlmostEqual(ub * Math.Sqrt(3))) {
                 sb.Append("是否忘除根号3?\r\n");
             }
-        }
-        if(!userua.AlmostEqual(uu.ua)) {
-            flag = true;
-            sb.Append("a类不确定度计算有误\r\n");
-        }
+        }       
         if(!userunc.AlmostEqual(uu.unc)) {
             flag = true;
             sb.Append("合成不确定度有误\r\n");
+            if (userunc.AlmostEqual(uu.ua + ub))
+            {
+                sb.Append("是否直接将A类和B类不确定度直接相加，两者应该各自平方后相加开方\r\n");
+            }
         }
         if(flag) {
             return (uu.average, uu.ua, uu.unc, string.Concat("检查出以下错误\r\n", sb.ToString()));
@@ -402,15 +406,39 @@ public class CalcArgs {//一次计算
         return res;
     }
     
+    public static CalcComplexResult CalculateComplexValue(string expression, CalcArgs argobj)
+    {
+        (symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
+        QuantityError error = new QuantityError();
+        bool flag = false;
+        var res = new CalcComplexResult();
+
+
+        res.status = flag ? "计算有误" : "计算无误";
+        res.err = error;
+        res.calcexpr = valexpr;
+        res.uncexpr = uncexpr;
+        return res;
+    }
+
+
     public static symexpr GetSymexpr(string expression) {
         return symexpr.Parse(expression);
     }
 }
-public class CalcMeasureResult {
+public class CalcMeasureResult
+{
     public string status;
     public List<QuantityError> err;//变量不确定度检查结果
     //public double val, unc, userval, userunc;//值 不确定度 用户计算值 用户计算不确定度
     public List<symexpr> calcexpr, uncexpr;
+}
+
+public class CalcComplexResult
+{
+    public string status;
+    public QuantityError err;//最终合成量不确定度检查结果
+    public symexpr calcexpr, uncexpr;
 }
 
 

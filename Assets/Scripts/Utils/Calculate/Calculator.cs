@@ -38,12 +38,12 @@ public struct CheckFloat {//带有效数字的小数
             HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
             LoDigit = HiDigit - EffectiveDigit + 1;
             if(HiDigit > 0) {
-                for(int i = 0; i < HiDigit; i++) {
+                for(int i = 0;i < HiDigit;i++) {
                     Value /= 10;
                 }
             }
             else if(HiDigit < 0) {
-                for(int i = 0; i < -HiDigit; i++) {
+                for(int i = 0;i < -HiDigit;i++) {
                     Value *= 10;
                 }
             }
@@ -235,6 +235,12 @@ public static class StaticMethods {
             //throw;
         }
     }
+    public static string GetUaExprLatex(string varname) {
+        return string.Concat(@"u_a=\sqrt{\frac{\sum_{i=1}^{n}{({", varname, @"_i}-{\bar{", varname, @"}})^2}}{n(n-1)}}");
+    }
+    public static string GetUbExprLatex(double insterr) {
+        return string.Concat(@"u_b=\frac{\Delta_{仪}}{\sqrt{3}}=\frac{", insterr.ToString(), @"}\sqrt{3}");
+    }
 }
 public class CalcVariable {//2021.8.20
     public List<double> values;
@@ -261,27 +267,24 @@ public class CalcVariable {//2021.8.20
         var uu = CalcUncertain();
         bool flag = false;
         StringBuilder sb = new StringBuilder();
-        if (!userua.AlmostEqual(uu.ua))
-        {
+        if(!userua.AlmostEqual(uu.ua)) {
             flag = true;
             sb.Append("a类不确定度计算有误\r\n");
-            if(userua.AlmostEqual(uu.ua * Math.Sqrt(1.0 * values.Count/(values.Count - 1))))
-            {
+            if(userua.AlmostEqual(uu.ua * Math.Sqrt(1.0 * values.Count / (values.Count - 1)))) {
                 sb.Append("是否将根号下分母除成了k-1,S^2代表的样本方差的分母也是k-1哟\r\n");
             }
         }
-        if (!ub.AlmostEqual(userub)) {
+        if(!ub.AlmostEqual(userub)) {
             flag = true;
             sb.Append("b类不确定度计算有误\r\n");
             if(userub.AlmostEqual(ub * Math.Sqrt(3))) {
                 sb.Append("是否忘除根号3?\r\n");
             }
-        }       
+        }
         if(!userunc.AlmostEqual(uu.unc)) {
             flag = true;
             sb.Append("合成不确定度有误\r\n");
-            if (userunc.AlmostEqual(uu.ua + ub))
-            {
+            if(userunc.AlmostEqual(uu.ua + ub)) {
                 sb.Append("是否直接将A类和B类不确定度直接相加，两者应该各自平方后相加开方\r\n");
             }
         }
@@ -346,11 +349,9 @@ public class CalcArgs {//一次计算
         return false;
     }
 
-    public bool UserUnput(string varname, double _userua, double _userub, double _userunc)
-    {
+    public bool UserUnput(string varname, double _userua, double _userub, double _userunc) {
         //添加用户计算的值
-        if (vars.ContainsKey(varname))
-        {
+        if(vars.ContainsKey(varname)) {
             vars[varname].userua = _userua;
             vars[varname].userub = _userub;
             vars[varname].userunc = _userunc;
@@ -371,7 +372,7 @@ public class CalcArgs {//一次计算
         //获取符号表达式
         //(symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
         List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
-        List<symexpr> calcexprs=new List<symexpr>(argobj.vars.Count);
+        List<symexpr> calcexprs = new List<symexpr>(argobj.vars.Count);
         List<symexpr> uncexprs = new List<symexpr>(argobj.vars.Count);
         bool flag = false;
         var res = new CalcMeasureResult();
@@ -405,9 +406,8 @@ public class CalcArgs {//一次计算
         res.err = errors;
         return res;
     }
-    
-    public static CalcComplexResult CalculateComplexValue(string expression, CalcArgs argobj)
-    {
+
+    public static CalcComplexResult CalculateComplexValue(string expression, CalcArgs argobj) {
         (symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
         QuantityError error = new QuantityError();
         bool flag = false;
@@ -426,16 +426,14 @@ public class CalcArgs {//一次计算
         return symexpr.Parse(expression);
     }
 }
-public class CalcMeasureResult
-{
+public class CalcMeasureResult {
     public string status;
     public List<QuantityError> err;//变量不确定度检查结果
     //public double val, unc, userval, userunc;//值 不确定度 用户计算值 用户计算不确定度
     public List<symexpr> calcexpr, uncexpr;
 }
 
-public class CalcComplexResult
-{
+public class CalcComplexResult {
     public string status;
     public QuantityError err;//最终合成量不确定度检查结果
     public symexpr calcexpr, uncexpr;

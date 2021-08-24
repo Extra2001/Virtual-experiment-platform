@@ -156,8 +156,10 @@ public class CreateObject : HTBehaviour
     /// </summary>
     public static void CreateRecord()
     {
-        if (RecordManager.tempRecord.showedObject != null)
+        if (RecordManager.tempRecord.showedObject != null && ShowedGameObject == null)
+        {
             ShowedGameObject = Create(RecordManager.tempRecord.showedObject);
+        }           
     }
     /// <summary>
     /// 生成新物体前销毁旧物体

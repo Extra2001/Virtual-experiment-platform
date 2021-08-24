@@ -241,6 +241,9 @@ public static class StaticMethods {
     public static string GetUbExprLatex(double insterr) {
         return string.Concat(@"u_b=\frac{\Delta_{仪}}{\sqrt{3}}=\frac{", insterr.ToString(), @"}\sqrt{3}");
     }
+    public static string GetUncLatex(double ua, double ub) {
+        return $@"u=\sqrt{{{{u_a}}^2+{{u_b}}^2}}=\sqrt{{{ua}^2+{ub}^2}}";
+    }
 }
 public class CalcVariable {//2021.8.20
     public List<double> values;
@@ -295,7 +298,6 @@ public class CalcVariable {//2021.8.20
             return (uu.average, uu.ua, uu.unc, null);//没有错
         }
     }
-
 }
 public class CalcArgs {//一次计算
     private Dictionary<string, CalcVariable> vars;//变量
@@ -377,14 +379,14 @@ public class CalcArgs {//一次计算
         bool flag = false;
         var res = new CalcMeasureResult();
         //return (value, uncertain)
-        Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
-        foreach(var item in argobj.cons) {
-            vals[item.Key] = argobj.cons[item.Key];
-        }
+        //Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
+        //foreach(var item in argobj.cons) {
+        //    vals[item.Key] = argobj.cons[item.Key];
+        //}
         foreach(var item in argobj.vars) {
             var unc = argobj.vars[item.Key].CheckInfo();
-            vals[item.Key] = unc.average;
-            vals[$"u_{item.Key}"] = unc.unc;
+            //vals[item.Key] = unc.average;
+            //vals[$"u_{item.Key}"] = unc.unc;
             if(unc.err != null) {
                 flag = true;
                 errors.Add(new QuantityError { Message = unc.err, Title = $"{item.Key}不确定度" });
@@ -395,11 +397,11 @@ public class CalcArgs {//一次计算
         }
         //res.val=valexpr.Evaluate(vals).RealValue;
         //res.unc = uncexpr.Evaluate(vals).RealValue;
-        foreach(var item in argobj.vars) {
-            var av = StaticMethods.Average(item.Value.values);
-            vals[item.Key] = av;
-            vals[$"u_{item.Key}"] = item.Value.userunc;
-        }
+        //foreach(var item in argobj.vars) {
+        //    var av = StaticMethods.Average(item.Value.values);
+        //    vals[item.Key] = av;
+        //    vals[$"u_{item.Key}"] = item.Value.userunc;
+        //}
         res.status = flag ? "计算有误" : "计算无误";
         //res.userval= valexpr.Evaluate(vals).RealValue;
         //res.userunc = uncexpr.Evaluate(vals).RealValue;
@@ -412,8 +414,33 @@ public class CalcArgs {//一次计算
         QuantityError error = new QuantityError();
         bool flag = false;
         var res = new CalcComplexResult();
-
-
+        StringBuilder sb = new StringBuilder();
+        Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
+        foreach(var item in argobj.cons) {
+            vals[item.Key] = argobj.cons[item.Key];
+        }
+        foreach(var item in argobj.vars) {
+            var u = argobj.vars[item.Key].CalcUncertain();
+            vals[item.Key] = u.average;
+            vals[$"u_{item.Key}"] = u.unc;
+        }
+        double val1 =valexpr.Evaluate(vals).RealValue;//对的val
+        double unc1 = uncexpr.Evaluate(vals).RealValue;//对的unc
+        foreach(var item in argobj.vars) {
+            vals[$"u_{item.Key}"] = argobj.vars[item.Key].userunc;
+        }
+        double val2 = valexpr.Evaluate(vals).RealValue;//用户的val
+        double unc2 = uncexpr.Evaluate(vals).RealValue;//用户的unc
+        if(!val2.AlmostEqual(val1)) {
+            sb.Append("合成量的值错误\r\n");
+            flag = true;
+        }
+        if(!unc2.AlmostEqual(unc1)) {
+            sb.Append("合成量的不确定度错误\r\n");
+            flag = true;
+        }
+        error.Message = sb.ToString();
+        error.Title = "合成量计算检查";
         res.status = flag ? "计算有误" : "计算无误";
         res.err = error;
         res.calcexpr = valexpr;
@@ -438,5 +465,4 @@ public class CalcComplexResult {
     public QuantityError err;//最终合成量不确定度检查结果
     public symexpr calcexpr, uncexpr;
 }
-
 

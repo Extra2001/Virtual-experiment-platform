@@ -63,6 +63,10 @@ public class GameButtonUILogic : UILogicResident
     {
         base.OnOpen(args);
         Main.m_Event.Subscribe<SelectInstrumentEventHandler>(ShowButtons);
+
+        //复现存档仪器被测物体位置等信息
+        CreateObject.CreateRecord();
+        CreateInstrument.CreateRecord();
     }
 
     /// <summary>

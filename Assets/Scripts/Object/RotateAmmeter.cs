@@ -54,12 +54,13 @@ public class RotateAmmeter : HTBehaviour
                 Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 1;
 
                 moveable_look = true;
-                mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
+                Player_S.GetComponent<MirrorPlayer>().moveable_look = moveable_look;
                 Player_S.GetComponent<MirrorPlayer>().updateMirror();
             }
             else if (Nowin)
             {
                 moveable_back = true;
+                Player_S.GetComponent<MirrorPlayer>().moveable_back = moveable_back;
             }
         }
         Ori_place = Player_S.GetComponent<MirrorPlayer>().Ori_place;

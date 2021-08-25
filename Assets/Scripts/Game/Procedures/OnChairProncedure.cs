@@ -46,10 +46,6 @@ public class OnChair : ProcedureBase
             else
                 Main.m_UI.GetUI<BagControl>().Hide();
         });
-
-        //复现存档仪器被测物体位置等信息
-        CreateObject.CreateRecord();
-        CreateInstrument.CreateRecord();
     }
 
     /// <summary>

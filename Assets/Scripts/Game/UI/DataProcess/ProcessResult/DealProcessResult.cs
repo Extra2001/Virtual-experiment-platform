@@ -35,8 +35,11 @@ public class DealProcessResult : HTBehaviour
     {
         public string Title { get; set; }
         public string Message { get; set; }
-        public List<FormulaNode> User { get; set; }
-        public List<FormulaNode> Right { get; set; }
+      //  public List<FormulaNode> User { get; set; }
+        //public List<FormulaNode> Right { get; set; }
+        public string ua { get; set; }
+        public string ub { get; set; }
+        public string unc { get; set; }
     }
 
     private void Start()

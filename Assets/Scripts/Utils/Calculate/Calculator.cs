@@ -236,13 +236,13 @@ public static class StaticMethods {
         }
     }
     public static string GetUaExprLatex(string varname) {
-        return string.Concat(@"u_a=\sqrt{\frac{\sum_{i=1}^{n}{({", varname, @"_i}-{\bar{", varname, @"}})^2}}{n(n-1)}}");
+        return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{\sum_{i=1}^{n}{({", varname, @"_i}-{\bar{", varname, @"}})^2}}{n(n-1)}}");
     }
-    public static string GetUbExprLatex(double insterr) {
-        return string.Concat(@"u_b=\frac{\Delta_{仪}}{\sqrt{3}}=\frac{", insterr.ToString(), @"}\sqrt{3}");
+    public static string GetUbExprLatex(string varname, double insterr) {
+        return string.Concat(@"u_b(", varname, @")=\frac{\Delta_{仪}}{\sqrt{3}}=\frac{", insterr.ToString(), @"}\sqrt{3}");
     }
-    public static string GetUncLatex(double ua, double ub) {
-        return $@"u=\sqrt{{{{u_a}}^2+{{u_b}}^2}}=\sqrt{{{ua}^2+{ub}^2}}";
+    public static string GetUncLatex(string varname, double ua, double ub) {
+        return $@"u({varname})=\sqrt{{{{u_a({varname})}}^2+{{u_b({varname})}}^2}}=\sqrt{{{ua}^2+{ub}^2}}";
     }
 }
 public class CalcVariable {//2021.8.20
@@ -374,8 +374,7 @@ public class CalcArgs {//一次计算
         //获取符号表达式
         //(symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
         List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
-        List<symexpr> calcexprs = new List<symexpr>(argobj.vars.Count);
-        List<symexpr> uncexprs = new List<symexpr>(argobj.vars.Count);
+        List<string> ua = new List<string>(), ub = new(argobj.vars.Count), u = new(argobj.vars.Count);
         bool flag = false;
         var res = new CalcMeasureResult();
         //return (value, uncertain)
@@ -389,11 +388,12 @@ public class CalcArgs {//一次计算
             //vals[$"u_{item.Key}"] = unc.unc;
             if(unc.err != null) {
                 flag = true;
-                errors.Add(new QuantityError { Message = unc.err, Title = $"{item.Key}不确定度" });
+                errors.Add(new QuantityError { Message = unc.err, Title = $"{item.Key}不确定度", ua = StaticMethods.GetUaExprLatex(item.Key), ub = StaticMethods.GetUbExprLatex(item.Key, item.Value.ub), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });
             }
             else {
-                errors.Add(new QuantityError { Message = "正确", Title = $"{item.Key}不确定度" });
+                errors.Add(new QuantityError { Message = "计算正确", Title = $"{item.Key}不确定度", ua = StaticMethods.GetUaExprLatex(item.Key), ub = StaticMethods.GetUbExprLatex(item.Key, item.Value.ub), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });
             }
+
         }
         //res.val=valexpr.Evaluate(vals).RealValue;
         //res.unc = uncexpr.Evaluate(vals).RealValue;
@@ -424,7 +424,7 @@ public class CalcArgs {//一次计算
             vals[item.Key] = u.average;
             vals[$"u_{item.Key}"] = u.unc;
         }
-        double val1 =valexpr.Evaluate(vals).RealValue;//对的val
+        double val1 = valexpr.Evaluate(vals).RealValue;//对的val
         double unc1 = uncexpr.Evaluate(vals).RealValue;//对的unc
         foreach(var item in argobj.vars) {
             vals[$"u_{item.Key}"] = argobj.vars[item.Key].userunc;
@@ -457,7 +457,6 @@ public class CalcMeasureResult {
     public string status;
     public List<QuantityError> err;//变量不确定度检查结果
     //public double val, unc, userval, userunc;//值 不确定度 用户计算值 用户计算不确定度
-    public List<symexpr> calcexpr, uncexpr;
 }
 
 public class CalcComplexResult {

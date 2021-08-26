@@ -246,7 +246,7 @@ public static class StaticMethods {
         return string.Concat(@"u_b(", varname, @")=\frac{", insterr.ToString(), @"}{\sqrt{3}}");
     }
     public static string GetUncLatex(string varname, double ua, double ub) {
-        return $@"u({varname})=\sqrt{{{{u_a({varname})}}^2+{{u_b({varname})}}^2}}=\sqrt{{{ua}^2+{ub}^2}}";
+        return $@"u({varname})=\sqrt{{({ua}^2)+({ub}^2)}}";
     }
 }
 public class CalcVariable {//2021.8.20

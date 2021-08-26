@@ -379,7 +379,7 @@ public class CalcArgs {//一次计算
         //获取符号表达式
         //(symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
         List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
-        List<string> ua = new List<string>(), ub = new(argobj.vars.Count), u = new(argobj.vars.Count);
+        //List<string> ua = new List<string>(), ub = new(argobj.vars.Count), u = new(argobj.vars.Count);
         bool flag = false;
         var res = new CalcMeasureResult();
         //return (value, uncertain)

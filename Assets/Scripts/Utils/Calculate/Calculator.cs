@@ -235,15 +235,16 @@ public static class StaticMethods {
             //throw;
         }
     }
-    public static string GetUaExprLatex(string varname,double s2,int k) {
+    public static string GetUaExprLatex(string varname) {
         //return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{\sum_{i=1}^{n}{({", varname, @"_i}-{\bar{", varname, @"}})^2}}{n(n-1)}}");
-        return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{s^2}{k}}=\sqrt{{", s2, "}{", k, "}}");
+        //return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{s^2}{k}}=\sqrt{{", s2, "}{", k, "}}");
         //下面这行是不要符号表达式的
-        //return string.Concat(@"u_a(", varname, @")=\sqrt{", s2, "}{", k, "}}");
+        return string.Concat(@"u_a(", varname, @")=\sqrt{s^2}{k}}");
     }
-    public static string GetUbExprLatex(string varname, double insterr) {
+    public static string GetUbExprLatex(string varname) {
         //return string.Concat(@"u_b(", varname, @")=\frac{\Delta_{仪}}{\sqrt{3}}=\frac{", insterr.ToString(), @"}\sqrt{3}");
-        return string.Concat(@"u_b(", varname, @")=\frac{", insterr.ToString(), @"}{\sqrt{3}}");
+        //return string.Concat(@"u_b(", varname, @")=\frac{", insterr.ToString(), @"}{\sqrt{3}}");
+        return string.Concat(@"u_b(", varname, @")=\frac{\Delta_{仪}}{\sqrt{3}}");
     }
     public static string GetUncLatex(string varname, double ua, double ub) {
         return $@"u({varname})=\sqrt{{({ua}^2)+({ub}^2)}}";
@@ -393,10 +394,10 @@ public class CalcArgs {//一次计算
             //vals[$"u_{item.Key}"] = unc.unc;
             if(unc.err != null) {
                 flag = true;
-                errors.Add(new QuantityError { Message = unc.err, Title = $"{item.Key}不确定度", ua = StaticMethods.GetUaExprLatex(item.Key,StaticMethods.Variance(item.Value.values),item.Value.values.Count), ub = StaticMethods.GetUbExprLatex(item.Key, item.Value.ub), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });
+                errors.Add(new QuantityError { Message = unc.err, Title = $"{item.Key}不确定度", ua = StaticMethods.GetUaExprLatex(item.Key), ub = StaticMethods.GetUbExprLatex(item.Key), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });
             }
             else {
-                errors.Add(new QuantityError { Message = "计算正确", Title = $"{item.Key}不确定度", ua = StaticMethods.GetUaExprLatex(item.Key, StaticMethods.Variance(item.Value.values), item.Value.values.Count), ub = StaticMethods.GetUbExprLatex(item.Key, item.Value.ub), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });
+                errors.Add(new QuantityError { Message = "计算正确", Title = $"{item.Key}不确定度", ua = StaticMethods.GetUaExprLatex(item.Key), ub = StaticMethods.GetUbExprLatex(item.Key), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });
             }
 
         }

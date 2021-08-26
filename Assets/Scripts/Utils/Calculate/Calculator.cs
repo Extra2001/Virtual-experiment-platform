@@ -244,7 +244,7 @@ public static class StaticMethods {
     public static string GetUbExprLatex(string varname) {
         //return string.Concat(@"u_b(", varname, @")=\frac{\Delta_{仪}}{\sqrt{3}}=\frac{", insterr.ToString(), @"}\sqrt{3}");
         //return string.Concat(@"u_b(", varname, @")=\frac{", insterr.ToString(), @"}{\sqrt{3}}");
-        return string.Concat(@"u_b(", varname, @")=\frac{\Delta}{\sqrt{3}}");
+        return string.Concat(@"u_b(", varname, @")=\frac{\Delta_{instrument}}{\sqrt{3}}");
     }
     public static string GetUncLatex(string varname, double ua, double ub) {
         return $@"u({varname})=\sqrt{{({ua:#.###}^2)+({ub:#.###}^2)}}";

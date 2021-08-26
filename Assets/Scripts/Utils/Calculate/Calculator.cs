@@ -239,7 +239,7 @@ public static class StaticMethods {
         //return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{\sum_{i=1}^{n}{({", varname, @"_i}-{\bar{", varname, @"}})^2}}{n(n-1)}}");
         //return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{s^2}{k}}=\sqrt{{", s2, "}{", k, "}}");
         //下面这行是不要符号表达式的
-        return string.Concat(@"u_a(", varname, @")=\sqrt{{s^2}{k}}");
+        return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{s^2}{k}}");
     }
     public static string GetUbExprLatex(string varname) {
         //return string.Concat(@"u_b(", varname, @")=\frac{\Delta_{仪}}{\sqrt{3}}=\frac{", insterr.ToString(), @"}\sqrt{3}");

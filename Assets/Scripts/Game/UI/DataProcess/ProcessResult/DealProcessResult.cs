@@ -202,19 +202,21 @@ public class DealProcessResult : HTBehaviour
             formula1.SetActive(true);
             LatexEquationRender.Render(current.ua, res =>
             {
-                formula1.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+                formula1.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                //formula1.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
             });
             formula2.SetActive(true);
             LatexEquationRender.Render(current.ub, res =>
             {
                 Debug.Log("b"+current.ub);
-                formula2.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+                formula2.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                //formula2.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
             });
             formula3.SetActive(true);
             LatexEquationRender.Render(current.unc, res =>
             {
-                //formula3.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
-                formula3.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+                formula3.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                //formula3.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
             });
             /*if (current.Right != null)
             {

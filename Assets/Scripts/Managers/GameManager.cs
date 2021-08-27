@@ -84,6 +84,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         Main.m_Event.Subscribe<PreviewConfirmEventHandler>(PreviewConfirm);
         Main.m_Event.Subscribe<ProcessExplainEventHandler>(ProcessTips);
         Main.m_Event.Subscribe<StartUncertaintyEventHandler>(EnterUncertainty);
+        Main.m_Event.Subscribe<UncertainLearnEventHandler>(UncertainLearn);
     }
 
     /// <summary>
@@ -252,7 +253,14 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     public void ShowUncertainty()
     {
         var pro = Main.m_Procedure.GetProcedure<MeasuredDataProcessProcedure>();
+        ProcedureStack.Add(typeof(MeasuredDataProcessProcedure));
         pro.ShowUncertainty(CurrentQuantity);
     }
+
+    public void UncertainLearn()
+    {
+        Main.m_Procedure.SwitchProcedure<UncertainLearnProcedure>();
+    }
+
     #endregion
 }

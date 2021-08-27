@@ -26,6 +26,10 @@ public class StartUILogic : UILogicResident
         UIEntity.FindChildren("ExitButton").GetComponent<Button>().onClick.AddListener(() =>
         {
             Application.Quit();
+        });        
+        UIEntity.FindChildren("UncertainLearnButton").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            Main.m_Event.Throw<UncertainLearnEventHandler>();
         });
         UIEntity.FindChildren("ContinueButton").GetComponent<Button>().onClick.AddListener(() =>
         {

@@ -3,6 +3,7 @@
     描述：游标卡尺行为处理程序
 *************************************************************************************/
 using HT.Framework;
+using RTEditor;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 public class Caliper_main : HTBehaviour
@@ -47,6 +48,7 @@ public class Caliper_main : HTBehaviour
 
                 Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = false;
                 Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 1;
+                
 
                 moveable_look = true;
                 Player_S.GetComponent<MirrorPlayer>().moveable_look = moveable_look;
@@ -78,8 +80,10 @@ public class Caliper_main : HTBehaviour
         }
         if (mCamera.fieldOfView < Ele.GetComponent<Camera>().fieldOfView + 0.01 && moveable_look)
         {
+            Player_S.transform.rotation = Quaternion.Euler(new Vector3(0, 270f, 0));
             mCamera.transform.position = Ele.transform.position;
             mCamera.transform.rotation = Ele.transform.rotation;
+            Debug.Log("qwq");
             mCamera.fieldOfView = Ele.GetComponent<Camera>().fieldOfView;
             moveable_look = false;
             Nowin = true;
@@ -104,6 +108,7 @@ public class Caliper_main : HTBehaviour
         {
             mCamera.transform.position = Ori_place;
             mCamera.transform.rotation = Quaternion.Euler(Ori_eulerAngles);
+            //Player_S.transform.rotation = mCamera.transform.rotation;
             mCamera.fieldOfView = Ori_fieldOfView;
             moveable_back = false;
             Nowin = false;

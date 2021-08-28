@@ -70,6 +70,7 @@ public class Ruler_main : HTBehaviour
         }
         if (mCamera.fieldOfView < Ele.GetComponent<Camera>().fieldOfView + 0.01 && moveable_look)
         {
+            Player_S.transform.rotation = Quaternion.Euler(new Vector3(0, 270f, 0));
             mCamera.transform.position = Ele.transform.position;
             mCamera.transform.rotation = Ele.transform.rotation;
             mCamera.fieldOfView = Ele.GetComponent<Camera>().fieldOfView;

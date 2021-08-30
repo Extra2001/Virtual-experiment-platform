@@ -6,6 +6,9 @@ using UnityEngine;
 using Flurl.Http;
 using System;
 using UnityEngine.Events;
+using System.IO;
+using System.Drawing.Imaging;
+using System.Text;
 
 public class LatexEquationRender
 {
@@ -17,7 +20,7 @@ public class LatexEquationRender
     /// <param name="errorHandler">äÖÈ¾Ê§°Ü»Øµ÷</param>
     public static void Render(string tex, UnityAction<Sprite> action = null, UnityAction errorHandler = null)
     {
-        var x = $"http://expr.buaaer.top/".PostJsonAsync(new
+        var x = $"http://localhost:{ProcessManager.Port}/".PostJsonAsync(new
         {
             equation = tex
         }).ReceiveString().ContinueWith(xx =>
@@ -26,7 +29,17 @@ public class LatexEquationRender
             {
                 try
                 {
-                    action?.Invoke(CommonTools.GetSprite(Convert.FromBase64String(xx.Result.Replace("data:image/png;base64,", ""))));
+                    using (var ms = new MemoryStream())
+                    {
+                        var buffer = Encoding.Default.GetBytes(xx.Result);
+                        using (var rms = new MemoryStream(buffer))
+                        {
+                            var svg = Svg.SvgDocument.Open<Svg.SvgDocument>(rms);
+                            var bitmap = svg.Draw(1000, (int)Math.Round((double)svg.Height / svg.Width * 1000));
+                            bitmap.Save(ms, ImageFormat.Png);
+                            action?.Invoke(CommonTools.GetSprite(ms.GetBuffer()));
+                        }
+                    }
                 }
                 catch { errorHandler?.Invoke(); }
             });

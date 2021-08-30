@@ -16,6 +16,8 @@ public class GameLaunch : MonoBehaviour
         InitLoading.gameObject.SetActive(true);
         LoadingScreen.gameObject.SetActive(true);
 
+        ProcessManager.StartService();
+
         UIAPIInitializer.Current.Initialize();
 
         PreLoadingAssets();
@@ -49,5 +51,10 @@ public class GameLaunch : MonoBehaviour
         PauseManager.Enable();
 
         KeyboardManager.Enable();
+    }
+
+    private void OnDestroy()
+    {
+        ProcessManager.StopService();
     }
 }

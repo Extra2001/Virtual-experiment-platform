@@ -69,6 +69,10 @@ public class Record
     /// </summary>
     public ObjectsModel showedObject { get; set; } = null;
     /// <summary>
+    /// 记录用户得分
+    /// </summary>
+    public ResultScore score { get; set; } = new ResultScore();
+    /// <summary>
     /// 人物视角的位置坐标
     /// </summary>
     public MyVector3 FPSPosition = new MyVector3()

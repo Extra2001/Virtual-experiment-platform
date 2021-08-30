@@ -236,13 +236,18 @@ public static class StaticMethods {
         }
     }
     public static string GetUaExprLatex(string varname) {
-        return string.Concat(@"u_a=\sqrt{\frac{\sum_{i=1}^{n}{({", varname, @"_i}-{\bar{", varname, @"}})^2}}{n(n-1)}}");
+        //return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{\sum_{i=1}^{n}{({", varname, @"_i}-{\bar{", varname, @"}})^2}}{n(n-1)}}");
+        //return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{s^2}{k}}=\sqrt{{", s2, "}{", k, "}}");
+        //下面这行是不要符号表达式的
+        return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{s^2}{k}}");
     }
-    public static string GetUbExprLatex(double insterr) {
-        return string.Concat(@"u_b=\frac{\Delta_{仪}}{\sqrt{3}}=\frac{", insterr.ToString(), @"}\sqrt{3}");
+    public static string GetUbExprLatex(string varname) {
+        //return string.Concat(@"u_b(", varname, @")=\frac{\Delta_{仪}}{\sqrt{3}}=\frac{", insterr.ToString(), @"}\sqrt{3}");
+        //return string.Concat(@"u_b(", varname, @")=\frac{", insterr.ToString(), @"}{\sqrt{3}}");
+        return string.Concat(@"u_b(", varname, @")=\frac{\Delta_{instrument}}{\sqrt{3}}");
     }
-    public static string GetUncLatex(double ua, double ub) {
-        return $@"u=\sqrt{{{{u_a}}^2+{{u_b}}^2}}=\sqrt{{{ua}^2+{ub}^2}}";
+    public static string GetUncLatex(string varname, double ua, double ub) {
+        return $@"u({varname})=\sqrt{{({NumberFormat(ua)}^2)+({NumberFormat(ub)}^2)}}";
     }
 }
 public class CalcVariable {//2021.8.20
@@ -272,14 +277,14 @@ public class CalcVariable {//2021.8.20
         StringBuilder sb = new StringBuilder();
         if(!userua.AlmostEqual(uu.ua)) {
             flag = true;
-            sb.Append("a类不确定度计算有误\r\n");
+            sb.Append("A类不确定度计算有误\r\n");
             if(userua.AlmostEqual(uu.ua * Math.Sqrt(1.0 * values.Count / (values.Count - 1)))) {
                 sb.Append("是否将根号下分母除成了k-1,S^2代表的样本方差的分母也是k-1哟\r\n");
             }
         }
         if(!ub.AlmostEqual(userub)) {
             flag = true;
-            sb.Append("b类不确定度计算有误\r\n");
+            sb.Append("B类不确定度计算有误\r\n");
             if(userub.AlmostEqual(ub * Math.Sqrt(3))) {
                 sb.Append("是否忘除根号3?\r\n");
             }
@@ -292,6 +297,7 @@ public class CalcVariable {//2021.8.20
             }
         }
         if(flag) {
+            sb.Append("A类不确定度，B类不确定度及合成不确定度的正确答案如下");
             return (uu.average, uu.ua, uu.unc, string.Concat("检查出以下错误\r\n", sb.ToString()));
         }
         else {
@@ -303,6 +309,7 @@ public class CalcArgs {//一次计算
     private Dictionary<string, CalcVariable> vars;//变量
     private Dictionary<string, double> cons;//常量
     //public int arrlen { get; private set; }
+    public double userval, userunc;//用户输入 合成的值 总的不确定度
     public CalcArgs(/*int measures*/) {
         vars = new Dictionary<string, CalcVariable>(); cons = new Dictionary<string, double>();
         //arrlen = measures;
@@ -351,8 +358,8 @@ public class CalcArgs {//一次计算
         return false;
     }
 
-    public bool UserUnput(string varname, double _userua, double _userub, double _userunc) {
-        //添加用户计算的值
+    public bool MeasureUserUnput(string varname, double _userua, double _userub, double _userunc) {
+        //添加用户直接测量的值
         if(vars.ContainsKey(varname)) {
             vars[varname].userua = _userua;
             vars[varname].userub = _userub;
@@ -360,6 +367,13 @@ public class CalcArgs {//一次计算
             return true;
         }
         return false;
+    }
+
+    public void ComplexUserUnput(double _userval, double _userunc)
+    {
+        //添加用户合成的结果（如体积）
+        userval = _userval;
+        userunc = _userunc;
     }
 
     public static (symexpr, symexpr) Calculate(string expression, CalcArgs argobj) {//return (value,uncertain) 符号计算不确定度
@@ -374,8 +388,7 @@ public class CalcArgs {//一次计算
         //获取符号表达式
         //(symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
         List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
-        List<symexpr> calcexprs = new List<symexpr>(argobj.vars.Count);
-        List<symexpr> uncexprs = new List<symexpr>(argobj.vars.Count);
+        //List<string> ua = new List<string>(), ub = new(argobj.vars.Count), u = new(argobj.vars.Count);
         bool flag = false;
         var res = new CalcMeasureResult();
         //return (value, uncertain)
@@ -389,11 +402,12 @@ public class CalcArgs {//一次计算
             //vals[$"u_{item.Key}"] = unc.unc;
             if(unc.err != null) {
                 flag = true;
-                errors.Add(new QuantityError { Message = unc.err, Title = $"{item.Key}不确定度" });
+                errors.Add(new QuantityError { Message = unc.err, Title = $"对物理量{item.Key}的检查", ua = StaticMethods.GetUaExprLatex(item.Key), ub = StaticMethods.GetUbExprLatex(item.Key), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });
             }
             else {
-                errors.Add(new QuantityError { Message = "正确", Title = $"{item.Key}不确定度" });
+                errors.Add(new QuantityError { Message = "计算正确", Title = $"对物理量{item.Key}的检查", ua = StaticMethods.GetUaExprLatex(item.Key), ub = StaticMethods.GetUbExprLatex(item.Key), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });
             }
+
         }
         //res.val=valexpr.Evaluate(vals).RealValue;
         //res.unc = uncexpr.Evaluate(vals).RealValue;
@@ -424,23 +438,25 @@ public class CalcArgs {//一次计算
             vals[item.Key] = u.average;
             vals[$"u_{item.Key}"] = u.unc;
         }
-        double val1 =valexpr.Evaluate(vals).RealValue;//对的val
+        double val1 = valexpr.Evaluate(vals).RealValue;//对的val
         double unc1 = uncexpr.Evaluate(vals).RealValue;//对的unc
         foreach(var item in argobj.vars) {
             vals[$"u_{item.Key}"] = argobj.vars[item.Key].userunc;
         }
-        double val2 = valexpr.Evaluate(vals).RealValue;//用户的val
-        double unc2 = uncexpr.Evaluate(vals).RealValue;//用户的unc
-        if(!val2.AlmostEqual(val1)) {
+        if(!val1.AlmostEqual(argobj.userval)) {
             sb.Append("合成量的值错误\r\n");
             flag = true;
         }
-        if(!unc2.AlmostEqual(unc1)) {
+        if(!unc1.AlmostEqual(argobj.userunc)) {
             sb.Append("合成量的不确定度错误\r\n");
             flag = true;
         }
-        error.Message = sb.ToString();
-        error.Title = "合成量计算检查";
+        if (flag)
+        {
+            sb.Append("合成量的值与不确定度正确答案如下");
+        }
+        error.Message = string.Concat("检查出以下错误\r\n", sb.ToString());
+        error.Title = "合成量的检查";
         res.status = flag ? "计算有误" : "计算无误";
         res.err = error;
         res.calcexpr = valexpr;
@@ -457,7 +473,6 @@ public class CalcMeasureResult {
     public string status;
     public List<QuantityError> err;//变量不确定度检查结果
     //public double val, unc, userval, userunc;//值 不确定度 用户计算值 用户计算不确定度
-    public List<symexpr> calcexpr, uncexpr;
 }
 
 public class CalcComplexResult {

@@ -12,6 +12,8 @@ public class DealProcessResult : HTBehaviour
     public GameObject formula1;
     public GameObject formula2;
     public GameObject formula3;
+    public GameObject formula4;
+    public GameObject formula5;
 
     public Text Title;
     public Text SuccessMessage;
@@ -29,14 +31,20 @@ public class DealProcessResult : HTBehaviour
     double ComplexAverage = 0, ComplexUncertainty = 0, UserComplexAverage = 0, UserComplexUncertainty;
 
     int curError = 0;
-    CalcMeasureResult result = new CalcMeasureResult();
+    CalcMeasureResult measureresult = new CalcMeasureResult();
+    CalcComplexResult complexresult = new CalcComplexResult();
 
     public class QuantityError
     {
         public string Title { get; set; }
         public string Message { get; set; }
-        public List<FormulaNode> User { get; set; }
-        public List<FormulaNode> Right { get; set; }
+        //直接测量量的ua,ub,unc
+        public string ua { get; set; }
+        public string ub { get; set; }
+        public string unc { get; set; }
+
+        public string answer { get; set; }
+        public string answerunc { get; set; }
     }
 
     private void Start()
@@ -155,23 +163,50 @@ public class DealProcessResult : HTBehaviour
     private void CheckRightOrWrong()
     {
         CalcArgs calc = new CalcArgs();
+        QuantityError ComplexErr = new QuantityError();
         foreach (var item in RecordManager.tempRecord.quantities)
         {
             calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / System.Math.Sqrt(3), item.Groups);
             calc.Measure(item.Symbol, item.Data.ToDouble().ToArray());
-            calc.UserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
+            calc.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
         }
 
-        result = CalcArgs.CalculateMeasureValue(calc);
+        measureresult = CalcArgs.CalculateMeasureValue(calc);
         quantityErrors = new List<QuantityError>();
-        foreach (var item in result.err)
+        bool flag = true;
+        foreach (var item in measureresult.err)
         {
-            if (item.Message != "正确")
-            {                
+            if (item.Message != "计算正确")
+            {
+                flag = false;
                 quantityErrors.Add(item);
             }
 
         }
+        if (!flag)
+        {
+            ComplexErr.Title = "最终合成量计算有误";
+            ComplexErr.Message = "直接测量量处理结果有误，请先修正直接测量量错误再处理最终合成量";
+            quantityErrors.Add(ComplexErr);
+        }
+        else
+        {
+            //calc.ComplexUserUnput(4.25, RecordManager.tempRecord.complexQuantityModel.UncertainExpression.GetExpressionExecuted());
+            calc.ComplexUserUnput(RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted(), RecordManager.tempRecord.complexQuantityModel.UncertainExpression.GetExpressionExecuted());
+            complexresult = CalcArgs.CalculateComplexValue(RecordManager.tempRecord.stringExpression, calc);
+            if(complexresult.status != "计算无误")
+            {
+                ComplexErr.Title = complexresult.err.Title;
+                ComplexErr.Message = complexresult.err.Message;
+                ComplexErr.answer = complexresult.calcexpr.ToLaTeX();
+                ComplexErr.answerunc = complexresult.uncexpr.ToLaTeX();
+                quantityErrors.Add(ComplexErr);
+            }
+            
+        }
+
+        
+
     }
 
     public void Show()
@@ -196,21 +231,70 @@ public class DealProcessResult : HTBehaviour
             Title.text = $"你的错误{curError + 1}/{quantityErrors.Count}";
             ErrorTitle.text = current.Title;
             ErrorMessage.text = current.Message;
-            formula1.SetActive(true);
-            LatexEquationRender.Render(RecordManager.tempRecord.stringExpression, res =>
+            
+            if (current.ua != null)
             {
-                formula1.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
-            });
-            formula2.SetActive(true);
-            LatexEquationRender.Render(RecordManager.tempRecord.stringExpression, res =>
+                formula1.SetActive(true);
+                LatexEquationRender.Render(current.ua, res =>
+                {
+                    formula1.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                });
+            }
+            else
             {
-                formula2.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
-            });
-            formula3.SetActive(true);
-            LatexEquationRender.Render(RecordManager.tempRecord.stringExpression, res =>
+                formula1.SetActive(false);
+            }
+            if (current.ub != null)
             {
-                formula3.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
-            });
+                formula2.SetActive(true);
+                LatexEquationRender.Render(current.ub, res =>
+                {
+                    formula2.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                });
+            }
+            else
+            {
+                formula2.SetActive(false);
+            }
+            if (current.unc != null)
+            {
+                formula3.SetActive(true);
+                LatexEquationRender.Render(current.unc, res =>
+                {
+                    formula3.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                    //formula3.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+                });
+            }
+            else
+            {
+                formula3.SetActive(false);
+            }
+            if (current.answer != null)
+            {
+                formula4.SetActive(true);
+                LatexEquationRender.Render(current.answer, res =>
+                {
+                    formula4.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                });
+            }
+            else
+            {
+                formula4.SetActive(false);
+            }
+            if (current.answerunc != null)
+            {
+                formula5.SetActive(true);
+                LatexEquationRender.Render(current.answerunc, res =>
+                {
+                    formula5.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                    //formula3.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+                });
+            }
+            else
+            {
+                formula5.SetActive(false);
+            }
+
             /*if (current.Right != null)
             {
                 RightFormula.gameObject.SetActive(true);
@@ -224,6 +308,8 @@ public class DealProcessResult : HTBehaviour
             formula1.SetActive(false);
             formula2.SetActive(false);
             formula3.SetActive(false);
+            formula4.SetActive(false);
+            formula5.SetActive(false);
             Title.text = quantityErrors.Count == 0 ? "正确无误！" : "你已查看了所有的错误！";
             SuccessMessage.text = quantityErrors.Count == 0 ? "你的实验已全部正确地完成！恭喜你掌握了本次误差理论的知识。" :
                 "你实验中所有的错误如上，请认真记录并思考。";

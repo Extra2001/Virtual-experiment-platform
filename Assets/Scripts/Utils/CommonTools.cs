@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using HT.Framework;
+using System.Collections;
 
 public static class CommonTools
 {
@@ -164,5 +165,14 @@ public static class CommonTools
     public static List<double> ToDouble(this List<string> list)
     {
         return list.Select(x => Convert.ToDouble(x)).ToList();
+    }
+
+    public static IEnumerator DelayGet(Func<bool> func)
+    {
+        while (true)
+        {
+            if (func.Invoke()) break;
+            yield return 1;
+        }
     }
 }

@@ -17,7 +17,8 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
     public void ShowAndHideLoading(int delay)
     {
         ShowLoading();
-        MainThread.Instance.DelayAndRun(delay, HideLoading);
+        Invoke(nameof(HideLoading), delay / 1000f);
+        //MainThread.Instance.DelayAndRun(delay, HideLoading);
     }
 
     public void HideLoading()
@@ -46,7 +47,7 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
     public void HideDataTable()
     {
         Main.m_UI.GetUI<DatatableUILogic>().Hide();
-        MainThread.Instance.DelayAndRun(300, () => Main.m_UI.CloseUI<DatatableUILogic>());
+        MainThread.Instance.DelayAndRun(300, Main.m_UI.CloseUI<DatatableUILogic>);
     }
 
     public void ShowInstrumentInfo<T>() where T : InstrumentBase

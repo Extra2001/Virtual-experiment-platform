@@ -3,6 +3,8 @@
     描述：UI位置计算器
 *************************************************************************************/
 using HT.Framework;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,19 +25,25 @@ public static class PositionHelper
         }
     }
 
-    public static Vector3 GetFloatPosition(this RectTransform UIEntity)
+    public static (Vector3, Vector2) GetFloatPosition(this RectTransform UIEntity)
     {
         var rect = UIEntity.rect;
         var size = GetScaledSize(rect.size);
 
         var mousePosition = Input.mousePosition;
-        Vector3 position = new Vector3(mousePosition.x + size.x / 2 + 3, mousePosition.y + size.y / 2 + 3);
+        Vector3 position = new Vector3(mousePosition.x - size.x / 2 - 3, mousePosition.y + size.y / 2 + 3);
 
-        if (mousePosition.x > ScreenRightTop.x / 2)
-            position.x -= 2 * (size.x / 2 + 3);
         if (mousePosition.y > ScreenRightTop.y / 2)
             position.y -= 2 * (size.y / 2 + 3);
-        return position;
+
+        if (position.x - size.x / 2 < 0)
+            position.x += size.x / 2 - position.x;
+
+        if (position.y + size.y / 2 > ScreenRightTop.y)
+            position.y -= position.y + size.y / 2 - ScreenRightTop.y;
+        if (position.y - size.y / 2 < 0)
+            position.y += size.y / 2 - position.y;
+        return (position, size);
     }
 
     /// <summary>
@@ -80,7 +88,7 @@ public static class PositionHelper
         var rect = UIEntity.rectTransform().rect;
         var size = GetScaledSize(rect.size);
         // 计算初始高度
-        var from = - size.x / 2 - 100;
+        var from = -size.x / 2 - 100;
         // 计算结束高度
         var end = size.x / 2;
         return (from, end);
@@ -102,9 +110,13 @@ public static class PositionHelper
         return (from, end);
     }
 
-    public static void SetFloat(this RectTransform UIEntity)
+    public static bool SetFloat(this RectTransform UIEntity)
     {
-        UIEntity.position = UIEntity.GetFloatPosition();
         UIEntity.gameObject.SetActive(true);
+        var (position, size) = UIEntity.GetFloatPosition();
+        UIEntity.position = position;
+        if (size.x == 0 || size.y == 0)
+            return false;
+        return true;
     }
 }

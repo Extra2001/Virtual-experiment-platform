@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ResultScore
 {
-    bool MeasureQuantity { get; set; } = true;
-    bool ComplexQuantity { get; set; } = true;
-    bool DataRecord { get; set; } = true;
+    int MeasureQuantityError { get; set; } = 0;
+    int ComplexQuantityError { get; set; } = 0;
+    int DataRecordError { get; set; } = 0;
 }

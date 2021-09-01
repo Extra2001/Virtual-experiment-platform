@@ -71,7 +71,7 @@ public class Record
     /// <summary>
     /// 记录用户得分
     /// </summary>
-    public ResultScore score { get; set; } = new ResultScore();
+    //public ResultScore score { get; set; } = new ResultScore();
     /// <summary>
     /// 人物视角的位置坐标
     /// </summary>

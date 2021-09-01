@@ -6,19 +6,14 @@ using HT.Framework;
 using UnityEngine;
 using Common;
 using System.IO;
-using UnityEngine.UI;
+using System;
 
-public class ImportModel : HTBehaviour
+public class ImportModel
 {
-    void Start()
-    {
-        GetComponent<Button>().onClick.AddListener(OpenFile);
-    }
-
     /// <summary>
     /// 打开模型文件并导入
     /// </summary>
-    public void OpenFile()
+    public static void OpenFile()
     {
         OpenFileDlg pth = new OpenFileDlg();
         pth.structSize = System.Runtime.InteropServices.Marshal.SizeOf(pth);
@@ -36,16 +31,24 @@ public class ImportModel : HTBehaviour
             string filepath = pth.file;
             if (!Directory.Exists(Path.Combine(Application.persistentDataPath, "objects")))
                 Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, "objects"));
-            File.Copy(filepath, Path.Combine(Application.persistentDataPath, "objects", Path.GetFileName(filepath)), true);
-            GameManager.Instance.objectsModels.Add(new ObjectsModel()
+            var fileName = Guid.NewGuid().ToString() + ".obj";
+            File.Copy(filepath, Path.Combine(Application.persistentDataPath, "objects", fileName), true);
+            GameManager.Instance.objectsModels.Insert(0, new ObjectsModel()
             {
                 id = 0,
                 Name = Path.GetFileNameWithoutExtension(filepath),
                 DetailMessage = "导入的3D物体",
                 Integrated = false,
                 PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png",
-                ResourcePath = Path.Combine(Application.persistentDataPath, "objects", Path.GetFileName(filepath))
+                ResourcePath = Path.Combine(Application.persistentDataPath, "objects", fileName)
             });
         }
+    }
+
+    public static void DeleteModel(ObjectsModel model)
+    {
+        if (File.Exists(model.ResourcePath))
+            File.Delete(model.ResourcePath);
+        GameManager.Instance.objectsModels.Remove(model);
     }
 }

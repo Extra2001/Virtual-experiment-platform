@@ -18,6 +18,7 @@ public class BagSelector : HTBehaviour
     public Button InstrumentButton;
     public Button ObjectButton;
     public Button HistoryButton;
+    public Button ImportButton;
 
     public InstrumentPanel InstrumentPanel;
     public ObjectsPanel ObjectPanel;
@@ -51,6 +52,7 @@ public class BagSelector : HTBehaviour
                 LoadHistorys();
             }
         });
+        ImportButton.onClick.AddListener(ImportObject);
 
         ChangeButtonColor(InstrumentButton);
         LoadInstruments();
@@ -60,6 +62,10 @@ public class BagSelector : HTBehaviour
     public void Show()
     {
         UIShowHideHelper.ShowFromButtom(gameObject);
+        if (RecordManager.tempRecord.historyInstrument.Where(x => x != null).Count() > 0)
+            HistoryButton.interactable = true;
+        else
+            HistoryButton.interactable = false;
     }
 
     public void Hide()
@@ -109,6 +115,19 @@ public class BagSelector : HTBehaviour
         HistoryPanel.SetData(bagItem.instrumentInfoModel);
     }
 
+    public void ImportObject()
+    {
+        ImportModel.OpenFile();
+        ChangeButtonColor(ObjectButton);
+        LoadObjects();
+    }
+
+    public void DeleteObject(BagItem bagItem)
+    {
+        ImportModel.DeleteModel(bagItem.objectsModel);
+        LoadObjects();
+    }
+
     private IEnumerator PreLoadImages()
     {
         var list = GameManager.Instance.objectsModels;
@@ -156,7 +175,7 @@ public class BagSelector : HTBehaviour
     private void LoadHistorys()
     {
         ClearBagMenu();
-        var list = RecordManager.tempRecord.historyInstrument;
+        var list = RecordManager.tempRecord.historyInstrument.Where(x => x != null);
         list.Reverse();
         var instances = new List<BagItem>();
         foreach (var item in list)

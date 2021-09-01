@@ -14,10 +14,14 @@ public class BagItem : HTBehaviour
 {
     public Text Title;
     public Image Image;
+    public Button Delete;
 
+    [NonSerialized]
     public BagSelector bagSelector;
     public Type instrumentType = null;
+    [NonSerialized]
     public ObjectsModel objectsModel = null;
+    [NonSerialized]
     public InstrumentInfoModel instrumentInfoModel = null;
 
     private int working = 0;
@@ -33,11 +37,16 @@ public class BagItem : HTBehaviour
             else if (working == 3)
                 bagSelector.SelectHistory(this);
         });
+        Delete.onClick.AddListener(() =>
+        {
+            bagSelector.DeleteObject(this);
+        });
     }
 
     public void SetData(BagSelector selector, Type instrumentType)
     {
         working = 1;
+        this.Delete.gameObject.SetActive(false);
         this.bagSelector = selector;
         this.instrumentType = instrumentType;
         var instance = instrumentType.CreateInstrumentInstance();
@@ -49,8 +58,11 @@ public class BagItem : HTBehaviour
     public void SetData(BagSelector selector, ObjectsModel objectsModel)
     {
         working = 2;
+        this.Delete.gameObject.SetActive(false);
         this.bagSelector = selector;
         this.objectsModel = objectsModel;
+        if (!objectsModel.Integrated)
+            this.Delete.gameObject.SetActive(true);
 
         Title.text = objectsModel.Name;
         Image.sprite = CommonTools.GetSprite(objectsModel.PreviewImage);
@@ -59,6 +71,7 @@ public class BagItem : HTBehaviour
     public void SetData(BagSelector selector, InstrumentInfoModel instrumentInfoModel)
     {
         working = 3;
+        this.Delete.gameObject.SetActive(false);
         this.bagSelector = selector;
         this.instrumentInfoModel = instrumentInfoModel;
         var instance = instrumentInfoModel.instrumentType.CreateInstrumentInstance();

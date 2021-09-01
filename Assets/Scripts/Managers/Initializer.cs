@@ -33,6 +33,7 @@ public class Initializer
     /// </summary>
     public static void InitializeObjects()
     {
+        PresetObjects.Clear();
         PresetObjects.AddRange(new List<ObjectsModel>()
         {
             new ObjectsModel()
@@ -114,9 +115,9 @@ public class Initializer
 
         if (!preset.Equals(now))
         {
-            var imported = GameManager.Instance.objectsModels.Where(x => x.Integrated).ToList();
-            GameManager.Instance.objectsModels = JsonConvert.DeserializeObject<List<ObjectsModel>>(preset)
-                .Concat(imported).ToList();
+            var imported = GameManager.Instance.objectsModels.Where(x => !x.Integrated).ToList();
+            GameManager.Instance.objectsModels = imported
+                .Concat(JsonConvert.DeserializeObject<List<ObjectsModel>>(preset)).ToList();
         }
 
         foreach (var item in GameManager.Instance.objectsModels)

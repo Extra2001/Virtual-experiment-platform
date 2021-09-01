@@ -9,9 +9,6 @@ public class BackButton : HTBehaviour
 {
     void Start()
     {
-        GetComponent<Button>().onClick.AddListener(() =>
-        {
-            GameManager.Instance.SwitchBackProcedure();
-        });
+        GetComponent<Button>().onClick.AddListener(GameManager.Instance.SwitchBackProcedure);
     }
 }

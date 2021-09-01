@@ -103,11 +103,7 @@ public class PauseUILogic : UILogicTemporary
             else if ((e as PauseEventHandler).NeedOpenPauseMenu)
             {
                 UIShowHideHelper.HideToUp(UIEntity);
-
-                MainThread.Instance.DelayAndRun(300, () =>
-                {
-                    Main.m_UI.CloseUI<PauseUILogic>();
-                });
+                MainThread.Instance.DelayAndRun(300, Main.m_UI.CloseUI<PauseUILogic>);
             }
         });
     }

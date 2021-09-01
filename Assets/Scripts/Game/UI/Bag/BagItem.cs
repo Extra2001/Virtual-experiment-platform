@@ -37,10 +37,7 @@ public class BagItem : HTBehaviour
             else if (working == 3)
                 bagSelector.SelectHistory(this);
         });
-        Delete.onClick.AddListener(() =>
-        {
-            bagSelector.DeleteObject(this);
-        });
+        Delete.onClick.AddListener(() => bagSelector.DeleteObject(this));
     }
 
     public void SetData(BagSelector selector, Type instrumentType)

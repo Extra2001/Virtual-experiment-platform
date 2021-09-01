@@ -122,7 +122,111 @@ public class CreateObject : HTBehaviour
     {
         var model = RecordManager.tempRecord.showedObject;
         Main.m_Resource.LoadPrefab(new PrefabInfo(null, null, model.ResourcePath), null, loadDoneAction: x =>
-            Create(x));
+            CreatePrefab2(x));
+    }
+    private static void CreatePrefab2(GameObject obj)
+    {
+        var model = RecordManager.tempRecord.showedObject;
+        ObjectValue objectValue;
+        // 挂载组件
+        if ((objectValue = obj.GetComponent<ObjectValue>()) == null)
+            (objectValue = obj.AddComponent<ObjectValue>()).ObjectModel = model;
+        int cnt = 0;
+        if (obj.GetComponent<Collider>() != null)
+        {
+            if (model.childrenPostition.Count == 0)
+                model.childrenPostition.Add(obj.transform.localPosition.GetMyVector());
+            else if (model.childrenPostition.Count > cnt)
+                obj.transform.localPosition = model.childrenPostition[cnt];
+
+            if (model.childrenRotation.Count == 0)
+                model.childrenRotation.Add(obj.transform.localRotation.GetMyVector());
+            else if (model.childrenRotation.Count > cnt)
+                obj.transform.localRotation = model.childrenRotation[cnt];
+
+            var right = obj.GetComponent<RightButtonObject>();
+            if (right == null)
+                right = obj.AddComponent<RightButtonObject>();
+            right.objectValue = objectValue;
+            right.index = 0;
+            if (obj.GetComponent<Rigidbody>() == null)
+            {
+                var rigid = obj.AddComponent<Rigidbody>();
+                rigid.useGravity = false;
+                rigid.drag = 10;
+                rigid.mass = 10;
+                rigid.angularDrag = 10;
+                rigid.isKinematic = false;
+            }
+        }
+        // 遍历计算点
+        Vector3 ClosestPoint = new Vector3();
+        Vector3 FarthestPoint = new Vector3();
+
+        foreach (var item in obj.GetComponentsInChildren<Collider>())
+        {
+            if (obj.GetComponent<Rigidbody>() == null)
+            {
+                var rigid = obj.AddComponent<Rigidbody>();
+                rigid.useGravity = false;
+                rigid.drag = 10;
+                rigid.mass = 10;
+                rigid.angularDrag = 10;
+                rigid.isKinematic = false;
+            }
+            if (item.gameObject.GetComponent<RightButtonObject>() == null)
+            {
+                if (model.childrenPostition.Count == cnt)
+                    model.childrenPostition.Add(item.transform.localPosition.GetMyVector());
+                else if (model.childrenPostition.Count > cnt)
+                    item.transform.localPosition = model.childrenPostition[cnt];
+
+                if (model.childrenRotation.Count == cnt)
+                    model.childrenRotation.Add(item.transform.localRotation.GetMyVector());
+                else if (model.childrenRotation.Count > cnt)
+                    item.transform.localRotation = model.childrenRotation[cnt];
+
+                var right = item.gameObject.AddComponent<RightButtonObject>();
+                right.objectValue = objectValue;
+                right.index = cnt;
+            }
+            //获取所有子物体中的最近点和最远点
+            var Temp = item.gameObject.GetComponent<MeshFilter>().mesh.bounds.min;
+            if (Temp.x < ClosestPoint.x)
+                ClosestPoint.x = Temp.x;
+            if (Temp.y < ClosestPoint.y)
+                ClosestPoint.y = Temp.y;
+            if (Temp.z < ClosestPoint.z)
+                ClosestPoint.z = Temp.z;
+
+            Temp = item.gameObject.GetComponent<MeshFilter>().mesh.bounds.max;
+            if (Temp.x > FarthestPoint.x)
+                FarthestPoint.x = Temp.x;
+            if (Temp.y > FarthestPoint.y)
+                FarthestPoint.y = Temp.y;
+            if (Temp.z > FarthestPoint.z)
+                FarthestPoint.z = Temp.z;
+            cnt++;
+        }
+        // 计算基础大小
+        objectValue.BaseSize = new Vector3(Mathf.Abs(FarthestPoint.x - ClosestPoint.x),
+            Mathf.Abs(FarthestPoint.y - ClosestPoint.y),
+            Mathf.Abs(FarthestPoint.z - ClosestPoint.z));
+        // 计算scale
+        var max = Mathf.Max(objectValue.BaseSize.x, objectValue.BaseSize.y, objectValue.BaseSize.z);
+        var scale = 2f / max;
+        objectValue.Scale = scale;
+        var rec = RecordManager.tempRecord;
+        // 计算位置
+        objectValue.Position = new Vector3(rec.objectStartPosition[0],
+            rec.objectStartPosition[1] + objectValue.BaseSize.y * scale / 2, rec.objectStartPosition[2]);
+        ShowedGameObject = obj;
+
+        if (!model.position.Equals(new MyVector3()))
+            obj.transform.position = model.position;
+        if (!model.rotation.Equals(new MyVector4()))
+            obj.transform.rotation = model.rotation;
+        obj.SetActive(true);
     }
     /// <summary>
     /// 重新计算模型中心点

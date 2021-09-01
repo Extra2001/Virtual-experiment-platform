@@ -9,18 +9,29 @@ using System;
 
 public class CreateInstrument : HTBehaviour
 {
-    public Type InstrumentType;
-    private Button btn;
-
-    void Start()
+    /// <summary>
+    /// 生成测量仪器（初始化）
+    /// </summary>
+    public static InstrumentBase Create(Type instrumentType)
     {
-        btn = GetComponent<Button>();
-        btn.onClick.AddListener(CreateWithDestroy);
+        var instrument = GameManager.Instance.GetInstrument(instrumentType);
+        var recpos = RecordManager.tempRecord.instrumentStartPosition;
+        var position = new Vector3();
+        position.x = recpos[0];
+        position.y = recpos[1];
+        position.z = recpos[2];
+        Main.m_Entity.ShowEntity(instrument);
+        RecordManager.tempRecord.showedInstrument = new InstrumentInfoModel()
+        {
+            instrumentType = instrumentType
+        };
+        Main.m_Event.Throw(Main.m_ReferencePool.Spawn<SelectInstrumentEventHandler>().Fill(instrument));
+        return instrument;
     }
     /// <summary>
-    /// 生成测量仪器
+    /// 生成测量仪器（带记录数据）
     /// </summary>
-    private static InstrumentBase Create(InstrumentInfoModel model)
+    public static InstrumentBase Create(InstrumentInfoModel model)
     {
         var instrument = GameManager.Instance.GetInstrument(model);
         var recpos = RecordManager.tempRecord.instrumentStartPosition;
@@ -28,32 +39,26 @@ public class CreateInstrument : HTBehaviour
         position.x = recpos[0];
         position.y = recpos[1];
         position.z = recpos[2];
+        // 恢复记录
         instrument.Entity.transform.position = position;
-        if (model.Valid)
-        {
-            instrument.Entity.transform.GetChild(0).position = model.position;
-            instrument.Entity.transform.GetChild(0).rotation = model.rotation;
-            instrument.MainValue = model.MainValue;
-            instrument.RandomErrorLimit = model.RandomErrorLimit;
-        }
+        instrument.Entity.transform.GetChild(0).position = model.position;
+        instrument.Entity.transform.GetChild(0).rotation = model.rotation;
+        instrument.MainValue = model.MainValue;
+        instrument.RandomErrorLimit = model.RandomErrorLimit;
+        // 显示仪器
         Main.m_Entity.ShowEntity(instrument);
         RecordManager.tempRecord.showedInstrument = model;
         Main.m_Event.Throw(Main.m_ReferencePool.Spawn<SelectInstrumentEventHandler>().Fill(instrument));
         return instrument;
     }
     /// <summary>
-    /// 生成前销毁旧仪器
+    /// 隐藏现有仪器
     /// </summary>
-    private void CreateWithDestroy()
+    public static void HideCurrent()
     {
         var inst = RecordManager.tempRecord.showedInstrument;
         if (inst != null && inst.instrumentType != null)
             Main.m_Entity.HideEntity(GameManager.Instance.GetInstrument(inst));
-        Create(new InstrumentInfoModel()
-        {
-            instrumentType = InstrumentType,
-        });
-        Main.m_UI.CloseUI<BagControl>();
     }
     /// <summary>
     /// 生成存档中的仪器

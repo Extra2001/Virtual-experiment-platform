@@ -32,16 +32,6 @@ public class RulerInstrument : DirectMeasurementInstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override void InstReset()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void ShowValue(double value)
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override void ShowGameButton(List<GameButtonItem> buttonItems)
     {
         base.ShowGameButton(buttonItems);
@@ -50,6 +40,4 @@ public class RulerInstrument : DirectMeasurementInstrumentBase
             KeyboardManager.Keybd_event(88, 0, 0, 0);
         });
     }
-
-
 }

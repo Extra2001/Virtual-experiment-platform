@@ -149,7 +149,6 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         ProcedureStack.Clear();
         ProcedureStack.Add(typeof(StartProcedure));
     }
-    
 
     public void ContinueExp()
     {
@@ -159,8 +158,9 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     private void StartNewExp()
     {
         if (RecordManager.tempRecord.showedInstrument != null && RecordManager.tempRecord.showedInstrument.instrumentType != null)
-            Main.m_Entity.HideEntity(GameManager.Instance.CurrentInstrument);
-        CreateObject.DestroyObjecthh();
+            Main.m_Entity.HideEntity(CurrentInstrument);
+        CreateObject.HideCurrent();
+        CreateInstrument.HideCurrent();
         RecordManager.ClearTempRecord();
         Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();
         ProcedureStack.Clear();

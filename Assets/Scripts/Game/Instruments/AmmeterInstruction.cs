@@ -35,11 +35,6 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override void InstReset()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override void ShowValue(double value)
     {
         Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);

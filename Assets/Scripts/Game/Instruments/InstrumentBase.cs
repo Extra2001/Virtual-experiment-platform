@@ -35,56 +35,50 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// 仪器名称
     /// </summary>
     public abstract string InstName { get; }
-
     /// <summary>
     /// 上限
     /// </summary>
     public abstract double URV { get; set; }
-
     /// <summary>
     /// 下限
     /// </summary>
     public abstract double LRV { get; set; }
-
     /// <summary>
     /// 仪器误差限
     /// </summary>
     public abstract double ErrorLimit { get; set; }
-
     /// <summary>
     /// 随机误差
     /// </summary>
     public virtual double RandomError { get => UnityEngine.Random.Range(-1 * (float)RandomErrorLimit, (float)RandomErrorLimit); }
-
     /// <summary>
     /// 随机误差限
     /// </summary>
     public abstract double RandomErrorLimit { get; set; }
-
     /// <summary>
     /// 主值
     /// </summary>
     public abstract double MainValue { get; set; }
-
     /// <summary>
     /// 单位名称
     /// </summary>
     public abstract string Unit { get; }
-
     /// <summary>
     /// 单位符号
     /// </summary>
     public abstract string UnitSymbol { get; }
-
-    public abstract string previewImagePath { get; }//缩略图路径
-
-    private Sprite prePreviewImage = null;//仪器缩略图
-
-    public virtual Sprite previewImage//仪器缩略图
+    /// <summary>
+    /// 缩略图
+    /// </summary>
+    public abstract string previewImagePath { get; }
+    private Sprite prePreviewImage = null;
+    public virtual Sprite previewImage
     {
         get => prePreviewImage == null ?
             (prePreviewImage = Resources.Load<Sprite>(previewImagePath)) : prePreviewImage;
     }
+    private Vector3 initPosition = new Vector3();
+    private Quaternion initRotation = new Quaternion();
 
     /// <summary>
     /// 测量获取数据
@@ -92,7 +86,9 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// <returns>测量数据</returns>
     public abstract double GetMeasureResult();
 
-    public abstract void ShowValue(double value);//将数据动画形式展现
+    public virtual void ShowValue(double value)
+    {
+    }
 
     public virtual void GenMainValueAndRandomErrorLimit()//随机生成主值和误差
     {
@@ -104,6 +100,8 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// </summary>
     public virtual void InstReset()
     {
+        Entity.transform.GetChild(0).position = initPosition;
+        Entity.transform.GetChild(0).rotation = initRotation;
         MainValue = 0;
         RandomErrorLimit = 0;
         ShowValue(0);
@@ -153,7 +151,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     public override void OnUpdate()//每帧调用一次
     {
         base.OnUpdate();
-        if (Entity.activeSelf)
+        if (Entity.activeSelf && Entity.transform.GetChild(0).gameObject.activeSelf)
         {
             RecordManager.tempRecord.showedInstrument.Valid = true;
             RecordManager.tempRecord.showedInstrument.MainValue = MainValue;
@@ -166,11 +164,16 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     public override void OnHide()//仪器隐藏时调用
     {
         Entity.transform.GetChild(0).gameObject.SetActive(false);
+        if (!RecordManager.tempRecord.historyInstrument.Contains(RecordManager.tempRecord.showedInstrument))
+            RecordManager.tempRecord.historyInstrument.Add(RecordManager.tempRecord.showedInstrument);
+        InstReset();
     }
 
     public override void OnInit()//初始化时调用
     {
         base.OnInit();
+        initPosition = Entity.transform.GetChild(0).position;
+        initRotation = Entity.transform.GetChild(0).rotation;
         Main.m_Resource.LoadAsset<Sprite>(new AssetInfo(null, null, previewImagePath), loadDoneAction: x =>
         {
             prePreviewImage = x;

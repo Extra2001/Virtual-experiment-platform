@@ -19,19 +19,16 @@ using symfuncs = MathNet.Symbolics.Function;
 using static DealProcessResult;
 
 public struct CheckFloat {//带有效数字的小数
-    public decimal Value { get; private set; }
-    public decimal TrueValue => Value * (decimal)Math.Pow(10, HiDigit);
+    public double Value { get; private set; }
+    public double TrueValue => Value * Math.Pow(10, HiDigit);
     public int EffectiveDigit { get; private set; }
     public int LoDigit { get; private set; }
     public int HiDigit { get; private set; }
-    public CheckFloat(decimal truevalue) : this(truevalue.ToString()) { }
+    public CheckFloat(double truevalue) : this(truevalue.ToString()) { }
     public CheckFloat(string value) {
         EffectiveDigit = Effectiveness(value);
-        if(decimal.TryParse(value, out decimal tmp)) {
-            Value = tmp;
-        }
-        else if(double.TryParse(value, out double tmp2)) {
-            Value = new decimal(tmp2);
+        if(double.TryParse(value, out double tmp2)) {
+            Value = tmp2;
         }
         else throw new NotSupportedException();
         if(Value != 0) {
@@ -65,7 +62,7 @@ public struct CheckFloat {//带有效数字的小数
         return Math.Round(d, n);
     }
     public CheckFloat KeepEffective(int n) {
-        decimal tmp = decimal.Round(Value, n);
+        double tmp = Math.Round(Value, n);
         return new CheckFloat() { Value = tmp, EffectiveDigit = n + 1, HiDigit = HiDigit, LoDigit = HiDigit - n };
     }
     public static decimal KeepEffective(decimal d, int n) {//保留小数点后n位 共n+1位有效数字
@@ -80,8 +77,8 @@ public struct CheckFloat {//带有效数字的小数
         }
         return Math.Round(d, n);
     }
-    public static decimal KeepTo(decimal truevalue, int n) {//保留到第n位有效数字
-        return Math.Truncate(truevalue / (decimal)Math.Pow(10, n)) * (decimal)Math.Pow(10, n);
+    public static double KeepTo(double truevalue, int n) {//保留到第n位有效数字
+        return Math.Truncate(truevalue / Math.Pow(10, n)) * Math.Pow(10, n);
     }
     public static int Effectiveness(string num) {//计算一个字符串表示的小数有多少位有效数字
         int digits = 0; bool lead0 = true;
@@ -107,25 +104,54 @@ public struct CheckFloat {//带有效数字的小数
     public static CheckFloat operator +(CheckFloat lhs, CheckFloat rhs) {//有效数字的加法
         int lo = Math.Max(lhs.LoDigit, rhs.LoDigit);
         int keep1 = lhs.HiDigit - lo + 1, keep2 = rhs.HiDigit - lo + 1;
-        decimal tmp = lhs.TrueValue + rhs.TrueValue;
+        double tmp = lhs.TrueValue + rhs.TrueValue;
         return new CheckFloat(KeepTo(tmp, lo).ToString($"G{Math.Max(lhs.HiDigit, rhs.HiDigit)}"));
     }
     public static CheckFloat operator -(CheckFloat lhs, CheckFloat rhs) {//有效数字的减法
         int lo = Math.Max(lhs.LoDigit, rhs.LoDigit);
         int keep1 = lhs.HiDigit - lo + 1, keep2 = rhs.HiDigit - lo + 1;
-        decimal tmp = lhs.TrueValue - rhs.TrueValue;
-        return new CheckFloat(KeepTo(tmp, lo).ToString($"E{Math.Max(keep1, keep2) - 1}"));
+        double tmp = lhs.TrueValue - rhs.TrueValue;
+        return new CheckFloat(KeepTo(tmp, lo).ToString($"G{Math.Max(lhs.HiDigit, rhs.HiDigit)}"));
     }
     public static CheckFloat operator *(CheckFloat lhs, CheckFloat rhs) {//有效数字的乘法
-        decimal tmp = KeepEffective((lhs.TrueValue * rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));
+        double tmp = KeepEffective((lhs.TrueValue * rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));
         return new CheckFloat(tmp.ToString());
     }
     public static CheckFloat operator /(CheckFloat lhs, CheckFloat rhs) {//除
-        decimal tmp = KeepEffective((lhs.TrueValue / rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));
+        double tmp = KeepEffective((lhs.TrueValue / rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));
         return new CheckFloat(tmp.ToString());
     }
     public override string ToString() {//显示
-        return $"值为{TrueValue},{EffectiveDigit}位有效数字,小数部分:{Value}";
+        return $"值为{TrueValue},{EffectiveDigit}位有效数字,小数部分:{Value},次数{HiDigit},最低位{LoDigit}";
+    }
+    public static CheckFloat FunctionX(CheckFloat x, double dx, Func<double, double> fn, Func<double, double> derivative) {
+        double rv = x.TrueValue;
+        double v = fn(rv);
+        double dy = derivative(rv) * dx;
+        CheckFloat tmp = new CheckFloat(dy);
+        return new CheckFloat(KeepTo(v, tmp.HiDigit).ToString($"G{Math.Abs(tmp.HiDigit)}"));
+    }
+    public static CheckFloat Sin(CheckFloat x, double dx) {
+        return FunctionX(x, dx, Math.Sin, Math.Cos);
+    }
+    public static CheckFloat Cos(CheckFloat x, double dx) {
+        return FunctionX(x, dx, Math.Cos, (x) => -Math.Sin(x));
+    }
+    public static CheckFloat Tan(CheckFloat x, double dx) {
+        return FunctionX(x, dx, Math.Tan, (x) => 1 / (Math.Cos(x) * Math.Cos(x)));
+    }
+    public static CheckFloat Pow(CheckFloat x, double n) {
+        if(n == 1.0) return x;
+        double dx = Math.Pow(10, x.LoDigit);
+        return FunctionX(x, dx, (x) => Math.Pow(x, n), (x) => Math.Pow(x, n - 1) * n);
+    }
+    public static CheckFloat Exp(double a, CheckFloat x) {
+        double dx = Math.Pow(10, x.LoDigit);
+        return FunctionX(x, dx, (x) => Math.Pow(a, x), (x) => Math.Pow(a, x) * Math.Log(a));
+    }
+    public static CheckFloat Log(double a, CheckFloat x) {//log_{a}(x)
+        double dx = Math.Pow(10, x.LoDigit);
+        return FunctionX(x, dx, (x) => Math.Log(a, x), (x) => 1.0 / x);
     }
 }
 public static class StaticMethods {

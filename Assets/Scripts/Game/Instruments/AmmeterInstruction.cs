@@ -6,6 +6,7 @@ using HT.Framework;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine;
 
 [EntityResource(null, null, "Instruments/Ammeter/Ammeter")]
 
@@ -101,7 +102,7 @@ public class AmmeterInstruction : IndirectMeasurementInstrumentBase
     {
         base.ShowGameButton(buttonItems);
         buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
-        {
+        {           
             KeyboardManager.Keybd_event(88, 0, 0, 0);
         });
         buttonItems.Where(x => x.GameObject.name.Equals("ResetButton")).FirstOrDefault().OnClick.Add(() =>

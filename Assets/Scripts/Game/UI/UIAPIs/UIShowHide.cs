@@ -24,6 +24,16 @@ public static class UIShowHideHelper
         }
     }
 
+    public static void ShowFadeIn(Image UIEntity)
+    {
+        UIEntity.DOFade(1f, 0.3f);
+    }
+
+    public static void HideFadeOut(Image UIEntity)
+    {
+        UIEntity.DOFade(0f, 0.3f);
+    }
+
     public static void ShowFromUp(GameObject UIEntity)
     {
         float fromUp = (ScreenRightTop.y - GetScaledSize(UIEntity.rectTransform().rect.size).y) / 2;

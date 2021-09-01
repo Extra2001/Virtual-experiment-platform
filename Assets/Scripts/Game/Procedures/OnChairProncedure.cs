@@ -16,7 +16,7 @@ public class OnChair : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        RenderManager.Instance?.Show();
+        RenderManager.Instance.Show();
 
         //人物可否移动
         GameManager.Instance.FPSable = true;
@@ -54,9 +54,8 @@ public class OnChair : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
-
         //关闭UI，取消注册按键
-        RenderManager.Instance?.Hide();
+        RenderManager.Instance.Hide();
         GameManager.Instance.FPSable = false;
         base.OnLeave(nextProcedure);
         UIAPI.Instance.HideDataTable();

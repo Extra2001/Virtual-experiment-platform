@@ -5,14 +5,28 @@
 using HT.Framework;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
 
 public class GameLaunch : MonoBehaviour
 {
+    public static GameLaunch Instance;
+
     public LoadingScreenManager2 InitLoading;
     public LoadingScreenManager LoadingScreen;
+    public Image GeneralLoadingScreen;
+
+    public void ShowGeneralLoadingScreen()
+    {
+        GeneralLoadingScreen.gameObject.SetActive(true);
+    }
+    public void HideGeneralLoadingScreen()
+    {
+        GeneralLoadingScreen.gameObject.SetActive(false);
+    }
 
     private void Awake()
     {
+        Instance = this;
         InitLoading.gameObject.SetActive(true);
         LoadingScreen.gameObject.SetActive(true);
 
@@ -38,7 +52,6 @@ public class GameLaunch : MonoBehaviour
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
     }
-
     /// <summary>
     /// 启动单例模式的MonoBeheavior管理器
     /// </summary>
@@ -52,7 +65,6 @@ public class GameLaunch : MonoBehaviour
 
         KeyboardManager.Enable();
     }
-
     private void OnDestroy()
     {
         ProcessManager.StopService();

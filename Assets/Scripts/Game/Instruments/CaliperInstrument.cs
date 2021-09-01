@@ -5,6 +5,7 @@
 using HT.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 [EntityResource(null, null, "Instruments/Caliper/Caliper")]
 public class CaliperInstrument : DirectMeasurementInstrumentBase
@@ -41,11 +42,12 @@ public class CaliperInstrument : DirectMeasurementInstrumentBase
         });
         buttonItems.Where(x => x.GameObject.name.Equals("OutwardButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(80, 0, 0, 0);            
+            Debug.Log("out");
+            KeyboardManager.Keybd_event(79, 0, 0, 0);            
         });
         buttonItems.Where(x => x.GameObject.name.Equals("InwardButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(79, 0, 0, 0);
+            KeyboardManager.Keybd_event(80, 0, 0, 0);
         });
     }
 }

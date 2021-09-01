@@ -1,12 +1,7 @@
-using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.IO;
 
 public static class ProcessManager
@@ -38,7 +33,7 @@ public static class ProcessManager
         
         Port = port;
         //Port = 5000;
-        UnityEngine.Debug.Log($"服务已运行在 http://localhost:{port}/");
+        //UnityEngine.Debug.Log($"服务已运行在 http://localhost:{port}/");
     }
 
     private static void Process_Exited(object sender, System.EventArgs e)
@@ -56,12 +51,15 @@ public static class ProcessManager
             process.Exited -= Process_Exited;
             process.Kill();
             process = null;
-            UnityEngine.Debug.Log($"服务已停止。");
+            //UnityEngine.Debug.Log($"服务已停止。");
         }
     }
 
     private static int GetPort()
     {
+        int port = 12335;
+        if (!PortInUse(port))
+            return port;
         System.Random r = new System.Random();
         for (int i = 0; i < 10000; i++)
         {

@@ -117,9 +117,11 @@ public class BagSelector : HTBehaviour
 
     public void ImportObject()
     {
-        ImportModel.OpenFile();
-        ChangeButtonColor(ObjectButton);
-        LoadObjects();
+        if (ImportModel.OpenFile())
+        {
+            ChangeButtonColor(ObjectButton);
+            LoadObjects();
+        }
     }
 
     public void DeleteObject(BagItem bagItem)

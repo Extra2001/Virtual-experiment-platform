@@ -13,7 +13,7 @@ public class ImportModel
     /// <summary>
     /// 打开模型文件并导入
     /// </summary>
-    public static void OpenFile()
+    public static bool OpenFile()
     {
         OpenFileDlg pth = new OpenFileDlg();
         pth.structSize = System.Runtime.InteropServices.Marshal.SizeOf(pth);
@@ -42,7 +42,9 @@ public class ImportModel
                 PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png",
                 ResourcePath = Path.Combine(Application.persistentDataPath, "objects", fileName)
             });
+            return true;
         }
+        return false;
     }
 
     public static void DeleteModel(ObjectsModel model)

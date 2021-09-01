@@ -17,11 +17,7 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
     public void ShowAndHideLoading(int delay)
     {
         ShowLoading();
-
-        MainThread.Instance.DelayAndRun(delay, () =>
-        {
-            HideLoading();
-        });
+        MainThread.Instance.DelayAndRun(delay, HideLoading);
     }
 
     public void HideLoading()
@@ -84,11 +80,7 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
         try
         {
             UIShowHideHelper.HideToRight(Main.m_UI.GetOpenedUI<T>().UIEntity);
-
-            MainThread.Instance.DelayAndRun(300, () =>
-            {
-                Main.m_UI.CloseUI<T>();
-            });
+            MainThread.Instance.DelayAndRun(300, Main.m_UI.CloseUI<T>);
         }
         catch { }
     }

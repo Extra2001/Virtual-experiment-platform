@@ -34,10 +34,7 @@ public class StartUILogic : UILogicResident
         UIEntity.FindChildren("ContinueButton").GetComponent<Button>().onClick.AddListener(() =>
         {
             UIAPI.Instance.ShowAndHideLoading(1000);
-            MainThread.Instance.DelayAndRun(500, () =>
-            {
-                GameManager.Instance.ContinueExp();
-            });
+            MainThread.Instance.DelayAndRun(500, GameManager.Instance.ContinueExp);
         });
     }
 

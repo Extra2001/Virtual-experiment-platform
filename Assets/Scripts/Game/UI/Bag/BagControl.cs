@@ -10,19 +10,19 @@ using HT.Framework;
 [UIResource(null, null, "UI/Bag/Bag")]
 public class BagControl : UILogicTemporary
 {
-	/// <summary>
-	/// 打开UI
-	/// </summary>
+    /// <summary>
+    /// 打开UI
+    /// </summary>
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
         GameManager.Instance.FPSable = false;
         UIEntity.GetComponent<BagSelector>()?.Show();
     }
-    
-	/// <summary>
-	/// 关闭UI
-	/// </summary>
+
+    /// <summary>
+    /// 关闭UI
+    /// </summary>
     public override void OnClose()
     {
         GameManager.Instance.FPSable = true;
@@ -35,9 +35,6 @@ public class BagControl : UILogicTemporary
     public void Hide()
     {
         UIEntity.GetComponent<BagSelector>()?.Hide();
-        MainThread.Instance.DelayAndRun(300, () =>
-        {
-            Close();
-        });
+        MainThread.Instance.DelayAndRun(300, Close);
     }
 }

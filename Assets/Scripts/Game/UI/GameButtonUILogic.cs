@@ -68,7 +68,6 @@ public class GameButtonUILogic : UILogicResident
         CreateObject.CreateRecord();
         CreateInstrument.CreateRecord();
         UIAPI.Instance.HideLoading();
-        //MainThread.Instance.DelayAndRun(300, UIAPI.Instance.HideLoading);
     }
 
     /// <summary>

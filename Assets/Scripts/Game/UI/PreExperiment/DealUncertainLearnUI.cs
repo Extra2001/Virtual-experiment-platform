@@ -46,7 +46,16 @@ public class DealUncertainLearnUI : HTBehaviour
             AnswerText.text = answer;
 
             input = UserInput.text;
-            if (input == answer)
+            if (input == "")
+            {
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Title = new BindableString("警告"),
+                    Message = new BindableString("请输入你认为的有效数字位数")
+                });
+            }
+            else if (input == answer)
             {
                 yes.transform.localScale = new Vector3(1, 1, 1);
                 yes.SetActive(true);

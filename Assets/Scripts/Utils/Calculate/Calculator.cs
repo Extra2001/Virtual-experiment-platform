@@ -135,7 +135,7 @@ public struct CheckFloat {//带有效数字的小数
         return FunctionX(x, dx, Math.Sin, Math.Cos);
     }
     public static CheckFloat Cos(CheckFloat x, double dx) {
-        return FunctionX(x, dx, Math.Cos, (x) => -Math.Sin(x));
+        return FunctionX(x, dx, Math.Cos, (X) => -Math.Sin(X));
     }
     public static CheckFloat Tan(CheckFloat x, double dx) {
         return FunctionX(x, dx, Math.Tan, (X) => 1 / (Math.Cos(X) * Math.Cos(X)));

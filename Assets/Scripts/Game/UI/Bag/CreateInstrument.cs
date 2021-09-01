@@ -20,6 +20,7 @@ public class CreateInstrument : HTBehaviour
         position.x = recpos[0];
         position.y = recpos[1];
         position.z = recpos[2];
+        instrument.Entity.transform.position = position;
         Main.m_Entity.ShowEntity(instrument);
         RecordManager.tempRecord.showedInstrument = new InstrumentInfoModel()
         {
@@ -40,7 +41,6 @@ public class CreateInstrument : HTBehaviour
         position.y = recpos[1];
         position.z = recpos[2];
         // 恢复记录
-        instrument.Entity.transform.position = position;
         instrument.Entity.transform.GetChild(0).position = model.position;
         instrument.Entity.transform.GetChild(0).rotation = model.rotation;
         instrument.MainValue = model.MainValue;

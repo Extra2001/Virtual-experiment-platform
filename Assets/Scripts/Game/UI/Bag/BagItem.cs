@@ -1,3 +1,7 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：背包的项目UI逻辑
+*************************************************************************************/
 using HT.Framework;
 using DG.Tweening;
 using System.Collections;
@@ -16,21 +20,24 @@ public class BagItem : HTBehaviour
     public ObjectsModel objectsModel = null;
     public InstrumentInfoModel instrumentInfoModel = null;
 
+    private int working = 0;
+
     private void Start()
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
-            if (instrumentType != null)
+            if (working == 1)
                 bagSelector.SelectInstrument(this);
-            else if (objectsModel != null)
+            else if (working == 2)
                 bagSelector.SelectObject(this);
-            else if (instrumentInfoModel != null)
+            else if (working == 3)
                 bagSelector.SelectHistory(this);
         });
     }
 
     public void SetData(BagSelector selector, Type instrumentType)
     {
+        working = 1;
         this.bagSelector = selector;
         this.instrumentType = instrumentType;
         var instance = instrumentType.CreateInstrumentInstance();
@@ -41,6 +48,7 @@ public class BagItem : HTBehaviour
 
     public void SetData(BagSelector selector, ObjectsModel objectsModel)
     {
+        working = 2;
         this.bagSelector = selector;
         this.objectsModel = objectsModel;
 
@@ -50,6 +58,7 @@ public class BagItem : HTBehaviour
 
     public void SetData(BagSelector selector, InstrumentInfoModel instrumentInfoModel)
     {
+        working = 3;
         this.bagSelector = selector;
         this.instrumentInfoModel = instrumentInfoModel;
         var instance = instrumentInfoModel.instrumentType.CreateInstrumentInstance();

@@ -5,10 +5,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Linq;
 
 public class Initializer
 {
     public static Dictionary<string, string> PresetExps = new Dictionary<string, string>();
+    public static List<ObjectsModel> PresetObjects = new List<ObjectsModel>();
     /// <summary>
     /// 初始化预置实验
     /// </summary>
@@ -31,94 +33,99 @@ public class Initializer
     /// </summary>
     public static void InitializeObjects()
     {
-        if (GameManager.Instance.objectsModels.Count == 0)
+        PresetObjects.AddRange(new List<ObjectsModel>()
         {
-            GameManager.Instance.objectsModels = new List<ObjectsModel>()
-                {
-                    new ObjectsModel()
-                    {
-                        id = 0,
-                        Name = "立方体",
-                        DetailMessage = "纯正立方体",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object1.obj"
-                    },
-                    new ObjectsModel()
-                    {
-                        id = 1,
-                        Name = "圆柱",
-                        DetailMessage = "较高的一个圆柱",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object2.obj"
-                    },
-                    new ObjectsModel()
-                    {
-                        id = 2,
-                        Name = "圆柱",
-                        DetailMessage = "较胖的一个圆柱",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object3.obj"
-                    },
-                    new ObjectsModel()
-                    {
-                        id = 3,
-                        Name = "圆环",
-                        DetailMessage = "圆环",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object4.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object4.obj"
-                    },
-                    new ObjectsModel()
-                    {
-                        id = 4,
-                        Name = "圆筒",
-                        DetailMessage = "带底的一个圆筒",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object5.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object5.obj"
-                    },
-                    new ObjectsModel()
-                    {
-                        id = 5,
-                        Name = "正四面体",
-                        DetailMessage = "标准的正四面体",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object6.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object6.obj"
-                    },
-                    new ObjectsModel()
-                    {
-                        id = 6,
-                        Name = "杯子",
-                        DetailMessage = "户外用杯子。可以用来测内径",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object7.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object7.obj"
-                    },
-                    new ObjectsModel()
-                    {
-                        id = 7,
-                        Name = "杯盖",
-                        DetailMessage = "与杯子匹配的杯盖",
-                        Integrated = true,
-                        PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object8.png",
-                        ResourcePath = $"{Application.streamingAssetsPath}/Objects/object8.obj"
-                    },
-                };
-        }
-        else
-        {
-            foreach(var item in GameManager.Instance.objectsModels)
+            new ObjectsModel()
             {
-                item.baseSize = new MyVector3();
-                item.childrenPostition = new List<MyVector3>();
-                item.childrenRotation = new List<MyVector4>();
-                item.position = new MyVector3();
-                item.rotation = new MyVector4();
-            }
+                id = 0,
+                Name = "立方体",
+                DetailMessage = "纯正立方体",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object1.obj"
+            },
+            new ObjectsModel()
+            {
+                id = 1,
+                Name = "圆柱",
+                DetailMessage = "较高的一个圆柱",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object2.obj"
+            },
+            new ObjectsModel()
+            {
+                id = 2,
+                Name = "圆柱",
+                DetailMessage = "较胖的一个圆柱",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object3.obj"
+            },
+            new ObjectsModel()
+            {
+                id = 3,
+                Name = "圆环",
+                DetailMessage = "圆环",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object4.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object4.obj"
+            },
+            new ObjectsModel()
+            {
+                id = 4,
+                Name = "圆筒",
+                DetailMessage = "带底的一个圆筒",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object5.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object5.obj"
+            },
+            new ObjectsModel()
+            {
+                id = 5,
+                Name = "正四面体",
+                DetailMessage = "标准的正四面体",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object6.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object6.obj"
+            },
+            new ObjectsModel()
+            {
+                id = 6,
+                Name = "杯子",
+                DetailMessage = "户外用杯子。可以用来测内径",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object7.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object7.obj"
+            },
+            new ObjectsModel()
+            {
+                id = 7,
+                Name = "杯盖",
+                DetailMessage = "与杯子匹配的杯盖",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object8.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object8.obj"
+            },
+        });
+
+        var preset = JsonConvert.SerializeObject(PresetObjects);
+        var now = JsonConvert.SerializeObject(GameManager.Instance.objectsModels.Where(x => x.Integrated).ToList());
+
+        if (!preset.Equals(now))
+        {
+            var imported = GameManager.Instance.objectsModels.Where(x => x.Integrated).ToList();
+            GameManager.Instance.objectsModels = JsonConvert.DeserializeObject<List<ObjectsModel>>(preset)
+                .Concat(imported).ToList();
+        }
+
+        foreach (var item in GameManager.Instance.objectsModels)
+        {
+            item.baseSize = new MyVector3();
+            item.childrenPostition = new List<MyVector3>();
+            item.childrenRotation = new List<MyVector4>();
+            item.position = new MyVector3();
+            item.rotation = new MyVector4();
         }
     }
 }

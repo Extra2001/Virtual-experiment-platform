@@ -1,3 +1,7 @@
+/************************************************************************************
+    作者：荆煦添
+    描述：背包根控制器
+*************************************************************************************/
 using HT.Framework;
 using DG.Tweening;
 using System.Collections;
@@ -6,7 +10,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 public class BagSelector : HTBehaviour
 {
@@ -68,18 +71,21 @@ public class BagSelector : HTBehaviour
     {
         CreateInstrument.HideCurrent();
         CreateInstrument.Create(panel.instrumentType);
+        Main.m_UI.GetUI<BagControl>().Hide();
     }
 
     public void GenerateObjects(ObjectsPanel panel)
     {
         CreateObject.HideCurrent();
         CreateObject.Create(panel.objectsModel.DeepCopy<ObjectsModel>());
+        Main.m_UI.GetUI<BagControl>().Hide();
     }
 
     public void GenerateHistory(HistorysPanel panel)
     {
         CreateInstrument.HideCurrent();
         CreateInstrument.Create(panel.model);
+        Main.m_UI.GetUI<BagControl>().Hide();
     }
 
     public void SelectInstrument(BagItem bagItem)
@@ -152,9 +158,13 @@ public class BagSelector : HTBehaviour
         ClearBagMenu();
         var list = RecordManager.tempRecord.historyInstrument;
         list.Reverse();
+        var instances = new List<BagItem>();
         foreach (var item in list)
-            Instantiate(BagItem, BagItemRoot.transform).SetData(this, item);
-        SelectHistory(BagItemRoot.transform.GetComponentInChildren<BagItem>());
+        {
+            instances.Add(Instantiate(BagItem, BagItemRoot.transform));
+            instances.Last().SetData(this, item);
+        }
+        SelectHistory(instances.First());
     }
 
     private void ClearBagMenu()

@@ -138,20 +138,20 @@ public struct CheckFloat {//带有效数字的小数
         return FunctionX(x, dx, Math.Cos, (x) => -Math.Sin(x));
     }
     public static CheckFloat Tan(CheckFloat x, double dx) {
-        return FunctionX(x, dx, Math.Tan, (x) => 1 / (Math.Cos(x) * Math.Cos(x)));
+        return FunctionX(x, dx, Math.Tan, (X) => 1 / (Math.Cos(X) * Math.Cos(X)));
     }
     public static CheckFloat Pow(CheckFloat x, double n) {
         if(n == 1.0) return x;
         double dx = Math.Pow(10, x.LoDigit);
-        return FunctionX(x, dx, (x) => Math.Pow(x, n), (x) => Math.Pow(x, n - 1) * n);
+        return FunctionX(x, dx, (X) => Math.Pow(X, n), (X) => Math.Pow(X, n - 1) * n);
     }
     public static CheckFloat Exp(double a, CheckFloat x) {
         double dx = Math.Pow(10, x.LoDigit);
-        return FunctionX(x, dx, (x) => Math.Pow(a, x), (x) => Math.Pow(a, x) * Math.Log(a));
+        return FunctionX(x, dx, (X) => Math.Pow(a, X), (X) => Math.Pow(a, X) * Math.Log(a));
     }
     public static CheckFloat Log(double a, CheckFloat x) {//log_{a}(x)
         double dx = Math.Pow(10, x.LoDigit);
-        return FunctionX(x, dx, (x) => Math.Log(a, x), (x) => 1.0 / x);
+        return FunctionX(x, dx, (X) => Math.Log(a, X), (X) => 1.0 / X);
     }
 }
 public static class StaticMethods {

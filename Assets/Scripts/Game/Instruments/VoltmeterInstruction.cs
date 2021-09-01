@@ -40,12 +40,6 @@ public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
     {
         Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().ShowNum((float)value);
     }
-
-    public override void InstReset()
-    {
-        Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().ShowNum(0.0f);
-    }
-
     public override void GenMainValueAndRandomErrorLimit()
     {
         MainValue = UnityEngine.Random.Range((float)LRV, (float)URV);

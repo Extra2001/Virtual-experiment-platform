@@ -32,11 +32,6 @@ public class ThermometerInstruction : IndirectMeasurementInstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override void InstReset()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override void ShowValue(double value)
     {
         Entity.FindChildren("Thermometer_son").GetComponent<thermometer_main>().ShowNum((float)value);

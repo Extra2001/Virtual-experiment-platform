@@ -44,6 +44,21 @@ public static class CommonTools
     /// 图片缓存，防止产生大量IO造成程序卡死
     /// </summary>
     private static Dictionary<string, Sprite> spritePool = new Dictionary<string, Sprite>();
+    private static Dictionary<string, byte[]> bytesPool = new Dictionary<string, byte[]>();
+    public static byte[] GetBytes(string path)
+    {
+        if (bytesPool.ContainsKey(path)) return bytesPool[path];
+        byte[] bytes;
+        using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+        {
+            fs.Seek(0, SeekOrigin.Begin);
+            bytes = new byte[fs.Length];
+            fs.Read(bytes, 0, (int)fs.Length);
+            fs.Close();
+        }
+        bytesPool.Add(path, bytes);
+        return bytes;
+    }
     /// <summary>
     /// 根据路径加载图片到Sprite
     /// </summary>
@@ -51,16 +66,14 @@ public static class CommonTools
     {
         if (spritePool.ContainsKey(path))
             return spritePool[path];
-        using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+        if (bytesPool.ContainsKey(path))
         {
-            fs.Seek(0, SeekOrigin.Begin);
-            byte[] bytes = new byte[fs.Length];
-            fs.Read(bytes, 0, (int)fs.Length);
-            fs.Close();
-            Sprite ret = GetSprite(bytes);
-            spritePool.Add(path, ret);
-            return ret;
+            spritePool.Add(path, GetSprite(bytesPool[path]));
+            return spritePool[path];
         }
+        Sprite ret = GetSprite(GetBytes(path));
+        spritePool.Add(path, ret);
+        return ret;
     }
     /// <summary>
     /// 根据二进制信息加载图片到Sprite

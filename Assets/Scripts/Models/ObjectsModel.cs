@@ -26,11 +26,16 @@ public class ObjectsModel
 }
 
 [Serializable]
-public class MyVector3
+public class MyVector3 : IEquatable<MyVector3>
 {
     public float x { get; set; }
     public float y { get; set; }
     public float z { get; set; }
+
+    public bool Equals(MyVector3 other)
+    {
+        return x == other.x && y == other.y && z == other.z;
+    }
 
     public static implicit operator Vector3(MyVector3 vector3)
     {
@@ -39,12 +44,17 @@ public class MyVector3
 }
 
 [Serializable]
-public class MyVector4
+public class MyVector4 : IEquatable<MyVector4>
 {
     public float x { get; set; }
     public float y { get; set; }
     public float z { get; set; }
     public float w { get; set; }
+
+    public bool Equals(MyVector4 other)
+    {
+        return x == other.x && y == other.y && z == other.z && w == other.w ;
+    }
 
     public static implicit operator Quaternion(MyVector4 vector3)
     {

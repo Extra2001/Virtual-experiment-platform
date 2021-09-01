@@ -17,8 +17,7 @@ public class BagControl : UILogicTemporary
     {
         base.OnOpen(args);
         GameManager.Instance.FPSable = false;
-        UIEntity.FindChildren("BagControl").GetComponent<BagSelectorAnimate>()?.Show();
-        UIEntity.FindChildren("Select_instrument").GetComponent<InstrumentChooserAnimate>()?.Show();
+        UIEntity.GetComponent<BagSelector>()?.Show();
     }
     
 	/// <summary>
@@ -35,9 +34,8 @@ public class BagControl : UILogicTemporary
     /// </summary>
     public void Hide()
     {
-        UIEntity.FindChildren("BagControl").GetComponent<BagSelectorAnimate>()?.Hide();
-        UIEntity.FindChildren("Select_instrument").GetComponent<InstrumentChooserAnimate>()?.Hide();
-        MainThread.Instance.DelayAndRun(100, () =>
+        UIEntity.GetComponent<BagSelector>()?.Hide();
+        MainThread.Instance.DelayAndRun(300, () =>
         {
             Close();
         });

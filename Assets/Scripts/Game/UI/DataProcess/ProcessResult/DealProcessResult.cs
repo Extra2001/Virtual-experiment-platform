@@ -6,6 +6,7 @@ using HT.Framework;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class DealProcessResult : HTBehaviour
 {
@@ -30,6 +31,7 @@ public class DealProcessResult : HTBehaviour
 
     double ComplexAverage = 0, ComplexUncertainty = 0, UserComplexAverage = 0, UserComplexUncertainty;
 
+    bool MeasureErrorFlag = false;//直接测量量错误是否解决
     int curError = 0;
     CalcMeasureResult measureresult = new CalcMeasureResult();
     CalcComplexResult complexresult = new CalcComplexResult();
@@ -75,20 +77,28 @@ public class DealProcessResult : HTBehaviour
 
         measureresult = CalcArgs.CalculateMeasureValue(calc);
         quantityErrors = new List<QuantityError>();
-        bool flag = true;
         foreach (var item in measureresult.err)
         {
             if (item.Message != "计算正确")
             {
-                flag = false;
+                MeasureErrorFlag = true;
                 quantityErrors.Add(item);
             }
 
         }
-        if (!flag)
+
+        if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
+        {
+            RecordManager.tempRecord.score.MeasureQuantityError = quantityErrors.Count;
+        }else if(quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
+        {
+            RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
+        }
+
+        if (MeasureErrorFlag)
         {
             ComplexErr.Title = "最终合成量计算有误";
-            ComplexErr.Message = "直接测量量处理结果有误，请先修正直接测量量错误再处理最终合成量";
+            ComplexErr.Message = "\n\n直接测量量处理结果有误，请先修正直接测量量错误再处理最终合成量";
             quantityErrors.Add(ComplexErr);
         }
         else
@@ -97,6 +107,7 @@ public class DealProcessResult : HTBehaviour
             complexresult = CalcArgs.CalculateComplexValue(RecordManager.tempRecord.stringExpression, calc);
             if(complexresult.status != "计算无误")
             {
+                RecordManager.tempRecord.score.ComplexQuantityError += 1;
                 ComplexErr.Title = complexresult.err.Title;
                 ComplexErr.Message = complexresult.err.Message;
                 ComplexErr.answer = complexresult.calcexpr.ToLaTeX();
@@ -112,8 +123,6 @@ public class DealProcessResult : HTBehaviour
 
     public void Show()
     {
-        //DealMeausredQuantities();
-        //DealComplexData();
         CheckRightOrWrong();
         curError = 0;
         Next();
@@ -188,7 +197,6 @@ public class DealProcessResult : HTBehaviour
                 LatexEquationRender.Render(current.answerunc, res =>
                 {
                     formula5.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
-                    //formula3.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
                 });
             }
             else
@@ -196,13 +204,16 @@ public class DealProcessResult : HTBehaviour
                 formula5.SetActive(false);
             }
 
-            /*if (current.Right != null)
-            {
-                RightFormula.gameObject.SetActive(true);
-                RightFormula.LoadFormula(current.Right);
-            }
-            else RightFormula.gameObject.SetActive(false);*/
             curError++;
+        }
+        else if (MeasureErrorFlag)
+        {
+            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            {
+                ShowCancel = false,
+                Title = new BindableString("警告"),
+                Message = new BindableString("请先修正直接测量量的错误")
+            });
         }
         else if (curError == quantityErrors.Count)
         {
@@ -212,7 +223,7 @@ public class DealProcessResult : HTBehaviour
             formula4.SetActive(false);
             formula5.SetActive(false);
             double score = RecordManager.tempRecord.score.CalcScore();
-            Title.text = "本次实验得分:" + score + "/4.0";
+            Title.text = "本次实验得分:" + String.Format("{0:F1}", score) + "/4.0";
             if (score - 4 == 0)
             {
                 SuccessMessage.text = "你的实验已全部正确地完成！恭喜你掌握了本次误差理论的知识。";
@@ -220,9 +231,21 @@ public class DealProcessResult : HTBehaviour
             else
             {
                 SuccessMessage.text = "本次实验中，\n";
-                SuccessMessage.text += "数据记录过程犯了" + RecordManager.tempRecord.score.DataRecordError + "次错误\n";
-                SuccessMessage.text += "直接测量量数据处理过程犯了" + RecordManager.tempRecord.score.MeasureQuantityError + "次错误\n";
-                SuccessMessage.text += "合成量数据处理过程犯了" + RecordManager.tempRecord.score.ComplexQuantityError + "次错误\n";
+                if (RecordManager.tempRecord.score.DataRecordError > 0)
+                {
+                    SuccessMessage.text += "数据记录过程犯了" + RecordManager.tempRecord.score.MeasureQuantityError + "次错误\n";
+                }
+                else if (RecordManager.tempRecord.score.MeasureQuantityError > 0)
+                {
+                    SuccessMessage.text += "直接测量量数据处理过程犯了" + RecordManager.tempRecord.score.MeasureQuantityError + "次错误\n";
+                }
+                else if (RecordManager.tempRecord.score.ComplexQuantityError > 0)
+                {
+                    SuccessMessage.text += "合成量数据处理过程犯了" + RecordManager.tempRecord.score.ComplexQuantityError + "次错误\n";
+                }
+                SuccessMessage.text += "请牢记错误原因，以免下次再犯";
+
+
             }
             //Title.text = quantityErrors.Count == 0 ? "正确无误！" : "你已查看了所有的错误！";
             //SuccessMessage.text = quantityErrors.Count == 0 ? "你的实验已全部正确地完成！恭喜你掌握了本次误差理论的知识。" :

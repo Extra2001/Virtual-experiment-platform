@@ -41,8 +41,8 @@ public class DealUncertainLearnUI : HTBehaviour
         try
         {
             formula = Field.GetComponent<FormulaController>().Expression;
-
-            //answer=f(formula)
+            CheckFloat temp = new CheckFloat("0.01");
+            answer = temp.TrueValue.ToString();
             AnswerText.text = answer;
 
             input = UserInput.text;
@@ -59,7 +59,7 @@ public class DealUncertainLearnUI : HTBehaviour
             {
                 yes.transform.localScale = new Vector3(1, 1, 1);
                 yes.SetActive(true);
-                no.SetActive(false);               
+                no.SetActive(false);
                 yes.transform.DOScale(new Vector3(4, 4, 4), 1.5f).OnComplete(() => {
                     yes.SetActive(false);
                 });
@@ -73,6 +73,7 @@ public class DealUncertainLearnUI : HTBehaviour
                     no.SetActive(false);
                 });
             }
+
         }
         catch
         {
@@ -85,6 +86,7 @@ public class DealUncertainLearnUI : HTBehaviour
             });
         }
         
+
     }
 
     private void ClickBackButton()

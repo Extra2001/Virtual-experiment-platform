@@ -42,7 +42,6 @@ public class CaliperInstrument : DirectMeasurementInstrumentBase
         });
         buttonItems.Where(x => x.GameObject.name.Equals("OutwardButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            Debug.Log("out");
             KeyboardManager.Keybd_event(79, 0, 0, 0);            
         });
         buttonItems.Where(x => x.GameObject.name.Equals("InwardButton")).FirstOrDefault().OnClick.Add(() =>

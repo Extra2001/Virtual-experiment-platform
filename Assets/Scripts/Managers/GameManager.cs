@@ -5,6 +5,7 @@
 using HT.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : SingletonBehaviorManager<GameManager>
@@ -116,16 +117,12 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     public void SwitchBackProcedure()
     {
         if (ProcedureStack.Count <= 1) return;
-        if (ProcedureStack.Count == 2)
+        if (ProcedureStack.Count == 3 && ProcedureStack[1] == typeof(ChooseExpProcedure))
         {
             UIAPI.Instance.ShowModel(new ModelDialogModel()
             {
                 Message = new BindableString("继续返回将丢失当前进度，继续？"),
-                ConfirmAction = () =>
-                {
-                    ProcedureStack.RemoveAt(ProcedureStack.Count - 1);
-                    Main.m_Procedure.SwitchProcedure(ProcedureStack[ProcedureStack.Count - 1]);
-                }
+                ConfirmAction = StartNewExp
             });
             return;
         }
@@ -138,7 +135,8 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         ProcedureBase Temp;
         Main.m_Procedure.SwitchNextProcedure();
         Temp = Main.m_Procedure.CurrentProcedure;
-        ProcedureStack.Add(Temp.GetType());
+        if (!ProcedureStack.Last().Name.Equals(Temp.GetType().Name))
+            ProcedureStack.Add(Temp.GetType());
     }
 
     public void ClearAll()
@@ -147,9 +145,9 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         RecordManager.ClearTempRecord();
         Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();
         ProcedureStack.Clear();
-        ProcedureStack.Add(typeof(StartProcedure));
+        if (!ProcedureStack.Last().Name.Equals(typeof(StartProcedure).Name))
+            ProcedureStack.Add(typeof(StartProcedure));
     }
-    
 
     public void ContinueExp()
     {
@@ -159,8 +157,9 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     private void StartNewExp()
     {
         if (RecordManager.tempRecord.showedInstrument != null && RecordManager.tempRecord.showedInstrument.instrumentType != null)
-            Main.m_Entity.HideEntity(GameManager.Instance.CurrentInstrument);
-        CreateObject.DestroyObjecthh();
+            Main.m_Entity.HideEntity(CurrentInstrument);
+        CreateObject.HideCurrent();
+        CreateInstrument.HideCurrent();
         RecordManager.ClearTempRecord();
         Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();
         ProcedureStack.Clear();
@@ -182,7 +181,8 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         if ((handler as ChooseExpEventHandler).expId == 0)
         {
             Main.m_Procedure.SwitchProcedure<AddValueProcedure>();
-            ProcedureStack.Add(typeof(AddValueProcedure));
+            if (!ProcedureStack.Last().Name.Equals(typeof(AddValueProcedure).Name))
+                ProcedureStack.Add(typeof(AddValueProcedure));
         }
         else
         {
@@ -195,7 +195,8 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         if (ValueValidator.ValidateQuantities(RecordManager.tempRecord.quantities))
         {
             Main.m_Procedure.SwitchProcedure<EnterExpressionProcedure>();
-            ProcedureStack.Add(typeof(EnterExpressionProcedure));
+            if (!ProcedureStack.Last().Name.Equals(typeof(EnterExpressionProcedure).Name))
+                ProcedureStack.Add(typeof(EnterExpressionProcedure));
         }
     }
 
@@ -206,7 +207,8 @@ public class GameManager : SingletonBehaviorManager<GameManager>
             if (res)
             {
                 Main.m_Procedure.SwitchProcedure<PreviewProcedure>();
-                ProcedureStack.Add(typeof(PreviewProcedure));
+                if (!ProcedureStack.Last().Name.Equals(typeof(PreviewProcedure).Name))
+                    ProcedureStack.Add(typeof(PreviewProcedure));
             }
             else
             {
@@ -222,30 +224,34 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     private void PreviewConfirm()
     {
-        UIAPI.Instance.ShowAndHideLoading(1000);
+        UIAPI.Instance.ShowLoading();
         MainThread.Instance.DelayAndRun(500, () =>
         {
             Main.m_Procedure.SwitchProcedure<EnterClassroomProcedure>();
-            ProcedureStack.Add(typeof(EnterClassroomProcedure));
+            if (!ProcedureStack.Last().Name.Equals(typeof(EnterClassroomProcedure).Name))
+                ProcedureStack.Add(typeof(EnterClassroomProcedure));
         });
     }
 
     public void SwitchProcedure<T>() where T : ProcedureBase
     {
         Main.m_Procedure.SwitchProcedure<T>();
-        ProcedureStack.Add(typeof(T));
+        if (!ProcedureStack.Last().Name.Equals(typeof(T).Name))
+            ProcedureStack.Add(typeof(T));
     }
 
     private void ProcessTips()
     {
-        Main.m_Procedure.SwitchProcedure<ProcessExplainProcedure>();
+        if (!ProcedureStack.Last().Name.Equals(typeof(ProcessExplainProcedure).Name))
+            Main.m_Procedure.SwitchProcedure<ProcessExplainProcedure>();
         ProcedureStack.Add(typeof(ProcessExplainProcedure));
     }
 
     public void EnterUncertainty()
     {
         Main.m_Procedure.SwitchProcedure<MeasuredDataProcessProcedure>();
-        ProcedureStack.Add(typeof(MeasuredDataProcessProcedure));
+        if (!ProcedureStack.Last().Name.Equals(typeof(MeasuredDataProcessProcedure).Name))
+            ProcedureStack.Add(typeof(MeasuredDataProcessProcedure));
         _currentQuantityIndex = 0;
         ShowUncertainty();
     }
@@ -253,7 +259,8 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     public void ShowUncertainty()
     {
         var pro = Main.m_Procedure.GetProcedure<MeasuredDataProcessProcedure>();
-        ProcedureStack.Add(typeof(MeasuredDataProcessProcedure));
+        if (!ProcedureStack.Last().Name.Equals(typeof(MeasuredDataProcessProcedure).Name))
+            ProcedureStack.Add(typeof(MeasuredDataProcessProcedure));
         pro.ShowUncertainty(CurrentQuantity);
     }
 

@@ -5,24 +5,40 @@
 using HT.Framework;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
 
 public class GameLaunch : MonoBehaviour
 {
+    public static GameLaunch Instance;
+
     public LoadingScreenManager2 InitLoading;
     public LoadingScreenManager LoadingScreen;
+    public Image GeneralLoadingScreen;
+
+    public void ShowGeneralLoadingScreen()
+    {
+        GeneralLoadingScreen.gameObject.SetActive(true);
+    }
+    public void HideGeneralLoadingScreen()
+    {
+        GeneralLoadingScreen.gameObject.SetActive(false);
+    }
 
     private void Awake()
     {
+        Instance = this;
         InitLoading.gameObject.SetActive(true);
         LoadingScreen.gameObject.SetActive(true);
 
+        ProcessManager.StartService();
+
         UIAPIInitializer.Current.Initialize();
 
-        PreLoadingAssets();
+        GetComponent<RenderManager>().Hide();
 
         LaunchManagers();
 
-        GetComponent<RenderManager>().Hide();
+        PreLoadingAssets();
     }
     /// <summary>
     /// 预加载资产
@@ -31,12 +47,11 @@ public class GameLaunch : MonoBehaviour
     {
         Initializer.InitializeObjects();
         Initializer.InitializeExperiments();
-
+        StartCoroutine(Initializer.PreLoadImages());
         // 加载仪器
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
     }
-
     /// <summary>
     /// 启动单例模式的MonoBeheavior管理器
     /// </summary>
@@ -46,8 +61,12 @@ public class GameLaunch : MonoBehaviour
 
         GameManager.Enable();
 
-        PauseManager.Enable();
-
         KeyboardManager.Enable();
+
+        PauseManager.Enable();
+    }
+    private void OnDestroy()
+    {
+        ProcessManager.StopService();
     }
 }

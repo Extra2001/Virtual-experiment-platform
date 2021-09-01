@@ -13,8 +13,8 @@ public class ProcessResultProcedure : ProcedureBase
     /// </summary>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        GameLaunch.Instance.ShowGeneralLoadingScreen();
         //如果有数据未输入则不能进入
-
         var rec = RecordManager.tempRecord;
         foreach(var item in rec.quantities)
         {
@@ -45,6 +45,7 @@ public class ProcessResultProcedure : ProcedureBase
             return;
         }
         Main.m_UI.OpenResidentUI<ProcessResult>();
+        GameLaunch.Instance.HideGeneralLoadingScreen();
         base.OnEnter(lastProcedure);
     }
 
@@ -53,6 +54,7 @@ public class ProcessResultProcedure : ProcedureBase
         //弹出报错信息UI
         MainThread.Instance.DelayAndRun(300, () =>
         {
+            GameLaunch.Instance.HideGeneralLoadingScreen();
             GameManager.Instance.SwitchBackProcedure();
             UIAPI.Instance.ShowModel(new ModelDialogModel()
             {

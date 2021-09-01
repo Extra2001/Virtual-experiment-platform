@@ -48,11 +48,6 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
 
     }
 
-    public override void InstReset()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override void GenMainValueAndRandomErrorLimit()
     {
         RandomErrorLimit = ErrorLimit * UnityEngine.Random.Range(-1f, 1f);

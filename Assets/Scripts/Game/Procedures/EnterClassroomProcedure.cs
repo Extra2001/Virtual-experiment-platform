@@ -19,7 +19,7 @@ public class EnterClassroomProcedure : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         //此处指定位置为左上角，后续会开放至所有桌子
-        RenderManager.Instance?.Show();
+        RenderManager.Instance.Show();
         MainThread.Instance.DelayAndRun(1000, () =>
         {
             var Position = NearChair.Instance.transform.position;
@@ -48,7 +48,7 @@ public class EnterClassroomProcedure : ProcedureBase
     public override void OnLeave(ProcedureBase nextProcedure)
     {
         //关闭UI,取消注册按钮
-        RenderManager.Instance?.Hide();
+        RenderManager.Instance.Hide();
         GameManager.Instance.FPSable = false;
         if (showed)
             UIAPI.Instance.HideDataTable();

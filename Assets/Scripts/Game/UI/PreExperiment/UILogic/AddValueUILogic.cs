@@ -9,5 +9,9 @@ using HT.Framework;
 [UIResource(null, null, "UI/PreExperiment/AddQuantityPanel")]
 public class AddValueUILogic : UILogicResident
 {
-
+    public override void OnOpen(params object[] args)
+    {
+        base.OnOpen(args);
+        UIEntity.GetComponentInChildren<QuantityManage>(true).LoadQuantities();
+    }
 }

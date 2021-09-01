@@ -31,7 +31,7 @@ public class LoadingScreenManager : MonoBehaviour
     }
 
     public void OnFinishedHide()
-    {
+    {        
         GetComponent<Canvas>().enabled = false;
         // TODO: remove it and call your functions 
         //transform.parent.GetComponent<DemoSceneManager>().OnLoadingScreenHided();

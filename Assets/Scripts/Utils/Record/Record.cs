@@ -65,6 +65,10 @@ public class Record
     /// </summary>
     public InstrumentInfoModel showedInstrument { get; set; } = null;
     /// <summary>
+    /// 已被生成的仪器
+    /// </summary>
+    public List<InstrumentInfoModel> historyInstrument { get; set; } = new List<InstrumentInfoModel>();
+    /// <summary>
     /// 已被生成的被测物体
     /// </summary>
     public ObjectsModel showedObject { get; set; } = null;
@@ -78,7 +82,7 @@ public class Record
     public MyVector3 FPSPosition = new MyVector3()
     {
         x = -58.759f,
-        y = 10.282f,
+        y = 6.4450f,
         z = 1.732f
     };
     /// <summary>

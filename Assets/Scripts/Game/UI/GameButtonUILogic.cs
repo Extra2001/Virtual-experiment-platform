@@ -67,6 +67,8 @@ public class GameButtonUILogic : UILogicResident
         //复现存档仪器被测物体位置等信息
         CreateObject.CreateRecord();
         CreateInstrument.CreateRecord();
+        UIAPI.Instance.HideLoading();
+        //MainThread.Instance.DelayAndRun(300, UIAPI.Instance.HideLoading);
     }
 
     /// <summary>

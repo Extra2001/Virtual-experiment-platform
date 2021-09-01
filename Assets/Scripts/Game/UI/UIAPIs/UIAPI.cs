@@ -22,7 +22,6 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
         {
             HideLoading();
         });
-
     }
 
     public void HideLoading()

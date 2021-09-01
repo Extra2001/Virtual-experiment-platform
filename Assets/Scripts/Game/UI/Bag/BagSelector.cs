@@ -56,7 +56,6 @@ public class BagSelector : HTBehaviour
 
         ChangeButtonColor(InstrumentButton);
         LoadInstruments();
-        StartCoroutine(nameof(PreLoadImages));
     }
 
     public void Show()
@@ -128,16 +127,6 @@ public class BagSelector : HTBehaviour
     {
         ImportModel.DeleteModel(bagItem.objectsModel);
         LoadObjects();
-    }
-
-    private IEnumerator PreLoadImages()
-    {
-        var list = GameManager.Instance.objectsModels;
-        foreach (var item in list)
-        {
-            yield return CommonTools.GetBytes(item.PreviewImage);
-            yield return CommonTools.GetSprite(item.PreviewImage);
-        }
     }
 
     private void ShowPanel(BagItem bagItem)

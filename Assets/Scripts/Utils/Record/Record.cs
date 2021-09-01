@@ -82,7 +82,7 @@ public class Record
     public MyVector3 FPSPosition = new MyVector3()
     {
         x = -58.759f,
-        y = 10.282f,
+        y = 6.4450f,
         z = 1.732f
     };
     /// <summary>

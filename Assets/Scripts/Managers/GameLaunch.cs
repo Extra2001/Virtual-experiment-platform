@@ -34,11 +34,11 @@ public class GameLaunch : MonoBehaviour
 
         UIAPIInitializer.Current.Initialize();
 
-        PreLoadingAssets();
+        GetComponent<RenderManager>().Hide();
 
         LaunchManagers();
 
-        GetComponent<RenderManager>().Hide();
+        PreLoadingAssets();
     }
     /// <summary>
     /// 预加载资产
@@ -47,7 +47,7 @@ public class GameLaunch : MonoBehaviour
     {
         Initializer.InitializeObjects();
         Initializer.InitializeExperiments();
-
+        StartCoroutine(Initializer.PreLoadImages());
         // 加载仪器
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
@@ -61,9 +61,9 @@ public class GameLaunch : MonoBehaviour
 
         GameManager.Enable();
 
-        PauseManager.Enable();
-
         KeyboardManager.Enable();
+
+        PauseManager.Enable();
     }
     private void OnDestroy()
     {

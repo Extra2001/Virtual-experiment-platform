@@ -21,7 +21,6 @@ public class QuantityManage : HTBehaviour
             RecordManager.tempRecord.quantities.Add(new QuantityModel());
             LoadQuantities();
         });
-        LoadQuantities();
     }
 
     private void Update()

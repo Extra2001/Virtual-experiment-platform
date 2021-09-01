@@ -117,16 +117,12 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     public void SwitchBackProcedure()
     {
         if (ProcedureStack.Count <= 1) return;
-        if (ProcedureStack.Count == 2)
+        if (ProcedureStack.Count == 3 && ProcedureStack[1] == typeof(ChooseExpProcedure))
         {
             UIAPI.Instance.ShowModel(new ModelDialogModel()
             {
                 Message = new BindableString("继续返回将丢失当前进度，继续？"),
-                ConfirmAction = () =>
-                {
-                    ProcedureStack.RemoveAt(ProcedureStack.Count - 1);
-                    Main.m_Procedure.SwitchProcedure(ProcedureStack[ProcedureStack.Count - 1]);
-                }
+                ConfirmAction = StartNewExp
             });
             return;
         }

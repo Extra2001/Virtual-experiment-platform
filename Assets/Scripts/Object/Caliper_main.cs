@@ -40,6 +40,7 @@ public class Caliper_main : HTBehaviour
         //已修正
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Debug.Log("owo");
             Nowin = Player_S.GetComponent<MirrorPlayer>().Nowin;
             moveable_look = Player_S.GetComponent<MirrorPlayer>().moveable_look;
             moveable_back = Player_S.GetComponent<MirrorPlayer>().moveable_back;
@@ -83,7 +84,6 @@ public class Caliper_main : HTBehaviour
             Player_S.transform.rotation = Quaternion.Euler(new Vector3(0, 270f, 0));
             mCamera.transform.position = Ele.transform.position;
             mCamera.transform.rotation = Ele.transform.rotation;
-            Debug.Log("qwq");
             mCamera.fieldOfView = Ele.GetComponent<Camera>().fieldOfView;
             moveable_look = false;
             Nowin = true;
@@ -134,10 +134,12 @@ public class Caliper_main : HTBehaviour
     {
         if (Input.GetKey(KeyCode.P))
         {
+            Debug.Log("p");
             this.transform.Find("MeasureHead").gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0,0 , -0.3f), ForceMode.VelocityChange);
         }
         if (Input.GetKey(KeyCode.O))
         {
+            Debug.Log("o");
             this.transform.Find("MeasureHead").gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 0.2f), ForceMode.VelocityChange);
         }
         Look_back();

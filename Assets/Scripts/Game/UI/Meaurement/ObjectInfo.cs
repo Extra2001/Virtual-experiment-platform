@@ -63,6 +63,6 @@ public class ObjectInfo : HTBehaviour
         _MassInput.text = objectValue.Mass.ToString();
         _Gravity.isOn = objectValue.Gravity;
 
-        _RootPanel.rectTransform().SetFloat();
+        StartCoroutine(CommonTools.DelayGet(_RootPanel.rectTransform().SetFloat));
     }
 }

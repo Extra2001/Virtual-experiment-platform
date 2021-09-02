@@ -15,7 +15,7 @@ public class ResultScore
     public double CalcScore()
     {
         double ans = 1;
-        ans = f(MeasureQuantityError) + f(ComplexQuantityError) + f(DataRecordError);
+        ans += f(MeasureQuantityError) + f(ComplexQuantityError) + f(DataRecordError);
 
         return ans;
     }
@@ -23,7 +23,20 @@ public class ResultScore
     double f(int n)   // 将错误个数得到的分数归一化
     {
         double ans;
-        ans = 0;
+        if (n == 0)
+        {
+            ans = 1;
+        }else if (n <= 2)
+        {
+            ans = 1 - 0.15 * n;
+        }else if (n <= 5)
+        {
+            ans = 1 - 0.12 * n;
+        }
+        else
+        {
+            ans = 0;
+        }
         return ans;
     }
 

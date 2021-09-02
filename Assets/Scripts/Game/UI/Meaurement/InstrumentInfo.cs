@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
 using System.Reflection;
+using System.Collections;
 
 public class InstrumentInfo : HTBehaviour
 {
@@ -54,9 +55,10 @@ public class InstrumentInfo : HTBehaviour
             item.Value.onValueChanged.Clear();
         _instrument = GameManager.Instance.GetInstrument(instrument);
         _instrument.ShowInfoPanel(infoItem);
-
-        _RootPanel.rectTransform().SetFloat();
+        StartCoroutine(CommonTools.DelayGet(_RootPanel.rectTransform().SetFloat));
     }
+
+    
 
     private void Initialize()
     {

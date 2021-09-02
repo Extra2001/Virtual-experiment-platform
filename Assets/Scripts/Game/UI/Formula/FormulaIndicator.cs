@@ -18,7 +18,8 @@ public class FormulaIndicator : HTBehaviour
         Title.text = title;
         Desc.text = desc;
         Value.text = value;
-        gameObject.rectTransform().SetFloat();
+        gameObject.SetActive(true);
+        StartCoroutine(CommonTools.DelayGet(gameObject.rectTransform().SetFloat));
     }
 
     public void Hide()

@@ -69,20 +69,25 @@ public partial class FormulaController {
         else if(cur.ReplaceFlags.Count == 2) {
             tmp1 = CalcExpression(cur.ReplaceFlags.First().Value);
             tmp2 = CalcExpression(cur.ReplaceFlags.Last().Value);
-            switch(cur.value) {
-                case "+":
-                    return tmp1 + tmp2;
-                case "-":
-                    return tmp1 - tmp2;
-                case "*":
-                    return tmp1 * tmp2;
-                case "/":
-                    return tmp1 / tmp2;
-                case "pow":
-                    return CheckFloat.Pow(tmp1, tmp2.TrueValue);
-                default:
-                    throw new Exception();
+            if(cur.value.Contains("+")) {
+                return tmp1 + tmp2;
             }
+            else if(cur.value.Contains("-")) {
+                return tmp1 - tmp2;
+            }
+            else if(cur.value.Contains("*")) {
+                return tmp1 * tmp2;
+            }
+            else if(cur.value.Contains("/")) {
+                return tmp1 / tmp2;
+            }
+            else if(cur.value.Contains("pow")) {
+                return CheckFloat.Pow(tmp1, tmp2.TrueValue);
+            }
+            else {
+                throw new Exception();
+            }
+
         }
         else {
             throw new Exception();

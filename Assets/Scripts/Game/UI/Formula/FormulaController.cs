@@ -8,7 +8,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 
-public class FormulaController : MonoBehaviour
+public partial class FormulaController : MonoBehaviour
 {
     /// <summary>
     /// 获取实例对象
@@ -334,6 +334,7 @@ public class FormulaController : MonoBehaviour
         }
         return value;
     }
+    
     /// <summary>
     /// 添加至所有FormulaInstance
     /// </summary>

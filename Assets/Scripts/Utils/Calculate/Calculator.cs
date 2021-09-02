@@ -18,6 +18,68 @@ using symdiff = MathNet.Symbolics.Calculus;
 using symfuncs = MathNet.Symbolics.Function;
 using static DealProcessResult;
 
+public partial class FormulaController {
+    ///<summary>
+    ///递归计算有效数字 cbj
+    ///</summary>
+    private CheckFloat CalcExpression(string guidstr) {
+        var cur = showedCells.Where((x) => x.thisGUID.Equals(guidstr)).Last();
+        CheckFloat tmp1 = default, tmp2 = default;
+        if(cur.ReplaceFlags.Count == 0) {
+            //没有别的子节点了 最底层的表达式就是数字
+            return new CheckFloat(cur.value);
+        }else if(cur.ReplaceFlags.Count == 1) {
+            //函数
+            tmp1 = CalcExpression(cur.ReplaceFlags.First().Value);
+            switch(cur.value) {
+                case "sin":                   
+                    return CheckFloat.Sin(tmp1);
+                case "cos":
+                    return CheckFloat.Cos(tmp1);
+                case "tan":
+                    return CheckFloat.Tan(tmp1);
+                case "asin":
+                    return CheckFloat.Asin(tmp1);
+                case "acos":
+                    return CheckFloat.Acos(tmp1);
+                case "atan":
+                    return CheckFloat.Atan(tmp1);
+                case "ln":
+                    return CheckFloat.Log(Math.E, tmp1);
+                case "lg":
+                    return CheckFloat.Log(10, tmp1);
+                case "sqr"://平方
+                    return CheckFloat.Pow(tmp1, 2);
+                case "sqrt"://开平方根
+                    return CheckFloat.Pow(tmp1, 0.5);
+                case "cube"://立方
+                    return CheckFloat.Pow(tmp1, 3);
+                default:
+                    throw new Exception();
+            }
+        }else if(cur.ReplaceFlags.Count == 2) {
+            tmp1 = CalcExpression(cur.ReplaceFlags.First().Value);
+            tmp2 = CalcExpression(cur.ReplaceFlags.Last().Value);
+            switch(cur.value) {
+                case "+":
+                    return tmp1 + tmp2;
+                case "-":
+                    return tmp1 - tmp2;
+                case "*":
+                    return tmp1 * tmp2;
+                case "/":
+                    return tmp1 / tmp2;
+                case "pow":
+                    return CheckFloat.Pow(tmp1, tmp2.TrueValue);
+                default:
+                    throw new Exception();
+            }
+        }
+        else {
+            throw new Exception();
+        }
+    }
+}
 public struct CheckFloat {//带有效数字的小数
     public double Value { get; private set; }
     public double TrueValue => Value * Math.Pow(10, HiDigit);
@@ -134,10 +196,22 @@ public struct CheckFloat {//带有效数字的小数
     public static CheckFloat Sin(CheckFloat x, double dx) {
         return FunctionX(x, dx, Math.Sin, Math.Cos);
     }
+    public static CheckFloat Sin(CheckFloat x) {
+        double dx = Math.Pow(10, x.LoDigit);
+        return FunctionX(x, dx, Math.Sin, Math.Cos);
+    }
     public static CheckFloat Cos(CheckFloat x, double dx) {
         return FunctionX(x, dx, Math.Cos, (X) => -Math.Sin(X));
     }
+    public static CheckFloat Cos(CheckFloat x) {
+        double dx = Math.Pow(10, x.LoDigit);
+        return FunctionX(x, dx, Math.Cos, (X) => -Math.Sin(X));
+    }
     public static CheckFloat Tan(CheckFloat x, double dx) {
+        return FunctionX(x, dx, Math.Tan, (X) => 1 / (Math.Cos(X) * Math.Cos(X)));
+    }
+    public static CheckFloat Tan(CheckFloat x) {
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Tan, (X) => 1 / (Math.Cos(X) * Math.Cos(X)));
     }
     public static CheckFloat Pow(CheckFloat x, double n) {
@@ -152,6 +226,18 @@ public struct CheckFloat {//带有效数字的小数
     public static CheckFloat Log(double a, CheckFloat x) {//log_{a}(x)
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, (X) => Math.Log(a, X), (X) => 1.0 / X);
+    }
+    public static CheckFloat Atan(CheckFloat x) {
+        double dx = Math.Pow(10, x.LoDigit);
+        return FunctionX(x, dx, Math.Atan, (X) => 1.0 / (X * X + 1.0));
+    }
+    public static CheckFloat Asin(CheckFloat x) {
+        double dx = Math.Pow(10, x.LoDigit);
+        return FunctionX(x, dx, Math.Asin, (X) => 1.0 / Math.Sqrt(X * X + 1.0));
+    }
+    public static CheckFloat Acos(CheckFloat x) {
+        double dx = Math.Pow(10, x.LoDigit);
+        return FunctionX(x, dx, Math.Acos, (X) => -1.0 / Math.Sqrt(X * X + 1.0));
     }
 }
 public static class StaticMethods {
@@ -395,8 +481,7 @@ public class CalcArgs {//一次计算
         return false;
     }
 
-    public void ComplexUserUnput(double _userval, double _userunc)
-    {
+    public void ComplexUserUnput(double _userval, double _userunc) {
         //添加用户合成的结果（如体积）
         userval = _userval;
         userunc = _userunc;
@@ -477,8 +562,7 @@ public class CalcArgs {//一次计算
             sb.Append("合成量的不确定度错误\r\n");
             flag = true;
         }
-        if (flag)
-        {
+        if(flag) {
             sb.Append("合成量的值与不确定度正确答案如下");
         }
         error.Message = string.Concat("检查出以下错误\r\n", sb.ToString());

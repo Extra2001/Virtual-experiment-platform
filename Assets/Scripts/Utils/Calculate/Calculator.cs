@@ -23,7 +23,7 @@ public partial class FormulaController {
     ///递归计算有效数字 cbj
     ///</summary>
     public CheckFloat GetCheckFloat() {
-        return this.CalcExpression(baseCell.value);
+        return this.CalcExpression("base");
     }
     private CheckFloat CalcExpression(string guidstr) {
         var cur = showedCells.Where((x) => x.thisGUID.Equals(guidstr)).Last();

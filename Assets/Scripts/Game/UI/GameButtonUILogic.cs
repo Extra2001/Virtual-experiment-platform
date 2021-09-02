@@ -65,7 +65,7 @@ public class GameButtonUILogic : UILogicResident
         Main.m_Event.Subscribe<SelectInstrumentEventHandler>(ShowButtons);
 
         //复现存档仪器被测物体位置等信息
-        //CreateObject.CreateRecord();
+        CreateObject.CreateRecord();
         CreateInstrument.CreateRecord();
         UIAPI.Instance.HideLoading();
     }

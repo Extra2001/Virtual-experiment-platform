@@ -27,7 +27,11 @@ public partial class FormulaController {
         CheckFloat tmp1 = default, tmp2 = default;
         if(cur.ReplaceFlags.Count == 0) {
             //没有别的子节点了 最底层的表达式就是数字
-            return new CheckFloat(cur.value);
+            switch(cur.value) {
+                default:
+                    return new CheckFloat(cur.value);
+            }
+            
         }else if(cur.ReplaceFlags.Count == 1) {
             //函数
             tmp1 = CalcExpression(cur.ReplaceFlags.First().Value);

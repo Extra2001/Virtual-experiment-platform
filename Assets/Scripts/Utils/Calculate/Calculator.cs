@@ -63,7 +63,7 @@ public partial class FormulaController {
                 case "cube"://立方
                     return CheckFloat.Pow(tmp1, 3);
                 default:
-                    throw new Exception();
+                    return tmp1;
             }
         }
         else if(cur.ReplaceFlags.Count == 2) {

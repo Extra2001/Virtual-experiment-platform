@@ -28,18 +28,19 @@ public partial class FormulaController {
     private CheckFloat CalcExpression(string guidstr) {
         var cur = showedCells.Where((x) => x.thisGUID.Equals(guidstr)).Last();
         CheckFloat tmp1 = default, tmp2 = default;
-        if(cur.ReplaceFlags.Count == 0) {
+        if(cur == null || cur.ReplaceFlags.Count == 0) {
             //没有别的子节点了 最底层的表达式就是数字
             switch(cur.value) {
                 default:
                     return new CheckFloat(cur.value);
             }
-            
-        }else if(cur.ReplaceFlags.Count == 1) {
+
+        }
+        else if(cur.ReplaceFlags.Count == 1) {
             //函数
             tmp1 = CalcExpression(cur.ReplaceFlags.First().Value);
             switch(cur.value) {
-                case "sin":                   
+                case "sin":
                     return CheckFloat.Sin(tmp1);
                 case "cos":
                     return CheckFloat.Cos(tmp1);
@@ -64,7 +65,8 @@ public partial class FormulaController {
                 default:
                     throw new Exception();
             }
-        }else if(cur.ReplaceFlags.Count == 2) {
+        }
+        else if(cur.ReplaceFlags.Count == 2) {
             tmp1 = CalcExpression(cur.ReplaceFlags.First().Value);
             tmp2 = CalcExpression(cur.ReplaceFlags.Last().Value);
             switch(cur.value) {

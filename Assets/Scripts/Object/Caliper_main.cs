@@ -25,6 +25,41 @@ public class Caliper_main : HTBehaviour
     public bool moveable_back = false;
     public bool Nowin = false;
     //定义游标卡尺行为
+    public void UsingX()
+    {
+        Nowin = Player_S.GetComponent<MirrorPlayer>().Nowin;
+        moveable_look = Player_S.GetComponent<MirrorPlayer>().moveable_look;
+        moveable_back = Player_S.GetComponent<MirrorPlayer>().moveable_back;
+        if (!Nowin && !moveable_look)
+        {
+
+            Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = false;
+            Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 1;
+
+
+            moveable_look = true;
+            Player_S.GetComponent<MirrorPlayer>().moveable_look = moveable_look;
+            Player_S.GetComponent<MirrorPlayer>().updateMirror();
+        }
+        else if (Nowin)
+        {
+            moveable_back = true;
+            Player_S.GetComponent<MirrorPlayer>().moveable_back = moveable_back;
+        }
+    }
+
+    public void UsingP()
+    {
+        this.transform.Find("MeasureHead").gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -0.3f), ForceMode.VelocityChange);
+    }
+
+    public void UsingO()
+    {
+        this.transform.Find("MeasureHead").gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 0.2f), ForceMode.VelocityChange);
+    }
+
+
+
     public void Measure()
     {
         this.transform.Find("MeasureHead").gameObject.GetComponent<Move_Caliper>().num = -0.1f;
@@ -41,25 +76,7 @@ public class Caliper_main : HTBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             Debug.Log("owo");
-            Nowin = Player_S.GetComponent<MirrorPlayer>().Nowin;
-            moveable_look = Player_S.GetComponent<MirrorPlayer>().moveable_look;
-            moveable_back = Player_S.GetComponent<MirrorPlayer>().moveable_back;
-            if (!Nowin && !moveable_look)
-            { 
-
-                Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = false;
-                Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 1;
-                
-
-                moveable_look = true;
-                Player_S.GetComponent<MirrorPlayer>().moveable_look = moveable_look;
-                Player_S.GetComponent<MirrorPlayer>().updateMirror();
-            }
-            else if (Nowin)
-            {
-                moveable_back = true;
-                Player_S.GetComponent<MirrorPlayer>().moveable_back = moveable_back;
-            }
+            UsingX();
         }
         Ori_place = Player_S.GetComponent<MirrorPlayer>().Ori_place;
         Ori_eulerAngles = Player_S.GetComponent<MirrorPlayer>().Ori_eulerAngles;
@@ -135,12 +152,12 @@ public class Caliper_main : HTBehaviour
         if (Input.GetKey(KeyCode.P))
         {
             Debug.Log("p");
-            this.transform.Find("MeasureHead").gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0,0 , -0.3f), ForceMode.VelocityChange);
+            UsingP();
         }
         if (Input.GetKey(KeyCode.O))
         {
             Debug.Log("o");
-            this.transform.Find("MeasureHead").gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 0.2f), ForceMode.VelocityChange);
+            UsingO();
         }
         Look_back();
         //判断游标卡尺是否到两侧顶点

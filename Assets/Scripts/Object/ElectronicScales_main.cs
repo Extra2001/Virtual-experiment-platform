@@ -24,6 +24,30 @@ public class ElectronicScales_main : HTBehaviour
     public bool Nowin = false;
     public double num;
     public int accuracy_ratings;
+
+    public void UsingX()
+    {
+        Nowin = Player_S.GetComponent<MirrorPlayer>().Nowin;
+        moveable_look = Player_S.GetComponent<MirrorPlayer>().moveable_look;
+        moveable_back = Player_S.GetComponent<MirrorPlayer>().moveable_back;
+        if (!Nowin && !moveable_look)
+        {
+
+            Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = false;
+            Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 1;
+
+
+            moveable_look = true;
+            Player_S.GetComponent<MirrorPlayer>().moveable_look = moveable_look;
+            Player_S.GetComponent<MirrorPlayer>().updateMirror();
+        }
+        else if (Nowin)
+        {
+            moveable_back = true;
+            Player_S.GetComponent<MirrorPlayer>().moveable_back = moveable_back;
+        }
+    }
+
     //调用子函数，显示数字
     public void ShowNum(float num)
     {
@@ -39,24 +63,7 @@ public class ElectronicScales_main : HTBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            Nowin = Player_S.GetComponent<MirrorPlayer>().Nowin;
-            moveable_look = Player_S.GetComponent<MirrorPlayer>().moveable_look;
-            moveable_back = Player_S.GetComponent<MirrorPlayer>().moveable_back;
-            if (!Nowin && !moveable_look)
-            {
-
-                Player_S.GetComponent<FirstPersonController>().m_MouseLookRotate = false;
-                Player_S.GetComponent<FirstPersonController>().m_WalkSpeed = 1;
-
-                moveable_look = true;
-                Player_S.GetComponent<MirrorPlayer>().moveable_look = moveable_look;
-                Player_S.GetComponent<MirrorPlayer>().updateMirror();
-            }
-            else if (Nowin)
-            {
-                moveable_back = true;
-                Player_S.GetComponent<MirrorPlayer>().moveable_back = moveable_back;
-            }
+            UsingX();
         }
         Ori_place = Player_S.GetComponent<MirrorPlayer>().Ori_place;
         Ori_eulerAngles = Player_S.GetComponent<MirrorPlayer>().Ori_eulerAngles;

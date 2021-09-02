@@ -22,6 +22,9 @@ public partial class FormulaController {
     ///<summary>
     ///递归计算有效数字 cbj
     ///</summary>
+    public CheckFloat GetCheckFloat() {
+        return this.CalcExpression(baseCell.value);
+    }
     private CheckFloat CalcExpression(string guidstr) {
         var cur = showedCells.Where((x) => x.thisGUID.Equals(guidstr)).Last();
         CheckFloat tmp1 = default, tmp2 = default;

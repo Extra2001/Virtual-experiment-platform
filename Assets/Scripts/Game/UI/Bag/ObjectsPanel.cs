@@ -29,7 +29,7 @@ public class ObjectsPanel : HTBehaviour
     {
         this.objectsModel = objectsModel;
 
-        //Image.sprite = CommonTools.GetSprite(objectsModel.PreviewImage);
+        Image.sprite = CommonTools.GetSprite(objectsModel.PreviewImage);
         Title.text = objectsModel.Name;
         Detail.text = objectsModel.DetailMessage;
         Integrated.text = objectsModel.Integrated ? "内置物体" : "用户导入物体";

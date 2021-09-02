@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// 存档数据模型

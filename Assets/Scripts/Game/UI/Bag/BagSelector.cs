@@ -10,9 +10,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
+using System.IO;
 
 public class BagSelector : HTBehaviour
 {
+    
     public BagItem BagItem;
     public GameObject BagItemRoot;
     public Button InstrumentButton;
@@ -25,7 +27,8 @@ public class BagSelector : HTBehaviour
     public HistorysPanel HistoryPanel;
 
     private Button CurrentActiveButton = null;
-
+    private GameObject PreviewImageCamera;
+    private RenderTexture TargetTexture;
     private void Start()
     {
         InstrumentButton.onClick.AddListener(() =>
@@ -53,6 +56,7 @@ public class BagSelector : HTBehaviour
             }
         });
         ImportButton.onClick.AddListener(ImportObject);
+        PreviewImageCamera = GameObject.Find("PreviewImageCamera");
 
         ChangeButtonColor(InstrumentButton);
         LoadInstruments();
@@ -118,11 +122,40 @@ public class BagSelector : HTBehaviour
     {
         if (ImportModel.OpenFile())
         {
-            ObjectsModel temp = GameManager.Instance.objectsModels[0];
-            
+            ObjectsModel temp = GameManager.Instance.objectsModels.FirstOrDefault();
+            CreateObject.Create(temp);
+            SavePreviewImage();
+            CreateObject.HideCurrent();
+
+
             ChangeButtonColor(ObjectButton);
             LoadObjects();
         }
+    }
+    
+    private void SavePreviewImage()
+    {
+        PreviewImageCamera.GetComponent<Camera>().enabled = true;
+        RenderTexture rt = PreviewImageCamera.GetComponent<Camera>().targetTexture;
+        
+        PreviewImageCamera.GetComponent<Camera>().Render();
+        RenderTexture.active = rt;
+        Debug.Log(RenderTexture.active);
+        Texture2D tex = new Texture2D(rt.width, rt.height, TextureFormat.ARGB32, false);
+        tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+        tex.Apply();
+
+        byte[] bytes = tex.EncodeToPNG();
+        var fileName = Guid.NewGuid().ToString() + ".png";
+        string path = string.Format(@"D:\123.png");
+        FileStream file = File.Open(path, FileMode.Create);
+        BinaryWriter writer = new BinaryWriter(file);
+        writer.Write(bytes);
+        file.Close();
+        writer.Close();
+        PreviewImageCamera.GetComponent<Camera>().enabled = false;
+        Destroy(tex);
+
     }
 
     public void DeleteObject(BagItem bagItem)

@@ -40,8 +40,9 @@ public class DealUncertainLearnUI : HTBehaviour
 
         try
         {
+            //formula = Field.GetComponent<FormulaController>().Serialize();
             formula = Field.GetComponent<FormulaController>().Expression;
-            CheckFloat temp = new CheckFloat("0.01");
+            CheckFloat temp = new CheckFloat(formula);
             answer = temp.TrueValue.ToString();
             AnswerText.text = answer;
 

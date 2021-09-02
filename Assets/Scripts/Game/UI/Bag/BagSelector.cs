@@ -118,6 +118,8 @@ public class BagSelector : HTBehaviour
     {
         if (ImportModel.OpenFile())
         {
+            ObjectsModel temp = GameManager.Instance.objectsModels[0];
+            
             ChangeButtonColor(ObjectButton);
             LoadObjects();
         }

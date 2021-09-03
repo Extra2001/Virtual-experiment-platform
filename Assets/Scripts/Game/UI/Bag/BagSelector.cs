@@ -123,9 +123,9 @@ public class BagSelector : HTBehaviour
         if (ImportModel.OpenFile())
         {
             ObjectsModel temp = GameManager.Instance.objectsModels.FirstOrDefault();
-            CreateObject.Create(temp);
-            SavePreviewImage();
-            CreateObject.HideCurrent();
+            GameObject tempObject = CreateObject.CreateSingleObj(temp.ResourcePath);
+            SavePreviewImage(temp.ResourcePath);
+            Destroy(tempObject);
 
 
             ChangeButtonColor(ObjectButton);
@@ -133,7 +133,7 @@ public class BagSelector : HTBehaviour
         }
     }
     
-    private void SavePreviewImage()
+    private void SavePreviewImage(string path)
     {
         PreviewImageCamera.GetComponent<Camera>().enabled = true;
         RenderTexture rt = PreviewImageCamera.GetComponent<Camera>().targetTexture;
@@ -146,9 +146,8 @@ public class BagSelector : HTBehaviour
         tex.Apply();
 
         byte[] bytes = tex.EncodeToPNG();
-        var fileName = Guid.NewGuid().ToString() + ".png";
-        string path = string.Format(@"D:\123.png");
-        FileStream file = File.Open(path, FileMode.Create);
+        string filepath = path.Replace(".obj", ".png");
+        FileStream file = File.Open(filepath, FileMode.Create);
         BinaryWriter writer = new BinaryWriter(file);
         writer.Write(bytes);
         file.Close();

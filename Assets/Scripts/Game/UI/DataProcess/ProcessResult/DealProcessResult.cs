@@ -64,19 +64,49 @@ public class DealProcessResult : HTBehaviour
         });
     }
 
+    private string double2string(double value)
+    {
+        var str = value.ToString();
+        if (str.Contains("."))
+            str = str.TrimEnd('0');
+        if (str.EndsWith("."))
+            str = str.Remove(str.Length - 1, 1);
+        return str;
+    }
+
     private void CheckRightOrWrong()
     {
         CalcArgs calc = new CalcArgs();
         QuantityError ComplexErr = new QuantityError();
+        List<QuantityError> recordErrors = new List<QuantityError>();
+
         foreach (var item in RecordManager.tempRecord.quantities)
         {
             calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / System.Math.Sqrt(3), item.Groups);
             calc.Measure(item.Symbol, item.Data.ToDouble().ToArray());
             calc.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
-        }
 
-        measureresult = CalcArgs.CalculateMeasureValue(calc);
+            var instrument = item.InstrumentType.CreateInstrumentInstance();
+
+            // 以下判断有效数字位数
+            foreach (var subitem in item.Data)
+            {
+                var (res, answer) = instrument.CheckErrorLimit(subitem);
+                if (!res)
+                {
+                    recordErrors.Add(new QuantityError()
+                    {
+                        answer = answer,
+                        answerunc = subitem,
+                        Message = "读取数据有效数字位数与仪器不匹配。",
+                        Title = "有效数字位数错误"
+                    });
+                }
+            }
+        }
         quantityErrors = new List<QuantityError>();
+        measureresult = CalcArgs.CalculateMeasureValue(calc);
+
         foreach (var item in measureresult.err)
         {
             if (item.Message != "计算正确")
@@ -84,16 +114,17 @@ public class DealProcessResult : HTBehaviour
                 MeasureErrorFlag = true;
                 quantityErrors.Add(item);
             }
-
         }
+
+        if (recordErrors.Count > RecordManager.tempRecord.score.DataRecordError)
+            RecordManager.tempRecord.score.DataRecordError = recordErrors.Count;
+        else if (recordErrors.Count < RecordManager.tempRecord.score.DataRecordError)
+            RecordManager.tempRecord.score.DataRecordError += recordErrors.Count;
 
         if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
-        {
             RecordManager.tempRecord.score.MeasureQuantityError = quantityErrors.Count;
-        }else if(quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
-        {
+        else if (quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
             RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
-        }
 
         if (MeasureErrorFlag)
         {
@@ -105,7 +136,7 @@ public class DealProcessResult : HTBehaviour
         {
             calc.ComplexUserUnput(RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted(), RecordManager.tempRecord.complexQuantityModel.UncertainExpression.GetExpressionExecuted());
             complexresult = CalcArgs.CalculateComplexValue(RecordManager.tempRecord.stringExpression, calc);
-            if(complexresult.status != "计算无误")
+            if (complexresult.status != "计算无误")
             {
                 RecordManager.tempRecord.score.ComplexQuantityError += 1;
                 ComplexErr.Title = complexresult.err.Title;
@@ -114,7 +145,7 @@ public class DealProcessResult : HTBehaviour
                 ComplexErr.answerunc = complexresult.uncexpr.ToLaTeX();
                 quantityErrors.Add(ComplexErr);
             }
-            
+
         }
 
 
@@ -140,7 +171,7 @@ public class DealProcessResult : HTBehaviour
             Title.text = $"你的错误{curError + 1}/{quantityErrors.Count}";
             ErrorTitle.text = current.Title;
             ErrorMessage.text = current.Message;
-            
+
             if (current.ua != null)
             {
                 formula1.SetActive(true);

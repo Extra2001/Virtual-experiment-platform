@@ -118,6 +118,50 @@ public class CreateObject : HTBehaviour
         var objLoader = new OBJLoader();
         Create(objLoader.Load(model.ResourcePath));
     }
+    public static GameObject CreateSingleObj(string path)
+    {
+        var objLoader = new OBJLoader();
+        var ret = objLoader.Load(path);
+
+        Vector3 ClosestPoint = new Vector3();
+        Vector3 FarthestPoint = new Vector3();
+        foreach (Transform item in ret.transform)
+        {
+            // 挂载组件
+            ResetModelPivot(item.gameObject);
+
+            //获取所有子物体中的最近点和最远点
+            var Temp = item.gameObject.GetComponent<MeshFilter>().mesh.bounds.min;
+            if (Temp.x < ClosestPoint.x)
+                ClosestPoint.x = Temp.x;
+            if (Temp.y < ClosestPoint.y)
+                ClosestPoint.y = Temp.y;
+            if (Temp.z < ClosestPoint.z)
+                ClosestPoint.z = Temp.z;
+
+            Temp = item.gameObject.GetComponent<MeshFilter>().mesh.bounds.max;
+            if (Temp.x > FarthestPoint.x)
+                FarthestPoint.x = Temp.x;
+            if (Temp.y > FarthestPoint.y)
+                FarthestPoint.y = Temp.y;
+            if (Temp.z > FarthestPoint.z)
+                FarthestPoint.z = Temp.z;
+        }
+        // 计算基础大小
+        var BaseSize = new Vector3(Mathf.Abs(FarthestPoint.x - ClosestPoint.x),
+            Mathf.Abs(FarthestPoint.y - ClosestPoint.y),
+            Mathf.Abs(FarthestPoint.z - ClosestPoint.z));
+        // 计算scale
+        var max = Mathf.Max(BaseSize.x, BaseSize.y, BaseSize.z);
+        var scale = 2f / max;
+        ret.transform.localScale = new Vector3(scale, scale, scale);
+        var rec = RecordManager.tempRecord;
+        // 计算位置
+        ret.transform.position = new Vector3(rec.objectStartPosition[0],
+            rec.objectStartPosition[1] + BaseSize.y * scale / 2, rec.objectStartPosition[2]);
+
+        return ret;
+    }
     private static void CreatePrefab()
     {
         var model = RecordManager.tempRecord.showedObject;

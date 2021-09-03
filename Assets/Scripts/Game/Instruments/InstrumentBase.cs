@@ -7,6 +7,8 @@ using UnityEngine;
 using HT.Framework;
 using UnityEngine.UI;
 using System.Linq;
+using System;
+using System.Text.RegularExpressions;
 
 public interface IMeasurable
 {
@@ -139,6 +141,29 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         //{
         //    Debug.Log("...");
         //});
+    }
+
+    public virtual (bool, string) CheckErrorLimit(string value)
+    {
+        var str = ErrorLimit.ToString();
+        if (str.Contains("."))
+            str = str.TrimEnd('0');
+        if (str.EndsWith("."))
+            str = str.Remove(str.Length - 1, 1);
+
+        if (str.Contains("."))
+        {
+            var rightModel = Regex.Replace(str, "/[0-9]/g", "0");
+            var right = Convert.ToDouble(value).ToString(rightModel);
+
+            if (value.Contains("."))
+            {
+
+            }
+            else return (false, right);
+        }
+
+        return (true, null);
     }
 
     public override void OnShow()//仪器展示的时候调用一次

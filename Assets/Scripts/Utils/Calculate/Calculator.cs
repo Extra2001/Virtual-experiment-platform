@@ -527,7 +527,7 @@ public class CalcArgs {//一次计算
             //vals[$"u_{item.Key}"] = unc.unc;
             if(unc.err != null) {
                 flag = true;
-                errors.Add(new QuantityError { Message = unc.err, Title = $"对物理量{item.Key}的检查", ua = StaticMethods.GetUaExprLatex(item.Key), ub = StaticMethods.GetUbExprLatex(item.Key), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });
+                errors.Add(new QuantityError { Message = unc.err, Title = $"对物理量{item.Key}的检查", ua = StaticMethods.GetUaExprLatex(item.Key), ub = StaticMethods.GetUbExprLatex(item.Key), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub), Symbol = item.Key });
             }
             else {
                 errors.Add(new QuantityError { Message = "计算正确", Title = $"对物理量{item.Key}的检查", ua = StaticMethods.GetUaExprLatex(item.Key), ub = StaticMethods.GetUbExprLatex(item.Key), unc = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub) });

@@ -7,14 +7,20 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class DealProcessResult : HTBehaviour
 {
-    public GameObject formula1;
-    public GameObject formula2;
-    public GameObject formula3;
-    public GameObject formula4;
-    public GameObject formula5;
+    //public GameObject formula1;
+    //public GameObject formula2;
+    //public GameObject formula3;
+    //public GameObject formula4;
+    //public GameObject formula5;
+    public ProcessResultCell cell1;
+    public ProcessResultCell cell2;
+    public ProcessResultCell cell3;
+    public ProcessResultCell cell4;
+    public ProcessResultCell cell5;
 
     public Text Title;
     public Text SuccessMessage;
@@ -40,6 +46,11 @@ public class DealProcessResult : HTBehaviour
     {
         public string Title { get; set; }
         public string Message { get; set; }
+        public string Symbol { get; set; }
+        public List<FormulaNode> userUa { get; set; }
+        public List<FormulaNode> userUb { get; set; }
+        public List<FormulaNode> userUnc { get; set; }
+
         //直接测量量的ua,ub,unc
         public string ua { get; set; }
         public string ub { get; set; }
@@ -64,16 +75,6 @@ public class DealProcessResult : HTBehaviour
         });
     }
 
-    private string double2string(double value)
-    {
-        var str = value.ToString();
-        if (str.Contains("."))
-            str = str.TrimEnd('0');
-        if (str.EndsWith("."))
-            str = str.Remove(str.Length - 1, 1);
-        return str;
-    }
-
     private void CheckRightOrWrong()
     {
         CalcArgs calc = new CalcArgs();
@@ -82,18 +83,17 @@ public class DealProcessResult : HTBehaviour
 
         foreach (var item in RecordManager.tempRecord.quantities)
         {
-            calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / System.Math.Sqrt(3), item.Groups);
+            calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.Groups);
             calc.Measure(item.Symbol, item.Data.ToDouble().ToArray());
             calc.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
 
             var instrument = item.InstrumentType.CreateInstrumentInstance();
-
             // 以下判断有效数字位数
             foreach (var subitem in item.Data)
             {
                 var (res, answer) = instrument.CheckErrorLimit(subitem);
+                var (res2, answer2) = instrument.CheckULLimit(subitem);
                 if (!res)
-                {
                     recordErrors.Add(new QuantityError()
                     {
                         answer = answer,
@@ -101,7 +101,14 @@ public class DealProcessResult : HTBehaviour
                         Message = "读取数据有效数字位数与仪器不匹配。",
                         Title = "有效数字位数错误"
                     });
-                }
+                if (!res2)
+                    recordErrors.Add(new QuantityError()
+                    {
+                        answer = null,
+                        answerunc = subitem,
+                        Message = answer2,
+                        Title = "记录数字错误"
+                    });
             }
         }
         quantityErrors = new List<QuantityError>();
@@ -111,6 +118,10 @@ public class DealProcessResult : HTBehaviour
         {
             if (item.Message != "计算正确")
             {
+                var quan = RecordManager.tempRecord.quantities.Where(x => x.Symbol.Equals(item.Symbol)).FirstOrDefault();
+                item.userUa = quan.UaExpression;
+                item.userUb = quan.UbExpression;
+                item.userUnc = quan.ComplexExpression;
                 MeasureErrorFlag = true;
                 quantityErrors.Add(item);
             }
@@ -176,66 +187,64 @@ public class DealProcessResult : HTBehaviour
             ErrorTitle.text = current.Title;
             ErrorMessage.text = current.Message;
 
+            var messages = current.Message.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
             if (current.ua != null)
             {
-                formula1.SetActive(true);
-                LatexEquationRender.Render(current.ua, res =>
-                {
-                    formula1.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
-                });
+                cell1.gameObject.SetActive(true);
+                string detail = null;
+                var find = messages.FindIndex(x => x.Equals("A类不确定度计算有误"));
+                if (find != -1 && messages[find + 1].StartsWith("是否"))
+                    detail = messages[find + 1];
+                cell1.ShowData("A类不确定度计算有误", detail, current.ua, current.userUa);
             }
             else
             {
-                formula1.SetActive(false);
+                cell1.gameObject.SetActive(false);
             }
             if (current.ub != null)
             {
-                formula2.SetActive(true);
-                LatexEquationRender.Render(current.ub, res =>
-                {
-                    formula2.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
-                });
+                cell2.gameObject.SetActive(true);
+                string detail = null;
+                var find = messages.FindIndex(x => x.Equals("B类不确定度计算有误"));
+                if (find != -1 && messages[find + 1].StartsWith("是否"))
+                    detail = messages[find + 1];
+                cell2.ShowData("B类不确定度计算有误", detail, current.ub, current.userUb);
             }
             else
             {
-                formula2.SetActive(false);
+                cell2.gameObject.SetActive(false);
             }
             if (current.unc != null)
             {
-                formula3.SetActive(true);
-                LatexEquationRender.Render(current.unc, res =>
-                {
-                    formula3.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
-                    //formula3.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
-                });
+                cell3.gameObject.SetActive(true);
+                string detail = null;
+                var find = messages.FindIndex(x => x.Equals("合成不确定度有误"));
+                if (find != -1 && messages[find + 1].StartsWith("是否"))
+                    detail = messages[find + 1];
+                cell3.ShowData("合成不确定度有误", detail, current.unc, current.userUnc);
             }
             else
             {
-                formula3.SetActive(false);
+                cell3.gameObject.SetActive(false);
             }
             if (current.answer != null)
             {
-                formula4.SetActive(true);
-                LatexEquationRender.Render(current.answer, res =>
-                {
-                    formula4.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
-                });
+                cell4.gameObject.SetActive(true);
+                cell4.ShowData("最终合成结果计算有误", rightExpression: current.answer);
             }
             else
             {
-                formula4.SetActive(false);
+                cell4.gameObject.SetActive(false);
             }
             if (current.answerunc != null)
             {
-                formula5.SetActive(true);
-                LatexEquationRender.Render(current.answerunc, res =>
-                {
-                    formula5.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
-                });
+                cell5.gameObject.SetActive(true);
+                cell5.ShowData("最终合成不确定度计算有误", rightExpression: current.answerunc);
             }
             else
             {
-                formula5.SetActive(false);
+                cell5.gameObject.SetActive(false);
             }
 
             curError++;
@@ -251,11 +260,11 @@ public class DealProcessResult : HTBehaviour
         }
         else if (curError == quantityErrors.Count)
         {
-            formula1.SetActive(false);
-            formula2.SetActive(false);
-            formula3.SetActive(false);
-            formula4.SetActive(false);
-            formula5.SetActive(false);
+            cell1.gameObject.SetActive(false);
+            cell2.gameObject.SetActive(false);
+            cell3.gameObject.SetActive(false);
+            cell4.gameObject.SetActive(false);
+            cell5.gameObject.SetActive(false);
             double score = RecordManager.tempRecord.score.CalcScore();
             Title.text = "本次实验得分:" + String.Format("{0:F1}", score) + "/4.0";
             if (score - 4 == 0)

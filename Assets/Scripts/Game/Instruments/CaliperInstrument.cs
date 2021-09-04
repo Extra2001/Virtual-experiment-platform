@@ -38,15 +38,15 @@ public class CaliperInstrument : DirectMeasurementInstrumentBase
         base.ShowGameButton(buttonItems);
         buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(88, 0, 0, 0);//模拟快捷键输入
+            Entity.FindChildren("Caliper_son").GetComponent<Caliper_main>().UsingX();
         });
         buttonItems.Where(x => x.GameObject.name.Equals("OutwardButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(79, 0, 0, 0);            
+            Entity.FindChildren("Caliper_son").GetComponent<Caliper_main>().UsingO();
         });
         buttonItems.Where(x => x.GameObject.name.Equals("InwardButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(80, 0, 0, 0);
+            Entity.FindChildren("Caliper_son").GetComponent<Caliper_main>().UsingP();
         });
     }
 }

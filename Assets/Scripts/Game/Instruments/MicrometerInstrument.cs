@@ -39,7 +39,7 @@ public class MicrometerInstrument : DirectMeasurementInstrumentBase
         base.ShowGameButton(buttonItems);
         buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(88, 0, 0, 0);
+            Entity.FindChildren("Micrometer_son").GetComponent<Micrometer_main>().UsingX();
         });
         buttonItems.Where(x => x.GameObject.name.Equals("OutwardButton")).FirstOrDefault().OnClick.Add(() =>
         {

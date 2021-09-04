@@ -71,7 +71,7 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
         base.ShowGameButton(buttonItems);
         buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(88, 0, 0, 0);
+            Entity.FindChildren("ElectronicScales_son").GetComponent<ElectronicScales_main>().UsingX();
         });
         buttonItems.Where(x => x.GameObject.name.Equals("ResetButton")).FirstOrDefault().OnClick.Add(() =>
         {

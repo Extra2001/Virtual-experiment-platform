@@ -102,7 +102,7 @@ public class VoltmeterInstruction : IndirectMeasurementInstrumentBase
         base.ShowGameButton(buttonItems);
         buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(88, 0, 0, 0);
+            Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().UsingX();
         });
         buttonItems.Where(x => x.GameObject.name.Equals("ResetButton")).FirstOrDefault().OnClick.Add(() =>
         {

@@ -145,7 +145,9 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public virtual (bool, string) CheckErrorLimit(string value)
     {
-        var str = ErrorLimit.ToString();
+        if (Convert.ToDouble(value) == 0.0) return (true, null);
+
+        var str = 0.5.ToString();
         if (str.Contains("."))
             str = str.TrimEnd('0');
         if (str.EndsWith("."))
@@ -153,16 +155,51 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
         if (str.Contains("."))
         {
-            var rightModel = Regex.Replace(str, "/[0-9]/g", "0");
-            var right = Convert.ToDouble(value).ToString(rightModel);
-
+            var rightModel = Regex.Replace(str, @"[0-9]", "0", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            var right = Convert.ToDecimal(value).ToString(rightModel);
+            if (value.IndexOf('.') != value.LastIndexOf('.'))
+                return (false, right);
             if (value.Contains("."))
             {
-
+                var s1 = str.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Last();
+                var s2 = value.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Last();
+                if (s1.Length != s2.Length) return (false, right);
+                return (true, null);
             }
             else return (false, right);
         }
+        else
+        {
+            var match = Regex.Match(str, "[1-9]", RegexOptions.IgnoreCase | RegexOptions.RightToLeft | RegexOptions.Compiled);
+            var zeroCount = str.Length - match.Index - 1;
+            if (zeroCount == 0)
+            {
+                if (value.Contains("."))
+                    return (false, value.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).First());
+                else return (true, null);
+            }
+            var input = value.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).First();
+            if (input.Length < zeroCount)
+                return (false, "0");
 
+            string a = "";
+            for (int i = 0; i < zeroCount; i++) a += "0";
+
+            var right = Regex.Replace(input, @"\d{" + zeroCount + "}$", a);
+            if (value.Contains("."))
+                return (false, right);
+            var userZeroCount = Regex.Match(value, "0+$").ToString().Length;
+            if (zeroCount != userZeroCount)
+                return (false, right);
+            return (true, null);
+        }
+    }
+
+    public virtual (bool, string) CheckULLimit(string value)
+    {
+        var val = Convert.ToDouble(value);
+        if (val > URV || val < LRV)
+            return (false, "记录值超出仪器的量程范围");
         return (true, null);
     }
 

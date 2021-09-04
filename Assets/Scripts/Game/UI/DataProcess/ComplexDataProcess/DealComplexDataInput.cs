@@ -188,6 +188,7 @@ public class DealComplexDataInput : HTBehaviour
             RecordManager.tempRecord.complexQuantityModel.UncertainState = 2;
             RecordManager.tempRecord.complexQuantityModel.Uncertain = Field2.GetComponent<FormulaController>().ExpressionExecuted;
             RecordManager.tempRecord.complexQuantityModel.UncertainExpression = Field2.GetComponent<FormulaController>().Serialize();
+            Debug.LogWarning(Field2.GetComponent<FormulaController>().Expression);
         }
         catch
         {

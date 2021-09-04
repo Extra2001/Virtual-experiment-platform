@@ -276,7 +276,7 @@ public class DealProcessResult : HTBehaviour
                 SuccessMessage.text = "本次实验中，\n";
                 if (RecordManager.tempRecord.score.DataRecordError > 0)
                 {
-                    SuccessMessage.text += "数据记录过程犯了" + RecordManager.tempRecord.score.MeasureQuantityError + "次错误\n";
+                    SuccessMessage.text += "数据记录过程犯了" + RecordManager.tempRecord.score.DataRecordError + "次错误\n";
                 }
                 else if (RecordManager.tempRecord.score.MeasureQuantityError > 0)
                 {

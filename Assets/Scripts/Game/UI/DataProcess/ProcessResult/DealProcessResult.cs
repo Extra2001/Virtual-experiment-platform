@@ -125,6 +125,10 @@ public class DealProcessResult : HTBehaviour
                 MeasureErrorFlag = true;
                 quantityErrors.Add(item);
             }
+            else
+            {
+                MeasureErrorFlag = false;
+            }
         }
 
         if (recordErrors.Count > RecordManager.tempRecord.score.DataRecordError)

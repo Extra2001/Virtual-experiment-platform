@@ -128,6 +128,8 @@ public class CreateObject : HTBehaviour
         foreach (Transform item in ret.transform)
         {
             // 挂载组件
+            item.gameObject.AddComponent<MeshCollider>();
+            item.gameObject.layer = 13;
             ResetModelPivot(item.gameObject);
 
             //获取所有子物体中的最近点和最远点

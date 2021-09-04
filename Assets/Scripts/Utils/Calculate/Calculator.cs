@@ -179,15 +179,13 @@ public struct CheckFloat {//带有效数字的小数
     }
     public static CheckFloat operator +(CheckFloat lhs, CheckFloat rhs) {//有效数字的加法
         int lo = Math.Max(lhs.LoDigit, rhs.LoDigit);
-        int keep1 = lhs.HiDigit - lo + 1, keep2 = rhs.HiDigit - lo + 1;
         double tmp = lhs.TrueValue + rhs.TrueValue;
-        return new CheckFloat(KeepTo(tmp, lo).ToString($"G{Math.Max(lhs.HiDigit, rhs.HiDigit)}"));
+        return new CheckFloat(KeepTo(tmp, lo).ToString($"G{lo}"));
     }
     public static CheckFloat operator -(CheckFloat lhs, CheckFloat rhs) {//有效数字的减法
         int lo = Math.Max(lhs.LoDigit, rhs.LoDigit);
-        int keep1 = lhs.HiDigit - lo + 1, keep2 = rhs.HiDigit - lo + 1;
         double tmp = lhs.TrueValue - rhs.TrueValue;
-        return new CheckFloat(KeepTo(tmp, lo).ToString($"G{Math.Max(lhs.HiDigit, rhs.HiDigit)}"));
+        return new CheckFloat(KeepTo(tmp, lo).ToString($"G{lo}"));
     }
     public static CheckFloat operator *(CheckFloat lhs, CheckFloat rhs) {//有效数字的乘法
         double tmp = KeepEffective((lhs.TrueValue * rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));

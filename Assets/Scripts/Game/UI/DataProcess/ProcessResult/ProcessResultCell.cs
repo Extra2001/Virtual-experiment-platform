@@ -25,11 +25,10 @@ public class ProcessResultCell : HTBehaviour
         else
         {
             ExpressionPanel.SetActive(true);
-            Debug.Log(title + rightExpression);
             LatexEquationRender.Render(rightExpression, res =>
                 {
-                    //ExpressionPanel.GetComponentInChildren<Image>(true).FitHeight(res);
-                    ExpressionPanel.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                    ExpressionPanel.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+                    //ExpressionPanel.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
                 });
         }
         if (userExpression == null)

@@ -3,6 +3,7 @@
     描述：右键物体信息数据模型
 *************************************************************************************/
 using HT.Framework;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -62,6 +63,17 @@ public class ObjectInfo : HTBehaviour
         _ScaleSlider.value = objectValue.Scale;
         _MassInput.text = objectValue.Mass.ToString();
         _Gravity.isOn = objectValue.Gravity;
+
+        if(value.ObjectModel.ResourcePath.EndsWith("obj") || Path.GetFileName(value.ObjectModel.ResourcePath).Contains("."))
+        {
+            _ScaleSlider.interactable = false;
+            _ScaleInput.interactable = false;
+        }
+        else
+        {
+            _ScaleSlider.interactable = true;
+            _ScaleInput.interactable = true;
+        }
 
         StartCoroutine(CommonTools.DelayGet(_RootPanel.rectTransform().SetFloat));
     }

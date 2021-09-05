@@ -42,7 +42,7 @@ public class DealUncertainLearnUI : HTBehaviour
 
             CheckFloat temp = Field.GetComponent<FormulaController>().GetCheckFloat();
             answer = temp.TrueValue.ToString();
-            AnswerText.text = answer;
+            
 
             input = UserInput.text;
             if (input == "")
@@ -56,6 +56,7 @@ public class DealUncertainLearnUI : HTBehaviour
             }
             else if (input == answer)
             {
+                AnswerText.text = answer;
                 yes.transform.localScale = new Vector3(1, 1, 1);
                 yes.SetActive(true);
                 no.SetActive(false);
@@ -65,6 +66,7 @@ public class DealUncertainLearnUI : HTBehaviour
             }
             else
             {
+                AnswerText.text = answer;
                 no.transform.localScale = new Vector3(1, 1, 1);
                 yes.SetActive(false);
                 no.SetActive(true);

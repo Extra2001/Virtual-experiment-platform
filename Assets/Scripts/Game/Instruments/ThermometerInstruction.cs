@@ -60,6 +60,7 @@ public class ThermometerInstruction : IndirectMeasurementInstrumentBase
         base.ShowGameButton(buttonItems);
         buttonItems.Where(x => x.GameObject.name.Equals("CloseButton")).FirstOrDefault().OnClick.Add(() =>
         {
+            Entity.FindChildren("Thermometer_son").GetComponent<thermometer_main>().UsingX();
             KeyboardManager.Keybd_event(88, 0, 0, 0);
         });
         buttonItems.Where(x => x.GameObject.name.Equals("ResetButton")).FirstOrDefault().OnClick.Add(() =>

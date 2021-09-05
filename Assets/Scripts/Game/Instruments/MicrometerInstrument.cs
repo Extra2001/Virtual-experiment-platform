@@ -43,11 +43,11 @@ public class MicrometerInstrument : DirectMeasurementInstrumentBase
         });
         buttonItems.Where(x => x.GameObject.name.Equals("OutwardButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(80, 0, 0, 0);
+            Entity.FindChildren("Micrometer_son").GetComponent<Micrometer_main>().UsingO();
         });
         buttonItems.Where(x => x.GameObject.name.Equals("InwardButton")).FirstOrDefault().OnClick.Add(() =>
         {
-            KeyboardManager.Keybd_event(79, 0, 0, 0);
+            Entity.FindChildren("Micrometer_son").GetComponent<Micrometer_main>().UsingP();
         });
     }
 }

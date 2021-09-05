@@ -15,13 +15,13 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     private Dictionary<KeyCode, Action> registeredHoldOn = new Dictionary<KeyCode, Action>();
     private Dictionary<int, Tuple<Func<bool>, Action>> registedCustom = new Dictionary<int, Tuple<Func<bool>, Action>>();
 
-    [DllImport("user32.dll", EntryPoint = "keybd_event")]//此处只用于windows平台的模拟输入，安卓平台需更改
+    /*[DllImport("user32.dll", EntryPoint = "keybd_event")]//此处只用于windows平台的模拟输入，安卓平台需更改
     public static extern void Keybd_event(
           byte bvk,//虚拟键值 ESC键对应的是27
           byte bScan,//0
           int dwFlags,//0为按下，1按住，2释放
           int dwExtraInfo//0
-          );
+          );*/
 
 
     private void Update()

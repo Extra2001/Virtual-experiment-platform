@@ -68,12 +68,12 @@ public class Micrometer_main : HTBehaviour
             IsKaKaed = true;
         }
 
-        this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = -3;
+        this.transform.Find("Micrometer_grandson").Find("srick").gameObject.GetComponent<Rotate_micrometer>().Rotatenum(1f);
     }
 
     public void UsingO()
     {
-        this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = 3;
+        this.transform.Find("Micrometer_grandson").Find("srick").gameObject.GetComponent<Rotate_micrometer>().Rotatenum(-1f);
     }
 
     //通用行为
@@ -162,13 +162,6 @@ public class Micrometer_main : HTBehaviour
         }
         Look_back();
 
-        if (this.transform.Find("Micrometer_grandson").Find("rotatebody_main").transform.localPosition[1] >= 1.3156f && this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num < 0)
-        {
-            this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = 0;
-        }
-        if (this.transform.Find("Micrometer_grandson").Find("rotatebody_main").transform.localPosition[1] <=1.227f&& this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num > 0)
-        {
-            this.transform.Find("Micrometer_grandson").Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num = 0;
-        }
+       
     }
 }

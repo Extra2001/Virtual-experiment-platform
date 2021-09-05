@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class ProcessResultCell : HTBehaviour
 {
     public GameObject ExpressionPanel;
+    public Image Expression;
     public GameObject FormulaControllerPanel;
+    public FormulaController Formula;
     public Text Title;
     public Text Detail;
 
@@ -27,7 +29,7 @@ public class ProcessResultCell : HTBehaviour
             ExpressionPanel.SetActive(true);
             LatexEquationRender.Render(rightExpression, res =>
                 {
-                    ExpressionPanel.FindChildren("ExpressionImage").GetComponent<Image>().FitHeight(res);
+                    Expression.FitHeight(res);
                     //ExpressionPanel.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
                 });
         }
@@ -36,7 +38,8 @@ public class ProcessResultCell : HTBehaviour
         else
         {
             FormulaControllerPanel.SetActive(true);
-            FormulaControllerPanel.GetComponentInChildren<FormulaController>(true).LoadFormula(userExpression);
+            Formula.LoadFormula(userExpression);
+            Formula.interactable = false;
         }
     }
 }

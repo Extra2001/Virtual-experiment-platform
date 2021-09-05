@@ -43,13 +43,25 @@ public partial class FormulaController : MonoBehaviour
     private GameObject ComplexPanel;
     [SerializeField]
     private Transform ComplexPanelRoot;
+    [SerializeField]
+    private GameObject EnabledMask;
     #endregion
     private List<FormulaCell> showedCells = new List<FormulaCell>();
     private Button clickedButton;
     private FormulaCell clickedCell;
+    public bool interactable
+    {
+        get => !EnabledMask.activeSelf;
+        set
+        {
+            EnabledMask.SetActive(!value);
+            Selector.SetActive(value);
+            MeasuredSelector.SetActive(value);
+            ComplexSelector.SetActive(value);
+        }
+    }
 
     public delegate void OnSelectCell();
-
     public event OnSelectCell onSelectCell;
 
     private void Start()

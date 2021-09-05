@@ -30,7 +30,7 @@ public class ProcessResultCell : HTBehaviour
             LatexEquationRender.Render(rightExpression, res =>
                 {
                     Expression.FitHeight(res);
-                    //ExpressionPanel.FindChildren("ExpressionImage").GetComponent<Image>().sprite = res;
+                    //Expression.sprite = res;
                 });
         }
         if (userExpression == null)

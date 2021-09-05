@@ -10,9 +10,10 @@ public class Collide : HTBehaviour
 {
     void OnCollisionStay(Collision collision)
     {
-        if ((collision.collider.tag == "Mesured") && this.transform.parent.transform.Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num<=-0.5f)
+        if ((collision.collider.tag == "Mesured") && this.transform.parent.transform.Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num<=-3f)
         {
-            this.transform.parent.transform.Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num += 0.5f;
+            Debug.Log("1");
+            this.transform.parent.transform.Find("rotatebody_main").gameObject.GetComponent<Rotate_micrometer>().num += 3f;
         }
     }
 }

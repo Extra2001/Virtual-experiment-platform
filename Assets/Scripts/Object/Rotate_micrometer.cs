@@ -11,19 +11,27 @@ public class Rotate_micrometer : HTBehaviour
 {
     public float num;
     private int prenum;
+    public float fnum;
     public void Rotatenum(float num)
     {
-        num = num / 5.0f;
 
-            this.transform.localPosition -= new Vector3(0, (0.53f * num) / 5000f, 0);
+        Forces(num);
+        //num = num / 5.0f;
 
-            //this.transform.parent.Find("对象014").Find("Camera").localPosition -= new Vector3(0, (0.53f*num)/5000f, 0);
-            //神秘bug
+        //    this.transform.localPosition -= new Vector3(0, (0.53f * num) / 5000f, 0);
 
-            this.transform.Rotate(new Vector3(0, num / 50.0f * 360.0f, 0));
+        //    //this.transform.parent.Find("对象014").Find("Camera").localPosition -= new Vector3(0, (0.53f*num)/5000f, 0);
+        //    //神秘bug
+
+        //    this.transform.Rotate(new Vector3(0, num / 50.0f * 360.0f, 0));
+    }
+    public void Forces(float num)
+    {
+        gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 0, num), ForceMode.Impulse);
     }
 
-    // Start is called before the first frame update
+
+        // Start is called before the first frame update
     void Start()
     {
         
@@ -32,6 +40,14 @@ public class Rotate_micrometer : HTBehaviour
     // Update is called once per frame
     void Update()
     {
-        Rotatenum(num);
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Rotatenum(1f);
+        }
+        if (gameObject.GetComponent<Rigidbody>().velocity.z > 0)
+        {
+            gameObject.GetComponent<Rigidbody>().velocity = new Vector3(gameObject.GetComponent<Rigidbody>().velocity.x, gameObject.GetComponent<Rigidbody>().velocity.y, gameObject.GetComponent<Rigidbody>().velocity.z/2);
+        }
     }
+
 }

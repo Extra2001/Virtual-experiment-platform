@@ -100,6 +100,7 @@ public class CreateObject : HTBehaviour
         // 计算scale
         var max = Mathf.Max(objectValue.BaseSize.x, objectValue.BaseSize.y, objectValue.BaseSize.z);
         var scale = 2f / max;
+        objectValue.BaseScale = scale;
         objectValue.Scale = scale;
         var rec = RecordManager.tempRecord;
         // 计算位置

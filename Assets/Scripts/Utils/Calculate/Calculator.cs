@@ -39,31 +39,43 @@ public partial class FormulaController {
         else if(cur.ReplaceFlags.Count == 1) {
             //函数
             tmp1 = CalcExpression(cur.ReplaceFlags.First().Value);
-            switch(cur.value) {
-                case "sin":
-                    return CheckFloat.Sin(tmp1);
-                case "cos":
-                    return CheckFloat.Cos(tmp1);
-                case "tan":
-                    return CheckFloat.Tan(tmp1);
-                case "asin":
-                    return CheckFloat.Asin(tmp1);
-                case "acos":
-                    return CheckFloat.Acos(tmp1);
-                case "atan":
-                    return CheckFloat.Atan(tmp1);
-                case "ln":
+            if(cur.value.Contains("sin")) {
+                return CheckFloat.Sin(tmp1);
+            }
+            else if(cur.value.Contains("cos")) {
+                return CheckFloat.Cos(tmp1);
+            }
+            else if(cur.value.Contains("tan")) {
+                return CheckFloat.Tan(tmp1);
+            }
+            else if(cur.value.Contains("asin")) {
+                return CheckFloat.Asin(tmp1);
+            }
+            else if(cur.value.Contains("acos")) {
+                return CheckFloat.Acos(tmp1);
+            }
+            else if(cur.value.Contains("atan")) {
+                return CheckFloat.Cos(tmp1);
+            }
+            else if(cur.value.Contains("log")) {
+                if(cur.value.Contains("log(10)")) {
+                    return CheckFloat.Log(10.0, tmp1);
+                }
+                else {
                     return CheckFloat.Log(Math.E, tmp1);
-                case "lg":
-                    return CheckFloat.Log(10, tmp1);
-                case "sqr"://平方
-                    return CheckFloat.Pow(tmp1, 2);
-                case "sqrt"://开平方根
-                    return CheckFloat.Pow(tmp1, 0.5);
-                case "cube"://立方
-                    return CheckFloat.Pow(tmp1, 3);
-                default:
-                    return tmp1;
+                }
+            }
+            else if(cur.value.Contains("sqrt")) {
+                return CheckFloat.Pow(tmp1, 0.5);
+            }
+            else if(Regex.IsMatch(cur.value, @"pow\(\s*[0-9A-F]{32}\s*,\s*2\s*\)")) {
+                return CheckFloat.Pow(tmp1, 2);
+            }
+            else if(Regex.IsMatch(cur.value, @"pow\(\s*[0-9A-F]{32}\s*,\s*3\s*\)")) {
+                return CheckFloat.Pow(tmp1, 2);
+            }
+            else {
+                return tmp1;
             }
         }
         else if(cur.ReplaceFlags.Count == 2) {
@@ -100,29 +112,50 @@ public struct CheckFloat {//带有效数字的小数
     public int EffectiveDigit { get; private set; }
     public int LoDigit { get; private set; }
     public int HiDigit { get; private set; }
-    public CheckFloat(double truevalue) : this(truevalue.ToString()) { }
-    public CheckFloat(string value) {
-        EffectiveDigit = Effectiveness(value);
-        if(double.TryParse(value, out double tmp2)) {
-            Value = tmp2;
+    public static readonly CheckFloat PI = new CheckFloat("3.1415926535 8979323846", false);
+    public static readonly CheckFloat E = new CheckFloat("2.7182818284 5904523536", false);
+    public CheckFloat(double truevalue) : this(truevalue.ToString(), true) { }
+    public CheckFloat(string value, bool checkmaxlen = true) {
+        if(value.ToLower() == "pi") {
+            LoDigit = PI.LoDigit;
+            HiDigit = PI.HiDigit;
+            Value = PI.Value;
+            EffectiveDigit = PI.EffectiveDigit;
+            return;
         }
-        else throw new NotSupportedException();
-        if(Value != 0) {
-            HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
-            LoDigit = HiDigit - EffectiveDigit + 1;
-            if(HiDigit > 0) {
-                for(int i = 0;i < HiDigit;i++) {
-                    Value /= 10;
-                }
-            }
-            else if(HiDigit < 0) {
-                for(int i = 0;i < -HiDigit;i++) {
-                    Value *= 10;
-                }
-            }
+        else if(value.ToLower() == "e") {
+            LoDigit = E.LoDigit;
+            HiDigit = E.HiDigit;
+            Value = E.Value;
+            EffectiveDigit = E.EffectiveDigit;
+            return;
         }
         else {
-            LoDigit = 0; HiDigit = 0;
+            EffectiveDigit = Effectiveness(value);
+            if(checkmaxlen && EffectiveDigit > 8) {
+                throw new Exception("输入太精确了");
+            }
+            if(double.TryParse(value, out double tmp2)) {
+                Value = tmp2;
+            }
+            else throw new NotSupportedException();
+            if(Value != 0) {
+                HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
+                LoDigit = HiDigit - EffectiveDigit + 1;
+                if(HiDigit > 0) {
+                    for(int i = 0;i < HiDigit;i++) {
+                        Value /= 10;
+                    }
+                }
+                else if(HiDigit < 0) {
+                    for(int i = 0;i < -HiDigit;i++) {
+                        Value *= 10;
+                    }
+                }
+            }
+            else {
+                LoDigit = 0; HiDigit = 0;
+            }
         }
     }
     public static double KeepEffective(double d, int n) {//保留n位有效数字
@@ -401,13 +434,12 @@ public class CalcVariable {//2021.8.20
         StringBuilder sua = new StringBuilder();
         StringBuilder sub = new StringBuilder();
         StringBuilder sunc = new StringBuilder();
-        if (!userua.AlmostEqual(uu.ua)) {
+        if(!userua.AlmostEqual(uu.ua)) {
             flag = true;
             if(userua.AlmostEqual(uu.ua * Math.Sqrt(1.0 * values.Count / (values.Count - 1)))) {
                 sua.Append("是否将根号下分母除成了k-1,S^2代表的样本方差的分母也是k-1哟\r\n");
             }
-            else
-            {
+            else {
                 sua.Append("其他错误");
             }
         }
@@ -416,8 +448,7 @@ public class CalcVariable {//2021.8.20
             if(userub.AlmostEqual(ub * Math.Sqrt(3))) {
                 sub.Append("是否忘除根号3?\r\n");
             }
-            else
-            {
+            else {
                 sub.Append("其他错误");
             }
         }
@@ -426,8 +457,7 @@ public class CalcVariable {//2021.8.20
             if(userunc.AlmostEqual(uu.ua + ub)) {
                 sunc.Append("是否直接将A类和B类不确定度直接相加，两者应该各自平方后相加开方\r\n");
             }
-            else
-            {
+            else {
                 sunc.Append("其他错误");
             }
         }
@@ -533,21 +563,18 @@ public class CalcArgs {//一次计算
         foreach(var item in argobj.vars) {
             var CheckResult = argobj.vars[item.Key].CheckInfo();
             temp = new QuantityError();
-            if (CheckResult.IfError) {
+            if(CheckResult.IfError) {
                 flag = true;
                 temp.right = false;
-                if (CheckResult.UaError != "")
-                {
+                if(CheckResult.UaError != "") {
                     temp.ua.right = false;
                     temp.ua.latex = StaticMethods.GetUaExprLatex(item.Key);
                 }
-                if (CheckResult.UbError != "")
-                {
+                if(CheckResult.UbError != "") {
                     temp.ub.right = false;
                     temp.ub.latex = StaticMethods.GetUbExprLatex(item.Key);
                 }
-                if (CheckResult.UncError != "")
-                {
+                if(CheckResult.UncError != "") {
                     temp.unc.right = false;
                     temp.unc.latex = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub);
                 }
@@ -598,18 +625,16 @@ public class CalcArgs {//一次计算
             flag = true;
             error.answer.right = false;
             error.answer.latex = valexpr.ToLaTeX();
-            if (true)
-            {
+            if(true) {
                 answer.Append("其他错误");
-            }           
+            }
             error.answer.message = answer.ToString();
         }
         if(!unc1.AlmostEqual(argobj.userunc)) {
             flag = true;
             error.answerunc.right = false;
             error.answerunc.latex = uncexpr.ToLaTeX();
-            if (true)
-            {
+            if(true) {
                 answerunc.Append("其他错误");
             }
             error.answerunc.message = answerunc.ToString();

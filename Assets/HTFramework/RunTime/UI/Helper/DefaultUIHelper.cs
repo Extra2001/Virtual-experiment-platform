@@ -508,6 +508,7 @@ namespace HT.Framework
                                 ui._lastUILogic = _currentOverlayTemporaryUI;
                                 _currentOverlayTemporaryUI = null;
                             }
+                            else ui._lastUILogic = null;
                             _currentOverlayTemporaryUI = ui;
 
                             if (!ui.IsCreated)

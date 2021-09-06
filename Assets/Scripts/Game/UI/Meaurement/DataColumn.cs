@@ -38,7 +38,7 @@ public class DataColumn : HTBehaviour
                 var showed = Instantiate(_dataInput, _Content.transform);
                 showed.Inputable = inputable;
                 showedInputs.Add(showed);
-                showed.Show(i + 1);
+                showed.Show(quantity, i + 1);
                 showed._Value.onEndEdit.AddListener(_ =>
                 {
                     quantity.Data[i] = showed.Value;
@@ -52,7 +52,7 @@ public class DataColumn : HTBehaviour
                 var showed = Instantiate(_dataInput, _Content.transform);
                 showedInputs.Add(showed);
                 showed.Inputable = inputable;
-                showed.Show(i + 1, quantity.Data[i]);
+                showed.Show(quantity, i + 1, quantity.Data[i]);
                 int tmp = i;
                 showed._Value.onEndEdit.AddListener(_ =>
                 {

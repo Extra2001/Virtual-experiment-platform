@@ -8,7 +8,7 @@ using System;
 /// 数据表格UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/Measurment/DataTable/DataTable")]
-public class DatatableUILogic : UILogicTemporary
+public class DatatableUILogic : UILogicResident
 {
     /// <summary>
     /// 打开UI

@@ -115,45 +115,42 @@ public struct CheckFloat {//带有效数字的小数
     public static readonly CheckFloat PI = new CheckFloat("3.14159265358979323846", false);
     public static readonly CheckFloat E = new CheckFloat("2.71828182845904523536", false);
     public CheckFloat(double truevalue) : this(truevalue.ToString(), true) { }
-    public CheckFloat(string value, bool checkmaxlen = true) {
+    public static CheckFloat Create(string value) {
         if(value.ToLower() == "pi") {
-            LoDigit = PI.LoDigit;
-            HiDigit = PI.HiDigit;
-            Value = PI.Value;
-            EffectiveDigit = PI.EffectiveDigit;
+            return PI;
         }
         else if(value.ToLower() == "e") {
-            LoDigit = E.LoDigit;
-            HiDigit = E.HiDigit;
-            Value = E.Value;
-            EffectiveDigit = E.EffectiveDigit;
+            return E;
         }
         else {
-            EffectiveDigit = Effectiveness(value);
-            if(checkmaxlen && EffectiveDigit > 8) {
-                throw new Exception("输入太精确了");
-            }
-            if(double.TryParse(value, out double tmp2)) {
-                Value = tmp2;
-            }
-            else throw new NotSupportedException();
-            if(Value != 0) {
-                HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
-                LoDigit = HiDigit - EffectiveDigit + 1;
-                if(HiDigit > 0) {
-                    for(int i = 0;i < HiDigit;i++) {
-                        Value /= 10;
-                    }
-                }
-                else if(HiDigit < 0) {
-                    for(int i = 0;i < -HiDigit;i++) {
-                        Value *= 10;
-                    }
+            return new CheckFloat(value);
+        }
+    }
+    public CheckFloat(string value, bool checkmaxlen = true) {
+        EffectiveDigit = Effectiveness(value);
+        if(checkmaxlen && EffectiveDigit > 8) {
+            throw new Exception("输入太精确了");
+        }
+        if(double.TryParse(value, out double tmp2)) {
+            Value = tmp2;
+        }
+        else throw new NotSupportedException();
+        if(Value != 0) {
+            HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
+            LoDigit = HiDigit - EffectiveDigit + 1;
+            if(HiDigit > 0) {
+                for(int i = 0;i < HiDigit;i++) {
+                    Value /= 10;
                 }
             }
-            else {
-                LoDigit = 0; HiDigit = 0;
+            else if(HiDigit < 0) {
+                for(int i = 0;i < -HiDigit;i++) {
+                    Value *= 10;
+                }
             }
+        }
+        else {
+            LoDigit = 0; HiDigit = 0;
         }
     }
     public static double KeepEffective(double d, int n) {//保留n位有效数字

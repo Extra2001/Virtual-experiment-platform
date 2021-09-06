@@ -21,6 +21,7 @@ public class ObjectsModel
     public MyVector4 rotation { get; set; } = new MyVector4();
     public List<MyVector4> childrenRotation = new List<MyVector4>();
     public MyVector3 baseSize { get; set; } = new MyVector3();
+    public float baseScale { get; set; } = 1;
     public float scale { get; set; } = 1;
     public float mass { get; set; } = 0;
 }

@@ -3,6 +3,7 @@
     描述：模态提示框UI逻辑类
 *************************************************************************************/
 using HT.Framework;
+using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
 /// 模态提示框UI逻辑类
@@ -84,9 +85,19 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
         this.Data.CancelAction = model.CancelAction;
 
         if (model.ShowCancel)
+        {
+            var position = ConfirmButton.rectTransform().localPosition;
+            position.y = -100;
+            ConfirmButton.rectTransform().localPosition = position;
             CancelButton.gameObject.SetActive(true);
+        }
         else
+        {
+            var position = ConfirmButton.rectTransform().localPosition;
+            position.y = -150;
+            ConfirmButton.rectTransform().localPosition = position;
             CancelButton.gameObject.SetActive(false);
+        }
 
         if (Main.Current.Pause == false)
         {

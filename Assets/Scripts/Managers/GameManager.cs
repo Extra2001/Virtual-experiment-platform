@@ -100,6 +100,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     public InstrumentBase GetInstrument(InstrumentInfoModel model)
     {
+        if (model == null) return null;
         return GetInstrument(model.instrumentType);
     }
     public InstrumentBase GetInstrument(Type type)

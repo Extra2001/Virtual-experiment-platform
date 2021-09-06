@@ -36,7 +36,7 @@ public class ObjectValue : HTBehaviour
     public List<MyVector3> childrenPostition => ObjectModel.childrenPostition;
 
     public List<MyVector4> childrenRotation => ObjectModel.childrenRotation;
-
+    public float BaseScale { get => ObjectModel.baseScale; set => ObjectModel.baseScale = value; }
     public float Scale
     {
         get => ObjectModel.scale; set

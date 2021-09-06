@@ -34,10 +34,15 @@ public class ObjectInfo : HTBehaviour
         {
             Main.m_UI.CloseUI<ObjectInfoUILogic>();
         });
-        _ScaleInput.onValueChanged.AddListener(x =>
+        _ScaleInput.onEndEdit.AddListener(x =>
         {
-            objectValue.Scale = float.Parse(x);
-            _ScaleSlider.value = float.Parse(x);
+            var val = float.Parse(x);
+            if (val > _ScaleSlider.maxValue)
+                val = _ScaleSlider.maxValue;
+            else if (val < _ScaleSlider.minValue)
+                val = _ScaleSlider.minValue;
+            objectValue.Scale = val;
+            _ScaleSlider.value = val;
         });
         _ScaleSlider.onValueChanged.AddListener(x =>
         {
@@ -61,18 +66,20 @@ public class ObjectInfo : HTBehaviour
         _Desc.text = objectValue.ObjectModel.DetailMessage;
         _ScaleInput.text = objectValue.Scale.ToString();
         _ScaleSlider.value = objectValue.Scale;
+        _ScaleSlider.maxValue = objectValue.BaseScale * 5;
+        _ScaleSlider.minValue = objectValue.BaseScale / 5;
         _MassInput.text = objectValue.Mass.ToString();
         _Gravity.isOn = objectValue.Gravity;
 
         if(value.ObjectModel.ResourcePath.EndsWith("obj") || Path.GetFileName(value.ObjectModel.ResourcePath).Contains("."))
         {
-            _ScaleSlider.interactable = false;
-            _ScaleInput.interactable = false;
+            _ScaleSlider.interactable = true;
+            _ScaleInput.interactable = true;
         }
         else
         {
-            _ScaleSlider.interactable = true;
-            _ScaleInput.interactable = true;
+            _ScaleSlider.interactable = false;
+            _ScaleInput.interactable = false;
         }
 
         StartCoroutine(CommonTools.DelayGet(_RootPanel.rectTransform().SetFloat));

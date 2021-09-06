@@ -57,7 +57,7 @@ public class VoltmeterBigInstrument : IndirectMeasurementInstrumentBase
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 
-    public override void SwitchRange(double _MainValue)
+    public void SwitchRange(double _MainValue)
     {
         Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().MaxV = 15;
         MainValue = _MainValue;

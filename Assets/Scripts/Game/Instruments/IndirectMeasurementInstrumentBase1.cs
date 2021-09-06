@@ -47,6 +47,5 @@ public abstract class IndirectMeasurementInstrumentBase : InstrumentBase
 
     public abstract void ReshowValue();//主值不变，随机误差变化重新生成读数
 
-    public abstract void SwitchRange(double _MainValue);//切换量程时新物体被调用
 
 }

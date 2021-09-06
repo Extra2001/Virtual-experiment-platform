@@ -58,7 +58,7 @@ public class AmmeterSmallInstrument : IndirectMeasurementInstrumentBase
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 
-    public override void SwitchRange(double _MainValue)
+    public void SwitchRange(double _MainValue)
     {
         Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;
         MainValue = _MainValue;

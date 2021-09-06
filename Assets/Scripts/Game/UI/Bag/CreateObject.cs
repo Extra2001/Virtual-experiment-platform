@@ -101,7 +101,10 @@ public class CreateObject : HTBehaviour
         var max = Mathf.Max(objectValue.BaseSize.x, objectValue.BaseSize.y, objectValue.BaseSize.z);
         var scale = 2f / max;
         objectValue.BaseScale = scale;
-        objectValue.Scale = scale;
+        if (model.scale != 1)
+            objectValue.Scale = model.scale;
+        else
+            objectValue.Scale = scale;
         var rec = RecordManager.tempRecord;
         // 计算位置
         objectValue.Position = new Vector3(rec.objectStartPosition[0],

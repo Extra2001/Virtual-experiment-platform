@@ -112,8 +112,8 @@ public struct CheckFloat {//带有效数字的小数
     public int EffectiveDigit { get; private set; }
     public int LoDigit { get; private set; }
     public int HiDigit { get; private set; }
-    public static readonly CheckFloat PI = new CheckFloat("3.1415926535 8979323846", false);
-    public static readonly CheckFloat E = new CheckFloat("2.7182818284 5904523536", false);
+    public static readonly CheckFloat PI = new CheckFloat("3.14159265358979323846", false);
+    public static readonly CheckFloat E = new CheckFloat("2.71828182845904523536", false);
     public CheckFloat(double truevalue) : this(truevalue.ToString(), true) { }
     public CheckFloat(string value, bool checkmaxlen = true) {
         if(value.ToLower() == "pi") {
@@ -121,14 +121,12 @@ public struct CheckFloat {//带有效数字的小数
             HiDigit = PI.HiDigit;
             Value = PI.Value;
             EffectiveDigit = PI.EffectiveDigit;
-            return;
         }
         else if(value.ToLower() == "e") {
             LoDigit = E.LoDigit;
             HiDigit = E.HiDigit;
             Value = E.Value;
             EffectiveDigit = E.EffectiveDigit;
-            return;
         }
         else {
             EffectiveDigit = Effectiveness(value);

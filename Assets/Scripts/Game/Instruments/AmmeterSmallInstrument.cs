@@ -58,6 +58,14 @@ public class AmmeterSmallInstrument : IndirectMeasurementInstrumentBase
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 
+    public override void SwitchRange(double _MainValue)
+    {
+        Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;
+        MainValue = _MainValue;
+        RandomErrorLimit = ErrorLimit * UnityEngine.Random.Range(-1f, 1f);
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+    }
+
     public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
     {
         //电压表和电流表还具有额外的切换量程功能

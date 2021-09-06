@@ -128,6 +128,16 @@ public class Initializer
                 //ResourcePath = $"{Application.streamingAssetsPath}/Objects/object8.obj"
                 ResourcePath = $"Objects/Cube"
             },
+
+            new ObjectsModel()
+            {
+                id = 9,
+                Name = "细丝",
+                DetailMessage = "无",
+                 Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object8.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object12.obj"
+            },
         });
 
         var preset = JsonConvert.SerializeObject(PresetObjects);

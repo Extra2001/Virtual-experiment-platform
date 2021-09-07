@@ -18,7 +18,7 @@ public class AmmeterSmallInstrument : IndirectMeasurementInstrumentBase
     public override double URV { get; set; } = 0.6;
     public override double LRV { get; set; } = -0.2;
 
-    public override double ErrorLimit { get; set; } = 0.04; //4格最小刻度，为了相对明显一点
+    public override double ErrorLimit { get; set; } = 0.04; //2格最小刻度，为了相对明显一点
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }
@@ -58,47 +58,6 @@ public class AmmeterSmallInstrument : IndirectMeasurementInstrumentBase
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 
-    public void SwitchRange(double _MainValue)
-    {
-        Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;
-        MainValue = _MainValue;
-        RandomErrorLimit = ErrorLimit * UnityEngine.Random.Range(-1f, 1f);
-        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
-    }
-
-    public override void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)
-    {
-        //电压表和电流表还具有额外的切换量程功能
-        base.ShowInfoPanel(infoItems);
-        infoItems["_SwitchRange"].GameObject.SetActive(true);
-        infoItems["_SwitchRange"].onValueChanged.Add(() =>
-        {
-            /*if (RangeState == 0)
-            {
-                URV = 3;
-                LRV = -1;
-                ErrorLimit = 0.2;
-                RangeState = 1;
-                infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
-                infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
-                Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState2();
-                Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 3f;
-                ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
-            }
-            else if (RangeState == 1)
-            {
-                URV = 0.6;
-                LRV = -0.2;
-                ErrorLimit = 0.04;
-                RangeState = 0;
-                infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
-                infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
-                Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState1();
-                Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;
-                ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
-            }*/
-        });
-    }
 
     public override void ShowGameButton(List<GameButtonItem> buttonItems)
     {
@@ -111,29 +70,7 @@ public class AmmeterSmallInstrument : IndirectMeasurementInstrumentBase
         {
             ReshowValue();
         });
-        buttonItems.Where(x => x.GameObject.name.Equals("SwitchButton")).FirstOrDefault().OnClick.Add(() =>
-        {
-            /*if (RangeState == 0)
-            {
-                URV = 3;
-                LRV = -1;
-                ErrorLimit = 0.2;
-                RangeState = 1;
-                Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState2();
-                Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 3f;
-                ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
-            }
-            else if (RangeState == 1)
-            {
-                URV = 0.6;
-                LRV = -0.2;
-                ErrorLimit = 0.04;
-                RangeState = 0;
-                Entity.FindChildren("Ammeter_son").GetComponent<VAStateChange>().SwitchState1();
-                Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 0.6f;
-                ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
-            }*/
-        });
+
     }
 }
  

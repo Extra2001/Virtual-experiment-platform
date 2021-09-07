@@ -19,7 +19,7 @@ public class VoltmeterSmallInstrument : IndirectMeasurementInstrumentBase
 
     public override double LRV { get; set; } = -1;
 
-    public override double ErrorLimit { get; set; } = 0.2;//2格最小刻度，为了相对明显一点
+    public override double ErrorLimit { get; set; } = 0.1;//1格最小刻度，为了相对明显一点
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }

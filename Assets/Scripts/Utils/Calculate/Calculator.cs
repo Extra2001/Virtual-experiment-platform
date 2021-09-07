@@ -224,7 +224,7 @@ public struct CheckFloat {//带有效数字的小数
         double v = fn(rv);
         double dy = derivative(rv) * dx;
         CheckFloat tmp = new CheckFloat(dy, false);
-        return new CheckFloat(KeepTo(v, tmp.HiDigit).ToString($"G{Math.Abs(tmp.HiDigit)}"), false);
+        return new CheckFloat(KeepTo(v, tmp.HiDigit), false);
     }
     public static CheckFloat Sin(CheckFloat x, double dx) {
         return FunctionX(x, dx, Math.Sin, Math.Cos);

@@ -54,6 +54,9 @@ public partial class FormulaController {
             else if(cur.value.Contains("atan")) {
                 return CheckFloat.Cos(tmp1);
             }
+            else if(cur.value.Contains("exp")) {
+                return CheckFloat.Exp(Math.E,tmp1);
+            }
             else if(cur.value.Contains("log")) {
                 if(cur.value.Contains("log(10)")) {
                     return CheckFloat.Log(10.0, tmp1);
@@ -221,7 +224,7 @@ public struct CheckFloat {//带有效数字的小数
         double v = fn(rv);
         double dy = derivative(rv) * dx;
         CheckFloat tmp = new CheckFloat(dy, false);
-        return new CheckFloat(KeepTo(v, tmp.HiDigit).ToString($"G{Math.Abs(tmp.HiDigit)}"), false);
+        return new CheckFloat(KeepTo(v, tmp.HiDigit), false);
     }
     public static CheckFloat Sin(CheckFloat x, double dx) {
         return FunctionX(x, dx, Math.Sin, Math.Cos);
@@ -255,7 +258,7 @@ public struct CheckFloat {//带有效数字的小数
     }
     public static CheckFloat Log(double a, CheckFloat x) {//log_{a}(x)
         double dx = Math.Pow(10, x.LoDigit);
-        return FunctionX(x, dx, (X) => Math.Log(a, X), (X) => 1.0 / X);
+        return FunctionX(x, dx, (X) => Math.Log(a, X), (X) => 1.0 / (X*Math.Log(a)));
     }
     public static CheckFloat Atan(CheckFloat x) {
         double dx = Math.Pow(10, x.LoDigit);

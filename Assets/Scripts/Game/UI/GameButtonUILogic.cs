@@ -63,7 +63,19 @@ public class GameButtonUILogic : UILogicResident
     {
         base.OnOpen(args);
         Main.m_Event.Subscribe<SelectInstrumentEventHandler>(ShowButtons);
+        if (GameManager.Instance.CurrentInstrument != null)
+            ShowButtons(GameManager.Instance.CurrentInstrument);
+        else
+        {
+            string[] names = new string[] { "PauseButton", "BagButton", "TableButton", "UncertaintyButton" };
 
+            gameButtonItems.ForEach(x =>
+            {
+                x.OnClick.Clear();
+                x.OnTap.Clear();
+                if (!names.Contains(x.GameObject.name)) x.GameObject.gameObject.SetActive(false);
+            });
+        }
         //复现存档仪器被测物体位置等信息
         CreateObject.CreateRecord();
         CreateInstrument.CreateRecord();
@@ -86,6 +98,10 @@ public class GameButtonUILogic : UILogicResident
     private void ShowButtons(EventHandlerBase handler)
     {
         var instrument = (handler as SelectInstrumentEventHandler).ActiveInstrument;
+        ShowButtons(instrument);
+    }
+    private void ShowButtons(InstrumentBase instrument)
+    {
         string[] names = new string[] { "PauseButton", "BagButton", "TableButton", "UncertaintyButton" };
 
         gameButtonItems.ForEach(x =>

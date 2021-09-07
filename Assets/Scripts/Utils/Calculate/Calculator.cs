@@ -543,11 +543,7 @@ public class CalcArgs {//一次计算
         QuantityError temp = new QuantityError();
         bool flag = false;
         var res = new CalcMeasureResult();
-        //return (value, uncertain)
-        //Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
-        //foreach(var item in argobj.cons) {
-        //    vals[item.Key] = argobj.cons[item.Key];
-        //}
+
         foreach(var item in argobj.vars) {
             var CheckResult = argobj.vars[item.Key].CheckInfo();
             temp = new QuantityError();
@@ -557,14 +553,17 @@ public class CalcArgs {//一次计算
                 if(CheckResult.UaError != "") {
                     temp.ua.right = false;
                     temp.ua.latex = StaticMethods.GetUaExprLatex(item.Key);
+                    temp.ua.message = CheckResult.UaError;
                 }
                 if(CheckResult.UbError != "") {
                     temp.ub.right = false;
                     temp.ub.latex = StaticMethods.GetUbExprLatex(item.Key);
+                    temp.ub.message = CheckResult.UbError;
                 }
                 if(CheckResult.UncError != "") {
                     temp.unc.right = false;
                     temp.unc.latex = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub);
+                    temp.unc.message = CheckResult.UncError;
                 }
                 temp.Symbol = item.Key;
                 temp.Title = "对物理量" + item.Key + "的检查";
@@ -574,16 +573,8 @@ public class CalcArgs {//一次计算
             }
             errors.Add(temp);
         }
-        //res.val=valexpr.Evaluate(vals).RealValue;
-        //res.unc = uncexpr.Evaluate(vals).RealValue;
-        //foreach(var item in argobj.vars) {
-        //    var av = StaticMethods.Average(item.Value.values);
-        //    vals[item.Key] = av;
-        //    vals[$"u_{item.Key}"] = item.Value.userunc;
-        //}
+
         res.status = flag ? "计算有误" : "计算无误";
-        //res.userval= valexpr.Evaluate(vals).RealValue;
-        //res.userunc = uncexpr.Evaluate(vals).RealValue;
         res.err = errors;
         return res;
     }

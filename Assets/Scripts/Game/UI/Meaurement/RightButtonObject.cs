@@ -19,7 +19,10 @@ public class RightButtonObject : HTBehaviour
             {
                 foreach (var item in gameObject.transform.GetComponentsInChildren<Collider>(true))
                     if (hit.collider.gameObject.GetInstanceID().Equals(item.gameObject.GetInstanceID()))
-                        Main.m_UI.OpenTemporaryUI<ObjectInfoUILogic>(objectValue);
+                        {
+                            Main.m_UI.OpenTemporaryUI<ObjectInfoUILogic>(objectValue);
+                            break;
+                        }
             }
         }
 

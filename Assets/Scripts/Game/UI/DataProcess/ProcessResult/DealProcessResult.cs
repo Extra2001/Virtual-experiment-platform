@@ -11,11 +11,6 @@ using System.Linq;
 
 public class DealProcessResult : HTBehaviour
 {
-    //public GameObject formula1;
-    //public GameObject formula2;
-    //public GameObject formula3;
-    //public GameObject formula4;
-    //public GameObject formula5;
     public ProcessResultCell cell1;
     public ProcessResultCell cell2;
     public ProcessResultCell cell3;
@@ -30,11 +25,9 @@ public class DealProcessResult : HTBehaviour
     public Button NextButton;
     public Button BackButton;
 
-    //Dictionary<QuantityModel, DataChart> quantities = new Dictionary<QuantityModel, DataChart>();
 
     List<QuantityError> quantityErrors = new List<QuantityError>();
 
-    double ComplexAverage = 0, ComplexUncertainty = 0, UserComplexAverage = 0, UserComplexUncertainty;
 
     bool MeasureErrorFlag = false;//直接测量量错误是否解决
     int curError = 0;
@@ -82,37 +75,12 @@ public class DealProcessResult : HTBehaviour
     {
         CalcArgs calc = new CalcArgs();
         QuantityError ComplexErr = new QuantityError();
-        List<QuantityError> recordErrors = new List<QuantityError>();
 
         foreach (var item in RecordManager.tempRecord.quantities)
         {
             calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.Groups);
             calc.Measure(item.Symbol, item.Data.ToDouble().ToArray());
             calc.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
-
-            /*var instrument = item.InstrumentType.CreateInstrumentInstance();
-            // 以下判断有效数字位数
-            foreach (var subitem in item.Data)
-            {
-                var (res, answer) = instrument.CheckErrorLimit(subitem);
-                var (res2, answer2) = instrument.CheckULLimit(subitem);
-                if (!res)
-                    recordErrors.Add(new QuantityError()
-                    {
-                        answer. = answer,
-                        answerunc = subitem,
-                        Message = "读取数据有效数字位数与仪器不匹配。",
-                        Title = "有效数字位数错误"
-                    });
-                if (!res2)
-                    recordErrors.Add(new QuantityError()
-                    {
-                        answer = null,
-                        answerunc = subitem,
-                        Message = answer2,
-                        Title = "记录数字错误"
-                    });
-            }*/
         }
         quantityErrors = new List<QuantityError>();
         measureresult = CalcArgs.CalculateMeasureValue(calc);
@@ -139,11 +107,6 @@ public class DealProcessResult : HTBehaviour
             }
 
         }
-
-        if (recordErrors.Count > RecordManager.tempRecord.score.DataRecordError)
-            RecordManager.tempRecord.score.DataRecordError = recordErrors.Count;
-        else if (recordErrors.Count < RecordManager.tempRecord.score.DataRecordError)
-            RecordManager.tempRecord.score.DataRecordError += recordErrors.Count;
 
         if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
             RecordManager.tempRecord.score.MeasureQuantityError = quantityErrors.Count;
@@ -197,10 +160,6 @@ public class DealProcessResult : HTBehaviour
             if (!current.ua.right)
             {
                 cell1.gameObject.SetActive(true);
-                /*string detail = null;
-                var find = messages.FindIndex(x => x.Equals("A类不确定度计算有误"));
-                if (find != -1 && messages[find + 1].StartsWith("是否"))
-                    detail = messages[find + 1];*/
                 cell1.ShowData("A类不确定度计算有误", current.ua.message, current.ua.latex, current.ua.userformula);
             }
             else
@@ -209,12 +168,7 @@ public class DealProcessResult : HTBehaviour
             }
             if (!current.ub.right)
             {
-                Debug.Log(current.Title + "的ub");
                 cell2.gameObject.SetActive(true);
-                /*string detail = null;
-                var find = messages.FindIndex(x => x.Equals("B类不确定度计算有误"));
-                if (find != -1 && messages[find + 1].StartsWith("是否"))
-                    detail = messages[find + 1];*/
                 cell2.ShowData("B类不确定度计算有误", current.ub.message, current.ub.latex, current.ub.userformula);
             }
             else
@@ -224,10 +178,6 @@ public class DealProcessResult : HTBehaviour
             if (!current.unc.right)
             {
                 cell3.gameObject.SetActive(true);
-                /*string detail = null;
-                var find = messages.FindIndex(x => x.Equals("合成不确定度有误"));
-                if (find != -1 && messages[find + 1].StartsWith("是否"))
-                    detail = messages[find + 1];*/
                 cell3.ShowData("合成不确定度有误", current.unc.message, current.unc.latex, current.unc.userformula);
             }
             else

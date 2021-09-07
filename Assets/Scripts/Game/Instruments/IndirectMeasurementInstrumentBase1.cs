@@ -47,4 +47,5 @@ public abstract class IndirectMeasurementInstrumentBase : InstrumentBase
 
     public abstract void ReshowValue();//主值不变，随机误差变化重新生成读数
 
+
 }

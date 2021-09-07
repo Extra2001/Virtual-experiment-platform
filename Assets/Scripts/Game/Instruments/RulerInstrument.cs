@@ -12,7 +12,7 @@ public class RulerInstrument : DirectMeasurementInstrumentBase
     //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "钢板尺"; 
 
-    public override double URV { get; set; } = 500; 
+    public override double URV { get; set; } = 300; 
 
     public override double LRV { get; set; } = 0; 
 

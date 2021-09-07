@@ -12,13 +12,13 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
     //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "电子秤";
 
-    public override double URV { get; set; } = 9999;
+    public override double URV { get; set; } = 2100;
 
     public override double LRV { get; set; } = 0;
 
     public int RangeState = 0;//0代表g,1还是代表g
 
-    public override double ErrorLimit { get; set; } = 0.5; //忘了
+    public override double ErrorLimit { get; set; } = 0.1;
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }
@@ -37,12 +37,12 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
     }
     public override void ShowValue(double value)
     {
-        if (value < 0)
+        if (value < LRV)
         {
-            value = 0;
-        }else if (value > 9999)
+            value = LRV;
+        }else if (value > URV)
         {
-            value = 9999;
+            value = URV;
         }
         Entity.FindChildren("ElectronicScales_son").GetComponent<ElectronicScales_main>().ShowNum((float)value);
 

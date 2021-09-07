@@ -16,7 +16,7 @@ public class ThermometerInstruction : IndirectMeasurementInstrumentBase
 
     public override double LRV { get; set; } = -30;
 
-    public override double ErrorLimit { get; set; } = 0.5; //忘了
+    public override double ErrorLimit { get; set; } = 1;
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }

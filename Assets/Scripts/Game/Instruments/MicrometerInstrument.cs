@@ -12,11 +12,11 @@ public class MicrometerInstrument : DirectMeasurementInstrumentBase
     //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "螺旋测微器";
 
-    public override double URV { get; set; } = 500; 
+    public override double URV { get; set; } = 10; 
 
     public override double LRV { get; set; } = 0; 
 
-    public override double ErrorLimit { get; set; } = 0.5;
+    public override double ErrorLimit { get; set; } = 0.005;
     
     public double ZeroPointError = 0.0f;//零点误差
 

@@ -13,11 +13,11 @@ public class CaliperInstrument : DirectMeasurementInstrumentBase
     //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "游标卡尺";
 
-    public override double URV { get; set; } = 500;
+    public override double URV { get; set; } = 250;
 
     public override double LRV { get; set; } = 0;
 
-    public override double ErrorLimit { get; set; } = 0.5;
+    public override double ErrorLimit { get; set; } = 0.02;
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }

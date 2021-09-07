@@ -35,12 +35,12 @@ public class DealUncertainLearnUI : HTBehaviour
     private void ClickSureButton()
     {
         string input;
-        string answer="0.1";
-        
+        string answer;
+        CheckFloat temp = Field.GetComponent<FormulaController>().GetCheckFloat();
         try
         {
 
-            CheckFloat temp = Field.GetComponent<FormulaController>().GetCheckFloat();
+            //CheckFloat temp = Field.GetComponent<FormulaController>().GetCheckFloat();
             answer = temp.TrueValue.ToString();
             
 

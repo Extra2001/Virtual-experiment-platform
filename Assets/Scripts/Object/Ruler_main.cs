@@ -50,6 +50,13 @@ public class Ruler_main : HTBehaviour
         }
     }
 
+    public void ini()
+    {
+        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
+        Ele = this.transform.Find("Camera").gameObject;
+        Player_S = GameObject.Find("FPSController").gameObject;
+    }
+
     private void Look_back()//通用视角处理函数
     {
         if (Input.GetKeyDown(KeyCode.X))
@@ -134,9 +141,7 @@ public class Ruler_main : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
-        Ele = this.transform.Find("Camera").gameObject;
-        Player_S = GameObject.Find("FPSController").gameObject;
+        ini();
     }
 
     // Update is called once per frame

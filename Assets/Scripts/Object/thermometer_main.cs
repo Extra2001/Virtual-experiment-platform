@@ -56,6 +56,13 @@ public class thermometer_main : HTBehaviour
         }
     }
 
+    public void ini()
+    {
+        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
+        Ele = this.transform.Find("Camera").gameObject;
+        Player_S = GameObject.Find("FPSController").gameObject;
+    }
+
     private void Look_back()
     {
         if (Input.GetKeyDown(KeyCode.X))
@@ -122,10 +129,7 @@ public class thermometer_main : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
-        Ele = this.transform.Find("Camera").gameObject;
-        Player_S = GameObject.Find("FPSController").gameObject;
+        ini();
     }
 
     // Update is called once per frame

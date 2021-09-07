@@ -76,6 +76,13 @@ public class Micrometer_main : HTBehaviour
         this.transform.Find("Micrometer_grandson").Find("srick").gameObject.GetComponent<Rotate_micrometer>().Rotatenum(-1f);
     }
 
+    public void ini()
+    {
+        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
+        Ele = this.transform.Find("Micrometer_grandson").Find("014").Find("Camera").gameObject;
+        Player_S = GameObject.Find("FPSController").gameObject;
+    }
+
     //通用行为
     private void Look_back()
     {
@@ -143,10 +150,7 @@ public class Micrometer_main : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        mCamera= GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
-        Ele = this.transform.Find("Micrometer_grandson").Find("014").Find("Camera").gameObject;
-        Player_S = GameObject.Find("FPSController").gameObject;
+        ini();
     }
 
     // Update is called once per frame

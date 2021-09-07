@@ -258,7 +258,7 @@ public struct CheckFloat {//带有效数字的小数
     }
     public static CheckFloat Log(double a, CheckFloat x) {//log_{a}(x)
         double dx = Math.Pow(10, x.LoDigit);
-        return FunctionX(x, dx, (X) => Math.Log(a, X), (X) => 1.0 / (X*Math.Log(a)));
+        return FunctionX(x, dx, (X) => Math.Log(X, a), (X) => 1.0 / (X*Math.Log(a)));
     }
     public static CheckFloat Atan(CheckFloat x) {
         double dx = Math.Pow(10, x.LoDigit);

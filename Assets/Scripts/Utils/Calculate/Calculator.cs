@@ -54,6 +54,9 @@ public partial class FormulaController {
             else if(cur.value.Contains("atan")) {
                 return CheckFloat.Cos(tmp1);
             }
+            else if(cur.value.Contains("exp")) {
+                return CheckFloat.Exp(Math.E,tmp1);
+            }
             else if(cur.value.Contains("log")) {
                 if(cur.value.Contains("log(10)")) {
                     return CheckFloat.Log(10.0, tmp1);

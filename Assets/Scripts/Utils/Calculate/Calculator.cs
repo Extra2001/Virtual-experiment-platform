@@ -111,7 +111,7 @@ public struct CheckFloat {//带有效数字的小数
     public int HiDigit { get; private set; }
     public static readonly CheckFloat PI = new CheckFloat("3.14159265358979323846", false);
     public static readonly CheckFloat E = new CheckFloat("2.71828182845904523536", false);
-    public CheckFloat(double truevalue) : this(truevalue.ToString(), true) { }
+    public CheckFloat(double truevalue, bool check = true) : this(truevalue.ToString(), check) { }
     public static CheckFloat Create(string value) {
         if(value.ToLower() == "pi") {
             return PI;
@@ -228,7 +228,7 @@ public struct CheckFloat {//带有效数字的小数
         double v = fn(rv);
         double dy = derivative(rv) * dx;
         CheckFloat tmp = new CheckFloat(dy);
-        return new CheckFloat(KeepTo(v, tmp.HiDigit).ToString($"G{Math.Abs(tmp.HiDigit)}"));
+        return new CheckFloat(KeepTo(v, tmp.HiDigit).ToString($"G{Math.Abs(tmp.HiDigit)}"), false);
     }
     public static CheckFloat Sin(CheckFloat x, double dx) {
         return FunctionX(x, dx, Math.Sin, Math.Cos);

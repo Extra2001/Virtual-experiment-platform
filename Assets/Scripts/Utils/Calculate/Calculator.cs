@@ -198,20 +198,20 @@ public struct CheckFloat {//带有效数字的小数
     public static CheckFloat operator +(CheckFloat lhs, CheckFloat rhs) {//有效数字的加法
         int lo = Math.Max(lhs.LoDigit, rhs.LoDigit);
         double tmp = lhs.TrueValue + rhs.TrueValue;
-        return new CheckFloat(KeepTo(tmp, lo).ToString($"G{lo}"));
+        return new CheckFloat(KeepTo(tmp, lo).ToString($"G{lo}"), false);
     }
     public static CheckFloat operator -(CheckFloat lhs, CheckFloat rhs) {//有效数字的减法
         int lo = Math.Max(lhs.LoDigit, rhs.LoDigit);
         double tmp = lhs.TrueValue - rhs.TrueValue;
-        return new CheckFloat(KeepTo(tmp, lo).ToString($"G{lo}"));
+        return new CheckFloat(KeepTo(tmp, lo).ToString($"G{lo}"), false);
     }
     public static CheckFloat operator *(CheckFloat lhs, CheckFloat rhs) {//有效数字的乘法
         double tmp = KeepEffective((lhs.TrueValue * rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));
-        return new CheckFloat(tmp.ToString());
+        return new CheckFloat(tmp.ToString(), false);
     }
     public static CheckFloat operator /(CheckFloat lhs, CheckFloat rhs) {//除
         double tmp = KeepEffective((lhs.TrueValue / rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));
-        return new CheckFloat(tmp.ToString());
+        return new CheckFloat(tmp.ToString(), false);
     }
     public override string ToString() {//显示
         return $"值为{TrueValue},{EffectiveDigit}位有效数字,小数部分:{Value},次数{HiDigit},最低位{LoDigit}";

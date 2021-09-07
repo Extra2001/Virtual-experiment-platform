@@ -58,7 +58,12 @@ public class Caliper_main : HTBehaviour
         this.transform.Find("MeasureHead").gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 0.2f), ForceMode.VelocityChange);
     }
 
-
+    public void ini()
+    {
+        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
+        Ele = this.transform.Find("MeasureHead").Find("Camera").gameObject;
+        Player_S = GameObject.Find("FPSController").gameObject;
+    }
 
     public void Measure()
     {
@@ -140,10 +145,7 @@ public class Caliper_main : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
-        Ele = this.transform.Find("MeasureHead").Find("Camera").gameObject;
-        Player_S = GameObject.Find("FPSController").gameObject;
+        ini();
     }
 
     // Update is called once per frame

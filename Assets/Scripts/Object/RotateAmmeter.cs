@@ -58,6 +58,13 @@ public class RotateAmmeter : HTBehaviour
         }
     }
 
+    public void ini()
+    {
+        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
+        Ele = this.transform.Find("Camera").gameObject;
+        Player_S = GameObject.Find("FPSController").gameObject;
+    }
+
     public void ShowNum(float num)
     {
         //插值导入旋转动画，详见内部实现
@@ -132,10 +139,7 @@ public class RotateAmmeter : HTBehaviour
 
     void Start()
     {
-
-        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
-        Ele = this.transform.Find("Camera").gameObject;
-        Player_S = GameObject.Find("FPSController").gameObject;
+        ini();
     }
 
     private void Update()

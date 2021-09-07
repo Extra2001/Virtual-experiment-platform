@@ -48,6 +48,13 @@ public class ElectronicScales_main : HTBehaviour
         }
     }
 
+    public void ini()
+    {
+        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
+        Ele = this.transform.Find("Camera").gameObject;
+        Player_S = GameObject.Find("FPSController").gameObject;
+    }
+
     //调用子函数，显示数字
     public void ShowNum(float num)
     {
@@ -127,9 +134,7 @@ public class ElectronicScales_main : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mCamera = GameObject.Find("FirstPersonCharacter").gameObject.GetComponent<Camera>();
-        Ele = this.transform.Find("Camera").gameObject;
-        Player_S = GameObject.Find("FPSController").gameObject;
+        ini();
     }
 
     // Update is called once per frame

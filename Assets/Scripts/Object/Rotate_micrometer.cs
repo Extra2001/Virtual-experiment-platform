@@ -41,10 +41,6 @@ public class Rotate_micrometer : HTBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Rotatenum(1f);
-        }
         //this.transform.Find("rotatebody_main").Rotate(new Vector3(0,1,0));
         //Debug.Log(rotatebody_main.transform.localPosition.y - this.transform.localPosition.y + 0.225f);
         if ((rotatebody_main.transform.localPosition.y - this.transform.localPosition.y + 0.225f) >= 1e-6 || (rotatebody_main.transform.localPosition.y - this.transform.localPosition.y + 0.225f) <= -1e-6)

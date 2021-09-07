@@ -50,6 +50,7 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
 
     public override void GenMainValueAndRandomErrorLimit()
     {
+        MainValue = UnityEngine.Random.Range((float)LRV, (float)URV);
         RandomErrorLimit = ErrorLimit * UnityEngine.Random.Range(-1f, 1f);
     }
 
@@ -62,7 +63,6 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
 
     public override void ReshowValue()
     {
-        GenMainValueAndRandomErrorLimit();
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 

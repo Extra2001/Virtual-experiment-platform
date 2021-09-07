@@ -18,7 +18,7 @@ public class AmmeterSmallInstrument : IndirectMeasurementInstrumentBase
     public override double URV { get; set; } = 0.6;
     public override double LRV { get; set; } = -0.2;
 
-    public override double ErrorLimit { get; set; } = 0.04; //2格最小刻度，为了相对明显一点
+    public override double ErrorLimit { get; set; } = 0.02; //1格最小刻度，为了相对明显一点
 
     public override double RandomErrorLimit { get; set; }
     public override double MainValue { get; set; }

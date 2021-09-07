@@ -113,15 +113,8 @@ public struct CheckFloat {//带有效数字的小数
     public static readonly CheckFloat E = new CheckFloat("2.71828182845904523536", false);
     public CheckFloat(double truevalue, bool check = true) : this(truevalue.ToString(), check) { }
     public static CheckFloat Create(string value, bool check = false) {
-        if(value.ToLower() == "pi") {
-            return PI;
-        }
-        else if(value.ToLower() == "e") {
-            return E;
-        }
-        else {
-            return new CheckFloat(value, check);
-        }
+        return new CheckFloat(value, check);
+
     }
     public CheckFloat(string value, bool checkmaxlen = true) {
         EffectiveDigit = Effectiveness(value);
@@ -227,7 +220,7 @@ public struct CheckFloat {//带有效数字的小数
         double rv = x.TrueValue;
         double v = fn(rv);
         double dy = derivative(rv) * dx;
-        CheckFloat tmp = new CheckFloat(dy);
+        CheckFloat tmp = new CheckFloat(dy, false);
         return new CheckFloat(KeepTo(v, tmp.HiDigit).ToString($"G{Math.Abs(tmp.HiDigit)}"), false);
     }
     public static CheckFloat Sin(CheckFloat x, double dx) {

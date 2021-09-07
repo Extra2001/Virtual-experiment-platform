@@ -36,10 +36,6 @@ public class CreateInstrument : HTBehaviour
     {
         var instrument = GameManager.Instance.GetInstrument(model);
         var recpos = RecordManager.tempRecord.instrumentStartPosition;
-        var position = new Vector3();
-        position.x = recpos[0];
-        position.y = recpos[1];
-        position.z = recpos[2];
         // 恢复记录
         instrument.Entity.transform.GetChild(0).position = model.position;
         instrument.Entity.transform.GetChild(0).rotation = model.rotation;

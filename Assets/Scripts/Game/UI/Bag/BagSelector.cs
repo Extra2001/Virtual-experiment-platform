@@ -125,8 +125,8 @@ public class BagSelector : HTBehaviour
             ObjectsModel temp = GameManager.Instance.objectsModels.FirstOrDefault();
             GameObject tempObject = CreateObject.CreateSingleObj(temp.ResourcePath);
             SavePreviewImage(temp.ResourcePath);
+            temp.PreviewImage = temp.ResourcePath.Replace(".obj", ".png");
             Destroy(tempObject);
-
 
             ChangeButtonColor(ObjectButton);
             LoadObjects();
@@ -159,9 +159,17 @@ public class BagSelector : HTBehaviour
 
     public void DeleteObject(BagItem bagItem)
     {
-        ImportModel.DeleteModel(bagItem.objectsModel);
-        LoadObjects();
-    }
+        UIAPI.Instance.ShowModel(new ModelDialogModel()
+        {
+            Title = new BindableString("提示"),
+            Message = new BindableString($"确认要删除{bagItem.objectsModel.Name}吗？"),
+            ConfirmAction = () =>
+            {
+                ImportModel.DeleteModel(bagItem.objectsModel);
+                LoadObjects();
+            }
+        });
+    } 
 
     private void ShowPanel(BagItem bagItem)
     {

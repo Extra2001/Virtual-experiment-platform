@@ -24,6 +24,16 @@ public class QuantityCell : HTBehaviour
     public QuantityModel Quantity { get => GetQuantity(); set => SetQuantity(value); }
 
     private QuantityModel QuantityReference = null;
+
+    private void Start()
+    {
+        _Instrument.onValueChanged.AddListener(x =>
+        {
+            var inst = instruments[x];
+            _Range.text = $"量程：{inst.LRV} ~ {inst.URV}";
+            _Unit.text = $"最小分度值单位：{inst.UnitSymbol}";
+        });
+    }
     /// <summary>
     /// 显示物理量
     /// </summary>
@@ -46,8 +56,8 @@ public class QuantityCell : HTBehaviour
         var inst = instruments[index];
         _Instrument.value = index;
         _Group.value = model.Groups;
-        _Range.text = $"量程：{inst.URV - inst.LRV}";
-        _Unit.text = $"最小分度值单位：{inst.Unit}";
+        _Range.text = $"量程：{inst.LRV} ~ {inst.URV}";
+        _Unit.text = $"最小分度值单位：{inst.UnitSymbol}";
 
         QuantityReference = model;
     }

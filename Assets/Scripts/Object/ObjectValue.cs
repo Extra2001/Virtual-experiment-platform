@@ -53,14 +53,14 @@ public class ObjectValue : HTBehaviour
         {
             x.useGravity = value;
             x.isKinematic = !value;
-            x.GetComponent<MeshCollider>().isTrigger = !value;
+            x.GetComponent<Collider>().isTrigger = !value;
         });
     }
 
     public bool Collider
     {
-        get => !gameObject.GetComponentInChildren<MeshCollider>().isTrigger;
-        set => gameObject.GetComponentsInChildren<MeshCollider>().Foreach((x, y) =>
+        get => !gameObject.GetComponentInChildren<Collider>().isTrigger;
+        set => gameObject.GetComponentsInChildren<Collider>().Foreach((x, y) =>
             x.isTrigger = !value);
     }
 

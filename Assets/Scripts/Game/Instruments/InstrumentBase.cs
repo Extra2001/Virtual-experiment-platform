@@ -102,8 +102,8 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// </summary>
     public virtual void InstReset()
     {
-        Entity.transform.GetChild(0).position = initPosition;
-        Entity.transform.GetChild(0).rotation = initRotation;
+        Entity.transform.GetChild(0).localPosition = initPosition;
+        Entity.transform.GetChild(0).localRotation = initRotation;
         MainValue = 0;
         RandomErrorLimit = 0;
         ShowValue(0);
@@ -147,7 +147,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     {
         if (Convert.ToDouble(value) == 0.0) return (true, null);
 
-        var str = 0.5.ToString();
+        var str = ErrorLimit.ToString();
         if (str.Contains("."))
             str = str.TrimEnd('0');
         if (str.EndsWith("."))
@@ -234,8 +234,8 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     public override void OnInit()//初始化时调用
     {
         base.OnInit();
-        initPosition = Entity.transform.GetChild(0).position;
-        initRotation = Entity.transform.GetChild(0).rotation;
+        initPosition = Entity.transform.GetChild(0).localPosition;
+        initRotation = Entity.transform.GetChild(0).localRotation;
         Main.m_Resource.LoadAsset<Sprite>(new AssetInfo(null, null, previewImagePath), loadDoneAction: x =>
         {
             prePreviewImage = x;

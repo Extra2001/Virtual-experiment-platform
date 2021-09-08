@@ -135,7 +135,7 @@ public class Initializer
                 Name = "细丝",
                 DetailMessage = "无",
                  Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object8.png",
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/st.png",
                 ResourcePath = $"{Application.streamingAssetsPath}/Objects/object12.obj"
             },
         });

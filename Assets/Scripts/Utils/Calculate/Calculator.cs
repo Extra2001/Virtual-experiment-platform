@@ -71,7 +71,7 @@ public partial class FormulaController {
                 return CheckFloat.Pow(tmp1, 2);
             }
             else if(Regex.IsMatch(cur.value, @"pow\(\s*[0-9A-F]{32}\s*,\s*3\s*\)")) {
-                return CheckFloat.Pow(tmp1, 2);
+                return CheckFloat.Pow(tmp1, 3);
             }
             else {
                 return tmp1;
@@ -230,51 +230,55 @@ public struct CheckFloat {//带有效数字的小数
         return FunctionX(x, dx, Math.Sin, Math.Cos);
     }
     public static CheckFloat Sin(CheckFloat x) {
-        double dx = Math.Pow(10, x.LoDigit-2);
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Sin, Math.Cos);
     }
     public static CheckFloat Cos(CheckFloat x, double dx) {
         return FunctionX(x, dx, Math.Cos, (X) => -Math.Sin(X));
     }
     public static CheckFloat Cos(CheckFloat x) {
-        double dx = Math.Pow(10, x.LoDigit-2);
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Cos, (X) => -Math.Sin(X));
     }
     public static CheckFloat Tan(CheckFloat x, double dx) {
         return FunctionX(x, dx, Math.Tan, (X) => 1 / (Math.Cos(X) * Math.Cos(X)));
     }
     public static CheckFloat Tan(CheckFloat x) {
-        double dx = Math.Pow(10, x.LoDigit - 2);
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Tan, (X) => 1 / (Math.Cos(X) * Math.Cos(X)));
     }
     public static CheckFloat Pow(CheckFloat x, double n) {
         if(n == 1.0) return x;
-        double dx = Math.Pow(10, x.LoDigit - 2);
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, (X) => Math.Pow(X, n), (X) => Math.Pow(X, n - 1) * n);
     }
     public static CheckFloat Exp(double a, CheckFloat x) {
-        double dx = Math.Pow(10, x.LoDigit - 2);
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, (X) => Math.Pow(a, X), (X) => Math.Pow(a, X) * Math.Log(a));
     }
     public static CheckFloat Log(double a, CheckFloat x) {//log_{a}(x)
-        double dx = Math.Pow(10, x.LoDigit - 2);
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, (X) => Math.Log(X, a), (X) => 1.0 / (X*Math.Log(a)));
     }
     public static CheckFloat Atan(CheckFloat x) {
-        double dx = Math.Pow(10, x.LoDigit - 2);
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Atan, (X) => 1.0 / (X * X + 1.0));
     }
     public static CheckFloat Asin(CheckFloat x) {
-        double dx = Math.Pow(10, x.LoDigit - 2);
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Asin, (X) => 1.0 / Math.Sqrt(X * X + 1.0));
     }
     public static CheckFloat Acos(CheckFloat x) {
-        double dx = Math.Pow(10, x.LoDigit - 2);
+        double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Acos, (X) => -1.0 / Math.Sqrt(X * X + 1.0));
     }
     public static CheckFloat Pow(CheckFloat x,CheckFloat n) {
-        CheckFloat a1 = Exp(x.TrueValue, n), a2 = Pow(x, n.TrueValue);
-        return a1.LoDigit > a2.LoDigit ? a1 : a2;
+        if((x.HiDigit - x.LoDigit) > (n.HiDigit - n.LoDigit)) {
+            return Pow(x, n.TrueValue).KeepEffective(n.HiDigit - n.LoDigit);
+        }
+        else {
+            return Exp(x.TrueValue, n).KeepEffective(x.HiDigit - x.LoDigit);
+        }
     }
 }
 public static class StaticMethods {

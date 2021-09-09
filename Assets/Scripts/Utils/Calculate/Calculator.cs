@@ -274,7 +274,7 @@ public struct CheckFloat {//带有效数字的小数
     }
     public static CheckFloat Pow(CheckFloat x,CheckFloat n) {
         CheckFloat a1 = Exp(x.TrueValue, n), a2 = Pow(x, n.TrueValue);
-        return ((a1.HiDigit - a1.LoDigit) > (a2.HiDigit - a2.LoDigit)) ? a2 : a1;
+        return a1.LoDigit > a2.LoDigit ? a1 : a2;
     }
 }
 public static class StaticMethods {

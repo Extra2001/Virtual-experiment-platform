@@ -118,16 +118,15 @@ public class DealProcessResult : HTBehaviour
             calc.ComplexUserUnput(RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted(), RecordManager.tempRecord.complexQuantityModel.UncertainExpression.GetExpressionExecuted());
             complexresult = CalcArgs.CalculateComplexValue(RecordManager.tempRecord.stringExpression, calc);
             if (complexresult.status != "计算无误")
-            {
-                RecordManager.tempRecord.score.ComplexQuantityError += 1;
-
+            {                
                 if (!complexresult.err.answer.right)
                 {
-                    Debug.Log(complexresult.err.answer.latex);
+                    RecordManager.tempRecord.score.ComplexQuantityError += 1;
                     complexresult.err.answer.userformula = RecordManager.tempRecord.complexQuantityModel.AverageExpression;
                 }
                 if (!complexresult.err.answerunc.right)
                 {
+                    RecordManager.tempRecord.score.ComplexQuantityError += 1;
                     complexresult.err.answerunc.userformula = RecordManager.tempRecord.complexQuantityModel.UncertainExpression;
                 }
                 quantityErrors.Add(complexresult.err);

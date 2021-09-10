@@ -23,6 +23,7 @@ public class DataColumn : HTBehaviour
     private DataColumnModel dataColumnModel;
     private List<DataColumnModel> datas = new List<DataColumnModel>();
     private List<DataInput> showedInputs = new List<DataInput>();
+    private bool single = false;
 
     public bool ReadOnly
     {
@@ -48,7 +49,7 @@ public class DataColumn : HTBehaviour
     {
         _Dropdown.onValueChanged.AddListener(x =>
         {
-            Show(datas[x]);
+            Show(datas[x], single);
             dataTable.RefreshAllDropdown();
         });
         _DeleteButton.onClick.AddListener(() =>
@@ -116,7 +117,7 @@ public class DataColumn : HTBehaviour
         for (int i = 0; i < datas.Count; i++)
             if (datas[i].addedToTable)
                 _Dropdown.disables.Add(i);
-        if (init) Show(datas.Where(x => !x.addedToTable).FirstOrDefault());
+        if (init) Show(datas.Where(x => !x.addedToTable).FirstOrDefault(), single);
     }
 
     public void SetSize(int size)
@@ -141,6 +142,7 @@ public class DataColumn : HTBehaviour
 
     public void Show(DataColumnModel dataColumnModel, bool single = false)
     {
+        this.single = single;
         if (!single)
         {
             if (this.dataColumnModel != null)
@@ -163,13 +165,13 @@ public class DataColumn : HTBehaviour
     public void AddInput()
     {
         dataColumnModel.data.Add("");
-        Show(dataColumnModel);
+        Show(dataColumnModel, single);
     }
 
     public void DeleteInput(DataInput dataInput)
     {
         dataColumnModel.data.RemoveAt(dataInput.Index);
-        Show(dataColumnModel);
+        Show(dataColumnModel, single);
     }
 
     private DataInput InstantiateDataInput(int index)

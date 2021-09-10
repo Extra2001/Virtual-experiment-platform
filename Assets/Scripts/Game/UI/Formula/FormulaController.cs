@@ -215,7 +215,6 @@ public partial class FormulaController : MonoBehaviour
         ComplexSelector.SetActive(true);
 
         Mask.SetActive(false);
-        onSelectCell?.Invoke();
     }
     /// <summary>
     /// 检查节点是否存在

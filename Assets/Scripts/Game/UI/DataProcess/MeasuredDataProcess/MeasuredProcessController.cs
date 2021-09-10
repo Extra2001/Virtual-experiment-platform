@@ -48,6 +48,23 @@ public class MeasuredProcessController : HTBehaviour
         _title.text = "处理" + quantity.Name + ":" + quantity.Symbol + "/" + instance.UnitSymbol;
     }
 
+    public bool CheckAll()
+    {
+        if (measuredUncertainty.gameObject.activeSelf)
+            return measuredUncertainty.CheckAll();
+        else if (measuredDifference2.gameObject.activeSelf)
+            return measuredDifference2.CheckAll();
+        else if (measuredRegression2.gameObject.activeSelf)
+            return measuredRegression2.CheckAll();
+        UIAPI.Instance.ShowModel(new ModelDialogModel()
+        {
+            ShowCancel = false,
+            Title = new BindableString("提示"),
+            Message = new BindableString("您还没有处理完该物理量")
+        });
+        return false;
+    }
+
     private void BackButton()
     {
         if (measuredUncertainty.gameObject.activeSelf || measuredDifference1.gameObject.activeSelf || measuredRegression1.gameObject.activeSelf)
@@ -61,9 +78,15 @@ public class MeasuredProcessController : HTBehaviour
     private void ContinueButton()
     {
         if (measuredDifference1.gameObject.activeSelf)
-            ShowDifference2();
+        {
+            if (measuredDifference1.CheckAll())
+                ShowDifference2();
+        }
         else if (measuredRegression1.gameObject.activeSelf)
-            ShowRegression2();
+        {
+            if (measuredRegression1.CheckAll())
+                ShowRegression2();
+        }
     }
 
     private void ShowDatatable(DataColumn dataColumn, DataColumnType type, DataColumnModel data, bool readOnly = true)

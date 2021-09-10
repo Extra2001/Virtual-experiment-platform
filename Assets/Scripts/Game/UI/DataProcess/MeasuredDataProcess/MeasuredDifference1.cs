@@ -10,18 +10,9 @@ public class MeasuredDifference1 : HTBehaviour
     {
 
     }
-    //启用自动化
-    protected override bool IsAutomate => true;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public bool CheckAll()
     {
-        
+        return true;
     }
 }

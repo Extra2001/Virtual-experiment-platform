@@ -103,18 +103,18 @@ public class DataTable : HTBehaviour
                 cell.Show(item.MesuredData);
                 showedColumn.Add(cell);
             }
-            if (item.IndependentData != null && item.IndependentData.addedToTable)
-            {
-                var cell = InstantiateDataColumn(DataColumnType.Independent);
-                cell.Show(item.IndependentData);
-                showedColumn.Add(cell);
-            }
-            if (item.DifferencedData != null && item.DifferencedData.addedToTable)
-            {
-                var cell = InstantiateDataColumn(DataColumnType.Differenced);
-                cell.Show(item.DifferencedData);
-                showedColumn.Add(cell);
-            }
+            //if (item.IndependentData != null && item.IndependentData.addedToTable)
+            //{
+            //    var cell = InstantiateDataColumn(DataColumnType.Independent);
+            //    cell.Show(item.IndependentData);
+            //    showedColumn.Add(cell);
+            //}
+            //if (item.DifferencedData != null && item.DifferencedData.addedToTable)
+            //{
+            //    var cell = InstantiateDataColumn(DataColumnType.Differenced);
+            //    cell.Show(item.DifferencedData);
+            //    showedColumn.Add(cell);
+            //}
         }
         HideAllButtons();
     }

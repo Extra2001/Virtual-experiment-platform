@@ -24,7 +24,7 @@ public class DataInput : HTBehaviour
             _GroupNumber.text = $"{value + 1}.";
         }
     }
-    public bool Inputable
+    public bool ReadOnly
     {
         get => _Value.readOnly;
         set => _Value.readOnly = value;
@@ -40,8 +40,8 @@ public class DataInput : HTBehaviour
     }
     public bool Deletable
     {
-        get => _DeleteButton.gameObject.activeSelf;
-        set => _DeleteButton.gameObject.SetActive(value);
+        get => _DeleteButton.interactable;
+        set => _DeleteButton.interactable = value;
     }
     private int index;
 
@@ -54,7 +54,7 @@ public class DataInput : HTBehaviour
     public void CheckInput(string input)
     {
         if (string.IsNullOrEmpty(input)) return;
-        if (Inputable) return;
+        if (ReadOnly) return;
         dataColumnModel.data[Index] = input;
         if (dataColumnModel.type == DataColumnType.Mesured || dataColumnModel.type == DataColumnType.Differenced)
             CheckInstrument(input);

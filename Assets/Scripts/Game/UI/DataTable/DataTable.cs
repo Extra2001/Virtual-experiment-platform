@@ -30,26 +30,31 @@ public class DataTable : HTBehaviour
         });
         _AddButton.onClick.AddListener(() =>
         {
-            if (_MesuredButton.gameObject.activeSelf)
-                HideAllButtons();
-            else
-            {
-                _MesuredButton.gameObject.SetActive(true);
-                _MesuredButton.interactable = false;
-                _StepButton.gameObject.SetActive(true);
-                _StepButton.interactable = false;
-                _DifferencedButton.gameObject.SetActive(true);
-                _DifferencedButton.interactable = false;
-                foreach (var item in RecordManager.tempRecord.quantities)
-                {
-                    if (item.MesuredData == null || (!item.MesuredData.addedToTable))
-                        _MesuredButton.interactable = true;
-                    if (item.IndependentData == null || (!item.IndependentData.addedToTable))
-                        _StepButton.interactable = true;
-                    if (item.DifferencedData == null || (!item.DifferencedData.addedToTable))
-                        _DifferencedButton.interactable = true;
-                }
-            }
+            showedColumn.Add(InstantiateDataColumn(DataColumnType.Mesured, true));
+            _AddButton.interactable = false;
+            foreach (var item in RecordManager.tempRecord.quantities)
+                if (item.MesuredData == null || (!item.MesuredData.addedToTable))
+                    _AddButton.interactable = true;
+            //if (_MesuredButton.gameObject.activeSelf)
+            //    HideAllButtons();
+            //else
+            //{
+            //    _MesuredButton.gameObject.SetActive(true);
+            //    _MesuredButton.interactable = false;
+            //    _StepButton.gameObject.SetActive(true);
+            //    _StepButton.interactable = false;
+            //    _DifferencedButton.gameObject.SetActive(true);
+            //    _DifferencedButton.interactable = false;
+            //    foreach (var item in RecordManager.tempRecord.quantities)
+            //    {
+            //        if (item.MesuredData == null || (!item.MesuredData.addedToTable))
+            //            _MesuredButton.interactable = true;
+            //        if (item.IndependentData == null || (!item.IndependentData.addedToTable))
+            //            _StepButton.interactable = true;
+            //        if (item.DifferencedData == null || (!item.DifferencedData.addedToTable))
+            //            _DifferencedButton.interactable = true;
+            //    }
+            //}
         });
         _MesuredButton.onClick.AddListener(() =>
         {
@@ -77,6 +82,9 @@ public class DataTable : HTBehaviour
 
     public void DeleteColumn(DataColumn dataColumn)
     {
+        foreach (var item in RecordManager.tempRecord.quantities)
+            if (item.MesuredData == null || (!item.MesuredData.addedToTable))
+                _AddButton.interactable = true;
         var index = showedColumn.FindIndex(x => x.GetInstanceID() == dataColumn.GetInstanceID());
         HideAllButtons();
         Show();

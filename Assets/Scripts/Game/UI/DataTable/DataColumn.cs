@@ -26,13 +26,22 @@ public class DataColumn : HTBehaviour
 
     public bool ReadOnly
     {
-        get => showedInputs.FirstOrDefault() != null && showedInputs.FirstOrDefault().Inputable;
-        set { showedInputs.ForEach(x => x.Inputable = x.Deletable = value); _AddButton.gameObject.SetActive(!value); }
+        get => showedInputs.FirstOrDefault() != null && showedInputs.FirstOrDefault().ReadOnly;
+        set { showedInputs.ForEach(x => { x.ReadOnly = value; x.Deletable = !value; }); _AddButton.gameObject.SetActive(!value); }
+    }
+    public bool Changable
+    {
+        get => _Dropdown.interactable;
+        set => _Dropdown.interactable = value;
     }
     public bool Deletable
     {
         get => _DeleteButton.gameObject.activeSelf;
-        set => _DeleteButton.gameObject.SetActive(value);
+        set
+        {
+            SetSize(value ? 2 : 1);
+            _DeleteButton.gameObject.SetActive(value);
+        }
     }
 
     private void Start()
@@ -53,7 +62,7 @@ public class DataColumn : HTBehaviour
         _AddButton.onClick.AddListener(AddInput);
     }
 
-    public void SetClass(DataColumnType type, bool init = false, QuantityModel quantity = null)
+    public void SetClass(DataColumnType type, bool init = false)
     {
         this.type = type;
         if (type == DataColumnType.Mesured)
@@ -101,47 +110,6 @@ public class DataColumn : HTBehaviour
                 datas.Add(item.DifferencedData);
             }
         }
-        else if (type == DataColumnType.SingleQuantity)
-        {
-            datas.Clear();
-            if (quantity.MesuredData == null)
-                quantity.MesuredData = new DataColumnModel()
-                {
-                    name = $"[Ô­] {quantity.Name} ({quantity.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
-                    quantitySymbol = quantity.Symbol,
-                    type = DataColumnType.Mesured
-                };
-            if (quantity.IndependentData == null)
-                quantity.IndependentData = new DataColumnModel()
-                {
-                    name = $"[²½] {quantity.Name} ({quantity.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
-                    quantitySymbol = quantity.Symbol,
-                    type = DataColumnType.Independent
-                };
-            if (quantity.DifferencedData == null)
-                quantity.DifferencedData = new DataColumnModel()
-                {
-                    name = $"[Öð] {quantity.Name} ({quantity.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
-                    quantitySymbol = quantity.Symbol,
-                    type = DataColumnType.Differenced
-                };
-            if (quantity.MesuredData.addedToTable)
-                datas.Add(quantity.MesuredData);
-            if (quantity.IndependentData.addedToTable)
-                datas.Add(quantity.IndependentData);
-            if (quantity.DifferencedData.addedToTable)
-                datas.Add(quantity.DifferencedData);
-            ReadOnly = true;
-            Deletable = false;
-            _Dropdown.ClearOptions();
-            _Dropdown.AddOptions(datas.Select(x => x.name).ToList());
-            _Dropdown.disables.Clear();
-            if (datas.Count != 0)
-                Show(datas[0]);
-            return;
-        }
-        ReadOnly = false;
-        Deletable = true;
         _Dropdown.ClearOptions();
         _Dropdown.AddOptions(datas.Select(x => x.name).ToList());
         _Dropdown.disables.Clear();
@@ -149,6 +117,18 @@ public class DataColumn : HTBehaviour
             if (datas[i].addedToTable)
                 _Dropdown.disables.Add(i);
         if (init) Show(datas.Where(x => !x.addedToTable).FirstOrDefault());
+    }
+
+    public void SetSize(int size)
+    {
+        var sized = _Dropdown.rectTransform().sizeDelta;
+        if (size == 1) sized.x = 200;
+        else if (size == 2) sized.x = 170;
+        _Dropdown.rectTransform().sizeDelta = sized;
+        var position = _Dropdown.transform.localPosition;
+        if (size == 1) position.x = 0;
+        else if (size == 2) position.x = -15;
+        _Dropdown.transform.localPosition = position;
     }
 
     public void RefreshDropdown()
@@ -159,16 +139,16 @@ public class DataColumn : HTBehaviour
                 _Dropdown.disables.Add(i);
     }
 
-    public void Show(DataColumnModel dataColumnModel)
+    public void Show(DataColumnModel dataColumnModel, bool single = false)
     {
-        if (type != DataColumnType.SingleQuantity)
+        if (!single)
         {
             if (this.dataColumnModel != null)
                 this.dataColumnModel.addedToTable = false;
-            this.dataColumnModel = dataColumnModel;
             dataColumnModel.addedToTable = true;
             SetClass(type);
         }
+        this.dataColumnModel = dataColumnModel;
         foreach (var item in showedInputs)
             Destroy(item.gameObject);
         showedInputs.Clear();

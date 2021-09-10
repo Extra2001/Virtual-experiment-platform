@@ -14,6 +14,9 @@ public class QuantityModel
     public int Groups { get; set; } = 8;
 
     public List<string> Data { get; set; } = new List<string>();
+    public DataColumnModel MesuredData { get; set; } = null;
+    public DataColumnModel IndependentData { get; set; } = null;
+    public DataColumnModel DifferencedData { get; set; } = null;
 
     public double Average { get; set; } = 0.0;
     public double Ua { get; set; } = 0.0;

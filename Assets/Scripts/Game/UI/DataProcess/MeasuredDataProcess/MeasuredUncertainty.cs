@@ -11,12 +11,16 @@ public class MeasuredUncertainty : HTBehaviour
 
     public FormulaController formulaController;
 
+    public Text Title1;
     public Button CallButton1;
     public Text Value1;
+    public Text Title2;
     public Button CallButton2;
     public Text Value2;
+    public Text Title3;
     public Button CallButton3;
     public Text Value3;
+    public Text Title4;
     public Button CallButton4;
     public Text Value4;
 
@@ -46,6 +50,10 @@ public class MeasuredUncertainty : HTBehaviour
         this.quantity = quantity;
         formulaController.Initialize();
         formulaController.gameObject.SetActive(false);
+        Title1.text = $"{quantity.Symbol}的平均值\n\n=";
+        Title2.text = $"{quantity.Symbol}的A类不确定度\n\n=";
+        Title3.text = $"{quantity.Symbol}的B类不确定度\n\n=";
+        Title4.text = $"{quantity.Symbol}的合成不确定度\n\n=";
         if (quantity.AverageExpression != null && quantity.AverageExpression.Count != 0)
         {
             Value1.text = "=" + StaticMethods.NumberFormat(quantity.AverageExpression.GetExpressionExecuted());

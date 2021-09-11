@@ -25,6 +25,9 @@ public class DataColumn : HTBehaviour
     private List<DataInput> showedInputs = new List<DataInput>();
     private bool single = false;
 
+    public delegate void OnInputCountChange();
+    public event OnInputCountChange onInputCountChange;
+
     public bool ReadOnly
     {
         get => showedInputs.FirstOrDefault() != null && showedInputs.FirstOrDefault().ReadOnly;
@@ -166,12 +169,14 @@ public class DataColumn : HTBehaviour
     {
         dataColumnModel.data.Add("");
         Show(dataColumnModel, single);
+        onInputCountChange?.Invoke();
     }
 
     public void DeleteInput(DataInput dataInput)
     {
         dataColumnModel.data.RemoveAt(dataInput.Index);
         Show(dataColumnModel, single);
+        onInputCountChange?.Invoke();
     }
 
     private DataInput InstantiateDataInput(int index)

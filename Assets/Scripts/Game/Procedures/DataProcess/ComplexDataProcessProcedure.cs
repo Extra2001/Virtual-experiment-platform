@@ -38,7 +38,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
         }
         else if (ComplexStatisticValue.Uncertain == valueKind)
         {
-            result = item.Uncertain.ToString();
+            result = item.ComplexExpression.GetExpressionExecuted().ToString();
         }
         return result;
     }

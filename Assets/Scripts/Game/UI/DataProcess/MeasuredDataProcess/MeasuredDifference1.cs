@@ -37,16 +37,17 @@ public class MeasuredDifference1 : HTBehaviour
         ShowImage();
     }
 
-    public bool CheckAll()
+    public bool CheckAll(bool silent = false)
     {
         // 在这里检查逐差法的表格
         if (quantity.MesuredData.data.Count / 2 != quantity.DifferencedData.data.Count)
         {
-            UIAPI.Instance.ShowModel(new ModelDialogModel()
-            {
-                ShowCancel = false,
-                Message = new BindableString("你的逐差表格的数据组数不正确")
-            });
+            if (!silent)
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Message = new BindableString("你的逐差表格的数据组数不正确")
+                });
             return false;
         }
         // 在这里检查步长有没有写

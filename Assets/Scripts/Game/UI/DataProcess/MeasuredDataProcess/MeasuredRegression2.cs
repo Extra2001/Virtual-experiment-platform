@@ -104,23 +104,26 @@ public class MeasuredRegression2 : MeasuredUncertainty
         }
     }
 
-    public override bool CheckAll()
+    public override bool CheckAll(bool silent = false)
     {
-        if(base.CheckAll())
+        if(base.CheckAll(silent))
         {
             if (quantity.BExpression == null || quantity.BExpression.Count == 0)
             {
-                ShowModel("b估计的值还未填写");
+                if (!silent)
+                    ShowModel("b估计的值还未填写");
                 return false;
             }
             if (quantity.AExpression == null || quantity.AExpression.Count == 0)
             {
-                ShowModel("a估计的值还未填写");
+                if (!silent)
+                    ShowModel("a估计的值还未填写");
                 return false;
             }
             if (quantity.RelationExpression == null || quantity.RelationExpression.Count == 0)
             {
-                ShowModel("相关系数还未填写");
+                if (!silent)
+                    ShowModel("相关系数还未填写");
                 return false;
             }
             return true;

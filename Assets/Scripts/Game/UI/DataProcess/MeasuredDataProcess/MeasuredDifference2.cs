@@ -7,13 +7,14 @@ using UnityEngine.UI;
 
 public class MeasuredDifference2 : MeasuredUncertainty
 {
-    public override bool CheckAll()
+    public override bool CheckAll(bool silent = false)
     {
-        if(base.CheckAll())
+        if (base.CheckAll(silent))
         {
             if (quantity.AverageExpression == null || quantity.AverageExpression.Count == 0)
             {
-                ShowModel("合成不确定度还未填写");
+                if (!silent)
+                    ShowModel("平均值还未填写");
                 return false;
             }
             return true;

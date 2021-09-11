@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class MeasuredRegression1 : HTBehaviour
 {
@@ -28,15 +29,26 @@ public class MeasuredRegression1 : HTBehaviour
         nextValue.SetValueWithoutNotify(quantity.nextValue);
     }
 
-    public bool CheckAll()
+    public bool CheckAll(bool silent = false)
     {
         if (quantity.MesuredData.data.Count != quantity.IndependentData.data.Count)
         {
-            UIAPI.Instance.ShowModel(new ModelDialogModel()
-            {
-                ShowCancel = false,
-                Message = new BindableString("自变量数据组数与因变量不相等")
-            });
+            if (!silent)
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Message = new BindableString("自变量数据组数与因变量不相等")
+                });
+            return false;
+        }
+        if (quantity.IndependentData.data.Where(x => string.IsNullOrEmpty(x)).Count() > 0)
+        {
+            if (!silent)
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Message = new BindableString("自变量数据有空值")
+                });
             return false;
         }
         return true;

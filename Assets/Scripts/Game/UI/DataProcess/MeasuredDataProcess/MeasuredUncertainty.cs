@@ -96,21 +96,24 @@ public class MeasuredUncertainty : HTBehaviour
         }
     }
 
-    public virtual bool CheckAll()
+    public virtual bool CheckAll(bool silent = false)
     {
         if (quantity.UaExpression == null || quantity.UaExpression.Count == 0)
         {
-            ShowModel("A类不确定度还未填写");
+            if (!silent)
+                ShowModel("A类不确定度还未填写");
             return false;
         }
         if (quantity.UbExpression == null || quantity.UbExpression.Count == 0)
         {
-            ShowModel("B类不确定度还未填写");
+            if (!silent)
+                ShowModel("B类不确定度还未填写");
             return false;
         }
         if (quantity.ComplexExpression == null || quantity.ComplexExpression.Count == 0)
         {
-            ShowModel("合成不确定度还未填写");
+            if (!silent)
+                ShowModel("合成不确定度还未填写");
             return false;
         }
         return true;

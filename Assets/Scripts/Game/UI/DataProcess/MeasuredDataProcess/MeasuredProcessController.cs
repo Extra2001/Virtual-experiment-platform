@@ -38,37 +38,67 @@ public class MeasuredProcessController : HTBehaviour
         _regressionButton.onClick.AddListener(ShowRegression1);
     }
 
-    public void Initialize(QuantityModel quantity)
+    public void Show(QuantityModel quantity)
     {
         HideAllPanel();
         this.quantity = quantity;
-        _chooserPanel.gameObject.SetActive(true);
-        ShowDatatable(dataColumn1, DataColumnType.Mesured, quantity.MesuredData);
         var instance = quantity.InstrumentType.CreateInstrumentInstance();
         _title.text = "处理" + quantity.Name + ":" + quantity.Symbol + "/" + instance.UnitSymbol;
+        measuredUncertainty.Show(quantity); measuredDifference1.Show(quantity);
+        measuredDifference2.Show(quantity); measuredRegression1.Show(quantity);
+        measuredRegression2.Show(quantity);
+        if (quantity.processMethod == 1) ShowUncertainty();
+        else if (quantity.processMethod == 2)
+        {
+            if (measuredDifference1.CheckAll(true)) ShowDifference2();
+            else ShowDifference1();
+        }
+        else if (quantity.processMethod == 3)
+        {
+            if (measuredRegression1.CheckAll(true)) ShowRegression2();
+            else ShowRegression1();
+        }
+        else
+        {
+            ShowChooser();
+        }
     }
 
-    public bool CheckAll()
+    public bool CheckAll(bool silent = false)
     {
         if (measuredUncertainty.gameObject.activeSelf)
-            return measuredUncertainty.CheckAll();
+            return measuredUncertainty.CheckAll(silent);
         else if (measuredDifference2.gameObject.activeSelf)
-            return measuredDifference2.CheckAll();
+            return measuredDifference2.CheckAll(silent);
         else if (measuredRegression2.gameObject.activeSelf)
-            return measuredRegression2.CheckAll();
-        UIAPI.Instance.ShowModel(new ModelDialogModel()
-        {
-            ShowCancel = false,
-            Title = new BindableString("提示"),
-            Message = new BindableString("您还没有处理完该物理量")
-        });
+            return measuredRegression2.CheckAll(silent);
+        else if (quantity.processMethod == 1)
+            return measuredUncertainty.CheckAll(silent);
+        else if (quantity.processMethod == 2)
+            return measuredDifference1.CheckAll(silent) && measuredDifference2.CheckAll(silent);
+        else if (quantity.processMethod == 3)
+            return measuredRegression1.CheckAll(silent) && measuredRegression2.CheckAll(silent);
+        if (!silent)
+            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            {
+                ShowCancel = false,
+                Title = new BindableString("提示"),
+                Message = new BindableString("您还没有处理完该物理量")
+            });
         return false;
+    }
+
+    private void ShowChooser()
+    {
+        HideAllPanel();
+        ShowDatatable(dataColumn1, DataColumnType.Mesured, quantity.MesuredData);
+        _chooserPanel.gameObject.SetActive(true);
     }
 
     private void BackButton()
     {
         if (measuredUncertainty.gameObject.activeSelf || measuredDifference1.gameObject.activeSelf || measuredRegression1.gameObject.activeSelf)
-            Initialize(quantity);
+            ShowChooser();
         else if (measuredDifference2.gameObject.activeSelf)
             ShowDifference1();
         else if (measuredRegression2.gameObject.activeSelf)
@@ -133,6 +163,7 @@ public class MeasuredProcessController : HTBehaviour
     private void ShowUncertainty()
     {
         HideAllPanel();
+        quantity.processMethod = 1;
         ShowDatatable(dataColumn1, DataColumnType.Mesured, quantity.MesuredData);
         ShowNavigationBar("直接计算不确定度", 2);
         measuredUncertainty.gameObject.SetActive(true);
@@ -143,6 +174,7 @@ public class MeasuredProcessController : HTBehaviour
     private void ShowDifference1()
     {
         HideAllPanel();
+        quantity.processMethod = 2;
         ShowDatatable(dataColumn1, DataColumnType.Mesured, quantity.MesuredData);
         ShowDatatable(dataColumn2, DataColumnType.Differenced, quantity.DifferencedData, false);
         ShowNavigationBar("逐差法第一步", 3);
@@ -155,6 +187,7 @@ public class MeasuredProcessController : HTBehaviour
     private void ShowDifference2()
     {
         HideAllPanel();
+        quantity.processMethod = 2;
         ShowDatatable(dataColumn1, DataColumnType.Differenced, quantity.DifferencedData);
         ShowNavigationBar("逐差法第二步", 2);
         measuredDifference2.gameObject.SetActive(true);
@@ -165,6 +198,7 @@ public class MeasuredProcessController : HTBehaviour
     private void ShowRegression1()
     {
         HideAllPanel();
+        quantity.processMethod = 3;
         ShowDatatable(dataColumn1, DataColumnType.Differenced, quantity.MesuredData);
         ShowDatatable(dataColumn2, DataColumnType.Independent, quantity.IndependentData, false);
         ShowNavigationBar("一元线性回归", 3);
@@ -177,6 +211,7 @@ public class MeasuredProcessController : HTBehaviour
     private void ShowRegression2()
     {
         HideAllPanel();
+        quantity.processMethod = 3;
         ShowNavigationBar("一元线性回归法第二步", 1);
         measuredRegression2.gameObject.SetActive(true);
         measuredRegression2.Show(quantity);

@@ -82,9 +82,6 @@ public class DataTable : HTBehaviour
 
     public void DeleteColumn(DataColumn dataColumn)
     {
-        foreach (var item in RecordManager.tempRecord.quantities)
-            if (item.MesuredData == null || (!item.MesuredData.addedToTable))
-                _AddButton.interactable = true;
         var index = showedColumn.FindIndex(x => x.GetInstanceID() == dataColumn.GetInstanceID());
         HideAllButtons();
         Show();
@@ -103,6 +100,7 @@ public class DataTable : HTBehaviour
                 cell.Show(item.MesuredData);
                 showedColumn.Add(cell);
             }
+            else _AddButton.interactable = true;
             //if (item.IndependentData != null && item.IndependentData.addedToTable)
             //{
             //    var cell = InstantiateDataColumn(DataColumnType.Independent);

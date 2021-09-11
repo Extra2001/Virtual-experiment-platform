@@ -24,6 +24,9 @@ public class QuantityModel
     //一元线性回归需要的内容
     public int nextValue = 0; // 0为b(斜率)，1为a
     public int dataset = 0; // 0为原始数据，1为自变量数据
+    public List<FormulaNode> BExpression { get; set; } = null;
+    public List<FormulaNode> AExpression { get; set; } = null;
+    public List<FormulaNode> RelationExpression { get; set; } = null;
 
     //存储输入的公式
     public List<FormulaNode> AverageExpression { get; set; } = null;

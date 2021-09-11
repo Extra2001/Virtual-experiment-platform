@@ -26,12 +26,12 @@ public class MeasuredUncertainty : HTBehaviour
 
     public Sprite[] Sprites = new Sprite[3];
 
-    private List<FormulaNode> currentNodes = null;
-    private Button currentButton = null;
-    private Text currentValue = null;
+    protected List<FormulaNode> currentNodes = null;
+    protected Button currentButton = null;
+    protected Text currentValue = null;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         CallButton1.onClick.AddListener(() => ShowFormulaEditor(CallButton1, Value1, quantity.AverageExpression == null ?
             quantity.AverageExpression = new List<FormulaNode>() : quantity.AverageExpression));
@@ -44,7 +44,7 @@ public class MeasuredUncertainty : HTBehaviour
         formulaController.onSelectCell += FormulaController_onSelectCell;
     }
 
-    public void Show(QuantityModel quantity)
+    public virtual void Show(QuantityModel quantity)
     {
         //按钮颜色，存储的表达式等等
         this.quantity = quantity;
@@ -96,7 +96,7 @@ public class MeasuredUncertainty : HTBehaviour
         }
     }
 
-    public bool CheckAll()
+    public virtual bool CheckAll()
     {
         if (quantity.UaExpression == null || quantity.UaExpression.Count == 0)
         {
@@ -116,7 +116,7 @@ public class MeasuredUncertainty : HTBehaviour
         return true;
     }
 
-    private void FormulaController_onSelectCell()
+    protected void FormulaController_onSelectCell()
     {
         try
         {
@@ -131,7 +131,7 @@ public class MeasuredUncertainty : HTBehaviour
         }
     }
 
-    private void ShowFormulaEditor(Button button, Text text, List<FormulaNode> nodes)
+    protected void ShowFormulaEditor(Button button, Text text, List<FormulaNode> nodes)
     {
         currentButton = button;
         currentValue = text;
@@ -142,7 +142,7 @@ public class MeasuredUncertainty : HTBehaviour
         else formulaController.Initialize();
     }
 
-    private void ShowModel(string message)
+    protected void ShowModel(string message)
     {
         UIAPI.Instance.ShowModel(new ModelDialogModel()
         {

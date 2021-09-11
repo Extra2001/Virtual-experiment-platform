@@ -78,7 +78,7 @@ public class DealProcessResult : HTBehaviour
 
         foreach (var item in RecordManager.tempRecord.quantities)
         {
-            calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.Groups);
+            calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
             calc.Measure(item.Symbol, item.Data.ToDouble().ToArray());
             calc.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
         }

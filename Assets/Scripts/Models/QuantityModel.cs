@@ -11,7 +11,6 @@ public class QuantityModel
     public string Name { get; set; } = "";
     public string Symbol { get; set; } = "";
     public Type InstrumentType { get; set; } = typeof(RulerInstrument);
-    public int Groups { get; set; } = 8;
 
     //物理量的数据处理方法，0为未处理，1为直接，2为逐差法，3为一元线性回归
     public int processMethod { get; set; } = 0;

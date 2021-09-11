@@ -11,7 +11,6 @@ public class QuantityPreviewCell : HTBehaviour
     protected override bool IsAutomate => true;
     public Text _Name;
     public Text _Symbol;
-    public Text _Group;
     public Text _InstrumentName;
     public Text _InstrumentUnit;
 
@@ -19,7 +18,6 @@ public class QuantityPreviewCell : HTBehaviour
     {
         _Name.text = model.Name;
         _Symbol.text = model.Symbol;
-        _Group.text = model.Groups.ToString();
         var inst = model.InstrumentType.CreateInstrumentInstance();
         _InstrumentName.text = inst.InstName;
         _InstrumentUnit.text = inst.UnitSymbol;

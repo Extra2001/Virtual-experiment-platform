@@ -32,9 +32,18 @@ public class ComplexDataProcessProcedure : ProcedureBase
         //根据记录的数据给公式编辑器传值
         string result = "error";
         var item = quantities.Where(x => x.Symbol.Equals(quantityName)).FirstOrDefault();
+
         if (ComplexStatisticValue.Average == valueKind)
         {
-            result = StaticMethods.Average(item.Data.ToDouble()).ToString();
+            if (item.processMethod == 1)
+                result = StaticMethods.Average(item.MesuredData.data.ToDouble()).ToString();
+            else if (item.processMethod == 2)
+                result = StaticMethods.Average(item.DifferencedData.data.ToDouble()).ToString();
+            // 下面可能还要改
+            else if (item.processMethod == 3 && item.nextValue == 0)
+                result = item.BExpression.GetExpressionExecuted().ToString();
+            else if (item.processMethod == 3 && item.nextValue == 1)
+                result = item.AExpression.GetExpressionExecuted().ToString();
         }
         else if (ComplexStatisticValue.Uncertain == valueKind)
         {

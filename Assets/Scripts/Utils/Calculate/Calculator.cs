@@ -54,7 +54,7 @@ public partial class FormulaController {
                 return CheckFloat.Cos(tmp1);
             }
             else if(cur.value.Contains("exp")) {
-                return CheckFloat.Exp(Math.E,tmp1);
+                return CheckFloat.Exp(Math.E, tmp1);
             }
             else if(cur.value.Contains("log")) {
                 if(cur.value.Contains("log(10)")) {
@@ -258,7 +258,7 @@ public struct CheckFloat {//带有效数字的小数
     }
     public static CheckFloat Log(double a, CheckFloat x) {//log_{a}(x)
         double dx = Math.Pow(10, x.LoDigit);
-        return FunctionX(x, dx, (X) => Math.Log(X, a), (X) => 1.0 / (X*Math.Log(a)));
+        return FunctionX(x, dx, (X) => Math.Log(X, a), (X) => 1.0 / (X * Math.Log(a)));
     }
     public static CheckFloat Atan(CheckFloat x) {
         double dx = Math.Pow(10, x.LoDigit);
@@ -272,7 +272,7 @@ public struct CheckFloat {//带有效数字的小数
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Acos, (X) => -1.0 / Math.Sqrt(X * X + 1.0));
     }
-    public static CheckFloat Pow(CheckFloat x,CheckFloat n) {
+    public static CheckFloat Pow(CheckFloat x, CheckFloat n) {
         if((x.HiDigit - x.LoDigit) > (n.HiDigit - n.LoDigit)) {
             return Pow(x, n.TrueValue).KeepEffective(n.HiDigit - n.LoDigit);
         }
@@ -318,6 +318,33 @@ public static class StaticMethods {
             Output = Input.ToString("E");
         }
         return Output;
+    }
+    public static (double a, double b) SuccessiveDifference(double[] x, double[] y) {
+        //y=bx+a
+        int n = x.Length, k = n / 2;
+        Span<double> x1 = x.AsSpan(0, n / 2), x2 = x.AsSpan(n % 2 == 0 ? n / 2 : n / 2 + 1, n / 2);
+        Span<double> y1 = y.AsSpan(0, n / 2), y2 = y.AsSpan(n % 2 == 0 ? n / 2 : n / 2 + 1, n / 2);
+        Span<double> bk = k >= 1024 ? new double[k] : stackalloc double[k];
+        double b = 0, xx = 0, yy = 0;
+        for(int i = 0;i < k;i++) {
+            bk[i] = (y2[i] - y1[i]) / (x2[i] - x1[i]);
+            b += bk[i];
+            xx += x1[i];xx += x2[i];yy += y1[i];yy += y2[i];
+        }
+        b /= k;
+        double a = (yy - b * xx) / (2 * k);
+        return (a,b);
+    }
+    public static (double a,double b) LinearRegression(double[] x,double[] y) {
+        //y=bx+a
+        double[] xy = new double[x.Length],x2=new double[x.Length];
+        for(int i = 0;i < x.Length;i++) {
+            xy[i] = x[i] * y[i];
+            x2[i] = x[i] * x[i];
+        }
+        double xav = Average(x), yav = Average(y), xyav = Average(xy), x2av = Average(x2);
+        double b = (xav * yav - xyav) / (xav * xav - x2av),a=yav-b*xav;
+        return (a, b);
     }
     public static (double avg, double ua, double u) CalcUncertain(IEnumerable<double> data, double ub) {
         //输入:测量数据data 仪器B类不确定度ub

@@ -17,7 +17,8 @@ public class MeasuredDataProcess : UILogicResident
     {       
         base.OnOpen(args);
         QuantityModel quantity = (QuantityModel)args[0];
-        UIEntity.GetComponent<UncertaintyInput>().Show(quantity);
-        UIEntity.GetComponent<DealMeasuredDataInput>().Show(quantity);
+        UIEntity.GetComponent<MeasuredProcessController>().Show(quantity);
+        //UIEntity.GetComponentInChildren<UncertaintyInput>(true).Show(quantity);
+        //UIEntity.GetComponentInChildren<DealMeasuredDataInput>(true).Show(quantity);
     }
 }

@@ -5,28 +5,64 @@
 using HT.Framework;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
 public class DataInput : HTBehaviour
 {
     public Text _GroupNumber;
     public InputField _Value;
-    public QuantityModel quantity;
-    public bool Inputable
+    public Button _DeleteButton;
+
+    public DataColumnModel dataColumnModel;
+    [NonSerialized]
+    public DataColumn dataColumn;
+    public int Index
+    {
+        get => index; set
+        {
+            index = value;
+            _GroupNumber.text = $"{value + 1}.";
+        }
+    }
+    public bool ReadOnly
     {
         get => _Value.readOnly;
         set => _Value.readOnly = value;
     }
-    public string Value { get => _Value.text; set => _Value.text = value; }
-    public int GroupNumber { get => Convert.ToInt32(_GroupNumber.text.Remove(_GroupNumber.text.Length - 1, 1));
-        set => _GroupNumber.text = $"{value}."; }
+    public string Value
+    {
+        get => _Value.text;
+        set
+        {
+            dataColumnModel.data[index] = value;
+            _Value.text = value;
+        }
+    }
+    public bool Deletable
+    {
+        get => _DeleteButton.interactable;
+        set => _DeleteButton.interactable = value;
+    }
+    private int index;
 
     private void Start()
     {
         _Value.onEndEdit.AddListener(CheckInput);
+        _DeleteButton.onClick.AddListener(() => dataColumn.DeleteInput(this));
     }
 
     public void CheckInput(string input)
     {
+        if (string.IsNullOrEmpty(input)) return;
+        if (ReadOnly) return;
+        dataColumnModel.data[Index] = input;
+        if (dataColumnModel.type == DataColumnType.Mesured || dataColumnModel.type == DataColumnType.Differenced)
+            CheckInstrument(input);
+    }
+
+    private void CheckInstrument(string input)
+    {
+        var quantity = RecordManager.tempRecord.quantities.Where(x => x.Symbol.Equals(dataColumnModel.quantitySymbol)).FirstOrDefault();
         var instrument1 = quantity.InstrumentType.CreateInstrumentInstance();
         var (res1, answer1) = instrument1.CheckErrorLimit(input);
         var (res2, answer2) = instrument1.CheckULLimit(input);
@@ -92,18 +128,14 @@ public class DataInput : HTBehaviour
     /// <summary>
     /// 显示数值
     /// </summary>
-    public void Show(QuantityModel quantity, int groupNumber)
+    public void Show(DataColumnModel dataColumnModel, int index, string value = null)
     {
-        GroupNumber = groupNumber;
-        this.quantity = quantity;
-    }
-    /// <summary>
-    /// 显示组数
-    /// </summary>
-    public void Show(QuantityModel quantity, int groupNumber, string value)
-    {
-        Value = value;
-        GroupNumber = groupNumber;
-        this.quantity = quantity;
+        Index = index;
+        this.dataColumnModel = dataColumnModel;
+
+        if (!string.IsNullOrEmpty(value))
+            Value = value;
+        else if (!string.IsNullOrEmpty(dataColumnModel.data[Index]))
+            Value = dataColumnModel.data[Index];
     }
 }

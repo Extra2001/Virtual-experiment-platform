@@ -9,6 +9,7 @@ public class UncertaintyBackNext : HTBehaviour
 {
     public Button NextButton;
     public Button BackButton;
+    public MeasuredProcessController controller;
 
     private void Start()
     {
@@ -29,14 +30,17 @@ public class UncertaintyBackNext : HTBehaviour
         });
         NextButton.onClick.AddListener(() =>
         {
-            if (gm._currentQuantityIndex >= rec.quantities.Count - 1)
+            if (controller != null && controller.CheckAll())
             {
-                gm.SwitchProcedure<ComplexDataProcessProcedure>();
-            }
-            else
-            {
-                gm._currentQuantityIndex++;
-                gm.ShowUncertainty();
+                if (gm._currentQuantityIndex >= rec.quantities.Count - 1)
+                {
+                    gm.SwitchProcedure<ComplexDataProcessProcedure>();
+                }
+                else
+                {
+                    gm._currentQuantityIndex++;
+                    gm.ShowUncertainty();
+                }
             }
         });
     }

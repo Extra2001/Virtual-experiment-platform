@@ -24,7 +24,5 @@ public class UncertaintyInput : HTBehaviour
         _UaTitle.text = quantity.Name + "的A类不确定度\n\n=";
         _UbTitle.text = quantity.Name + "的B类不确定度\n\n=";
         _ComplexTitle.text = quantity.Name + "的合成不确定度\n\n=";
-
-        dataColumn.ShowQuantity(quantity, true);
     }
 }

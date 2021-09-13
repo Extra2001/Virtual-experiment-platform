@@ -11,21 +11,23 @@ public class QuantityModel
     public string Name { get; set; } = "";
     public string Symbol { get; set; } = "";
     public Type InstrumentType { get; set; } = typeof(RulerInstrument);
-    public int Groups { get; set; } = 8;
 
-    public List<string> Data { get; set; } = new List<string>();
+    //物理量的数据处理方法，0为未处理，1为直接，2为逐差法，3为一元线性回归
+    public int processMethod { get; set; } = 0;
 
-    public double Average { get; set; } = 0.0;
-    public double Ua { get; set; } = 0.0;
-    public double Ub { get; set; } = 0.0;
-    public double Uncertain { get; set; } = 0.0;
+    public DataColumnModel MesuredData { get; set; } = null;
+    public DataColumnModel IndependentData { get; set; } = null;
+    public DataColumnModel DifferencedData { get; set; } = null;
 
+    //逐差法需要的内容
+    public string stepLength { get; set; } = "1";
 
-    //此处状态0代表初始，1代表正在构建表达式，2代表构建表达式完成
-    public int AverageState { get; set; } = 0;
-    public int UaState { get; set; } = 0;
-    public int UbState { get; set; } = 0;
-    public int ComplexState { get; set; } = 0;
+    //一元线性回归需要的内容
+    public int nextValue = 0; // 0为b(斜率)，1为a
+    public int dataset = 0; // 0为原始数据，1为自变量数据
+    public List<FormulaNode> BExpression { get; set; } = null;
+    public List<FormulaNode> AExpression { get; set; } = null;
+    public List<FormulaNode> RelationExpression { get; set; } = null;
 
     //存储输入的公式
     public List<FormulaNode> AverageExpression { get; set; } = null;

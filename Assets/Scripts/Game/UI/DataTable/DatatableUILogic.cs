@@ -23,19 +23,8 @@ public class DatatableUILogic : UILogicResident
 
     public void Show()
     {
-        UIEntity.GetComponent<DataTable>().Show();
-        UIShowHideHelper.ShowFromLeft(UIEntity);
-    }
-
-    public void Show(Type type)
-    {
-        UIEntity.GetComponent<DataTable>().Show(type);
-        UIShowHideHelper.ShowFromLeft(UIEntity);
-    }
-
-    public void Show<T>() where T : InstrumentBase
-    {
-        UIEntity.GetComponent<DataTable>().Show(typeof(T));
+        var dt = UIEntity.GetComponentInChildren<DataTable>();
+        dt.Show();
         UIShowHideHelper.ShowFromLeft(UIEntity);
     }
 

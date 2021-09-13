@@ -17,6 +17,7 @@ public class PreviewExp : HTBehaviour
 
     private void Start()
     {
+        InitData();
         LoadQuantities();
         Render();
     }
@@ -46,6 +47,31 @@ public class PreviewExp : HTBehaviour
             quantities.Add(cell);
             var cellScript = cell.GetComponent<QuantityPreviewCell>();
             cellScript.SetQuantity(item);
+        }
+    }
+
+    public void InitData()
+    {
+        foreach (var item in RecordManager.tempRecord.quantities)
+        { 
+            item.MesuredData = new DataColumnModel()
+            {
+                name = $"[Ô­] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+                quantitySymbol = item.Symbol,
+                type = DataColumnType.Mesured
+            };
+            item.IndependentData = new DataColumnModel()
+            {
+                name = $"[×Ô] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+                quantitySymbol = item.Symbol,
+                type = DataColumnType.Independent
+            };
+            item.DifferencedData = new DataColumnModel()
+            {
+                name = $"[Öð] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+                quantitySymbol = item.Symbol,
+                type = DataColumnType.Differenced
+            };
         }
     }
 }

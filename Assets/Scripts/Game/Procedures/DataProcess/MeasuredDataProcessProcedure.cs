@@ -3,6 +3,9 @@
     描述：直接测量量的处理流程
 *************************************************************************************/
 using HT.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 /// <summary>
 /// 直接测量量的处理流程
 /// </summary>
@@ -32,45 +35,68 @@ public class MeasuredDataProcessProcedure : ProcedureBase
     {
         //根据记录的数据给公式编辑器传值
         string result = "error";
-        if (valueKind == MeasuredStatisticValue.Symbol)
-        {
-            result = CurrentQuantity.Symbol;
-        }
-        else if (valueKind == MeasuredStatisticValue.Number)
-        {
-            result = CurrentQuantity.Groups.ToString();
-        }
-        else if (valueKind == MeasuredStatisticValue.Average)
-        {
-            result = StaticMethods.Average(CurrentQuantity.Data.ToDouble()).ToString();
-        }
-        else if (valueKind == MeasuredStatisticValue.SigmaX)
-        {
-            result = (StaticMethods.CenterMoment(CurrentQuantity.Data.ToDouble(), 1) * CurrentQuantity.Groups).ToString();
-        }
-        else if (valueKind == MeasuredStatisticValue.SigmaXSquare)
-        {
-            result = (StaticMethods.CenterMoment(CurrentQuantity.Data.ToDouble(), 2) * CurrentQuantity.Groups).ToString();
-        }
-        else if (valueKind == MeasuredStatisticValue.SigmaXCube)
-        {
-            result = (StaticMethods.CenterMoment(CurrentQuantity.Data.ToDouble(), 3) * CurrentQuantity.Groups).ToString();
-        }
-        else if (valueKind == MeasuredStatisticValue.Variance)
-        {
-            result = StaticMethods.Variance(CurrentQuantity.Data.ToDouble()).ToString();
-        }
-        else if (valueKind == MeasuredStatisticValue.StandardDeviation)
-        {
-            result = StaticMethods.StdDev(CurrentQuantity.Data.ToDouble()).ToString();
-        }
-        else if (valueKind == MeasuredStatisticValue.InstrumentError)
-        {
-            result = GameManager.Instance.GetInstrument(CurrentQuantity.InstrumentType).ErrorLimit.ToString();
-        }
-        return result;
 
-        //throw new NotImplementedException();
+        if (valueKind == MeasuredStatisticValue.Symbol)
+            result = CurrentQuantity.Symbol;
+        else if (valueKind == MeasuredStatisticValue.Number)
+            result = CurrentQuantity.MesuredData.data.Count.ToString();
+        else if (valueKind == MeasuredStatisticValue.Average)
+            result = StaticMethods.Average(CurrentQuantity.MesuredData.data.ToDouble()).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmaX)
+            result = (StaticMethods.CenterMoment(CurrentQuantity.MesuredData.data.ToDouble(), 1) 
+                * CurrentQuantity.MesuredData.data.Count).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmaXSquare)
+            result = (StaticMethods.CenterMoment(CurrentQuantity.MesuredData.data.ToDouble(), 2) 
+                * CurrentQuantity.MesuredData.data.Count).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmaXCube)
+            result = (StaticMethods.CenterMoment(CurrentQuantity.MesuredData.data.ToDouble(), 3) 
+                * CurrentQuantity.MesuredData.data.Count).ToString();
+        else if (valueKind == MeasuredStatisticValue.Variance)
+            result = StaticMethods.Variance(CurrentQuantity.MesuredData.data.ToDouble()).ToString();
+        else if (valueKind == MeasuredStatisticValue.StandardDeviation)
+            result = StaticMethods.StdDev(CurrentQuantity.MesuredData.data.ToDouble()).ToString();
+        else if (valueKind == MeasuredStatisticValue.InstrumentError)
+            result = GameManager.Instance.GetInstrument(CurrentQuantity.InstrumentType).ErrorLimit.ToString();
+        else if (valueKind == MeasuredStatisticValue.DeltaNumber)
+            result = CurrentQuantity.DifferencedData.data.Count.ToString();
+        else if (valueKind == MeasuredStatisticValue.DeltaXAverage)
+            result = StaticMethods.CenterMoment(CurrentQuantity.DifferencedData.data.ToDouble(), 1).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmaDeltaX)
+            result = (StaticMethods.CenterMoment(CurrentQuantity.DifferencedData.data.ToDouble(), 1) 
+                * CurrentQuantity.DifferencedData.data.Count).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmaDeltaXSquare)
+            result = (StaticMethods.CenterMoment(CurrentQuantity.DifferencedData.data.ToDouble(), 2) 
+                * CurrentQuantity.DifferencedData.data.Count).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmDeltaXCube)
+            result = (StaticMethods.CenterMoment(CurrentQuantity.DifferencedData.data.ToDouble(), 3) 
+                * CurrentQuantity.DifferencedData.data.Count).ToString();
+        else if (valueKind == MeasuredStatisticValue.VarianceDelta)
+            result = StaticMethods.Variance(CurrentQuantity.DifferencedData.data.ToDouble()).ToString();
+        else if (valueKind == MeasuredStatisticValue.StandardDeviationDelta)
+            result = StaticMethods.StdDev(CurrentQuantity.DifferencedData.data.ToDouble()).ToString();
+        else if (valueKind == MeasuredStatisticValue.IndependentNumber)
+            result = CurrentQuantity.IndependentData.data.Count.ToString();
+        else if (valueKind == MeasuredStatisticValue.IndependentXAverage)
+            result = StaticMethods.Average(CurrentQuantity.IndependentData.data.ToDouble()).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmaIndependentX)
+            result = (StaticMethods.CenterMoment(CurrentQuantity.IndependentData.data.ToDouble(), 1) 
+                * CurrentQuantity.IndependentData.data.Count).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmaIndependentXSquare)
+            result = (StaticMethods.CenterMoment(CurrentQuantity.IndependentData.data.ToDouble(), 2) 
+                * CurrentQuantity.IndependentData.data.Count).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmIndependentXCube)
+            result = (StaticMethods.CenterMoment(CurrentQuantity.IndependentData.data.ToDouble(), 3) 
+                * CurrentQuantity.IndependentData.data.Count).ToString();
+        else if (valueKind == MeasuredStatisticValue.SigmaXAndIndependentX)
+        {
+            List<double> list = new List<double>();
+            for(int i = 0; i < CurrentQuantity.IndependentData.data.Count; i++)
+                list.Add(Convert.ToDouble(CurrentQuantity.IndependentData.data[i]) * 
+                    Convert.ToDouble(CurrentQuantity.MesuredData.data[i]));
+            result = StaticMethods.CenterMoment(list, 1).ToString();
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -94,5 +120,18 @@ public enum MeasuredStatisticValue
     SigmaXCube,  //(X_i)^3求和
     Variance,    //方差
     StandardDeviation,//标准差
-    InstrumentError   //仪器误差限
+    InstrumentError,   //仪器误差限
+    DeltaNumber,
+    DeltaXAverage,
+    SigmaDeltaX,
+    SigmaDeltaXSquare,
+    SigmDeltaXCube,
+    VarianceDelta,
+    StandardDeviationDelta,
+    IndependentNumber,
+    IndependentXAverage,
+    SigmaIndependentX,
+    SigmaIndependentXSquare,
+    SigmIndependentXCube,
+    SigmaXAndIndependentX,
 }

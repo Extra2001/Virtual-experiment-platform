@@ -34,6 +34,12 @@ public partial class FormulaController : MonoBehaviour
     [SerializeField]
     private GameObject MeasuredSelector;
     [SerializeField]
+    private GameObject MeasuredUncertainty;
+    [SerializeField]
+    private GameObject MeasuredDifference;
+    [SerializeField]
+    private GameObject MeasuredRegression;
+    [SerializeField]
     private GameObject ComplexSelector;
     [SerializeField]
     private GameObject Mask;
@@ -215,7 +221,6 @@ public partial class FormulaController : MonoBehaviour
         ComplexSelector.SetActive(true);
 
         Mask.SetActive(false);
-        onSelectCell?.Invoke();
     }
     /// <summary>
     /// 检查节点是否存在
@@ -263,8 +268,14 @@ public partial class FormulaController : MonoBehaviour
         if (Main.m_Procedure.CurrentProcedure is MeasuredDataProcessProcedure)
         {
             var procedure = Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure;
-            foreach (var item in MeasuredSelector.GetComponentsInChildren<FormulaSelectorCell>())
+            foreach (var item in MeasuredSelector.GetComponentsInChildren<FormulaSelectorCell>(true))
                 item.SetSelectorName(procedure.GetStatisticValue(MeasuredStatisticValue.Symbol));
+            MeasuredDifference.SetActive(false);
+            MeasuredRegression.SetActive(false);
+            if (GameManager.Instance.CurrentQuantity.processMethod == 2)
+                MeasuredDifference.SetActive(true);
+            else if (GameManager.Instance.CurrentQuantity.processMethod == 3)
+                MeasuredRegression.SetActive(true);
             RefreshContentSizeFitter(MeasuredSelector.gameObject);
             UIShowHideHelper.ShowFromButtom(MeasuredSelector, 0);
         }

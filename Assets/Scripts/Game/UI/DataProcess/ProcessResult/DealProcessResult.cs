@@ -25,14 +25,10 @@ public class DealProcessResult : HTBehaviour
     public Button NextButton;
     public Button BackButton;
 
-
     List<QuantityError> quantityErrors = new List<QuantityError>();
-
 
     bool MeasureErrorFlag = false;//直接测量量错误是否解决
     int curError = 0;
-    CalcMeasureResult measureresult = new CalcMeasureResult();
-    CalcComplexResult complexresult = new CalcComplexResult();
 
     public class QuantityError
     {
@@ -40,12 +36,12 @@ public class DealProcessResult : HTBehaviour
         public string Symbol { get; set; }
 
         public bool right { get; set; } = true;
+        public QuantityErrorMessage average { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage ua { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage ub { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage unc { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage answer { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage answerunc { get; set; } = new QuantityErrorMessage();
-
     }
 
     public class QuantityErrorMessage
@@ -74,16 +70,13 @@ public class DealProcessResult : HTBehaviour
     private void CheckRightOrWrong()
     {
         CalcArgs calc = new CalcArgs();
-        QuantityError ComplexErr = new QuantityError();
-
-        foreach (var item in RecordManager.tempRecord.quantities)
-        {
-            calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.Groups);
-            calc.Measure(item.Symbol, item.Data.ToDouble().ToArray());
-            calc.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
-        }
         quantityErrors = new List<QuantityError>();
-        measureresult = CalcArgs.CalculateMeasureValue(calc);
+
+        CheckMeasuredUncertainty(calc);
+        CheckMeasuredDifferenced(calc);
+        CheckMeasuredRegression(calc);
+
+        var measureresult = CalcArgs.CalculateMeasureValue(calc);
 
         MeasureErrorFlag = false;
         foreach (var item in measureresult.err)
@@ -105,7 +98,6 @@ public class DealProcessResult : HTBehaviour
                 MeasureErrorFlag = true;
                 quantityErrors.Add(item);
             }
-
         }
 
         if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
@@ -113,12 +105,37 @@ public class DealProcessResult : HTBehaviour
         else if (quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
             RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
 
+        CheckComplex(calc);
+    }
+
+    private void CheckMeasuredUncertainty(CalcArgs calc)
+    {
+        foreach (var item in RecordManager.tempRecord.quantities.Where(x => x.processMethod == 1))
+        {
+            calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
+            calc.Measure(item.Symbol, item.MesuredData.data.ToDouble().ToArray());
+            calc.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
+        }
+    }
+
+    private void CheckMeasuredDifferenced(CalcArgs calc)
+    {
+        // 啊！逐差这个还需要新写一个判断！
+    }
+
+    private void CheckMeasuredRegression(CalcArgs calc)
+    {
+        // 啊！回归这个还需要新写一个判断！
+    }
+
+    private void CheckComplex(CalcArgs calc)
+    {
         if (!MeasureErrorFlag)
         {
             calc.ComplexUserUnput(RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted(), RecordManager.tempRecord.complexQuantityModel.UncertainExpression.GetExpressionExecuted());
-            complexresult = CalcArgs.CalculateComplexValue(RecordManager.tempRecord.stringExpression, calc);
+            var complexresult = CalcArgs.CalculateComplexValue(RecordManager.tempRecord.stringExpression, calc);
             if (complexresult.status != "计算无误")
-            {                
+            {
                 if (!complexresult.err.answer.right)
                 {
                     RecordManager.tempRecord.score.ComplexQuantityError += 1;
@@ -131,10 +148,7 @@ public class DealProcessResult : HTBehaviour
                 }
                 quantityErrors.Add(complexresult.err);
             }
-
         }
-
-
     }
 
     public void Show()

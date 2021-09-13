@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Threading;
+using UnityEngine;
 
 public class MainThread : SingletonBehaviorManager<MainThread>
 {
@@ -19,9 +20,10 @@ public class MainThread : SingletonBehaviorManager<MainThread>
     /// </summary>
     void Update()
     {
-        for(int i=tasks.Count - 1; i >= 0; i--)
+        for (int i = tasks.Count - 1; i >= 0; i--)
         {
-            tasks[i].Invoke();
+            if (tasks[i] != null)
+                tasks[i].Invoke();
             tasks.RemoveAt(i);
         }
     }

@@ -274,10 +274,10 @@ public struct CheckFloat {//带有效数字的小数
     }
     public static CheckFloat Pow(CheckFloat x, CheckFloat n) {
         if((x.HiDigit - x.LoDigit) > (n.HiDigit - n.LoDigit)) {
-            return Pow(x, n.TrueValue).KeepEffective(n.HiDigit - n.LoDigit);
+            return Pow(x, n.TrueValue);
         }
         else {
-            return Exp(x.TrueValue, n).KeepEffective(x.HiDigit - x.LoDigit);
+            return Exp(x.TrueValue, n);
         }
     }
 }

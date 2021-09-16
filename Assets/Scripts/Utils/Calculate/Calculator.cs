@@ -26,7 +26,7 @@ public partial class FormulaController {
         return this.CalcExpression("base");
     }
     public string CheckError(string realval) {
-        var root = showedCells.Where((x) => x.thisGUID.Equals("base")).Last();
+        var root = showedCells.Where((x) => x.thisGUID.Equals("{0}")).Last();
         if(root.ReplaceFlags.Count == 2) {
             var left = showedCells.Where((x) => x.thisGUID.Equals(root.ReplaceFlags.First().Value)).Last();
             var right = showedCells.Where((x) => x.thisGUID.Equals(root.ReplaceFlags.Last().Value)).Last();
@@ -36,26 +36,30 @@ public partial class FormulaController {
                 if(root.value.Contains("+")) {
                     a = x + y;
                     bool status = a.TrueValue == z.TrueValue;
-                    analyse =  status? null : $"{left.value}有{x.HiDigit-x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit-y.LoDigit}个有效数字,根据规则要保留到{Math.Pow(10,Math.Max(x.LoDigit,y.LoDigit))}位,正确答案为{a.TrueValue}";
+                    analyse =  status? null : $"{left.value}有{x.HiDigit-x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit-y.LoDigit}个有效数字,根据规则要保留到{Math.Pow(10,Math.Max(x.LoDigit,y.LoDigit))}位,正确答案为{a}";
                     result = string.Format(template, x.TrueValue, "+", y.TrueValue, z, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。",status?"对":"错", analyse);
+                    return result;
                 }
                 else if(root.value.Contains("-")) {
                     a = x - y;
                     bool status = a.TrueValue == z.TrueValue;
-                    analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留到{Math.Pow(10, Math.Max(x.LoDigit, y.LoDigit))}位,正确答案为{a.TrueValue}";
-                    result = string.Format(template, x.TrueValue, "+", y.TrueValue, z, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。", status ? "对" : "错", analyse);
+                    analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留到{Math.Pow(10, Math.Max(x.LoDigit, y.LoDigit))}位,正确答案为{a}";
+                    result = string.Format(template, x.TrueValue, "-", y.TrueValue, z, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。", status ? "对" : "错", analyse);
+                    return result;
                 }
                 else if(root.value.Contains("*")) {
                     a = x * y;
                     bool status = a.TrueValue == z.TrueValue;
-                    analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留{Math.Min(x.HiDigit-x.LoDigit,y.HiDigit-y.LoDigit)}个有效数字,正确答案为{a.TrueValue}";
-                    result = string.Format(template, x.TrueValue, "+", y.TrueValue, z, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "对" : "错", analyse);
+                    analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留{Math.Min(x.HiDigit-x.LoDigit,y.HiDigit-y.LoDigit)}个有效数字,正确答案为{a}";
+                    result = string.Format(template, x.TrueValue, "*", y.TrueValue, z, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "对" : "错", analyse);
+                    return result;
                 }
                 else if(root.value.Contains("/")) {
                     a = x / y;
                     bool status = a.TrueValue == z.TrueValue;
-                    analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留{Math.Min(x.HiDigit - x.LoDigit, y.HiDigit - y.LoDigit)}个有效数字,正确答案为{a.TrueValue}";
-                    result = string.Format(template, x.TrueValue, "+", y.TrueValue, z, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "对" : "错", analyse);
+                    analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留{Math.Min(x.HiDigit - x.LoDigit, y.HiDigit - y.LoDigit)}个有效数字,正确答案为{a}";
+                    result = string.Format(template, x.TrueValue, "/", y.TrueValue, z, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "对" : "错", analyse);
+                    return result;
                 }
             }
         }
@@ -253,8 +257,11 @@ public struct CheckFloat {//带有效数字的小数
         double tmp = KeepEffective((lhs.TrueValue / rhs.TrueValue), Math.Min(rhs.EffectiveDigit, lhs.EffectiveDigit));
         return new CheckFloat(tmp.ToString(), false);
     }
-    public override string ToString() {//显示
+    public string Display() {//显示
         return $"值为{TrueValue},{EffectiveDigit}位有效数字,小数部分:{Value},次数{HiDigit},最低位{LoDigit}";
+    }
+    public override string ToString() {
+        return TrueValue.ToString($"G{EffectiveDigit}");
     }
     public static CheckFloat FunctionX(CheckFloat x, double dx, Func<double, double> fn, Func<double, double> derivative) {
         double rv = x.TrueValue;

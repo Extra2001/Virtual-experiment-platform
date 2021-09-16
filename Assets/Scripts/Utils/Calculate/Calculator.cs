@@ -26,7 +26,7 @@ public partial class FormulaController {
         return this.CalcExpression("base");
     }
     public string CheckError(string realval) {
-        var root = showedCells.Where((x) => x.thisGUID.Equals("root")).Last();
+        var root = showedCells.Where((x) => x.thisGUID.Equals("base")).Last();
         if(root.ReplaceFlags.Count == 2) {
             var left = showedCells.Where((x) => x.thisGUID.Equals(root.ReplaceFlags.First().Value)).Last();
             var right = showedCells.Where((x) => x.thisGUID.Equals(root.ReplaceFlags.Last().Value)).Last();

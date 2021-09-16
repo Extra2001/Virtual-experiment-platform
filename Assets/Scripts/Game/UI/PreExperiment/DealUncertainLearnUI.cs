@@ -36,26 +36,30 @@ public class DealUncertainLearnUI : HTBehaviour
     {
         string input;
         string answer;
-        CheckFloat temp = Field.GetComponent<FormulaController>().GetCheckFloat();
-        try
+
+        input = UserInput.text;        
+
+        if (input == "")
         {
-
-            //CheckFloat temp = Field.GetComponent<FormulaController>().GetCheckFloat();
-            answer = temp.TrueValue.ToString();
-            
-
-            input = UserInput.text;
-            if (input == "")
+            UIAPI.Instance.ShowModel(new ModelDialogModel()
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
-                {
-                    ShowCancel = false,
-                    Title = new BindableString("警告"),
-                    Message = new BindableString("请输入你认为的有效数字位数")
-                });
-            }
-            else if (input == answer)
+                ShowCancel = false,
+                Title = new BindableString("警告"),
+                Message = new BindableString("请输入你认为的有效数字位数")
+            });
+        }
+        else
+        {
+            try
             {
+
+                //CheckFloat temp = Field.GetComponent<FormulaController>().GetCheckFloat();
+                answer = Field.GetComponent<FormulaController>().CheckError(input);
+                Debug.Log(answer);
+
+                /* if (input == answer)
+            {
+
                 AnswerText.text = answer;
                 yes.transform.localScale = new Vector3(1, 1, 1);
                 yes.SetActive(true);
@@ -73,20 +77,21 @@ public class DealUncertainLearnUI : HTBehaviour
                 no.transform.DOScale(new Vector3(4, 4, 4), 1.5f).OnComplete(() => {
                     no.SetActive(false);
                 });
-            }
+            }*/
 
-        }
-        catch
-        {
-            //弹出报错提示框
-            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            }
+            catch
             {
-                ShowCancel = false,
-                Title = new BindableString("错误"),
-                Message = new BindableString("输入表达式不合法，请仔细检查")
-            });
+                //弹出报错提示框
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Title = new BindableString("错误"),
+                    Message = new BindableString("输入表达式不合法，请仔细检查")
+                });
+            }
         }
-        
+      
 
     }
 

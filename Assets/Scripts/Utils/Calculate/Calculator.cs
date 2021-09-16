@@ -35,30 +35,30 @@ public partial class FormulaController {
                 CheckFloat x = CheckFloat.Create(left.value), y = CheckFloat.Create(right.value), a, z = CheckFloat.Create(realval);
                 if(root.value.Contains("+")) {
                     a = x + y;
-                    bool status = a.TrueValue == z.TrueValue;
+                    bool status = a.Equals(z);
                     analyse =  status? null : $"{left.value}有{x.HiDigit-x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit-y.LoDigit}个有效数字,根据规则要保留到{Math.Pow(10,Math.Max(x.LoDigit,y.LoDigit))}位,正确答案为{a}";
-                    result = string.Format(template, x.TrueValue, "+", y.TrueValue, z, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。",status?"对":"错", analyse);
+                    result = string.Format(template, x.Original, "+", y.Original, z.Original, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。",status?"对":"错", analyse);
                     return result;
                 }
                 else if(root.value.Contains("-")) {
                     a = x - y;
-                    bool status = a.TrueValue == z.TrueValue;
+                    bool status = a.Equals(z);
                     analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留到{Math.Pow(10, Math.Max(x.LoDigit, y.LoDigit))}位,正确答案为{a}";
-                    result = string.Format(template, x.TrueValue, "-", y.TrueValue, z, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。", status ? "对" : "错", analyse);
+                    result = string.Format(template, x.Original, "-", y.Original, z.Original, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。", status ? "对" : "错", analyse);
                     return result;
                 }
                 else if(root.value.Contains("*")) {
                     a = x * y;
-                    bool status = a.TrueValue == z.TrueValue;
+                    bool status = a.Equals(z);
                     analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留{Math.Min(x.HiDigit-x.LoDigit,y.HiDigit-y.LoDigit)}个有效数字,正确答案为{a}";
-                    result = string.Format(template, x.TrueValue, "*", y.TrueValue, z, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "对" : "错", analyse);
+                    result = string.Format(template, x.Original, "*", y.Original, z.Original, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "对" : "错", analyse);
                     return result;
                 }
                 else if(root.value.Contains("/")) {
                     a = x / y;
-                    bool status = a.TrueValue == z.TrueValue;
+                    bool status = a.Equals(z);
                     analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留{Math.Min(x.HiDigit - x.LoDigit, y.HiDigit - y.LoDigit)}个有效数字,正确答案为{a}";
-                    result = string.Format(template, x.TrueValue, "/", y.TrueValue, z, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "对" : "错", analyse);
+                    result = string.Format(template, x.Original, "/", y.Original, z.Original, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "对" : "错", analyse);
                     return result;
                 }
             }
@@ -147,7 +147,7 @@ public partial class FormulaController {
         }
     }
 }
-public struct CheckFloat {//带有效数字的小数
+public struct CheckFloat:IEquatable<CheckFloat> {//带有效数字的小数
     public double Value { get; private set; }
     public double TrueValue => Value * Math.Pow(10, HiDigit);
     public int EffectiveDigit { get; private set; }
@@ -155,12 +155,14 @@ public struct CheckFloat {//带有效数字的小数
     public int HiDigit { get; private set; }
     public static readonly CheckFloat PI = new CheckFloat("3.14159265358979323846", false);
     public static readonly CheckFloat E = new CheckFloat("2.71828182845904523536", false);
+    public string Original { get; }
     public CheckFloat(double truevalue, bool check = true) : this(truevalue.ToString(), check) { }
     public static CheckFloat Create(string value, bool check = false) {
         return new CheckFloat(value, check);
 
     }
     public CheckFloat(string value, bool checkmaxlen = true) {
+        Original = value;
         EffectiveDigit = Effectiveness(value);
         if(checkmaxlen && EffectiveDigit > 8) {
             throw new Exception("输入太精确了");
@@ -318,6 +320,10 @@ public struct CheckFloat {//带有效数字的小数
     }
     public static CheckFloat Pow(CheckFloat x, CheckFloat n) {
         return Pow(x, n.TrueValue);
+    }
+
+    public bool Equals(CheckFloat other) {
+        return HiDigit == other.HiDigit && LoDigit == other.LoDigit && TrueValue == other.TrueValue;
     }
 }
 public static class StaticMethods {

@@ -175,7 +175,7 @@ public struct CheckFloat {//带有效数字的小数
         return Math.Round(d, n);
     }
     public static double KeepTo(double truevalue, int n) {//保留到第n位有效数字
-        return Math.Truncate(truevalue / Math.Pow(10, n)) * Math.Pow(10, n);
+        return Math.Round(truevalue / Math.Pow(10, n)) * Math.Pow(10, n);
     }
     public static int Effectiveness(string num) {//计算一个字符串表示的小数有多少位有效数字
         int digits = 0; bool lead0 = true;
@@ -273,12 +273,7 @@ public struct CheckFloat {//带有效数字的小数
         return FunctionX(x, dx, Math.Acos, (X) => -1.0 / Math.Sqrt(X * X + 1.0));
     }
     public static CheckFloat Pow(CheckFloat x, CheckFloat n) {
-        if((x.HiDigit - x.LoDigit) > (n.HiDigit - n.LoDigit)) {
-            return Pow(x, n.TrueValue);
-        }
-        else {
-            return Exp(x.TrueValue, n);
-        }
+        return Pow(x, n.TrueValue);
     }
 }
 public static class StaticMethods {
@@ -329,21 +324,21 @@ public static class StaticMethods {
         for(int i = 0;i < k;i++) {
             bk[i] = (y2[i] - y1[i]) / (x2[i] - x1[i]);
             b += bk[i];
-            xx += x1[i];xx += x2[i];yy += y1[i];yy += y2[i];
+            xx += x1[i]; xx += x2[i]; yy += y1[i]; yy += y2[i];
         }
         b /= k;
         double a = (yy - b * xx) / (2 * k);
-        return (a,b);
+        return (a, b);
     }
-    public static (double a,double b) LinearRegression(double[] x,double[] y) {
+    public static (double a, double b) LinearRegression(double[] x, double[] y) {
         //y=bx+a
-        double[] xy = new double[x.Length],x2=new double[x.Length];
+        double[] xy = new double[x.Length], x2 = new double[x.Length];
         for(int i = 0;i < x.Length;i++) {
             xy[i] = x[i] * y[i];
             x2[i] = x[i] * x[i];
         }
         double xav = Average(x), yav = Average(y), xyav = Average(xy), x2av = Average(x2);
-        double b = (xav * yav - xyav) / (xav * xav - x2av),a=yav-b*xav;
+        double b = (xav * yav - xyav) / (xav * xav - x2av), a = yav - b * xav;
         return (a, b);
     }
     public static (double avg, double ua, double u) CalcUncertain(IEnumerable<double> data, double ub) {

@@ -497,11 +497,14 @@ public static class StaticMethods {
     public static string GetUncLatex(string varname, double ua, double ub) {
         return $@"u({varname})=\sqrt{{({NumberFormat(ua)}^2)+({NumberFormat(ub)}^2)}}";
     }
+    public static string GetAverageLatex(string varname,int n) {
+        return $@"$\bar{{{varname}}}=\sum_{{i = 0}}^{{{varname}}}{{{varname}_i}}";
+    }
 }
 public class CalcVariable {//2021.8.20
     public List<double> values;
     public double ub;
-    public double userua, userub, userunc;//用户测量的ua,ub,用户的合成的不确定度
+    public double userua, userub, userunc, useraver;//用户测量的ua,ub,用户的合成的不确定度
 
     public CalcVariable(double ub, int measures) {//测量了measures个数据
         this.ub = ub; values = new List<double>(measures);
@@ -519,12 +522,13 @@ public class CalcVariable {//2021.8.20
         return (average, Math.Sqrt(sum2), Math.Sqrt(sum2 + ub * ub));
     }
     //下面的是8月20号加的
-    public (string UaError, string UbError, string UncError, bool IfError) CheckInfo() {
+    public (string UaError, string UbError, string UncError,string AverError, bool IfError) CheckInfo() {
         var uu = CalcUncertain();
         bool flag = false;
         StringBuilder sua = new StringBuilder();
         StringBuilder sub = new StringBuilder();
         StringBuilder sunc = new StringBuilder();
+        string s=null;
         if(!userua.AlmostEqual(uu.ua)) {
             flag = true;
             if(userua.AlmostEqual(uu.ua * Math.Sqrt(1.0 * values.Count / (values.Count - 1)))) {
@@ -552,7 +556,11 @@ public class CalcVariable {//2021.8.20
                 sunc.Append("其他错误");
             }
         }
-        return (sua.ToString(), sub.ToString(), sunc.ToString(), flag);
+        if(!useraver.AlmostEqual(uu.average)) {
+            flag = true;
+            s = "平均值计算错了";
+        }
+        return (sua.ToString(), sub.ToString(), sunc.ToString(), s, flag);
 
         /*if(flag) {
             sb.Append("A类不确定度，B类不确定度及合成不确定度的正确答案如下");
@@ -667,6 +675,11 @@ public class CalcArgs {//一次计算
                     temp.unc.right = false;
                     temp.unc.latex = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub);
                     temp.unc.message = CheckResult.UncError;
+                }
+                if(CheckResult.AverError != "") {
+                    temp.average.right = false;
+                    temp.average.latex = StaticMethods.GetAverageLatex(item.Key, item.Value.values.Count);
+                    temp.average.message = CheckResult.AverError;
                 }
                 temp.Symbol = item.Key;
                 temp.Title = "对物理量" + item.Key + "的检查";

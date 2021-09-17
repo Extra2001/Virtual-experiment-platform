@@ -36,8 +36,8 @@ public partial class FormulaController {
                 if(root.value.Contains("+")) {
                     a = x + y;
                     bool status = a.Equals(z);
-                    analyse =  status? null : $"{left.value}有{x.HiDigit-x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit-y.LoDigit}个有效数字,根据规则要保留到{Math.Pow(10,Math.Max(x.LoDigit,y.LoDigit))}位,正确答案为{a}";
-                    result = string.Format(template, x.Original, "+", y.Original, z.Original, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。",status?"正确":"错误", analyse);
+                    analyse = status ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留到{Math.Pow(10, Math.Max(x.LoDigit, y.LoDigit))}位,正确答案为{a}";
+                    result = string.Format(template, x.Original, "+", y.Original, z.Original, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。", status ? "正确" : "错误", analyse);
                     return result;
                 }
                 else if(root.value.Contains("-")) {
@@ -50,7 +50,7 @@ public partial class FormulaController {
                 else if(root.value.Contains("*")) {
                     a = x * y;
                     bool status = a.Equals(z);
-                    analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留{Math.Min(x.HiDigit-x.LoDigit,y.HiDigit-y.LoDigit)}个有效数字,正确答案为{a}";
+                    analyse = a.TrueValue == z.TrueValue ? null : $"{left.value}有{x.HiDigit - x.LoDigit}个有效数字,最低位,{right.value}有{y.HiDigit - y.LoDigit}个有效数字,根据规则要保留{Math.Min(x.HiDigit - x.LoDigit, y.HiDigit - y.LoDigit)}个有效数字,正确答案为{a}";
                     result = string.Format(template, x.Original, "*", y.Original, z.Original, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "正确" : "错误", analyse);
                     return result;
                 }
@@ -147,7 +147,7 @@ public partial class FormulaController {
         }
     }
 }
-public struct CheckFloat:IEquatable<CheckFloat> {//带有效数字的小数
+public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
     public double Value { get; private set; }
     public double TrueValue => Value * Math.Pow(10, HiDigit);
     public int EffectiveDigit { get; private set; }
@@ -366,33 +366,26 @@ public static class StaticMethods {
     }
     public static bool CheckDifferenced(List<string> measure, List<string> userdifference) //检查逐差过程是否正确
     {
-        List<string> answerdifference = new List<string>();
+        List<double> answerdifference = new List<double>();
         int n;
-        if (measure.Count % 2 == 0)
-        {
+        if(measure.Count % 2 == 0) {
             n = measure.Count / 2;
-            for (int i = 0; i < n; i++)
-            {
-                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])).ToString());
+            for(int i = 0;i < n;i++) {
+                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])));
             }
         }
-        else
-        {
+        else {
             n = (measure.Count + 1) / 2;
-            for (int i = 0; i < n - 1; i++)
-            {
-                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])).ToString());
+            for(int i = 0;i < n - 1;i++) {
+                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])));
             }
-        }      
-
-        if (answerdifference == userdifference)
-        {
-            return true;
         }
-        else
-        {
-            return false;
+        foreach(var item in answerdifference) {
+            if(Math.Abs(item) > 1e-5) {
+                return false;
+            }
         }
+        return true;
     }
     public static (double a, double b) SuccessiveDifference(double[] x, double[] y) {
         //y=bx+a

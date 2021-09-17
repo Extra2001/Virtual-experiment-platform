@@ -15,9 +15,9 @@ public class QuantityModel
     //物理量的数据处理方法，0为未处理，1为直接，2为逐差法，3为一元线性回归
     public int processMethod { get; set; } = 0;
 
-    public DataColumnModel MesuredData { get; set; } = null;
-    public DataColumnModel IndependentData { get; set; } = null;
-    public DataColumnModel DifferencedData { get; set; } = null;
+    public DataColumnModel MesuredData { get; set; } = null; //测量原始数据
+    public DataColumnModel IndependentData { get; set; } = null; //一元线性回归的自变量
+    public DataColumnModel DifferencedData { get; set; } = null; //逐差法逐差后数据
 
     //逐差法需要的内容
     public string stepLength { get; set; } = "1";

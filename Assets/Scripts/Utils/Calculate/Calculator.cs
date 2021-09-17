@@ -364,6 +364,36 @@ public static class StaticMethods {
         }
         return Output;
     }
+    public static bool CheckDifferenced(List<string> measure, List<string> userdifference) //检查逐差过程是否正确
+    {
+        List<string> answerdifference = new List<string>();
+        int n;
+        if (measure.Count % 2 == 0)
+        {
+            n = measure.Count / 2;
+            for (int i = 0; i < n; i++)
+            {
+                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])).ToString());
+            }
+        }
+        else
+        {
+            n = (measure.Count + 1) / 2;
+            for (int i = 0; i < n - 1; i++)
+            {
+                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])).ToString());
+            }
+        }      
+
+        if (answerdifference == userdifference)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public static (double a, double b) SuccessiveDifference(double[] x, double[] y) {
         //y=bx+a
         int n = x.Length, k = n / 2;

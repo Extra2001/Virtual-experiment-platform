@@ -497,7 +497,7 @@ public static class StaticMethods {
     public static string GetUncLatex(string varname, double ua, double ub) {
         return $@"u({varname})=\sqrt{{({NumberFormat(ua)}^2)+({NumberFormat(ub)}^2)}}";
     }
-    public static string GetAverageLatex(string varname,int n) {
+    public static string GetAverageLatex(string varname, int n) {
         return $@"$\bar{{{varname}}}=\sum_{{i = 0}}^{{{varname}}}{{{varname}_i}}";
     }
 }
@@ -522,13 +522,13 @@ public class CalcVariable {//2021.8.20
         return (average, Math.Sqrt(sum2), Math.Sqrt(sum2 + ub * ub));
     }
     //下面的是8月20号加的
-    public (string UaError, string UbError, string UncError,string AverError, bool IfError) CheckInfo() {
+    public (string UaError, string UbError, string UncError, string AverError, bool IfError) CheckInfo() {
         var uu = CalcUncertain();
         bool flag = false;
         StringBuilder sua = new StringBuilder();
         StringBuilder sub = new StringBuilder();
         StringBuilder sunc = new StringBuilder();
-        string s=null;
+        string s = null;
         if(!userua.AlmostEqual(uu.ua)) {
             flag = true;
             if(userua.AlmostEqual(uu.ua * Math.Sqrt(1.0 * values.Count / (values.Count - 1)))) {
@@ -759,4 +759,20 @@ public class CalcComplexResult {
     public QuantityError err;//最终合成量不确定度检查结果
     //public symexpr calcexpr, uncexpr;
 }
+public class CalcDifferenceResult//逐差法
+{
+    public string status;
+    public List<QuantityError> err;//变量不确定度检查结果
+    public static CalcDifferenceResult CheckSuccessiveDifference() {
+        return default;
+    }
+}
 
+public class CalcIndependentResult//一元线性回归
+{
+    public string status;
+    public List<QuantityError> err;//变量不确定度检查结果
+    public static CalcIndependentResult CheckRegression() {
+        return default;
+    }
+}

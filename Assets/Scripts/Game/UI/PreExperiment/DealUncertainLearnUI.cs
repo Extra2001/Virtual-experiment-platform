@@ -13,6 +13,7 @@ public class DealUncertainLearnUI : HTBehaviour
     public InputField UserInput;
     public GameObject Field;
 
+    public GameObject Reason;
     public GameObject yes;
     public GameObject no;
 
@@ -36,6 +37,7 @@ public class DealUncertainLearnUI : HTBehaviour
     {
         string input;
         string answer;
+        string reason;
 
         input = UserInput.text;        
 
@@ -53,31 +55,39 @@ public class DealUncertainLearnUI : HTBehaviour
             try
             {
 
-                //CheckFloat temp = Field.GetComponent<FormulaController>().GetCheckFloat();
-                answer = Field.GetComponent<FormulaController>().CheckError(input);
-                Debug.Log(answer);
+                answer = Field.GetComponent<FormulaController>().GetCheckFloat().TrueValue.ToString();
+                reason = Field.GetComponent<FormulaController>().CheckError(input);
+                if (reason != "")
+                {
+                    Reason.SetActive(true);
+                    Reason.GetComponent<Text>().text = reason;
+                }
+                else
+                {
+                    Reason.SetActive(false);
+                }
 
-                /* if (input == answer)
-            {
+                if (input == answer)
+                {
 
-                AnswerText.text = answer;
-                yes.transform.localScale = new Vector3(1, 1, 1);
-                yes.SetActive(true);
-                no.SetActive(false);
-                yes.transform.DOScale(new Vector3(4, 4, 4), 1.5f).OnComplete(() => {
-                    yes.SetActive(false);
-                });
-            }
-            else
-            {
-                AnswerText.text = answer;
-                no.transform.localScale = new Vector3(1, 1, 1);
-                yes.SetActive(false);
-                no.SetActive(true);
-                no.transform.DOScale(new Vector3(4, 4, 4), 1.5f).OnComplete(() => {
+                    AnswerText.text = answer;
+                    yes.transform.localScale = new Vector3(1, 1, 1);
+                    yes.SetActive(true);
                     no.SetActive(false);
-                });
-            }*/
+                    yes.transform.DOScale(new Vector3(4, 4, 4), 1.5f).OnComplete(() => {
+                        yes.SetActive(false);
+                    });
+                }
+                else
+                {
+                    AnswerText.text = answer;
+                    no.transform.localScale = new Vector3(1, 1, 1);
+                    yes.SetActive(false);
+                    no.SetActive(true);
+                    no.transform.DOScale(new Vector3(4, 4, 4), 1.5f).OnComplete(() => {
+                        no.SetActive(false);
+                    });
+                }
 
             }
             catch

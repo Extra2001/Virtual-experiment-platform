@@ -50,7 +50,21 @@ public class MeasuredDifference1 : HTBehaviour
                 });
             return false;
         }
-        // 在这里检查步长有没有写
+        
+        if(!StaticMethods.CheckDifferenced(quantity.MesuredData.data, quantity.DifferencedData.data))
+        {
+            if (!silent)
+            {
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Message = new BindableString("你的逐差表格的数据大小不正确")
+                });
+            }
+
+            return false;
+        }
+
         return true;
     }
 

@@ -387,7 +387,7 @@ public static class StaticMethods {
         }
         return true;
     }
-    public static (double a, double b) SuccessiveDifference(double[] x, double[] y) {
+    public static (double a, double b, double uncb) SuccessiveDifference(double[] x, double[] y) {
         //y=bx+a
         int n = x.Length, k = n / 2;
         Span<double> x1 = x.AsSpan(0, n / 2), x2 = x.AsSpan(n % 2 == 0 ? n / 2 : n / 2 + 1, n / 2);
@@ -401,18 +401,31 @@ public static class StaticMethods {
         }
         b /= k;
         double a = (yy - b * xx) / (2 * k);
-        return (a, b);
+        double uncb = 0.0;
+        for(int i = 0;i < k;i++) {
+            uncb += (bk[i] - b) * (bk[i] - b);
+        }
+        uncb = Math.Sqrt(uncb / (k * (k - 1)));
+        return (a, b, uncb);
     }
-    public static (double a, double b) LinearRegression(double[] x, double[] y) {
+    public static double[] LinearRegression(double[] x, double[] y) {
         //y=bx+a
-        double[] xy = new double[x.Length], x2 = new double[x.Length];
+        double[] xy = new double[x.Length], x2 = new double[x.Length], y2 = new double[x.Length];
         for(int i = 0;i < x.Length;i++) {
             xy[i] = x[i] * y[i];
             x2[i] = x[i] * x[i];
+            y2[i] = y[i] * y[i];
         }
-        double xav = Average(x), yav = Average(y), xyav = Average(xy), x2av = Average(x2);
-        double b = (xav * yav - xyav) / (xav * xav - x2av), a = yav - b * xav;
-        return (a, b);
+        double xav = Average(x), yav = Average(y), xyav = Average(xy), x2av = Average(x2), y2av = Average(y2);
+        double b = (xav * yav - xyav) / (xav * xav - x2av), a = yav - b * xav, r = (xyav - xav * yav) / Math.Sqrt((y2av - yav * yav) * (x2av - xav * xav));
+        double sy0 = 0;
+        for(int i = 0;i < x.Length;i++) {
+            sy0 += (y[i] - (a + b * x[i])) * (y[i] - (a + b * x[i]));
+        }
+        sy0 = Math.Sqrt(sy0 / (x.Length - 2));
+        double b_unca = b * Math.Sqrt((1 / (r * r) - 1) / (x.Length - 2));
+        double a_unca = Math.Sqrt(x2av) * b_unca;
+        return new double[] { b, a, r, b_unca, a_unca };
     }
     public static (double avg, double ua, double u) CalcUncertain(IEnumerable<double> data, double ub) {
         //输入:测量数据data 仪器B类不确定度ub
@@ -759,11 +772,26 @@ public class CalcComplexResult {
     public QuantityError err;//最终合成量不确定度检查结果
     //public symexpr calcexpr, uncexpr;
 }
+public class UserInputSuccessiveDifference {
+    public double[] y_nplusi_minus_y_i;//n是这个数组的长度
+    public double x_nplusi_minus_x_i;//x[n+i]-x[i]是固定值
+    public double user_aver_b;//用户给的最终结果
+    public double correct_b_uncb;//正确的b类不确定度
+    public double user_b_unca;//用户给的最终结果的a类不确定度
+    public double user_b_uncb;//用户给的最终结果的b类不确定度
+    public double user_b_unc;//用户给的最终结果的合成不确定度
+}
+public class UserInputRegression {
+    public double[] x, y;//用户数据
+    public double a, b, r, f_unca, f_uncb, f_unc; //用户的a,b,r 和 a,b的不确定度
+    public bool ifa;//true为要求a的不确定度 false为b的不确定度
+
+}
 public class CalcDifferenceResult//逐差法
 {
     public string status;
-    public List<QuantityError> err;//变量不确定度检查结果
-    public static CalcDifferenceResult CheckSuccessiveDifference() {
+    public QuantityError err;//变量不确定度检查结果
+    public static CalcDifferenceResult CheckSuccessiveDifference(UserInputSuccessiveDifference input) {
         return default;
     }
 }
@@ -771,8 +799,8 @@ public class CalcDifferenceResult//逐差法
 public class CalcIndependentResult//一元线性回归
 {
     public string status;
-    public List<QuantityError> err;//变量不确定度检查结果
-    public static CalcIndependentResult CheckRegression() {
+    public QuantityError err;//变量不确定度检查结果
+    public static CalcIndependentResult CheckRegression(UserInputRegression input) {
         return default;
     }
 }

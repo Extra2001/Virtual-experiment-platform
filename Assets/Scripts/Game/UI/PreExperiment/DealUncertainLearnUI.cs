@@ -52,6 +52,8 @@ public class DealUncertainLearnUI : HTBehaviour
         }
         else
         {
+            answer = Field.GetComponent<FormulaController>().GetCheckFloat().TrueValue.ToString();
+            reason = Field.GetComponent<FormulaController>().CheckError(input);
             try
             {
 

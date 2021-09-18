@@ -77,7 +77,99 @@ public class DealProcessResult : HTBehaviour
 
     private void CheckRightOrWrong()
     {
-        CalcArgs calc = new CalcArgs();
+        quantityErrors = new List<QuantityError>();
+        MeasureErrorFlag = false;
+        foreach (var item in RecordManager.tempRecord.quantities)
+        {
+            if (item.processMethod == 1)
+            {
+                UserInputTable calc = new UserInputTable();
+                calc.varname = item.Symbol;
+                List<double> temp = new List<double>();
+                for (int i = 0; i < item.MesuredData.data.Count; i++)
+                {
+                    temp.Add(double.Parse(item.MesuredData.data[i]));
+                }
+                calc.data = new CalcVariable(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), temp.Count);
+                calc.data.values = temp;
+                calc.data.useraver = item.AverageExpression.GetExpressionExecuted();
+                calc.data.userua = item.UaExpression.GetExpressionExecuted();
+                calc.data.userub = item.UbExpression.GetExpressionExecuted();
+                calc.data.userunc = item.ComplexExpression.GetExpressionExecuted();
+                CalcResult result = CalcResult.CheckTable(calc);
+                if (!result.err.right)
+                {
+                    MeasureErrorFlag = true;
+                    quantityErrors.Add(result.err);
+                }
+            }
+            else if(item.processMethod == 2)
+            {
+                UserInputSuccessiveDifference calc = new UserInputSuccessiveDifference();
+                double[] temp = new double[item.DifferencedData.data.Count];
+                for (int i = 0; i < item.DifferencedData.data.Count; i++)
+                {
+                    temp[i] = double.Parse(item.DifferencedData.data[i]);
+                }
+                calc.y_nplusi_minus_y_i = temp;
+                calc.x_nplusi_minus_x_i = double.Parse(item.stepLength);
+                calc.user_aver_b = item.AverageExpression.GetExpressionExecuted();
+                calc.correct_b_uncb = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3);
+                calc.user_b_unca = item.UaExpression.GetExpressionExecuted();
+                calc.user_b_uncb = item.UbExpression.GetExpressionExecuted();
+                calc.user_b_unc = item.ComplexExpression.GetExpressionExecuted();
+                CalcResult result = CalcResult.CheckSuccessiveDifference(calc);
+                if (!result.err.right)
+                {
+                    MeasureErrorFlag = true;
+                    quantityErrors.Add(result.err);
+                }
+            }
+            else if (item.processMethod == 3)
+            {
+                UserInputLinearRegression calc = new UserInputLinearRegression();
+                double[] temp = new double[item.IndependentData.data.Count];
+                for (int i = 0; i < item.IndependentData.data.Count; i++)
+                {
+                    temp[i] = double.Parse(item.IndependentData.data[i]);
+                }
+                calc.x = temp;
+                for (int i = 0; i < item.MesuredData.data.Count; i++)
+                {
+                    temp[i] = double.Parse(item.MesuredData.data[i]);
+                }
+                calc.y = temp;
+                calc.a = item.AExpression.GetExpressionExecuted();
+                calc.b = item.BExpression.GetExpressionExecuted();
+                calc.r = item.RelationExpression.GetExpressionExecuted();
+                calc.f_unca = item.UaExpression.GetExpressionExecuted();
+                calc.f_uncb = item.UbExpression.GetExpressionExecuted();
+                calc.f_unc = item.ComplexExpression.GetExpressionExecuted();
+                calc.ifa = (item.nextValue != 0);
+                CalcResult result = CalcResult.CheckRegression(calc);
+                if (!result.err.right)
+                {
+                    MeasureErrorFlag = true;
+                    quantityErrors.Add(result.err);
+                }
+            }
+        }
+
+        if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
+            RecordManager.tempRecord.score.MeasureQuantityError = quantityErrors.Count;
+        else if (quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
+            RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
+
+        CalcArgs calc_complex = new CalcArgs();
+        foreach (var item in RecordManager.tempRecord.quantities)
+        {
+            calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
+            calc_complex.Measure(item.Symbol, item.MesuredData.data.ToDouble().ToArray());
+            calc_complex.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
+        }
+        CheckComplex(calc_complex);
+
+        /*CalcArgs calc = new CalcArgs();
         quantityErrors = new List<QuantityError>();
 
         CheckMeasuredUncertainty(calc);
@@ -113,9 +205,9 @@ public class DealProcessResult : HTBehaviour
         else if (quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
             RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
 
-        CheckComplex(calc);
+        CheckComplex(calc);*/
     }
-
+    /*
     private void CheckMeasuredUncertainty(CalcArgs calc)
     {
         foreach (var item in RecordManager.tempRecord.quantities.Where(x => x.processMethod == 1))
@@ -134,7 +226,7 @@ public class DealProcessResult : HTBehaviour
     private void CheckMeasuredRegression(CalcArgs calc)
     {
         // 啊！回归这个还需要新写一个判断！
-    }
+    }*/
 
     private void CheckComplex(CalcArgs calc)
     {

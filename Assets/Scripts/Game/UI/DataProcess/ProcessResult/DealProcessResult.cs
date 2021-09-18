@@ -45,6 +45,7 @@ public class DealProcessResult : HTBehaviour
         public QuantityErrorMessage a { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage b { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage r { get; set; } = new QuantityErrorMessage();
+        
     }
 
     public class QuantityErrorMessage

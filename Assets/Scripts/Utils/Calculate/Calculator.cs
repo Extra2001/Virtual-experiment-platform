@@ -38,28 +38,28 @@ public partial class FormulaController {
                     a = x + y;
                     bool status = a.Equals(z);
                     analyse = status ? null : $"根据规则要保留{a.EffectiveDigit}位有效数字,正确答案为{a}";
-                    result = string.Format(template, x.Original, "+", y.Original, z.Original, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。", status ? "正确" : "错误", analyse);
+                    result = string.Format(template, x.Original, "+", y.Original, z.Original, "加法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。四舍六入五凑偶。", status ? "正确" : "错误", analyse);
                     return result;
                 }
                 else if(root.value.Contains("-")) {
                     a = x - y;
                     bool status = a.Equals(z);
                     analyse = a.TrueValue == z.TrueValue ? null : $"根据规则要保留{a.EffectiveDigit}位有效数字,正确答案为{a}";
-                    result = string.Format(template, x.Original, "-", y.Original, z.Original, "减法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。", status ? "正确" : "错误", analyse);
+                    result = string.Format(template, x.Original, "-", y.Original, z.Original, "减法先按小数点后位数最少的数据保留其它各数的位数,再进行计算,计算结果也使小数点后保留相同的位数。四舍六入五凑偶。", status ? "正确" : "错误", analyse);
                     return result;
                 }
                 else if(root.value.Contains("*")) {
                     a = x * y;
                     bool status = a.Equals(z);
                     analyse = a.TrueValue == z.TrueValue ? null : $"根据规则要保留{a.EffectiveDigit}位有效数字,正确答案为{a}";
-                    result = string.Format(template, x.Original, "*", y.Original, z.Original, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "正确" : "错误", analyse);
+                    result = string.Format(template, x.Original, "*", y.Original, z.Original, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。四舍六入五凑偶。", status ? "正确" : "错误", analyse);
                     return result;
                 }
                 else if(root.value.Contains("/")) {
                     a = x / y;
                     bool status = a.Equals(z);
                     analyse = a.TrueValue == z.TrueValue ? null : $"根据规则要保留{a.EffectiveDigit}位有效数字,正确答案为{a}";
-                    result = string.Format(template, x.Original, "/", y.Original, z.Original, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。", status ? "正确" : "错误", analyse);
+                    result = string.Format(template, x.Original, "/", y.Original, z.Original, "先按有效数字最少的数据保留其它各数,再进行乘除运算,计算结果仍保留相同有效数字。四舍六入五凑偶。", status ? "正确" : "错误", analyse);
                     return result;
                 }
             }

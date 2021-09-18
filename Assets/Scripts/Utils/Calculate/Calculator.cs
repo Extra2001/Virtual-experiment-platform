@@ -520,9 +520,9 @@ public static class StaticMethods {
     public static string GetUncLatex(string varname) {
         return $@"u({varname})=\sqrt{{({{u_a({varname})}}^2)+({{u_b({varname})}}^2)}}";
     }
-    public static string GetAverageLatex(string varname, int n) {
+    public static string GetAverageLatex(string varname) {
         //return $@"\overline{{{varname}}}=\frac{{\sum_{{i = 0}}^{{n}}}}{{{{{varname}_i}}}}{{n}}";
-        return string.Concat(@"\overline{", varname, @"}=\frac{\sum_{i=1}^{", n, "}{", varname, "_i}}{", n, "}");
+        return string.Concat(@"\overline{", varname, @"}=\frac{\sum_{i=1}^{n}{", varname, "_i}}{n}");
         //return @"{\overline{x}=0}";
     }
     public static (bool correct, string reason) CheckUncertain(string value, string unc) {
@@ -715,7 +715,7 @@ public class CalcArgs {//一次计算
                 }
                 if(CheckResult.AverError != "") {
                     temp.average.right = false;
-                    temp.average.latex = StaticMethods.GetAverageLatex(item.Key, item.Value.values.Count);
+                    temp.average.latex = StaticMethods.GetAverageLatex(item.Key);
                     temp.average.message = CheckResult.AverError;
                 }
                 temp.Symbol = item.Key;
@@ -887,7 +887,7 @@ public class CalcResult {
             flag = false;
             result.err.average.right = false;
             result.err.average.message = "逐差法计算错误";
-            result.err.average.latex = StaticMethods.GetAverageLatex(@"\Delta b", input.y_nplusi_minus_y_i.Length);
+            result.err.average.latex = StaticMethods.GetAverageLatex(@"\Delta b");
         }
         if(!input.user_b_unc.AlmostEqual(StaticMethods.CalcUncertain(uncb, input.correct_b_uncb))) {
             flag = false;

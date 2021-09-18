@@ -516,6 +516,18 @@ public static class StaticMethods {
     public static string GetAverageLatex(string varname, int n) {
         return $@"$\bar{{{varname}}}=\sum_{{i = 0}}^{{{varname}}}{{{varname}_i}}";
     }
+    public static (bool correct,string reason) CheckUncertain(string value,string unc) {
+        CheckFloat v = new CheckFloat(value, false), u = new CheckFloat(unc, false);
+        if(u.EffectiveDigit!=1) {
+            return (false, "不确定度保留1位有效数字");
+        }
+        else {
+            if(v.LoDigit == u.HiDigit) {
+                return (true, null);
+            }
+            return (false, "有效数字没有对齐");
+        }
+    }
 }
 public class CalcVariable {//2021.8.20
     public List<double> values;
@@ -873,7 +885,9 @@ public class CalcResult {
         result.status = flag ? "正确" : "错误";
         return result;
     }
-    public static CalcResult CheckTable(string varname,CalcVariable userin) {//一个的列表法
+    public static CalcResult CheckTable(UserInputTable input) {//一个的列表法
+        string varname = input.varname;
+        var userin = input.data;
         var (average, ua, unc) = userin.CalcUncertain();
         var result = new CalcResult();
         bool flag = true;
@@ -918,4 +932,8 @@ public class UserInputLinearRegression {
     public double[] x, y;//用户数据
     public double a, b, r, f_unca, f_uncb, f_unc, correct_uncb; //用户的a,b,r 和 a,b的不确定度
     public bool ifa;//true为要求a的不确定度 false为b的不确定度
+}
+public class UserInputTable {
+    public string varname;
+    public CalcVariable data;
 }

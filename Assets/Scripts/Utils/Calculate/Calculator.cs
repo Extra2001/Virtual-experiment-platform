@@ -849,6 +849,7 @@ public class CalcResult {
                 result.err.unc.latex = StaticMethods.GetUncLatex("b");
             }
         }
+        result.err.right = flag;
         result.status = flag ? "正确" : "错误";
         return result;
     }
@@ -890,6 +891,7 @@ public class CalcResult {
             result.err.unc.message = "合成不确定度计算错误";
             result.err.unc.latex = StaticMethods.GetUncLatex("b");
         }
+        result.err.right = flag;
         result.status = flag ? "正确" : "错误";
         return result;
     }
@@ -924,6 +926,7 @@ public class CalcResult {
             result.err.unc.message = "合成不确定度计算错误";
             result.err.unc.latex = StaticMethods.GetUncLatex(varname);
         }
+        result.err.right = flag;
         result.status = flag ? "正确" : "错误";
         return result;
     }

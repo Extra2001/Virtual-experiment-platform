@@ -159,6 +159,11 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
     public string Original { get; }
     public CheckFloat(double truevalue, bool check = true) : this(truevalue.ToString(), check) { }
     public static CheckFloat Create(string value, bool check = false) {
+        if(value.Contains("PI")) {
+            return PI;
+        }else if(value.Contains("Math.E")) {
+            return E;
+        }
         return new CheckFloat(value, check);
 
     }

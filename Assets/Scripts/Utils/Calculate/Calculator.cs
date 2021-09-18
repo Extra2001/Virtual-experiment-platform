@@ -789,6 +789,7 @@ public class CalcResult {
     public static CalcResult CheckRegression(UserInputLinearRegression input) {//一元线性回归
         var (b, a, r, b_unca, a_unca) = StaticMethods.LinearRegression(input.x, input.y);
         CalcResult result = new CalcResult();
+        result.err = new QuantityError();
         bool flag = true;
         if(!input.b.AlmostEqual(b)) {
             flag = false;
@@ -850,6 +851,7 @@ public class CalcResult {
         double b = 0, uncb = 0;
         bool flag = true;
         CalcResult result = new CalcResult();
+        result.err = new QuantityError();
         for(int i = 0;i < bk.Length;i++) {
             bk[i] = input.y_nplusi_minus_y_i[i] / input.x_nplusi_minus_x_i;
         }
@@ -890,6 +892,7 @@ public class CalcResult {
         var userin = input.data;
         var (average, ua, unc) = userin.CalcUncertain();
         var result = new CalcResult();
+        result.err = new QuantityError();
         bool flag = true;
         if(!userin.useraver.AlmostEqual(average)) {
             flag = false;
@@ -920,6 +923,7 @@ public class CalcResult {
     }
 }
 public class UserInputSuccessiveDifference {
+    public string name;
     public double[] y_nplusi_minus_y_i;//n是这个数组的长度
     public double x_nplusi_minus_x_i;//x[n+i]-x[i]是固定值
     public double user_aver_b;//用户给的最终结果
@@ -929,6 +933,7 @@ public class UserInputSuccessiveDifference {
     public double user_b_unc;//用户给的最终结果的合成不确定度
 }
 public class UserInputLinearRegression {
+    public string name;
     public double[] x, y;//用户数据
     public double a, b, r, f_unca, f_uncb, f_unc, correct_uncb; //用户的a,b,r 和 a,b的不确定度
     public bool ifa;//true为要求a的不确定度 false为b的不确定度

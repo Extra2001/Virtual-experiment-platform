@@ -408,7 +408,7 @@ public static class StaticMethods {
         uncb = Math.Sqrt(uncb / (k * (k - 1)));
         return (a, b, uncb);
     }
-    public static double[] LinearRegression(double[] x, double[] y) {
+    public static (double b, double a, double r, double b_unca, double a_unca) LinearRegression(double[] x, double[] y) {
         //y=bx+a
         double[] xy = new double[x.Length], x2 = new double[x.Length], y2 = new double[x.Length];
         for(int i = 0;i < x.Length;i++) {
@@ -425,7 +425,7 @@ public static class StaticMethods {
         sy0 = Math.Sqrt(sy0 / (x.Length - 2));
         double b_unca = b * Math.Sqrt((1 / (r * r) - 1) / (x.Length - 2));
         double a_unca = Math.Sqrt(x2av) * b_unca;
-        return new double[] { b, a, r, b_unca, a_unca };
+        return (b, a, r, b_unca, a_unca);
     }
     public static (double avg, double ua, double u) CalcUncertain(IEnumerable<double> data, double ub) {
         //输入:测量数据data 仪器B类不确定度ub
@@ -509,6 +509,9 @@ public static class StaticMethods {
     }
     public static string GetUncLatex(string varname, double ua, double ub) {
         return $@"u({varname})=\sqrt{{({NumberFormat(ua)}^2)+({NumberFormat(ub)}^2)}}";
+    }
+    public static string GetUncLatex(string varname) {
+        return $@"u({varname})=\sqrt{{({{u_a({varname})}}^2)+({{u_b({varname})}}^2)}}";
     }
     public static string GetAverageLatex(string varname, int n) {
         return $@"$\bar{{{varname}}}=\sum_{{i = 0}}^{{{varname}}}{{{varname}_i}}";
@@ -708,11 +711,11 @@ public class CalcArgs {//一次计算
         return res;
     }
 
-    public static CalcComplexResult CalculateComplexValue(string expression, CalcArgs argobj) {
+    public static CalcResult CalculateComplexValue(string expression, CalcArgs argobj) {
         (symexpr valexpr, symexpr uncexpr) = Calculate(expression, argobj);
         QuantityError error = new QuantityError();
         bool flag = false;
-        var res = new CalcComplexResult();
+        var res = new CalcResult();
         StringBuilder answer = new StringBuilder();
         StringBuilder answerunc = new StringBuilder();
         Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + 2 * argobj.vars.Count);
@@ -767,10 +770,140 @@ public class CalcMeasureResult {
     //public double val, unc, userval, userunc;//值 不确定度 用户计算值 用户计算不确定度
 }
 
-public class CalcComplexResult {
+public class CalcResult {
     public string status;
     public QuantityError err;//最终合成量不确定度检查结果
     //public symexpr calcexpr, uncexpr;
+    public static CalcResult CheckRegression(UserInputLinearRegression input) {//一元线性回归
+        var (b, a, r, b_unca, a_unca) = StaticMethods.LinearRegression(input.x, input.y);
+        CalcResult result = new CalcResult();
+        bool flag = true;
+        if(!input.b.AlmostEqual(b)) {
+            flag = false;
+            result.err.b.right = false;
+            result.err.b.message = "一元线性回归y=bx+a系数b计算错误";
+            result.err.b.latex = @"";
+        }
+        if(!input.a.AlmostEqual(a)) {
+            flag = false;
+            result.err.a.right = false;
+            result.err.a.message = "一元线性回归y=bx+a系数b计算错误";
+            result.err.a.latex = @"";
+        }
+        if(!input.r.AlmostEqual(r)) {
+            flag = false;
+            result.err.r.right = false;
+            result.err.r.message = "一元线性回归y=bx+a相关系数r计算错误";
+            result.err.r.latex = @"";
+        }
+        if(!input.f_uncb.AlmostEqual(input.correct_uncb)) {
+            flag = false;
+            result.err.ub.right = false;
+            result.err.ub.message = "b类不确定度计算错误";
+            result.err.ub.latex = StaticMethods.GetUbExprLatex(input.ifa ? "a" : "b");
+        }
+        if(input.ifa) {
+            if(!input.f_unca.AlmostEqual(a_unca)) {
+                flag = false;
+                result.err.ua.right = false;
+                result.err.ua.message = "a类不确定度计算错误";
+                result.err.ua.latex = @"u_a(a)=b\sqrt{\frac{\bar{x^2}}{n-2}(\frac{1}{r^2}-1)}";
+            }
+            if(!input.f_unc.AlmostEqual(StaticMethods.CalcUncertain(a_unca, input.correct_uncb))) {
+                flag = false;
+                result.err.unc.right = false;
+                result.err.unc.message = "合成不确定度计算错误";
+                result.err.unc.latex = StaticMethods.GetUncLatex("a");
+            }
+        }
+        else {
+            if(!input.f_unca.AlmostEqual(b_unca)) {
+                flag = false;
+                result.err.ua.right = false;
+                result.err.ua.message = "a类不确定度计算错误";
+                result.err.ua.latex = @"u_a(b)=b\sqrt{\frac{1}{n-2}(\frac{1}{r^2}-1)}";
+            }
+            if(!input.f_unca.AlmostEqual(StaticMethods.CalcUncertain(b_unca, input.correct_uncb))) {
+                flag = false;
+                result.err.unc.right = false;
+                result.err.unc.message = "合成不确定度计算错误";
+                result.err.unc.latex = StaticMethods.GetUncLatex("b");
+            }
+        }
+        result.status = flag ? "正确" : "错误";
+        return result;
+    }
+    public static CalcResult CheckSuccessiveDifference(UserInputSuccessiveDifference input) {//逐差法
+        double[] bk = new double[input.y_nplusi_minus_y_i.Length];
+        double b = 0, uncb = 0;
+        bool flag = true;
+        CalcResult result = new CalcResult();
+        for(int i = 0;i < bk.Length;i++) {
+            bk[i] = input.y_nplusi_minus_y_i[i] / input.x_nplusi_minus_x_i;
+        }
+        b = StaticMethods.Average(bk);
+        for(int i = 0;i < bk.Length;i++) {
+            uncb += ((bk[i] - b) * (bk[i] - b));
+        }
+        uncb = Math.Sqrt(uncb / (bk.Length * (bk.Length - 1)));
+        if(!input.correct_b_uncb.AlmostEqual(input.user_b_uncb)) {
+            flag = false;
+            result.err.ub.right = false;
+            result.err.ub.message = "b类不确定度计算错误";
+            result.err.ub.latex = StaticMethods.GetUbExprLatex("b");
+        }
+        if(!input.user_b_unca.AlmostEqual(uncb)) {
+            flag = false;
+            result.err.ua.right = false;
+            result.err.ua.message = "a类不确定度计算错误";
+            result.err.ua.latex = StaticMethods.GetUaExprLatex("b");
+        }
+        if(!input.user_aver_b.AlmostEqual(b)) {
+            flag = false;
+            result.err.average.right = false;
+            result.err.average.message = "逐差法计算错误";
+            result.err.average.latex = "";
+        }
+        if(!input.user_b_unc.AlmostEqual(StaticMethods.CalcUncertain(uncb, input.correct_b_uncb))) {
+            flag = false;
+            result.err.unc.right = false;
+            result.err.unc.message = "合成不确定度计算错误";
+            result.err.unc.latex = StaticMethods.GetUncLatex("b");
+        }
+        result.status = flag ? "正确" : "错误";
+        return result;
+    }
+    public static CalcResult CheckTable(string varname,CalcVariable userin) {//一个的列表法
+        var (average, ua, unc) = userin.CalcUncertain();
+        var result = new CalcResult();
+        bool flag = true;
+        if(!userin.useraver.AlmostEqual(average)) {
+            flag = false;
+            result.err.average.message = "平均值计算错误";
+            result.err.average.latex = StaticMethods.GetAverageLatex(varname, userin.values.Count);
+            result.err.average.right = false;
+        }
+        if(!userin.userua.AlmostEqual(ua)) {
+            flag = false;
+            result.err.ua.right = false;
+            result.err.ua.message = "a类不确定度计算错误";
+            result.err.ua.latex = StaticMethods.GetUaExprLatex(varname);
+        }
+        if(!userin.userub.AlmostEqual(userin.ub)) {
+            flag = false;
+            result.err.ub.right = false;
+            result.err.ub.message = "b类不确定度计算错误";
+            result.err.ub.latex = StaticMethods.GetUbExprLatex(varname);
+        }
+        if(!userin.userunc.AlmostEqual(unc)) {
+            flag = false;
+            result.err.unc.right = false;
+            result.err.unc.message = "合成不确定度计算错误";
+            result.err.unc.latex = StaticMethods.GetUncLatex(varname);
+        }
+        result.status = flag ? "正确" : "错误";
+        return result;
+    }
 }
 public class UserInputSuccessiveDifference {
     public double[] y_nplusi_minus_y_i;//n是这个数组的长度
@@ -781,26 +914,8 @@ public class UserInputSuccessiveDifference {
     public double user_b_uncb;//用户给的最终结果的b类不确定度
     public double user_b_unc;//用户给的最终结果的合成不确定度
 }
-public class UserInputRegression {
+public class UserInputLinearRegression {
     public double[] x, y;//用户数据
-    public double a, b, r, f_unca, f_uncb, f_unc; //用户的a,b,r 和 a,b的不确定度
+    public double a, b, r, f_unca, f_uncb, f_unc, correct_uncb; //用户的a,b,r 和 a,b的不确定度
     public bool ifa;//true为要求a的不确定度 false为b的不确定度
-
-}
-public class CalcDifferenceResult//逐差法
-{
-    public string status;
-    public QuantityError err;//变量不确定度检查结果
-    public static CalcDifferenceResult CheckSuccessiveDifference(UserInputSuccessiveDifference input) {
-        return default;
-    }
-}
-
-public class CalcIndependentResult//一元线性回归
-{
-    public string status;
-    public QuantityError err;//变量不确定度检查结果
-    public static CalcIndependentResult CheckRegression(UserInputRegression input) {
-        return default;
-    }
 }

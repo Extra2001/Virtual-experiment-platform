@@ -803,19 +803,19 @@ public class CalcResult {
             flag = false;
             result.err.b.right = false;
             result.err.b.message = "一元线性回归y=bx+a系数b计算错误";
-            result.err.b.latex = @"";
+            result.err.b.latex = @"b=\frac{\bar{x}\bar{y}-\bar{xy}}{(\bar{x})^2-\bar{x^2}}";
         }
         if(!input.a.AlmostEqual(a)) {
             flag = false;
             result.err.a.right = false;
-            result.err.a.message = "一元线性回归y=bx+a系数b计算错误";
-            result.err.a.latex = @"";
+            result.err.a.message = "一元线性回归y=bx+a系数a计算错误";
+            result.err.a.latex = @"a=\bar{y}-b\bar{x}";
         }
         if(!input.r.AlmostEqual(r)) {
             flag = false;
             result.err.r.right = false;
             result.err.r.message = "一元线性回归y=bx+a相关系数r计算错误";
-            result.err.r.latex = @"";
+            result.err.r.latex = @"\frac{\bar{xy}-\bar{x}\bar{y}}{\sqrt{(\bar{x^2}-(\bar{x})^2)(\bar{y^2}-(\bar{y})^2)}}";
         }
         if(!input.f_uncb.AlmostEqual(input.correct_uncb)) {
             flag = false;
@@ -885,7 +885,7 @@ public class CalcResult {
             flag = false;
             result.err.average.right = false;
             result.err.average.message = "逐差法计算错误";
-            result.err.average.latex = "";
+            result.err.average.latex = @"u_a(b)=s(\bar{b})=\sqrt{\frac{(b_i-\bar{b})^2}{n(n-1)}}";
         }
         if(!input.user_b_unc.AlmostEqual(StaticMethods.CalcUncertain(uncb, input.correct_b_uncb))) {
             flag = false;

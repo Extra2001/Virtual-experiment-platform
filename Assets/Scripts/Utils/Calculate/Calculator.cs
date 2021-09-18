@@ -887,7 +887,7 @@ public class CalcResult {
             flag = false;
             result.err.average.right = false;
             result.err.average.message = "逐差法计算错误";
-            result.err.average.latex = StaticMethods.GetAverageLatex(@"\Deltab", input.y_nplusi_minus_y_i.Length);
+            result.err.average.latex = StaticMethods.GetAverageLatex(@"\Delta b", input.y_nplusi_minus_y_i.Length);
         }
         if(!input.user_b_unc.AlmostEqual(StaticMethods.CalcUncertain(uncb, input.correct_b_uncb))) {
             flag = false;

@@ -23,15 +23,18 @@ public class DealComplexDataInput : HTBehaviour
     public GameObject Field2;
     public Text Value2;
 
-    public Button CallButton3;
-    public Button SureButton3;
-    public GameObject Field3;
+    public InputField MainValue;
+    public InputField Uncertain;
 
-    public Text Value34;
+    //public Button CallButton3;
+    //public Button SureButton3;
+    //public GameObject Field3;
 
-    public Button CallButton4;
-    public Button SureButton4;
-    public GameObject Field4;
+    //public Text Value34;
+
+    //public Button CallButton4;
+    //public Button SureButton4;
+    //public GameObject Field4;
 
 
     public Sprite[] Sprites = new Sprite[3]; //0为初始，1为编辑中，2为编辑完成
@@ -44,12 +47,14 @@ public class DealComplexDataInput : HTBehaviour
         SureButton1.onClick.AddListener(SureClick1);
         CallButton2.onClick.AddListener(CallClick2);
         SureButton2.onClick.AddListener(SureClick2);
-        CallButton3.onClick.AddListener(CallClick3);
+        MainValue.onValueChanged.AddListener(MainValueInput);
+        Uncertain.onValueChanged.AddListener(UncertainInput);
+        /*CallButton3.onClick.AddListener(CallClick3);
         SureButton3.onClick.AddListener(SureClick3);
         CallButton4.onClick.AddListener(CallClick4);
-        SureButton4.onClick.AddListener(SureClick4);
+        SureButton4.onClick.AddListener(SureClick4);*/
         CurrentField = Field1;        
-
+        
         
     }
 
@@ -90,7 +95,9 @@ public class DealComplexDataInput : HTBehaviour
         }
         Field2.SetActive(false);
 
-        CallButton3.image.sprite = Sprites[model.AnswerAverageState];
+        MainValue.text = model.AnswerAverage;
+        Uncertain.text = model.AnswerUncertain;
+        /*CallButton3.image.sprite = Sprites[model.AnswerAverageState];
         Value34.text = "=" + StaticMethods.NumberFormat(model.AnswerAverage) + "±" + StaticMethods.NumberFormat(model.AnswerUncertain);
         Field3.SetActive(true);
         if (model.AnswerAverageExpression != null)
@@ -115,7 +122,7 @@ public class DealComplexDataInput : HTBehaviour
         {
             Field4.GetComponent<FormulaController>().Initialize();
         }
-        Field4.SetActive(false);
+        Field4.SetActive(false);*/
     }
 
     private void CallClick1()
@@ -200,7 +207,18 @@ public class DealComplexDataInput : HTBehaviour
         }
     }
 
-    private void CallClick3()
+    private void MainValueInput(string input)
+    {
+        RecordManager.tempRecord.complexQuantityModel.AnswerAverage = input;
+        RecordManager.tempRecord.complexQuantityModel.AnswerAverageState = 2;
+    }
+
+    private void UncertainInput(string input)
+    {
+        RecordManager.tempRecord.complexQuantityModel.AnswerUncertain = input;
+        RecordManager.tempRecord.complexQuantityModel.AnswerUncertainState = 2;
+    }
+    /*private void CallClick3()
     {
         if (CurrentField == Field3)
         {
@@ -278,7 +296,7 @@ public class DealComplexDataInput : HTBehaviour
             CallButton4.image.sprite = Sprites[1];
             RecordManager.tempRecord.complexQuantityModel.AnswerUncertainState = 1;
         }
-    }
+    }*/
 
 
     private void ShowModel(string message)

@@ -157,6 +157,7 @@ public class DealProcessResult : HTBehaviour
             else if (item.processMethod == 3)
             {
                 UserInputLinearRegression calc = new UserInputLinearRegression();
+                calc.name = item.Symbol;
                 double[] temp = new double[item.IndependentData.data.Count];
                 for (int i = 0; i < item.IndependentData.data.Count; i++)
                 {

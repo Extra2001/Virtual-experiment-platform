@@ -520,7 +520,8 @@ public static class StaticMethods {
         return $@"u({varname})=\sqrt{{({{u_a({varname})}}^2)+({{u_b({varname})}}^2)}}";
     }
     public static string GetAverageLatex(string varname, int n) {
-        return $@"\bar{{{varname}}}=\frac{{\sum_{{i = 0}}^{{n}}{{{varname}_i}}}}{{n}}";
+        //return $@"\bar{{{varname}}}=\frac{{\sum_{{i = 0}}^{{n}}}}{{{{{varname}_i}}}}{{n}}";
+        return string.Concat(@"\bar{", varname, @"}=\frac{\sum_{i=0}^{n}{", varname, "_i}}{n}");
     }
     public static (bool correct,string reason) CheckUncertain(string value,string unc) {
         CheckFloat v = new CheckFloat(value, false), u = new CheckFloat(unc, false);

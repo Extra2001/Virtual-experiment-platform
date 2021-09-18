@@ -161,7 +161,8 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
     public static CheckFloat Create(string value, bool check = false) {
         if(value.Contains("PI")) {
             return PI;
-        }else if(value.Contains("Math.E")) {
+        }
+        else if(value.Contains("Math.E")) {
             return E;
         }
         return new CheckFloat(value, check);
@@ -383,7 +384,7 @@ public static class StaticMethods {
         else {
             n = (measure.Count + 1) / 2;
             for(int i = 0;i < n - 1;i++) {
-                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i]))-double.Parse(userdifference[i]));
+                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])) - double.Parse(userdifference[i]));
             }
         }
         foreach(var item in answerdifference) {
@@ -521,12 +522,12 @@ public static class StaticMethods {
     }
     public static string GetAverageLatex(string varname, int n) {
         //return $@"\bar{{{varname}}}=\frac{{\sum_{{i = 0}}^{{n}}}}{{{{{varname}_i}}}}{{n}}";
-        return string.Concat(@"\bar{", varname, @"}=\frac{\sum_{i=1}^{n}{", varname, "_i}}{n}");
+        return string.Concat(@"\bar{", varname, @"}=\frac{\sum_{i=1}^{", n, "}{", varname, "_i}}{", n, "}");
         //return @"{\bar{x}=0}";
     }
-    public static (bool correct,string reason) CheckUncertain(string value,string unc) {
+    public static (bool correct, string reason) CheckUncertain(string value, string unc) {
         CheckFloat v = new CheckFloat(value, false), u = new CheckFloat(unc, false);
-        if(u.EffectiveDigit!=1) {
+        if(u.EffectiveDigit != 1) {
             return (false, "不确定度保留1位有效数字");
         }
         else {
@@ -879,13 +880,13 @@ public class CalcResult {
             flag = false;
             result.err.ua.right = false;
             result.err.ua.message = "a类不确定度计算错误";
-            result.err.ua.latex = StaticMethods.GetUaExprLatex("b");
+            result.err.ua.latex = @"u_a(b)=s(\bar{b})=\sqrt{\frac{(b_i-\bar{b})^2}{n(n-1)}}";
         }
         if(!input.user_aver_b.AlmostEqual(b)) {
             flag = false;
             result.err.average.right = false;
             result.err.average.message = "逐差法计算错误";
-            result.err.average.latex = @"u_a(b)=s(\bar{b})=\sqrt{\frac{(b_i-\bar{b})^2}{n(n-1)}}";
+            result.err.average.latex = StaticMethods.GetAverageLatex(@"\Deltab", input.y_nplusi_minus_y_i.Length);
         }
         if(!input.user_b_unc.AlmostEqual(StaticMethods.CalcUncertain(uncb, input.correct_b_uncb))) {
             flag = false;

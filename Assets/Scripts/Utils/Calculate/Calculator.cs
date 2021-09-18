@@ -206,10 +206,10 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
             d = (int)(d / Math.Pow(10, 0 - n)) * Math.Pow(10, 0 - n);
             n = 0;
         }
-        return Math.Round(d, n);
+        return Math.Round(d, n,MidpointRounding.ToEven);
     }
     public CheckFloat KeepEffective(int n) {
-        double tmp = Math.Round(Value, n);
+        double tmp = Math.Round(Value, n,MidpointRounding.ToEven);
         return new CheckFloat() { Value = tmp, EffectiveDigit = n + 1, HiDigit = HiDigit, LoDigit = HiDigit - n };
     }
     public static decimal KeepEffective(decimal d, int n) {//保留小数点后n位 共n+1位有效数字
@@ -222,10 +222,10 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
             d = (int)((double)d / Math.Pow(10, -n)) * (decimal)(Math.Pow(10, -n));
             n = 0;
         }
-        return Math.Round(d, n);
+        return Math.Round(d, n,MidpointRounding.ToEven);
     }
     public static double KeepTo(double truevalue, int n) {//保留到第n位有效数字
-        return Math.Round(truevalue / Math.Pow(10, n)) * Math.Pow(10, n);
+        return Math.Round(truevalue / Math.Pow(10, n),MidpointRounding.ToEven) * Math.Pow(10, n);
     }
     public static int Effectiveness(string num) {//计算一个字符串表示的小数有多少位有效数字
         int digits = 0; bool lead0 = true;

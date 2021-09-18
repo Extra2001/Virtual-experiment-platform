@@ -50,8 +50,19 @@ public class MeasuredDifference1 : HTBehaviour
                 });
             return false;
         }
-        
-        if(!StaticMethods.CheckDifferenced(quantity.MesuredData.data, quantity.DifferencedData.data))
+
+        if (quantity.MesuredData.data.Count / 2 < 2)
+        {
+            if (!silent)
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                {
+                    ShowCancel = false,
+                    Message = new BindableString("你的逐差表格的数据组数过少，请增加测量组数")
+                });
+            return false;
+        }
+
+        if (!StaticMethods.CheckDifferenced(quantity.MesuredData.data, quantity.DifferencedData.data))
         {
             if (!silent)
             {

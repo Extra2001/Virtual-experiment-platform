@@ -181,7 +181,7 @@ public class DealProcessResult : HTBehaviour
             if (!current.a.right)
             {
                 cell0.gameObject.SetActive(true);
-                cell0.ShowData("系数a计算有误", current.a.message, current.a.latex, current.a.userformula);
+                cell0.ShowData("一元线性回归系数a计算有误", current.a.message, current.a.latex, current.a.userformula);
             }
             else
             {
@@ -190,7 +190,7 @@ public class DealProcessResult : HTBehaviour
             if (!current.b.right)
             {
                 cell1.gameObject.SetActive(true);
-                cell1.ShowData("系数b计算有误", current.b.message, current.b.latex, current.b.userformula);
+                cell1.ShowData("一元线性回归系数b计算有误", current.b.message, current.b.latex, current.b.userformula);
             }
             else
             {

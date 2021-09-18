@@ -853,6 +853,7 @@ public class CalcResult {
             }
         }
         result.err.right = flag;
+        result.err.Title = $"检查{input.name}的不确定度";
         result.status = flag ? "正确" : "错误";
         return result;
     }
@@ -896,6 +897,7 @@ public class CalcResult {
         }
         result.err.right = flag;
         result.status = flag ? "正确" : "错误";
+        result.err.Title = $"检查{input.name}的不确定度";
         return result;
     }
     public static CalcResult CheckTable(UserInputTable input) {//一个的列表法
@@ -924,6 +926,7 @@ public class CalcResult {
             result.err.unc.latex = StaticMethods.GetUncLatex(varname);
         }
         result.err.right = flag;
+        result.err.Title = $"检查{input.varname}的不确定度";
         result.status = flag ? "正确" : "错误";
         return result;
     }

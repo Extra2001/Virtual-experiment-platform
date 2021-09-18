@@ -504,7 +504,7 @@ public static class StaticMethods {
         }
     }
     public static string GetUaExprLatex(string varname) {
-        //return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{\sum_{i=1}^{n}{({", varname, @"_i}-{\bar{", varname, @"}})^2}}{n(n-1)}}");
+        //return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{\sum_{i=1}^{n}{({", varname, @"_i}-{\overline{", varname, @"}})^2}}{n(n-1)}}");
         //return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{s^2}{k}}=\sqrt{{", s2, "}{", k, "}}");
         //下面这行是不要符号表达式的
         return string.Concat(@"u_a(", varname, @")=\sqrt{\frac{s^2}{k}}");
@@ -521,9 +521,9 @@ public static class StaticMethods {
         return $@"u({varname})=\sqrt{{({{u_a({varname})}}^2)+({{u_b({varname})}}^2)}}";
     }
     public static string GetAverageLatex(string varname, int n) {
-        //return $@"\bar{{{varname}}}=\frac{{\sum_{{i = 0}}^{{n}}}}{{{{{varname}_i}}}}{{n}}";
-        return string.Concat(@"\bar{", varname, @"}=\frac{\sum_{i=1}^{", n, "}{", varname, "_i}}{", n, "}");
-        //return @"{\bar{x}=0}";
+        //return $@"\overline{{{varname}}}=\frac{{\sum_{{i = 0}}^{{n}}}}{{{{{varname}_i}}}}{{n}}";
+        return string.Concat(@"\overline{", varname, @"}=\frac{\sum_{i=1}^{", n, "}{", varname, "_i}}{", n, "}");
+        //return @"{\overline{x}=0}";
     }
     public static (bool correct, string reason) CheckUncertain(string value, string unc) {
         CheckFloat v = new CheckFloat(value, false), u = new CheckFloat(unc, false);
@@ -804,19 +804,19 @@ public class CalcResult {
             flag = false;
             result.err.b.right = false;
             result.err.b.message = "一元线性回归y=bx+a系数b计算错误";
-            result.err.b.latex = @"b=\frac{\bar{x}\bar{y}-\bar{xy}}{(\bar{x})^2-\bar{x^2}}";
+            result.err.b.latex = @"b=\frac{\overline{x}\overline{y}-\overline{xy}}{(\overline{x})^2-\overline{x^2}}";
         }
         if(!input.a.AlmostEqual(a)) {
             flag = false;
             result.err.a.right = false;
             result.err.a.message = "一元线性回归y=bx+a系数a计算错误";
-            result.err.a.latex = @"a=\bar{y}-b\bar{x}";
+            result.err.a.latex = @"a=\overline{y}-b\overline{x}";
         }
         if(!input.r.AlmostEqual(r)) {
             flag = false;
             result.err.r.right = false;
             result.err.r.message = "一元线性回归y=bx+a相关系数r计算错误";
-            result.err.r.latex = @"\frac{\bar{xy}-\bar{x}\bar{y}}{\sqrt{(\bar{x^2}-(\bar{x})^2)(\bar{y^2}-(\bar{y})^2)}}";
+            result.err.r.latex = @"\frac{\overline{xy}-\overline{x}\overline{y}}{\sqrt{(\overline{x^2}-(\overline{x})^2)(\overline{y^2}-(\overline{y})^2)}}";
         }
         if(!input.f_uncb.AlmostEqual(input.correct_uncb)) {
             flag = false;
@@ -829,7 +829,7 @@ public class CalcResult {
                 flag = false;
                 result.err.ua.right = false;
                 result.err.ua.message = "a类不确定度计算错误";
-                result.err.ua.latex = @"u_a(a)=b\sqrt{\frac{\bar{x^2}}{n-2}(\frac{1}{r^2}-1)}";
+                result.err.ua.latex = @"u_a(a)=b\sqrt{\frac{\overline{x^2}}{n-2}(\frac{1}{r^2}-1)}";
             }
             if(!input.f_unc.AlmostEqual(StaticMethods.CalcUncertain(a_unca, input.correct_uncb))) {
                 flag = false;
@@ -881,7 +881,7 @@ public class CalcResult {
             flag = false;
             result.err.ua.right = false;
             result.err.ua.message = "a类不确定度计算错误";
-            result.err.ua.latex = @"u_a(b)=s(\bar{b})=\sqrt{\frac{(b_i-\bar{b})^2}{n(n-1)}}";
+            result.err.ua.latex = @"u_a(b)=s(\overline{b})=\sqrt{\frac{(b_i-\overline{b})^2}{n(n-1)}}";
         }
         if(!input.user_aver_b.AlmostEqual(b)) {
             flag = false;

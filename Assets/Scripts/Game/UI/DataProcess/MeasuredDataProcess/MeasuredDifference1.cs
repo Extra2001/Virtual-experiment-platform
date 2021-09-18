@@ -58,7 +58,7 @@ public class MeasuredDifference1 : HTBehaviour
                 UIAPI.Instance.ShowModel(new ModelDialogModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString("你的逐差表格的数据大小不正确")
+                    Message = new BindableString("你的逐差表格的数据不正确")
                 });
             }
 

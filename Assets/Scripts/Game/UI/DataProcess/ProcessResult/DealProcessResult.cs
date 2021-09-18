@@ -100,6 +100,18 @@ public class DealProcessResult : HTBehaviour
                 if (!result.err.right)
                 {
                     MeasureErrorFlag = true;
+                    if (!result.err.ua.right)
+                    {
+                        result.err.ua.userformula = item.UaExpression;
+                    }
+                    if (!result.err.ub.right)
+                    {
+                        result.err.ub.userformula = item.UbExpression;
+                    }
+                    if (!result.err.unc.right)
+                    {
+                        result.err.unc.userformula = item.ComplexExpression;
+                    }
                     quantityErrors.Add(result.err);
                 }
             }
@@ -111,6 +123,7 @@ public class DealProcessResult : HTBehaviour
                 {
                     temp[i] = double.Parse(item.DifferencedData.data[i]);
                 }
+                calc.name = item.Symbol;
                 calc.y_nplusi_minus_y_i = temp;
                 calc.x_nplusi_minus_x_i = double.Parse(item.stepLength);
                 calc.user_aver_b = item.AverageExpression.GetExpressionExecuted();
@@ -122,6 +135,22 @@ public class DealProcessResult : HTBehaviour
                 if (!result.err.right)
                 {
                     MeasureErrorFlag = true;
+                    if (!result.err.average.right)
+                    {
+                        result.err.average.userformula = item.AverageExpression;
+                    }
+                    if (!result.err.ua.right)
+                    {
+                        result.err.ua.userformula = item.UaExpression;
+                    }
+                    if (!result.err.ub.right)
+                    {
+                        result.err.ub.userformula = item.UbExpression;
+                    }
+                    if (!result.err.unc.right)
+                    {
+                        result.err.unc.userformula = item.ComplexExpression;
+                    }
                     quantityErrors.Add(result.err);
                 }
             }
@@ -150,6 +179,30 @@ public class DealProcessResult : HTBehaviour
                 if (!result.err.right)
                 {
                     MeasureErrorFlag = true;
+                    if (!result.err.a.right)
+                    {
+                        result.err.a.userformula = item.AExpression;
+                    }
+                    if (!result.err.b.right)
+                    {
+                        result.err.b.userformula = item.BExpression;
+                    }
+                    if (!result.err.r.right)
+                    {
+                        result.err.r.userformula = item.RelationExpression;
+                    }
+                    if (!result.err.ua.right)
+                    {
+                        result.err.ua.userformula = item.UaExpression;
+                    }
+                    if (!result.err.ub.right)
+                    {
+                        result.err.ub.userformula = item.UbExpression;
+                    }
+                    if (!result.err.unc.right)
+                    {
+                        result.err.unc.userformula = item.ComplexExpression;
+                    }
                     quantityErrors.Add(result.err);
                 }
             }
@@ -277,7 +330,7 @@ public class DealProcessResult : HTBehaviour
             }
             else
             {
-                cell1.gameObject.SetActive(false);
+                cell0.gameObject.SetActive(false);
             }
             if (!current.b.right)
             {
@@ -364,11 +417,15 @@ public class DealProcessResult : HTBehaviour
         }
         else if (curError == quantityErrors.Count)
         {
+            cell0.gameObject.SetActive(false);
             cell1.gameObject.SetActive(false);
             cell2.gameObject.SetActive(false);
             cell3.gameObject.SetActive(false);
             cell4.gameObject.SetActive(false);
             cell5.gameObject.SetActive(false);
+            cell6.gameObject.SetActive(false);
+            cell7.gameObject.SetActive(false);
+            cell8.gameObject.SetActive(false);
             double score = RecordManager.tempRecord.score.CalcScore();
             Title.text = "本次实验得分:" + String.Format("{0:F1}", score) + "/4.0";
             if (score - 4 == 0)

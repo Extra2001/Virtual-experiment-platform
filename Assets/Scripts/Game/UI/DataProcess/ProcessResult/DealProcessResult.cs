@@ -11,11 +11,15 @@ using System.Linq;
 
 public class DealProcessResult : HTBehaviour
 {
+    public ProcessResultCell cell0;
     public ProcessResultCell cell1;
     public ProcessResultCell cell2;
     public ProcessResultCell cell3;
     public ProcessResultCell cell4;
     public ProcessResultCell cell5;
+    public ProcessResultCell cell6;
+    public ProcessResultCell cell7;
+    public ProcessResultCell cell8;
 
     public Text Title;
     public Text SuccessMessage;
@@ -36,16 +40,16 @@ public class DealProcessResult : HTBehaviour
         public string Symbol { get; set; }
 
         public bool right { get; set; } = true;
+        public QuantityErrorMessage a { get; set; } = new QuantityErrorMessage();//一元线性回归的a,b,r
+        public QuantityErrorMessage b { get; set; } = new QuantityErrorMessage();
+        public QuantityErrorMessage r { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage average { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage ua { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage ub { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage unc { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage answer { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage answerunc { get; set; } = new QuantityErrorMessage();
-        public QuantityErrorMessage a { get; set; } = new QuantityErrorMessage();
-        public QuantityErrorMessage b { get; set; } = new QuantityErrorMessage();
-        public QuantityErrorMessage r { get; set; } = new QuantityErrorMessage();
-        
+              
     }
 
     public class QuantityErrorMessage
@@ -174,52 +178,87 @@ public class DealProcessResult : HTBehaviour
             Title.text = $"你的错误{curError + 1}/{quantityErrors.Count}";
             ErrorTitle.text = current.Title;
 
-            if (!current.ua.right)
+            if (!current.a.right)
             {
-                cell1.gameObject.SetActive(true);
-                cell1.ShowData("A类不确定度计算有误", current.ua.message, current.ua.latex, current.ua.userformula);
+                cell0.gameObject.SetActive(true);
+                cell0.ShowData("系数a计算有误", current.a.message, current.a.latex, current.a.userformula);
             }
             else
             {
                 cell1.gameObject.SetActive(false);
             }
-            if (!current.ub.right)
+            if (!current.b.right)
+            {
+                cell1.gameObject.SetActive(true);
+                cell1.ShowData("系数b计算有误", current.b.message, current.b.latex, current.b.userformula);
+            }
+            else
+            {
+                cell1.gameObject.SetActive(false);
+            }
+            if (!current.r.right)
             {
                 cell2.gameObject.SetActive(true);
-                cell2.ShowData("B类不确定度计算有误", current.ub.message, current.ub.latex, current.ub.userformula);
+                cell2.ShowData("相关系数r计算有误", current.r.message, current.r.latex, current.r.userformula);
             }
             else
             {
                 cell2.gameObject.SetActive(false);
             }
-            if (!current.unc.right)
+            if (!current.average.right)
             {
                 cell3.gameObject.SetActive(true);
-                cell3.ShowData("合成不确定度有误", current.unc.message, current.unc.latex, current.unc.userformula);
+                cell3.ShowData("平均值计算有误", current.average.message, current.average.latex, current.average.userformula);
             }
             else
             {
                 cell3.gameObject.SetActive(false);
             }
-            if (!current.answer.right)
+            if (!current.ua.right)
             {
                 cell4.gameObject.SetActive(true);
-                cell4.ShowData("最终合成结果计算有误", current.answer.message, current.answer.latex, current.answer.userformula);
+                cell4.ShowData("A类不确定度计算有误", current.ua.message, current.ua.latex, current.ua.userformula);
             }
             else
             {
                 cell4.gameObject.SetActive(false);
             }
-            if (!current.answerunc.right)
+            if (!current.ub.right)
             {
                 cell5.gameObject.SetActive(true);
-                cell5.ShowData("最终合成不确定度计算有误", current.answerunc.message, current.answerunc.latex, current.answerunc.userformula);
+                cell5.ShowData("B类不确定度计算有误", current.ub.message, current.ub.latex, current.ub.userformula);
             }
             else
             {
                 cell5.gameObject.SetActive(false);
             }
-
+            if (!current.unc.right)
+            {
+                cell6.gameObject.SetActive(true);
+                cell6.ShowData("合成不确定度有误", current.unc.message, current.unc.latex, current.unc.userformula);
+            }
+            else
+            {
+                cell6.gameObject.SetActive(false);
+            }
+            if (!current.answer.right)
+            {
+                cell7.gameObject.SetActive(true);
+                cell7.ShowData("最终合成结果计算有误", current.answer.message, current.answer.latex, current.answer.userformula);
+            }
+            else
+            {
+                cell7.gameObject.SetActive(false);
+            }
+            if (!current.answerunc.right)
+            {
+                cell8.gameObject.SetActive(true);
+                cell8.ShowData("最终合成不确定度计算有误", current.answerunc.message, current.answerunc.latex, current.answerunc.userformula);
+            }
+            else
+            {
+                cell8.gameObject.SetActive(false);
+            }
             curError++;
         }
         else if (MeasureErrorFlag)

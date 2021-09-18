@@ -16,6 +16,7 @@ using expr = MathNet.Symbolics.Expression;
 using symexpr = MathNet.Symbolics.SymbolicExpression;
 using symdiff = MathNet.Symbolics.Calculus;
 using symfuncs = MathNet.Symbolics.Function;
+using UnityEngine;
 using static DealProcessResult;
 
 public partial class FormulaController {
@@ -371,13 +372,13 @@ public static class StaticMethods {
         if(measure.Count % 2 == 0) {
             n = measure.Count / 2;
             for(int i = 0;i < n;i++) {
-                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])));
+                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])) - double.Parse(userdifference[i]));
             }
         }
         else {
             n = (measure.Count + 1) / 2;
             for(int i = 0;i < n - 1;i++) {
-                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])));
+                answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i]))-double.Parse(userdifference[i]));
             }
         }
         foreach(var item in answerdifference) {

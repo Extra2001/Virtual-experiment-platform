@@ -521,8 +521,8 @@ public static class StaticMethods {
     }
     public static string GetAverageLatex(string varname, int n) {
         //return $@"\bar{{{varname}}}=\frac{{\sum_{{i = 0}}^{{n}}}}{{{{{varname}_i}}}}{{n}}";
-        //return string.Concat(@"\bar{", varname, @"}=\frac{\sum_{i=1}^{n}{", varname, "_i}}{n}");
-        return @"{\bar{x}=0}";
+        return string.Concat(@"\bar{", varname, @"}=\frac{\sum_{i=1}^{n}{", varname, "_i}}{n}");
+        //return @"{\bar{x}=0}";
     }
     public static (bool correct,string reason) CheckUncertain(string value,string unc) {
         CheckFloat v = new CheckFloat(value, false), u = new CheckFloat(unc, false);

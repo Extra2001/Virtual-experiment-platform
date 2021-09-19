@@ -34,6 +34,12 @@ public class MeasuredDifference1 : HTBehaviour
     {
         this.quantity = quantity;
         stepLength.text = quantity.stepLength;
+        if (quantity.DifferencedData == null) quantity.DifferencedData = new DataColumnModel()
+        {
+            name = $"[Öð] {quantity.Name} ({quantity.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+            quantitySymbol = quantity.Symbol,
+            type = DataColumnType.Differenced
+        }; ;
         ShowImage();
     }
 

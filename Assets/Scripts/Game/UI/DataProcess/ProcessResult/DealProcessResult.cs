@@ -323,24 +323,24 @@ public class DealProcessResult : HTBehaviour
             Title.text = $"你的错误{curError + 1}/{quantityErrors.Count}";
             ErrorTitle.text = current.Title;
 
-            if (!current.a.right)
+            if (!current.b.right)
             {
                 cell0.gameObject.SetActive(true);
-                cell0.ShowData("一元线性回归系数a计算有误", current.a.message, current.a.latex, current.a.userformula);
+                cell0.ShowData("一元线性回归系数b计算有误", current.b.message, current.b.latex, current.b.userformula);
             }
             else
             {
                 cell0.gameObject.SetActive(false);
             }
-            if (!current.b.right)
+            if (!current.a.right)
             {
                 cell1.gameObject.SetActive(true);
-                cell1.ShowData("一元线性回归系数b计算有误", current.b.message, current.b.latex, current.b.userformula);
+                cell1.ShowData("一元线性回归系数a计算有误", current.a.message, current.a.latex, current.a.userformula);
             }
             else
             {
                 cell1.gameObject.SetActive(false);
-            }
+            }           
             if (!current.r.right)
             {
                 cell2.gameObject.SetActive(true);

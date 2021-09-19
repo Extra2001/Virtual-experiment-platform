@@ -3,9 +3,11 @@
     描述：右键物体信息数据模型
 *************************************************************************************/
 using HT.Framework;
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
 
 public class ObjectInfo : HTBehaviour
 {
@@ -25,11 +27,20 @@ public class ObjectInfo : HTBehaviour
     private InputField _MassInput;
     [SerializeField]
     private Toggle _Gravity;
+    [SerializeField]
+    private InputField _Step;
+    [SerializeField]
+    private SegmentedControl _StepAxis;
+    [SerializeField]
+    private Button _StepAdd;
+    [SerializeField]
+    private Button _StepSub;
 
     private ObjectValue objectValue;
 
     private void Start()
     {
+        _Step.text = "1";
         _Mask.onClick.AddListener(() =>
         {
             Main.m_UI.CloseUI<ObjectInfoUILogic>();
@@ -56,6 +67,20 @@ public class ObjectInfo : HTBehaviour
         _Gravity.onValueChanged.AddListener(x =>
         {
             objectValue.Gravity = x;
+        });
+        _StepAdd.onClick.AddListener(() =>
+        {
+            // 要步进缩放的轴
+            var axis = _StepAxis.selectedSegmentIndex;
+            var step = Convert.ToDouble(_Step.text);
+            // 步进增加
+        });
+        _StepSub.onClick.AddListener(() =>
+        {
+            // 要步进缩放的轴
+            var axis = _StepAxis.selectedSegmentIndex;
+            var step = Convert.ToDouble(_Step.text);
+            // 步进减少
         });
     }
 

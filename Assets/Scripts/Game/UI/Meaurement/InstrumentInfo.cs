@@ -13,6 +13,8 @@ using System.Collections;
 
 public class InstrumentInfo : HTBehaviour
 {
+    public double Step => Convert.ToDouble(_Step.text);
+
     [SerializeField]
     private Button _Mask;
     [SerializeField]
@@ -35,6 +37,12 @@ public class InstrumentInfo : HTBehaviour
     private GameObject _RootPanel;
     [SerializeField]
     private Button _SwitchRange;
+    [SerializeField]
+    private InputField _Step;
+    [SerializeField]
+    private Button _StepAdd;
+    [SerializeField]
+    private Button _StepSub;
 
     private Dictionary<string, IntrumentInfoItem> infoItem = new Dictionary<string, IntrumentInfoItem>();
     private InstrumentBase _instrument;
@@ -99,6 +107,14 @@ public class InstrumentInfo : HTBehaviour
         {
             infoItem[nameof(_SwitchRange)].onValueChanged.ForEach(y => y.Invoke());
         });
+        _StepAdd.onClick.AddListener(() =>
+        {
+            infoItem[nameof(_StepAdd)].onValueChangedDouble.ForEach(y => y.Invoke(Step));
+        });
+        _StepSub.onClick.AddListener(() =>
+        {
+            infoItem[nameof(_StepSub)].onValueChangedDouble.ForEach(y => y.Invoke(Step));
+        });
         initialized = true;
     }
 }
@@ -108,4 +124,6 @@ public class IntrumentInfoItem
 {
     public GameObject GameObject { get; set; }
     public List<Action> onValueChanged { get; set; } = new List<Action>();
+    public List<Action<string>> onValueChangedString { get; set; } = new List<Action<string>>();
+    public List<Action<double>> onValueChangedDouble { get; set; } = new List<Action<double>>();
 }

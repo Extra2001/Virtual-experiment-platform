@@ -17,6 +17,17 @@ public abstract class IndirectMeasurementInstrumentBase : InstrumentBase
         infoItems["_RandomError"].GameObject.SetActive(true);
         infoItems["_RandomError"].GameObject.GetComponent<InputField>().text = RandomErrorLimit.ToString();
         infoItems["_ConfirmButton"].GameObject.SetActive(true);
+        infoItems["_StepAdd"].GameObject.SetActive(true);
+        infoItems["_StepSub"].GameObject.SetActive(true);
+        infoItems["_Step"].GameObject.SetActive(true);
+        infoItems["_StepAdd"].onValueChangedDouble.Add(step =>
+        {
+            // 步进增加
+        });
+        infoItems["_StepSub"].onValueChangedDouble.Add(step =>
+        {
+            // 步进减少
+        });
         infoItems["_ConfirmButton"].onValueChanged.Add(() =>
         {
             double re = Convert.ToDouble(infoItems["_RandomError"].GameObject.GetComponent<InputField>().text);

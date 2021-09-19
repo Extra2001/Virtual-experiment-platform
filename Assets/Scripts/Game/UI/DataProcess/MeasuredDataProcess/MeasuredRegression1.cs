@@ -21,7 +21,7 @@ public class MeasuredRegression1 : HTBehaviour
 
     public void Show(QuantityModel quantity)
     {
-        if (quantity.DifferencedData == null) quantity.DifferencedData = new DataColumnModel()
+        if (quantity.IndependentData == null) quantity.IndependentData = new DataColumnModel()
         {
             name = $"[вт] {quantity.Name} ({quantity.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
             quantitySymbol = quantity.Symbol,

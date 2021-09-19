@@ -93,7 +93,7 @@ public class MeasuredDataProcessProcedure : ProcedureBase
             for(int i = 0; i < CurrentQuantity.IndependentData.data.Count; i++)
                 list.Add(Convert.ToDouble(CurrentQuantity.IndependentData.data[i]) * 
                     Convert.ToDouble(CurrentQuantity.MesuredData.data[i]));
-            result = StaticMethods.CenterMoment(list, 1).ToString();
+            result = (StaticMethods.CenterMoment(list, 1) * list.Count).ToString();
         }
 
         return result;

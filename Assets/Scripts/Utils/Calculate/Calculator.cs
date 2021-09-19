@@ -225,7 +225,24 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
         return Math.Round(d, n, MidpointRounding.ToEven);
     }
     public static double KeepTo(double truevalue, int n) {//保留到第n位有效数字
-        return Math.Round(truevalue/ Math.Pow(10, n),MidpointRounding.ToEven) * Math.Pow(10, n);
+        int p = 1;
+        if(n > 0) {
+            for(int i = 0;i < n;i++) {
+                p *= 10;
+            }
+            double x = truevalue / p;
+            return Math.Round(x, MidpointRounding.ToEven) * p;
+        }
+        else if(n < 0) {
+            for(int i = 0;i <-n;i++) {
+                p *= 10;
+            }
+            double x = truevalue * p;
+            return Math.Round(x, MidpointRounding.ToEven) / p;
+        }
+        else {
+            return Math.Round(truevalue, MidpointRounding.ToEven);
+        }
         //return Math.Round((truevalue * Math.Pow(10, n) + 0.5) , MidpointRounding.ToEven) / Math.Pow(10, n);
     }
     public static int Effectiveness(string num) {//计算一个字符串表示的小数有多少位有效数字

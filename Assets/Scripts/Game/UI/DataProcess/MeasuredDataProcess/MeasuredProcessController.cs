@@ -199,7 +199,7 @@ public class MeasuredProcessController : HTBehaviour
     {
         HideAllPanel();
         quantity.processMethod = 3;
-        ShowDatatable(dataColumn1, DataColumnType.Differenced, quantity.MesuredData);
+        ShowDatatable(dataColumn1, DataColumnType.Mesured, quantity.MesuredData);
         ShowDatatable(dataColumn2, DataColumnType.Independent, quantity.IndependentData, false);
         ShowNavigationBar("一元线性回归", 3);
         measuredRegression1.gameObject.SetActive(true);

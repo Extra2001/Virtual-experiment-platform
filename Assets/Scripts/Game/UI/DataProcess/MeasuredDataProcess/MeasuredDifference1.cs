@@ -39,7 +39,7 @@ public class MeasuredDifference1 : HTBehaviour
             name = $"[Öð] {quantity.Name} ({quantity.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
             quantitySymbol = quantity.Symbol,
             type = DataColumnType.Differenced
-        }; ;
+        };
         ShowImage();
     }
 

@@ -92,7 +92,6 @@ public class DealProcessResult : HTBehaviour
                 }
                 calc.data = new CalcVariable(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), temp.Count);
                 calc.data.values = temp;
-                calc.data.useraver = item.AverageExpression.GetExpressionExecuted();
                 calc.data.userua = item.UaExpression.GetExpressionExecuted();
                 calc.data.userub = item.UbExpression.GetExpressionExecuted();
                 calc.data.userunc = item.ComplexExpression.GetExpressionExecuted();

@@ -20,7 +20,7 @@ public class UncertaintyBackNext : HTBehaviour
             if (gm._currentQuantityIndex == 0)
             {
                 Main.m_UI.CloseUI<MeasuredDataProcess>();
-                gm.SwitchBackProcedure();
+                gm.SwitchProcedure<ProcessExplainProcedure>();
             }
             else
             {

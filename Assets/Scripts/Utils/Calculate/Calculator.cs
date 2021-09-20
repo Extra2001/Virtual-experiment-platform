@@ -379,7 +379,7 @@ public static class StaticMethods {
         string Output;
 
         if(Math.Abs(Input) > 0.01 && Math.Abs(Input) < 1000) {
-            Output = Input.ToString("f4");
+            Output = Input.ToString("f6");
         }
         else if((Input - 0) == 0) {
             Output = "0";
@@ -863,7 +863,7 @@ public class CalcResult {
                 result.err.ua.message = "a类不确定度计算错误";
                 result.err.ua.latex = @"u_a(b)=b\sqrt{\frac{1}{n-2}(\frac{1}{r^2}-1)}";
             }
-            if(!input.f_unca.AlmostEqual(StaticMethods.CalcUncertain(b_unca, input.correct_uncb))) {
+            if(!input.f_unc.AlmostEqual(StaticMethods.CalcUncertain(b_unca, input.correct_uncb))) {
                 flag = false;
                 result.err.unc.right = false;
                 result.err.unc.message = "合成不确定度计算错误";

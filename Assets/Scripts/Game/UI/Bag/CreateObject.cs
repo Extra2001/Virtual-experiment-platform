@@ -42,6 +42,7 @@ public class CreateObject : HTBehaviour
                 meshCollider.convex = true;
                 meshCollider.isTrigger = false;
             }
+            item.gameObject.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Objects/ImportObjectMaterial");//酸奶盒上色
             ResetModelPivot(item.gameObject);
             if (item.gameObject.GetComponent<Rigidbody>() == null)
             {
@@ -92,6 +93,9 @@ public class CreateObject : HTBehaviour
             if (Temp.z > FarthestPoint.z)
                 FarthestPoint.z = Temp.z;
             cnt++;
+
+            item.gameObject.AddComponent<ImportModelSetColor>();//酸奶盒上色
+            item.gameObject.GetComponent<ImportModelSetColor>().SetColor();//
         }
         // 计算基础大小
         objectValue.BaseSize = new Vector3(Mathf.Abs(FarthestPoint.x - ClosestPoint.x),
@@ -133,6 +137,7 @@ public class CreateObject : HTBehaviour
         {
             // 挂载组件
             item.gameObject.AddComponent<MeshCollider>();
+            item.gameObject.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Objects/ImportObjectMaterial");
             item.gameObject.layer = 13;
             ResetModelPivot(item.gameObject);
 
@@ -152,6 +157,10 @@ public class CreateObject : HTBehaviour
                 FarthestPoint.y = Temp.y;
             if (Temp.z > FarthestPoint.z)
                 FarthestPoint.z = Temp.z;
+
+            item.gameObject.AddComponent<ImportModelSetColor>();
+            item.gameObject.GetComponent<ImportModelSetColor>().SetColor();
+
         }
         // 计算基础大小
         var BaseSize = new Vector3(Mathf.Abs(FarthestPoint.x - ClosestPoint.x),
@@ -166,6 +175,7 @@ public class CreateObject : HTBehaviour
         ret.transform.position = new Vector3(rec.objectStartPosition[0],
             rec.objectStartPosition[1] + BaseSize.y * scale / 2, rec.objectStartPosition[2]);
 
+        
         return ret;
     }
     private static void CreatePrefab()

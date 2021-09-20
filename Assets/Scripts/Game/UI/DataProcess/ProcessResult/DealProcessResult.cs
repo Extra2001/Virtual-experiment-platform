@@ -163,6 +163,7 @@ public class DealProcessResult : HTBehaviour
                     temp[i] = double.Parse(item.IndependentData.data[i]);
                 }
                 calc.x = temp;
+                temp = new double[item.MesuredData.data.Count];
                 for (int i = 0; i < item.MesuredData.data.Count; i++)
                 {
                     temp[i] = double.Parse(item.MesuredData.data[i]);
@@ -171,6 +172,7 @@ public class DealProcessResult : HTBehaviour
                 calc.a = item.AExpression.GetExpressionExecuted();
                 calc.b = item.BExpression.GetExpressionExecuted();
                 calc.r = item.RelationExpression.GetExpressionExecuted();
+                calc.correct_uncb = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3);
                 calc.f_unca = item.UaExpression.GetExpressionExecuted();
                 calc.f_uncb = item.UbExpression.GetExpressionExecuted();
                 calc.f_unc = item.ComplexExpression.GetExpressionExecuted();

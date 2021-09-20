@@ -140,7 +140,6 @@ public class BagSelector : HTBehaviour
         
         PreviewImageCamera.GetComponent<Camera>().Render();
         RenderTexture.active = rt;
-        Debug.Log(RenderTexture.active);
         Texture2D tex = new Texture2D(rt.width, rt.height, TextureFormat.ARGB32, false);
         tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
         tex.Apply();

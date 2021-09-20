@@ -43,6 +43,33 @@ public class ObjectValue : HTBehaviour
         {
             gameObject.transform.localScale = new Vector3(value, value, value);
             ObjectModel.scale = value;
+            ObjectModel.linescaleX = value;
+            ObjectModel.linescaleY = value;
+            ObjectModel.linescaleZ = value;
+        }
+    }
+    public float LineScaleX
+    {
+        get => ObjectModel.linescaleX; set
+        {
+            gameObject.transform.localScale = new Vector3(ObjectModel.linescaleX, ObjectModel.linescaleY, ObjectModel.linescaleZ);
+            ObjectModel.linescaleX = value;
+        }
+    }
+    public float LineScaleY
+    {
+        get => ObjectModel.linescaleY; set
+        {
+            gameObject.transform.localScale = new Vector3(ObjectModel.linescaleX, ObjectModel.linescaleY, ObjectModel.linescaleZ);
+            ObjectModel.linescaleY = value;
+        }
+    }
+    public float LineScaleZ
+    {
+        get => ObjectModel.linescaleZ; set
+        {
+            gameObject.transform.localScale = new Vector3(ObjectModel.linescaleX, ObjectModel.linescaleY, ObjectModel.linescaleZ);
+            ObjectModel.linescaleZ = value;
         }
     }
     public float Mass { get => ObjectModel.mass; set => ObjectModel.mass = value; }

@@ -24,6 +24,10 @@ public class ObjectsModel
     public float baseScale { get; set; } = 1;
     public float scale { get; set; } = 1;
     public float mass { get; set; } = 0;
+
+    public float linescaleX { get; set; } = 1;
+    public float linescaleY { get; set; } = 1;
+    public float linescaleZ { get; set; } = 1;
 }
 
 [Serializable]

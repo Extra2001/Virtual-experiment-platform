@@ -73,6 +73,20 @@ public class ObjectInfo : HTBehaviour
             // 要步进缩放的轴
             var axis = _StepAxis.selectedSegmentIndex;
             var step = Convert.ToDouble(_Step.text);
+
+
+            if (axis==0)
+            {
+                objectValue.LineScaleX = objectValue.LineScaleX+ objectValue.Scale * 0.1f * (float)step;
+            }
+            if (axis == 1)
+            {
+                objectValue.LineScaleY = objectValue.LineScaleY+ objectValue.Scale*0.1f * (float)step;
+            }
+            if (axis == 2)
+            {
+                objectValue.LineScaleZ = objectValue.LineScaleZ+ objectValue.Scale * 0.1f * (float)step;
+            }
             // 步进增加
         });
         _StepSub.onClick.AddListener(() =>
@@ -80,7 +94,20 @@ public class ObjectInfo : HTBehaviour
             // 要步进缩放的轴
             var axis = _StepAxis.selectedSegmentIndex;
             var step = Convert.ToDouble(_Step.text);
+
             // 步进减少
+            if (axis == 0)
+            {
+                objectValue.LineScaleX = Math.Max(objectValue.Scale*0.1f,objectValue.LineScaleX - objectValue.Scale * 0.1f * (float)step);
+            }
+            if (axis == 1)
+            {
+                objectValue.LineScaleY = Math.Max(objectValue.Scale * 0.1f, objectValue.LineScaleY - objectValue.Scale * 0.1f * (float)step);
+            }
+            if (axis == 2)
+            {
+                objectValue.LineScaleZ = Math.Max(objectValue.Scale * 0.1f, objectValue.LineScaleZ - objectValue.Scale * 0.1f * (float)step);
+            }
         });
     }
 

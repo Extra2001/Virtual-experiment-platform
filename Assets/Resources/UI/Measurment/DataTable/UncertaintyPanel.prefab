@@ -530,7 +530,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 91.5, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &796896819047036885
@@ -624,7 +624,9 @@ MonoBehaviour:
   _dataInput: {fileID: 5029756965862552476, guid: e02dc9a518c157f47b335c380485540b,
     type: 3}
   _Content: {fileID: 796896819047036905}
-  _Name: {fileID: 0}
+  _DeleteButton: {fileID: 0}
+  _Dropdown: {fileID: 0}
+  _AddButton: {fileID: 0}
 --- !u!1 &796896819108896432
 GameObject:
   m_ObjectHideFlags: 0
@@ -1910,13 +1912,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e6ebd290e12ce44be226d8cb588190, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Name: {fileID: 2865159987258992039}
-  _Symbol: {fileID: 2865159989279956446}
-  _Unit: {fileID: 2255706636427312894}
-  _Group: {fileID: 2255706636851095025}
-  _Instrument: {fileID: 1879176041765089196}
-  UA: {fileID: 2097695778530468175}
-  UB: {fileID: 5369241879583876034}
+  _Title: {fileID: 0}
+  _AverageTitle: {fileID: 0}
+  _UaTitle: {fileID: 0}
+  _UbTitle: {fileID: 0}
+  _ComplexTitle: {fileID: 0}
   dataColumn: {fileID: 9011628068045568558}
 --- !u!114 &2427220303640409895
 MonoBehaviour:
@@ -1932,6 +1932,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NextButton: {fileID: 6397294242522210281}
   BackButton: {fileID: 7146321402482996822}
+  controller: {fileID: 0}
 --- !u!1 &2865159988950099451
 GameObject:
   m_ObjectHideFlags: 0

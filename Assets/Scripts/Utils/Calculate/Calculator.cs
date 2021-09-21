@@ -928,19 +928,34 @@ public class CalcResult {
         if(!userin.userua.AlmostEqual(ua)) {
             flag = false;
             result.err.ua.right = false;
-            result.err.ua.message = "a类不确定度计算错误";
+            double k = input.data.values.Count;
+            if (userin.userua.AlmostEqual(ua*k/(k-1)))
+            {
+                result.err.ua.message = "是否将k除成了k-1，请注意样本方差的底数";
+            }
+            else
+            {
+                result.err.ua.message = "其他错误";
+            }            
             result.err.ua.latex = StaticMethods.GetUaExprLatex(varname);
         }
         if(!userin.userub.AlmostEqual(userin.ub)) {
             flag = false;
             result.err.ub.right = false;
-            result.err.ub.message = "b类不确定度计算错误";
+            if (userin.userub.AlmostEqual(userin.ub * Math.Sqrt(3)))
+            {
+                result.err.ub.message = "是否将k除成了k-1，请注意样本方差的底数";
+            }
+            else
+            {
+                result.err.ub.message = "其他错误";
+            }
             result.err.ub.latex = StaticMethods.GetUbExprLatex(varname);
         }
         if(!userin.userunc.AlmostEqual(unc)) {
             flag = false;
             result.err.unc.right = false;
-            result.err.unc.message = "合成不确定度计算错误";
+            result.err.unc.message = "其他错误";
             result.err.unc.latex = StaticMethods.GetUncLatex(varname);
         }
         result.err.right = flag;

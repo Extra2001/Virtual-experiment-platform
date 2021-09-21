@@ -23,10 +23,10 @@ public class MeasuredRegression1 : HTBehaviour
     {
         if (quantity.IndependentData == null) quantity.IndependentData = new DataColumnModel()
         {
-            name = $"[自] {quantity.Name} ({quantity.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+            name = $"[自] 自变量 {quantity.Name}",
             quantitySymbol = quantity.Symbol,
             type = DataColumnType.Independent
-        }; ;
+        };
         this.quantity = quantity;
         ShowImage();
         dataset.options[0].text = quantity.MesuredData.name;

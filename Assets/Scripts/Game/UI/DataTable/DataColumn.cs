@@ -92,7 +92,7 @@ public class DataColumn : HTBehaviour
                 if (item.IndependentData == null)
                     item.IndependentData = new DataColumnModel()
                     {
-                        name = $"[步] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+                        name = $"[自] 自变量 {item.Name}",
                         quantitySymbol = item.Symbol,
                         type = DataColumnType.Independent
                     };

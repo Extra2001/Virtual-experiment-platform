@@ -62,7 +62,7 @@ public class PreviewExp : HTBehaviour
             };
             item.IndependentData = new DataColumnModel()
             {
-                name = $"[自] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+                name = $"[自] 自变量 {item.Name}",
                 quantitySymbol = item.Symbol,
                 type = DataColumnType.Independent
             };

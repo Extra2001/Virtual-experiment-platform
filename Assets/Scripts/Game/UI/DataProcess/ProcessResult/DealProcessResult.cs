@@ -408,7 +408,7 @@ public class DealProcessResult : HTBehaviour
             }
             curError++;
         }
-        /*else if (MeasureErrorFlag)
+        else if (MeasureErrorFlag)
         {
             UIAPI.Instance.ShowModel(new ModelDialogModel()
             {
@@ -416,7 +416,7 @@ public class DealProcessResult : HTBehaviour
                 Title = new BindableString("警告"),
                 Message = new BindableString("请先修正直接测量量的错误")
             });
-        }*/
+        }
         else if (curError == quantityErrors.Count)
         {
             cell0.gameObject.SetActive(false);

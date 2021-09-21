@@ -931,7 +931,7 @@ public class CalcResult {
             double k = input.data.values.Count;
             if (userin.userua.AlmostEqual(ua*Math.Sqrt(k/(k-1))))
             {
-                result.err.ua.message = "是否将k除成了k-1，请注意样本方差的底数";
+                result.err.ua.message = "是否将k除成了k-1，请注意样本方差的含义";
             }
             else
             {

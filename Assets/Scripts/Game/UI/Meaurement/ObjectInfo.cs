@@ -77,15 +77,15 @@ public class ObjectInfo : HTBehaviour
 
             if (axis==0)
             {
-                objectValue.LineScaleX = objectValue.LineScaleX+ objectValue.Scale * 0.1f * (float)step;
+                objectValue.LineScaleX = objectValue.LineScaleX+ objectValue.Scale  * (float)step;
             }
             if (axis == 1)
             {
-                objectValue.LineScaleY = objectValue.LineScaleY+ objectValue.Scale*0.1f * (float)step;
+                objectValue.LineScaleY = objectValue.LineScaleY+ objectValue.Scale * (float)step;
             }
             if (axis == 2)
             {
-                objectValue.LineScaleZ = objectValue.LineScaleZ+ objectValue.Scale * 0.1f * (float)step;
+                objectValue.LineScaleZ = objectValue.LineScaleZ+ objectValue.Scale  * (float)step;
             }
             // 步进增加
         });
@@ -98,15 +98,15 @@ public class ObjectInfo : HTBehaviour
             // 步进减少
             if (axis == 0)
             {
-                objectValue.LineScaleX = Math.Max(objectValue.Scale*0.1f,objectValue.LineScaleX - objectValue.Scale * 0.1f * (float)step);
+                objectValue.LineScaleX = Math.Max(0,objectValue.LineScaleX - objectValue.Scale  * (float)step);
             }
             if (axis == 1)
             {
-                objectValue.LineScaleY = Math.Max(objectValue.Scale * 0.1f, objectValue.LineScaleY - objectValue.Scale * 0.1f * (float)step);
+                objectValue.LineScaleY = Math.Max(0, objectValue.LineScaleY - objectValue.Scale  * (float)step);
             }
             if (axis == 2)
             {
-                objectValue.LineScaleZ = Math.Max(objectValue.Scale * 0.1f, objectValue.LineScaleZ - objectValue.Scale * 0.1f * (float)step);
+                objectValue.LineScaleZ = Math.Max(0, objectValue.LineScaleZ - objectValue.Scale  * (float)step);
             }
         });
     }

@@ -285,8 +285,8 @@ public class DealProcessResult : HTBehaviour
 
     private void CheckComplex(CalcArgs calc)
     {
-        if (!MeasureErrorFlag)
-        {
+        //if (!MeasureErrorFlag)
+        //{
             calc.ComplexUserUnput(RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted(), RecordManager.tempRecord.complexQuantityModel.UncertainExpression.GetExpressionExecuted());
             var complexresult = CalcArgs.CalculateComplexValue(RecordManager.tempRecord.stringExpression, calc);
             if (complexresult.status != "计算无误")
@@ -303,7 +303,7 @@ public class DealProcessResult : HTBehaviour
                 }
                 quantityErrors.Add(complexresult.err);
             }
-        }
+        //}
     }
 
     public void Show()
@@ -408,15 +408,15 @@ public class DealProcessResult : HTBehaviour
             }
             curError++;
         }
-        else if (MeasureErrorFlag)
-        {
-            UIAPI.Instance.ShowModel(new ModelDialogModel()
-            {
-                ShowCancel = false,
-                Title = new BindableString("警告"),
-                Message = new BindableString("请先修正直接测量量的错误")
-            });
-        }
+        //else if (MeasureErrorFlag)
+        //{
+        //    UIAPI.Instance.ShowModel(new ModelDialogModel()
+        //    {
+        //        ShowCancel = false,
+        //        Title = new BindableString("警告"),
+        //        Message = new BindableString("请先修正直接测量量的错误")
+        //    });
+        //}
         else if (curError == quantityErrors.Count)
         {
             cell0.gameObject.SetActive(false);

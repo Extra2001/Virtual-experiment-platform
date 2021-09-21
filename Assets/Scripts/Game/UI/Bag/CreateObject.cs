@@ -42,7 +42,7 @@ public class CreateObject : HTBehaviour
                 meshCollider.convex = true;
                 meshCollider.isTrigger = false;
             }
-            item.gameObject.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Objects/ImportObjectMaterial");//酸奶盒上色
+            //item.gameObject.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Objects/ImportObjectMaterial");//酸奶盒上色
             ResetModelPivot(item.gameObject);
             if (item.gameObject.GetComponent<Rigidbody>() == null)
             {
@@ -94,8 +94,8 @@ public class CreateObject : HTBehaviour
                 FarthestPoint.z = Temp.z;
             cnt++;
 
-            item.gameObject.AddComponent<ImportModelSetColor>();//酸奶盒上色
-            item.gameObject.GetComponent<ImportModelSetColor>().SetColor();//
+            //item.gameObject.AddComponent<ImportModelSetColor>();//酸奶盒上色
+            //item.gameObject.GetComponent<ImportModelSetColor>().SetColor();//
         }
         // 计算基础大小
         objectValue.BaseSize = new Vector3(Mathf.Abs(FarthestPoint.x - ClosestPoint.x),

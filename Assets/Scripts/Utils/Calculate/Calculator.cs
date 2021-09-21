@@ -375,19 +375,9 @@ public static class StaticMethods {
         }
         return ans /= n;
     }
-    public static string NumberFormat(double Input) {//格式化输出float
-        string Output;
-
-        if(Math.Abs(Input) > 0.01 && Math.Abs(Input) < 1000) {
-            Output = Input.ToString("f5");
-        }
-        else if((Input - 0) == 0) {
-            Output = "0";
-        }
-        else {
-            Output = Input.ToString("E");
-        }
-        return Output;
+    public static string NumberFormat(double input) {//格式化输出float
+        double t = Math.Abs(input);
+        return (t >= 1e5 || t <= 1e-5) ? input.ToString("G4") : input.ToString("F4");
     }
     public static bool CheckDifferenced(List<string> measure, List<string> userdifference) //检查逐差过程是否正确
     {

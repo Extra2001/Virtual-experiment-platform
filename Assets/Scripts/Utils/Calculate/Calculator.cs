@@ -379,7 +379,7 @@ public static class StaticMethods {
         string Output;
 
         if(Math.Abs(Input) > 0.01 && Math.Abs(Input) < 1000) {
-            Output = Input.ToString("f6");
+            Output = Input.ToString("f5");
         }
         else if((Input - 0) == 0) {
             Output = "0";

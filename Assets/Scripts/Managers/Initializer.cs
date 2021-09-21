@@ -122,7 +122,7 @@ public class Initializer
             {
                 id = 8,
                 Name = "无盖盒",
-                DetailMessage = "无",
+                DetailMessage = "具有内径和深度的盒子",
                 Integrated = true,
                 PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/box.png",
                 //ResourcePath = $"{Application.streamingAssetsPath}/Objects/object8.obj"
@@ -133,7 +133,7 @@ public class Initializer
             {
                 id = 9,
                 Name = "细丝",
-                DetailMessage = "无",
+                DetailMessage = "极细的丝线",
                  Integrated = true,
                 PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/st.png",
                 ResourcePath = $"{Application.streamingAssetsPath}/Objects/object12.obj"

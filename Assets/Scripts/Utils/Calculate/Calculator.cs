@@ -919,9 +919,9 @@ public class CalcResult {
             flag = false;
             result.err.ua.right = false;
             double k = input.data.values.Count;
-            if (userin.userua.AlmostEqual(ua*k/(k-1)))
+            if (userin.userua.AlmostEqual(ua*Math.Sqrt(k/(k-1))))
             {
-                result.err.ua.message = "是否将k除成了k-1，请注意样本方差的底数";
+                result.err.ua.message = "是否将k除成了k-1，请注意样本方差的含义";
             }
             else
             {
@@ -934,7 +934,7 @@ public class CalcResult {
             result.err.ub.right = false;
             if (userin.userub.AlmostEqual(userin.ub * Math.Sqrt(3)))
             {
-                result.err.ub.message = "是否将k除成了k-1，请注意样本方差的底数";
+                result.err.ub.message = "是否忘除以根号3";
             }
             else
             {

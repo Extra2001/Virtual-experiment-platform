@@ -766,7 +766,7 @@ public class CalcArgs {//一次计算
             error.answer.right = false;
             error.answer.latex = valexpr.ToLaTeX();
             if(true) {
-                answer.Append("其他错误");
+                answer.Append("主值应代入各物理量平均值");
             }
             error.answer.message = answer.ToString();
         }

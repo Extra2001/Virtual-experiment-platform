@@ -57,9 +57,9 @@ public static class ProcessManager
 
     private static int GetPort()
     {
-        int port = 12335;
-        if (!PortInUse(port))
-            return port;
+        //int port = 12335;
+        //if (!PortInUse(port))
+        //    return port;
         System.Random r = new System.Random();
         for (int i = 0; i < 10000; i++)
         {

@@ -17,6 +17,7 @@ public class QuantityModel
 
     public DataColumnModel MesuredData { get; set; } = null; //测量原始数据
     public DataColumnModel IndependentData { get; set; } = null; //一元线性回归的自变量
+    public DataColumnModel GraphicData { get; set; } = null; //图示法的自变量
     public DataColumnModel DifferencedData { get; set; } = null; //逐差法逐差后数据
 
     //逐差法需要的内容

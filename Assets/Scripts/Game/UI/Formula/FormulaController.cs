@@ -176,7 +176,7 @@ public partial class FormulaController : MonoBehaviour
             baseCell.ReplaceFlags.Add(baseCell.Value2, baseNode.ReplaceFlags[1]);
         baseCell.thisGUID = baseNode.GUID;
         // 显示方块
-        RestoreCell(baseCell, nodes);
+        RestoreCell(baseCell, copyNodes);
     }
     /// <summary>
     /// 初始化公式编辑器，此操作会清空其中所有内容。

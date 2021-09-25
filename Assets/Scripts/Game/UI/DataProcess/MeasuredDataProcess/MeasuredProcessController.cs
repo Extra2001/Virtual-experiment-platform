@@ -26,6 +26,8 @@ public class MeasuredProcessController : HTBehaviour
     public MeasuredDifference2 measuredDifference2;
     public MeasuredRegression1 measuredRegression1;
     public MeasuredRegression2 measuredRegression2;
+    public MeasuredGraphic1 measuredGraphic1;
+    public MeasuredGraphic2 measuredGraphic2;
 
     private QuantityModel quantity;
 
@@ -139,6 +141,8 @@ public class MeasuredProcessController : HTBehaviour
         measuredDifference2.gameObject.SetActive(false);
         measuredRegression1.gameObject.SetActive(false);
         measuredRegression2.gameObject.SetActive(false);
+        measuredGraphic1.gameObject.SetActive(false);
+        measuredGraphic2.gameObject.SetActive(false);
         _chooserPanel.gameObject.SetActive(false);
         _backButton.interactable = false;
         _continueButton.interactable = false;
@@ -176,7 +180,7 @@ public class MeasuredProcessController : HTBehaviour
         HideAllPanel();
         quantity.processMethod = 2;
         ShowDatatable(dataColumn1, DataColumnType.Mesured, quantity.MesuredData);
-        ShowDatatable(dataColumn2, DataColumnType.Differenced, quantity.DifferencedData, false);
+        ShowDatatable(dataColumn2, DataColumnType.Differenced, quantity.GraphicData, false);
         ShowNavigationBar("逐差法第一步", 3);
         measuredDifference1.gameObject.SetActive(true);
         measuredDifference1.Show(quantity);
@@ -215,6 +219,29 @@ public class MeasuredProcessController : HTBehaviour
         ShowNavigationBar("一元线性回归法第二步", 1);
         measuredRegression2.gameObject.SetActive(true);
         measuredRegression2.Show(quantity);
+        _backButton.interactable = true;
+    }
+
+    private void ShowGraphic1()
+    {
+        HideAllPanel();
+        quantity.processMethod = 4;
+        ShowDatatable(dataColumn1, DataColumnType.Mesured, quantity.MesuredData);
+        ShowDatatable(dataColumn2, DataColumnType.Independent, quantity.IndependentData, false);
+        ShowNavigationBar("图示法", 3);
+        measuredGraphic1.gameObject.SetActive(true);
+        //measuredGraphic1.Show(quantity);
+        _backButton.interactable = true;
+        _continueButton.interactable = true;
+    }
+
+    private void ShowGraphic2()
+    {
+        HideAllPanel();
+        quantity.processMethod = 4;
+        ShowNavigationBar("图示法第二步", 1);
+        measuredGraphic2.gameObject.SetActive(true);
+        //measuredGraphic2.Show(quantity);
         _backButton.interactable = true;
     }
 }

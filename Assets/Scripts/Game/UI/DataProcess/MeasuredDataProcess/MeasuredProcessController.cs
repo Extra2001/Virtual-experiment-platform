@@ -38,6 +38,7 @@ public class MeasuredProcessController : HTBehaviour
         _tableButton.onClick.AddListener(ShowUncertainty);
         _differenceButton.onClick.AddListener(ShowDifference1);
         _regressionButton.onClick.AddListener(ShowRegression1);
+        _graphicButton.onClick.AddListener(ShowGraphic1);
     }
 
     public void Show(QuantityModel quantity)
@@ -48,7 +49,8 @@ public class MeasuredProcessController : HTBehaviour
         _title.text = "处理" + quantity.Name + ":" + quantity.Symbol + "/" + instance.UnitSymbol;
         measuredUncertainty.Show(quantity); measuredDifference1.Show(quantity);
         measuredDifference2.Show(quantity); measuredRegression1.Show(quantity);
-        measuredRegression2.Show(quantity);
+        measuredRegression2.Show(quantity); measuredGraphic1.Show(quantity);
+        measuredGraphic2.Show(quantity);
         if (quantity.processMethod == 1) ShowUncertainty();
         else if (quantity.processMethod == 2)
         {
@@ -59,6 +61,11 @@ public class MeasuredProcessController : HTBehaviour
         {
             if (measuredRegression1.CheckAll(true)) ShowRegression2();
             else ShowRegression1();
+        }
+        else if (quantity.processMethod == 4)
+        {
+            if (measuredGraphic1.CheckAll(true)) ShowGraphic2();
+            else ShowGraphic1();
         }
         else
         {
@@ -74,12 +81,16 @@ public class MeasuredProcessController : HTBehaviour
             return measuredDifference2.CheckAll(silent);
         else if (measuredRegression2.gameObject.activeSelf)
             return measuredRegression2.CheckAll(silent);
+        else if (measuredGraphic2.gameObject.activeSelf)
+            return measuredGraphic2.CheckAll(silent);
         else if (quantity.processMethod == 1)
             return measuredUncertainty.CheckAll(silent);
         else if (quantity.processMethod == 2)
             return measuredDifference1.CheckAll(silent) && measuredDifference2.CheckAll(silent);
         else if (quantity.processMethod == 3)
             return measuredRegression1.CheckAll(silent) && measuredRegression2.CheckAll(silent);
+        else if (quantity.processMethod == 4)
+            return measuredGraphic1.CheckAll(silent) && measuredGraphic2.CheckAll(silent);
         if (!silent)
             UIAPI.Instance.ShowModel(new ModelDialogModel()
             {
@@ -99,12 +110,15 @@ public class MeasuredProcessController : HTBehaviour
 
     private void BackButton()
     {
-        if (measuredUncertainty.gameObject.activeSelf || measuredDifference1.gameObject.activeSelf || measuredRegression1.gameObject.activeSelf)
+        if (measuredUncertainty.gameObject.activeSelf || measuredDifference1.gameObject.activeSelf 
+            || measuredRegression1.gameObject.activeSelf || measuredGraphic1.gameObject.activeSelf)
             ShowChooser();
         else if (measuredDifference2.gameObject.activeSelf)
             ShowDifference1();
         else if (measuredRegression2.gameObject.activeSelf)
             ShowRegression1();
+        else if (measuredGraphic2.gameObject.activeSelf)
+            ShowGraphic1();
     }
 
     private void ContinueButton()
@@ -118,6 +132,11 @@ public class MeasuredProcessController : HTBehaviour
         {
             if (measuredRegression1.CheckAll())
                 ShowRegression2();
+        }
+        else if (measuredGraphic1.gameObject.activeSelf)
+        {
+            if (measuredGraphic1.CheckAll())
+                ShowGraphic2();
         }
     }
 
@@ -230,7 +249,7 @@ public class MeasuredProcessController : HTBehaviour
         ShowDatatable(dataColumn2, DataColumnType.Independent, quantity.IndependentData, false);
         ShowNavigationBar("图示法", 3);
         measuredGraphic1.gameObject.SetActive(true);
-        //measuredGraphic1.Show(quantity);
+        measuredGraphic1.Show(quantity);
         _backButton.interactable = true;
         _continueButton.interactable = true;
     }
@@ -241,7 +260,7 @@ public class MeasuredProcessController : HTBehaviour
         quantity.processMethod = 4;
         ShowNavigationBar("图示法第二步", 1);
         measuredGraphic2.gameObject.SetActive(true);
-        //measuredGraphic2.Show(quantity);
+        measuredGraphic2.Show(quantity);
         _backButton.interactable = true;
     }
 }

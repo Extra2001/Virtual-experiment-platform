@@ -6,18 +6,13 @@ using UnityEngine;
 
 public class MeasuredGraphic2 : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-    
-    // Start is called before the first frame update
-    void Start()
+    public void Show(QuantityModel quantity)
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool CheckAll(bool silent = false)
     {
-        
+        return true;
     }
 }

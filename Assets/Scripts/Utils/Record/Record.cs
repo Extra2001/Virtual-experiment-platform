@@ -82,9 +82,9 @@ public class Record
     /// </summary>
     public MyVector3 FPSPosition = new MyVector3()
     {
-        x = -29.80946f,
-        y = 97.62866f,
-        z = 12.10236f
+        x = -58.759f,
+        y = 6.4450f,
+        z = 1.732f
     };
     /// <summary>
     /// 任务视角的旋转角

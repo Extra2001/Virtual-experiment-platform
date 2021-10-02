@@ -21,7 +21,7 @@ public class StartUILogic : UILogicResident
 
         UIEntity.FindChildren("NewGameButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            Main.m_Event.Throw<StartNewExpEventHandler>();
+            GameManager.Instance.ChooseNewExp();
         });
         UIEntity.FindChildren("ExitButton").GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -29,7 +29,7 @@ public class StartUILogic : UILogicResident
         });        
         UIEntity.FindChildren("UncertainLearnButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            Main.m_Event.Throw<UncertainLearnEventHandler>();
+            GameManager.Instance.StartValidNumber();
         });
         UIEntity.FindChildren("ContinueButton").GetComponent<Button>().onClick.AddListener(() =>
         {

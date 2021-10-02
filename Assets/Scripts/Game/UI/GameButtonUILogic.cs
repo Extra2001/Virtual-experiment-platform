@@ -52,7 +52,7 @@ public class GameButtonUILogic : UILogicResident
         });
         UIEntity.FindChildren("UncertaintyButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            Main.m_Event.Throw<ProcessExplainEventHandler>();
+            GameManager.Instance.SwitchProcedure<ProcessExplainProcedure>();
         });
     }
 

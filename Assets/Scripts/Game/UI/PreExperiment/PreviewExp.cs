@@ -15,7 +15,7 @@ public class PreviewExp : HTBehaviour
 
     private List<GameObject> quantities = new List<GameObject>();
 
-    private void Start()
+    public void Show()
     {
         InitData();
         LoadQuantities();
@@ -53,25 +53,28 @@ public class PreviewExp : HTBehaviour
     public void InitData()
     {
         foreach (var item in RecordManager.tempRecord.quantities)
-        { 
-            item.MesuredData = new DataColumnModel()
-            {
-                name = $"[原] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
-                quantitySymbol = item.Symbol,
-                type = DataColumnType.Mesured
-            };
-            item.IndependentData = new DataColumnModel()
-            {
-                name = $"[自] 自变量 {item.Name}",
-                quantitySymbol = item.Symbol,
-                type = DataColumnType.Independent
-            };
-            item.DifferencedData = new DataColumnModel()
-            {
-                name = $"[逐] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
-                quantitySymbol = item.Symbol,
-                type = DataColumnType.Differenced
-            };
+        {
+            if (item.MesuredData == null)
+                item.MesuredData = new DataColumnModel()
+                {
+                    name = $"[原] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+                    quantitySymbol = item.Symbol,
+                    type = DataColumnType.Mesured
+                };
+            if (item.IndependentData == null)
+                item.IndependentData = new DataColumnModel()
+                {
+                    name = $"[自] 自变量 {item.Name}",
+                    quantitySymbol = item.Symbol,
+                    type = DataColumnType.Independent
+                };
+            if (item.DifferencedData == null)
+                item.DifferencedData = new DataColumnModel()
+                {
+                    name = $"[逐] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+                    quantitySymbol = item.Symbol,
+                    type = DataColumnType.Differenced
+                };
         }
     }
 }

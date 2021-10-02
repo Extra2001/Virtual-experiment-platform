@@ -5,7 +5,7 @@
 using HT.Framework;
 using UnityEngine.UI;
 
-public class UncertaintyBackNext : HTBehaviour
+public class NextBackButtonOnMeasuredDataProcess : HTBehaviour
 {
     public Button NextButton;
     public Button BackButton;
@@ -20,7 +20,7 @@ public class UncertaintyBackNext : HTBehaviour
             if (gm._currentQuantityIndex == 0)
             {
                 Main.m_UI.CloseUI<MeasuredDataProcess>();
-                gm.SwitchProcedure<ProcessExplainProcedure>();
+                gm.SwitchBackProcedure();
             }
             else
             {

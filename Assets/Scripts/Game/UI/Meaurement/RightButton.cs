@@ -12,7 +12,7 @@ public class RightButton : HTBehaviour
 
     private void Update()
     {
-        if (Main.m_Procedure.CurrentProcedure is OnChair && Input.GetMouseButtonDown(1))
+        if (Main.m_Procedure.CurrentProcedure is OnChairProcedure && Input.GetMouseButtonDown(1))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))

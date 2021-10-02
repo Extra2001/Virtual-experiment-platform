@@ -8,7 +8,7 @@ using HT.Framework;
 /// <summary>
 /// 选定位置，进入测量阶段
 /// </summary>
-public class OnChair : ProcedureBase
+public class OnChairProcedure : ProcedureBase
 {
     /// <summary>
     /// 进入流程
@@ -17,7 +17,8 @@ public class OnChair : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         RenderManager.Instance.Show();
-
+        var Position = NearChair.Instance.transform.position;
+        Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill(Position.x, Position.y, Position.z));
         //人物可否移动
         GameManager.Instance.FPSable = true;
         //记录人物位置

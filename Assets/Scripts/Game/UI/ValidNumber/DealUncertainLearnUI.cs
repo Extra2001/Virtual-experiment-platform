@@ -27,12 +27,6 @@ public class DealUncertainLearnUI : HTBehaviour
         SureButton.onClick.AddListener(ClickSureButton);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void ClickSureButton()
     {
         string input;
@@ -103,8 +97,6 @@ public class DealUncertainLearnUI : HTBehaviour
                 });
             }
         }
-      
-
     }
 
     private void ClickBackButton()

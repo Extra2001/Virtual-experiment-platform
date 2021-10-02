@@ -6,7 +6,7 @@ using HT.Framework;
 using System.Linq;
 using UnityEngine.UI;
 
-public class NextBackButtonControl : HTBehaviour
+public class NextBackButtonOnProcessExplain : HTBehaviour
 {
     public Button BackButton;
     public Button NextButton;
@@ -21,10 +21,20 @@ public class NextBackButtonControl : HTBehaviour
     {
         GameManager.Instance.SwitchBackProcedure();
     }
+
     public void Next()
     {
-        bool flag = true;
-        foreach(var item in RecordManager.tempRecord.quantities)
+        if (CheckAll())
+        {
+            GameManager.Instance.SwitchProcedure<MeasuredDataProcessProcedure>();
+            GameManager.Instance._currentQuantityIndex = 0;
+            GameManager.Instance.ShowUncertainty();
+        }
+    }
+
+    public bool CheckAll(bool silent = false)
+    {
+        foreach (var item in RecordManager.tempRecord.quantities)
         {
             if (item.MesuredData.data.Count == 0)
             {
@@ -33,7 +43,7 @@ public class NextBackButtonControl : HTBehaviour
                     ShowCancel = false,
                     Message = new BindableString($"物理量 {item.Name}({item.Symbol}) 还没记录数据")
                 });
-                flag = false;break;
+                return false;
             }
             if (item.MesuredData.data.Where(x => string.IsNullOrEmpty(x)).Count() != 0)
             {
@@ -42,9 +52,9 @@ public class NextBackButtonControl : HTBehaviour
                     ShowCancel = false,
                     Message = new BindableString($"物理量 {item.Name}({item.Symbol}) 存在空数据")
                 });
-                flag = false; break;
+                return false;
             }
         }
-        if(flag) GameManager.Instance.SwitchNextProcedure();
+        return true;
     }
 }

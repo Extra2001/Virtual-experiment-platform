@@ -12,7 +12,13 @@ public class CustomizeExp : HTBehaviour
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
-            Main.m_Event.Throw(Main.m_ReferencePool.Spawn<ChooseExpEventHandler>().Fill(ExpId));
+            if (RecordManager.tempRecord.showedInstrument != null
+            && RecordManager.tempRecord.showedInstrument.instrumentType != null)
+                Main.m_Entity.HideEntity(GameManager.Instance.CurrentInstrument);
+            CreateObject.HideCurrent();
+            CreateInstrument.HideCurrent();
+            RecordManager.ClearTempRecord();
+            GameManager.Instance.SwitchProcedure<AddValueProcedure>();
         });
     }
 }

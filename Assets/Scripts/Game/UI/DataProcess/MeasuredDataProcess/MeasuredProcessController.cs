@@ -199,7 +199,7 @@ public class MeasuredProcessController : HTBehaviour
         HideAllPanel();
         quantity.processMethod = 2;
         ShowDatatable(dataColumn1, DataColumnType.Mesured, quantity.MesuredData);
-        ShowDatatable(dataColumn2, DataColumnType.Differenced, quantity.GraphicData, false);
+        ShowDatatable(dataColumn2, DataColumnType.Differenced, quantity.DifferencedData, false);
         ShowNavigationBar("逐差法第一步", 3);
         measuredDifference1.gameObject.SetActive(true);
         measuredDifference1.Show(quantity);

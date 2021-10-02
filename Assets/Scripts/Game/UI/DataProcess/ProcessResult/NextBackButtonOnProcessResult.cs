@@ -5,7 +5,7 @@
 using HT.Framework;
 using UnityEngine.UI;
 
-public class BackEndButton : HTBehaviour
+public class NextBackButtonOnProcessResult : HTBehaviour
 {
     public Button BackButton;
     public Button EndButton;

@@ -5,15 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ComplexDataProcessNextBack : HTBehaviour
+public class NextBackButtonOnComplexDataProcess : HTBehaviour
 {
     public Button BackButton;
     public Button NextButton;
 
-    //启用自动化
-    protected override bool IsAutomate => true;
-    
-    // Start is called before the first frame update
     void Start()
     {
         BackButton.onClick.AddListener(Back);
@@ -22,8 +18,9 @@ public class ComplexDataProcessNextBack : HTBehaviour
 
     public void Back()
     {
-        GameManager.Instance.SwitchProcedure<MeasuredDataProcessProcedure>();
+        GameManager.Instance.SwitchBackProcedure();
     }
+
     public void Next()
     {
         bool flag;

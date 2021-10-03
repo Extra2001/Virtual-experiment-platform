@@ -63,7 +63,11 @@ public class Resolution : HTBehaviour
         });
         foreach (var item in Screen.resolutions)
         {
-            Add(item.width, item.width, item.refreshRate);
+            if (item.width < 800) continue;
+            var hh = Screen.resolutions.Where(x => x.width == item.width && x.height == item.height)
+                .OrderByDescending(x => x.refreshRate).First();
+            if (resolutions.Where(x => x.width == hh.width && x.height == hh.height).Any()) continue;
+            Add(hh.width, hh.width, hh.refreshRate);
         }
         for (int i = 1; i < resolutions.Count; i++)
             if (resolutions[i].width == resolutions[0].width &&

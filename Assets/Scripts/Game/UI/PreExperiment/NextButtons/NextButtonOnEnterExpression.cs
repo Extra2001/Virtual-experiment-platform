@@ -3,9 +3,6 @@ using UnityEngine.UI;
 
 public class NextButtonOnEnterExpression : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
-    
     private void Start()
     {
         GetComponent<Button>().onClick.AddListener(() =>

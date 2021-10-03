@@ -7,6 +7,7 @@ using System;
 using HT.Framework;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 
 public static class RecordManager
 {
@@ -74,6 +75,20 @@ public static class RecordManager
         LoadToTempRecord(record);
         PauseManager.Instance.Continue();
         GameManager.Instance.ContinueExp();
+    }
+    /// <summary>
+    /// 导入外来存档
+    /// </summary>
+    /// <param name="rec"></param>
+    public static RecordInfo Import(string rec)
+    {
+        var record = JsonConvert.DeserializeObject<Record>(rec);
+        var info = record.info;
+        if (info == null) throw new Exception();
+        info.id = GetFirstNone();
+        info.title = "【导入】" + info.title;
+        SaveRecord(record);
+        return info;
     }
     /// <summary>
     /// 加载该存档到工作存档
@@ -150,7 +165,6 @@ public static class RecordManager
             return false;
         return true;
     }
-
     /// <summary>
     /// 获取存档信息列表
     /// </summary>

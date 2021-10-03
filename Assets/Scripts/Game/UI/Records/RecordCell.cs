@@ -11,6 +11,7 @@ public class RecordCell : HTBehaviour
     public Text _time;
     public Button _LoadButton;
     public Button _DeleteButton;
+    public Button _ShareButton;
     public LoadRecord _LoadRecord;
     public int recordId { get; set; }
     public string title
@@ -30,6 +31,8 @@ public class RecordCell : HTBehaviour
             _LoadButton.onClick.AddListener(() => { Main.m_UI.GetOpenedUI<ReadRecordUILogic>()?.NavigateBack(); RecordManager.records[recordId].Load(); });
         if (_DeleteButton != null)
             _DeleteButton.onClick.AddListener(() => { RecordManager.records[recordId].Delete(); });
+        if (_ShareButton != null)
+            _ShareButton.onClick.AddListener(() => { SaveOpenRecord.ExportRecord(RecordManager.records[recordId]); });
     }
 
     public void SetRecordInfo(RecordInfo recordInfo)

@@ -36,6 +36,10 @@ public class StartUILogic : UILogicResident
             UIAPI.Instance.ShowAndHideLoading(1000);
             MainThread.Instance.DelayAndRun(500, GameManager.Instance.ContinueExp);
         });
+        UIEntity.FindChildren("ImportRecordButton").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            SaveOpenRecord.ImportRecord();
+        });
     }
 
     /// <summary>

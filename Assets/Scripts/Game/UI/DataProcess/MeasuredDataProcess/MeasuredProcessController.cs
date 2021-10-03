@@ -47,10 +47,13 @@ public class MeasuredProcessController : HTBehaviour
         this.quantity = quantity;
         var instance = quantity.InstrumentType.CreateInstrumentInstance();
         _title.text = "¥¶¿Ì" + quantity.Name + ":" + quantity.Symbol + "/" + instance.UnitSymbol;
-        measuredUncertainty.Show(quantity); measuredDifference1.Show(quantity);
-        measuredDifference2.Show(quantity); measuredRegression1.Show(quantity);
-        measuredRegression2.Show(quantity); measuredGraphic1.Show(quantity);
-        measuredGraphic2.Show(quantity);
+        try { measuredUncertainty.Show(quantity); } catch { }
+        try { measuredDifference1.Show(quantity); } catch { }
+        try { measuredDifference2.Show(quantity); } catch { }
+        try { measuredRegression1.Show(quantity); } catch { }
+        try { measuredRegression2.Show(quantity); } catch { }
+        try { measuredGraphic1.Show(quantity); } catch { }
+        try { measuredGraphic2.Show(quantity); } catch { }
         if (quantity.processMethod == 1) ShowUncertainty();
         else if (quantity.processMethod == 2)
         {

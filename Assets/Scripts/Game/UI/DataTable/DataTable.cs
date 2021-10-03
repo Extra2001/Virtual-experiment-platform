@@ -7,12 +7,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using DG.Tweening;
 
 public class DataTable : HTBehaviour
 {
     public DataColumn _dataColumn;
     public GameObject _ColumnContainer;
     public GameObject _Content;
+    public Button _ButtonPanelMask;
+    public GameObject _ButtonPanel;
     public Button _MaskButton;
     public Button _AddButton;
     public Button _MesuredButton;
@@ -28,33 +31,34 @@ public class DataTable : HTBehaviour
             HideAllButtons();
             UIAPI.Instance.HideDataTable();
         });
+        _ButtonPanelMask.onClick.AddListener(HideAllButtons);
         _AddButton.onClick.AddListener(() =>
         {
-            showedColumn.Add(InstantiateDataColumn(DataColumnType.Mesured, true));
-            _AddButton.interactable = false;
-            foreach (var item in RecordManager.tempRecord.quantities)
-                if (item.MesuredData == null || (!item.MesuredData.addedToTable))
-                    _AddButton.interactable = true;
-            //if (_MesuredButton.gameObject.activeSelf)
-            //    HideAllButtons();
-            //else
-            //{
-            //    _MesuredButton.gameObject.SetActive(true);
-            //    _MesuredButton.interactable = false;
-            //    _StepButton.gameObject.SetActive(true);
-            //    _StepButton.interactable = false;
-            //    _DifferencedButton.gameObject.SetActive(true);
-            //    _DifferencedButton.interactable = false;
-            //    foreach (var item in RecordManager.tempRecord.quantities)
-            //    {
-            //        if (item.MesuredData == null || (!item.MesuredData.addedToTable))
-            //            _MesuredButton.interactable = true;
-            //        if (item.IndependentData == null || (!item.IndependentData.addedToTable))
-            //            _StepButton.interactable = true;
-            //        if (item.DifferencedData == null || (!item.DifferencedData.addedToTable))
-            //            _DifferencedButton.interactable = true;
-            //    }
-            //}
+            //showedColumn.Add(InstantiateDataColumn(DataColumnType.Mesured, true));
+            //_AddButton.interactable = false;
+            //foreach (var item in RecordManager.tempRecord.quantities)
+            //    if (item.MesuredData == null || (!item.MesuredData.addedToTable))
+            //        _AddButton.interactable = true;
+            if (_ButtonPanel.gameObject.activeSelf)
+                HideAllButtons();
+            else
+            {
+                _ButtonPanel.SetActive(true);
+                _ButtonPanelMask.gameObject.SetActive(true);
+                _ButtonPanel.SetFloatWithAnimation(this);
+                _MesuredButton.interactable = false;
+                _StepButton.interactable = false;
+                _DifferencedButton.interactable = false;
+                foreach (var item in RecordManager.tempRecord.quantities)
+                {
+                    if (item.MesuredData == null || (!item.MesuredData.addedToTable))
+                        _MesuredButton.interactable = true;
+                    if (item.IndependentData == null || (!item.IndependentData.addedToTable))
+                        _StepButton.interactable = true;
+                    if (item.DifferencedData == null || (!item.DifferencedData.addedToTable))
+                        _DifferencedButton.interactable = true;
+                }
+            }
         });
         _MesuredButton.onClick.AddListener(() =>
         {
@@ -75,9 +79,15 @@ public class DataTable : HTBehaviour
 
     private void HideAllButtons()
     {
-        _MesuredButton.gameObject.SetActive(false);
-        _StepButton.gameObject.SetActive(false);
-        _DifferencedButton.gameObject.SetActive(false);
+        _ButtonPanel.transform.DOScale(0, 0.3f)
+            .SetEase(Ease.OutExpo);
+        Invoke(nameof(CloseAllButtons), 0.3f);
+    }
+
+    private void CloseAllButtons()
+    {
+        _ButtonPanel.SetActive(false);
+        _ButtonPanelMask.gameObject.SetActive(false);
     }
 
     public void DeleteColumn(DataColumn dataColumn)
@@ -101,18 +111,18 @@ public class DataTable : HTBehaviour
                 showedColumn.Add(cell);
             }
             else _AddButton.interactable = true;
-            //if (item.IndependentData != null && item.IndependentData.addedToTable)
-            //{
-            //    var cell = InstantiateDataColumn(DataColumnType.Independent);
-            //    cell.Show(item.IndependentData);
-            //    showedColumn.Add(cell);
-            //}
-            //if (item.DifferencedData != null && item.DifferencedData.addedToTable)
-            //{
-            //    var cell = InstantiateDataColumn(DataColumnType.Differenced);
-            //    cell.Show(item.DifferencedData);
-            //    showedColumn.Add(cell);
-            //}
+            if (item.IndependentData != null && item.IndependentData.addedToTable)
+            {
+                var cell = InstantiateDataColumn(DataColumnType.Independent);
+                cell.Show(item.IndependentData);
+                showedColumn.Add(cell);
+            }
+            if (item.DifferencedData != null && item.DifferencedData.addedToTable)
+            {
+                var cell = InstantiateDataColumn(DataColumnType.Differenced);
+                cell.Show(item.DifferencedData);
+                showedColumn.Add(cell);
+            }
         }
         HideAllButtons();
     }

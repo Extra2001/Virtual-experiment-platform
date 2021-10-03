@@ -1070,36 +1070,36 @@
             </summary>
             <param name="renderer">The <see cref="T:System.Drawing.Graphics"/> object to render to.</param>
         </member>
-        <member name="T:Svg.Document_Structure.SvgSymbol">
+        <member name="T:Svg.SvgSymbol">
             <summary>
             An element used to group SVG shapes.
             </summary>
         </member>
-        <member name="P:Svg.Document_Structure.SvgSymbol.ViewBox">
+        <member name="P:Svg.SvgSymbol.ViewBox">
             <summary>
             Gets or sets the viewport of the element.
             </summary>
             <value></value>
         </member>
-        <member name="P:Svg.Document_Structure.SvgSymbol.AspectRatio">
+        <member name="P:Svg.SvgSymbol.AspectRatio">
             <summary>
             Gets or sets the aspect of the viewport.
             </summary>
             <value></value>
         </member>
-        <member name="M:Svg.Document_Structure.SvgSymbol.Path(Svg.ISvgRenderer)">
+        <member name="M:Svg.SvgSymbol.Path(Svg.ISvgRenderer)">
             <summary>
             Gets the <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> for this element.
             </summary>
             <value></value>
         </member>
-        <member name="P:Svg.Document_Structure.SvgSymbol.Bounds">
+        <member name="P:Svg.SvgSymbol.Bounds">
             <summary>
             Gets the bounds of the element.
             </summary>
             <value>The bounds.</value>
         </member>
-        <member name="M:Svg.Document_Structure.SvgSymbol.PushTransforms(Svg.ISvgRenderer)">
+        <member name="M:Svg.SvgSymbol.PushTransforms(Svg.ISvgRenderer)">
             <summary>
             Applies the required transforms to <see cref="T:Svg.ISvgRenderer"/>.
             </summary>
@@ -1695,7 +1695,7 @@
             </summary>
             <value>The bounds.</value>
         </member>
-        <member name="M:Svg.SvgPathBuilder.Parse(System.String)">
+        <member name="M:Svg.SvgPathBuilder.Parse(System.ReadOnlySpan{System.Char})">
             <summary>
             Parses the specified string into a collection of path segments.
             </summary>
@@ -1971,6 +1971,22 @@
             For Example Adobe Illustrator svgs.
             </summary>
         </member>
+        <member name="P:Svg.SvgDocument.ResolveExternalXmlEntites">
+            <summary>
+            Which types of XML external entities are allowed to be resolved. Defaults to <see cref="F:Svg.ExternalType.None"/> to prevent XXE.
+            </summary>
+            <see ref="https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing"/>
+        </member>
+        <member name="P:Svg.SvgDocument.ResolveExternalImages">
+            <summary>
+            Which types of external images are allowed to be resolved. Defaults to <see cref="F:Svg.ExternalType.Local"/> and <see cref="F:Svg.ExternalType.Remote"/>.
+            </summary>
+        </member>
+        <member name="P:Svg.SvgDocument.ResolveExternalElements">
+            <summary>
+            Which types of external elements, for example text definitions, are allowed to be resolved. Defaults to <see cref="F:Svg.ExternalType.Local"/> and <see cref="F:Svg.ExternalType.Remote"/>.
+            </summary>
+        </member>
         <member name="M:Svg.SvgDocument.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Svg.SvgDocument"/> class.
@@ -2063,12 +2079,6 @@
             </summary>
             <param name="stream">The <see cref="T:System.IO.Stream"/> containing the SVG document to open.</param>
         </member>
-        <member name="M:Svg.SvgDocument.FromSvg``1(System.String)">
-            <summary>
-            Attempts to create an SVG document from the specified string data.
-            </summary>
-            <param name="svg">The SVG data.</param>
-        </member>
         <member name="M:Svg.SvgDocument.Open``1(System.IO.Stream,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
             Opens an SVG document from the specified <see cref="T:System.IO.Stream"/> and adds the specified entities.
@@ -2076,6 +2086,18 @@
             <param name="stream">The <see cref="T:System.IO.Stream"/> containing the SVG document to open.</param>
             <param name="entities">Custom entity definitions.</param>
             <exception cref="T:System.ArgumentNullException">The <paramref name="stream"/> parameter cannot be <c>null</c>.</exception>
+        </member>
+        <member name="M:Svg.SvgDocument.FromSvg``1(System.String)">
+            <summary>
+            Attempts to create an SVG document from the specified string data.
+            </summary>
+            <param name="svg">The SVG data.</param>
+        </member>
+        <member name="M:Svg.SvgDocument.Open``1(System.Xml.XmlReader)">
+            <summary>
+            Attempts to open an SVG document from the specified <see cref="T:System.Xml.XmlReader"/>.
+            </summary>
+            <param name="reader">The <see cref="T:System.Xml.XmlReader"/> containing the SVG document to open.</param>
         </member>
         <member name="M:Svg.SvgDocument.Open(System.Xml.XmlDocument)">
             <summary>
@@ -2134,6 +2156,12 @@
             <param name="rasterWidth"></param>
             <param name="rasterHeight"></param>
         </member>
+        <member name="P:Svg.SvgDtdResolver.ResolveExternalXmlEntities">
+            <summary>
+            Defaults to <see cref="F:Svg.ExternalType.None"/> to prevent XXE.  Set to <see cref="F:Svg.ExternalType.Local"/> and/or <see cref="T:Svg.ExternalType"/> to resolve external resources.
+            </summary>
+            <see ref="https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing"/>
+        </member>
         <member name="M:Svg.SvgDtdResolver.GetEntity(System.Uri,System.String,System.Type)">
             <summary>
             Maps a URI to an object containing the actual resource.
@@ -2150,6 +2178,12 @@
             <exception cref="T:System.NullReferenceException">
                 <paramref name="absoluteUri"/> is null. </exception>
             <exception cref="T:System.Exception">There is a runtime error (for example, an interrupted server connection). </exception>
+        </member>
+        <member name="F:Svg.SvgDtdResolver._svgDtdRegex">
+            <summary>
+            Matches any reference to svg00.dtd or DTD SVG 0.0 (case-insensitive)
+            </summary>
+            <see ref="https://regexper.com/#%28%3F%3ASVG%5B0-9%5D%2B%5C.DTD%29%7C%28%3F%3ADTD%20SVG%20%5B0-9%5C.%5D%2B%29"/>
         </member>
         <member name="T:Svg.SvgElement">
             <summary>
@@ -2169,6 +2203,12 @@
             Flush styles.
             </summary>
             <param name="children">If true, flush styles to the children.</param>
+        </member>
+        <member name="P:Svg.SvgElement.Namespaces">
+            <summary>
+            Gets the namespaces that element has.
+            </summary>
+            <value>Key is prefix and value is namespace.</value>
         </member>
         <member name="P:Svg.SvgElement.ElementNamespace">
             <summary>
@@ -2333,6 +2373,21 @@
         </member>
         <member name="M:Svg.SvgElement.ShouldWriteElement">
             <summary>Derrived classes may decide that the element should not be written. For example, the text element shouldn't be written if it's empty.</summary>
+        </member>
+        <member name="M:Svg.SvgElement.Write(System.Xml.XmlWriter)">
+            <summary>
+            Write this SvgElement out using a given XmlWriter.
+            </summary>
+            <param name="writer">The XmlWriter to use.</param>
+            <remarks>
+            Recommendation is to create an XmlWriter by calling a factory method,<br/>
+            e.g. <see cref="M:System.Xml.XmlWriter.Create(System.IO.Stream)"/>,
+            as per <a href="https://docs.microsoft.com/dotnet/api/system.xml.xmltextwriter#remarks">Microsoft documentation</a>.<br/>
+            <br/>
+            However, unlike an <see cref="T:System.Xml.XmlTextWriter"/> created via 'new XmlTextWriter()',<br/>
+            a factory-constructed XmlWriter will not flush output until it is closed<br/>
+            (normally via a using statement), or unless the client explicitly calls <see cref="M:System.Xml.XmlWriter.Flush"/>.
+            </remarks>
         </member>
         <member name="M:Svg.SvgElement.Render(Svg.ISvgRenderer)">
             <summary>
@@ -2675,17 +2730,17 @@
         </member>
         <member name="M:Svg.SvgElementFactory.CreateDocument``1(System.Xml.XmlReader)">
             <summary>
-            Creates an <see cref="T:Svg.SvgDocument"/> from the current node in the specified <see cref="T:System.Xml.XmlTextReader"/>.
+            Creates an <see cref="T:Svg.SvgDocument"/> from the current node in the specified <see cref="T:System.Xml.XmlReader"/>.
             </summary>
-            <param name="reader">The <see cref="T:System.Xml.XmlTextReader"/> containing the node to parse into an <see cref="T:Svg.SvgDocument"/>.</param>
+            <param name="reader">The <see cref="T:System.Xml.XmlReader"/> containing the node to parse into an <see cref="T:Svg.SvgDocument"/>.</param>
             <exception cref="T:System.ArgumentNullException">The <paramref name="reader"/> parameter cannot be <c>null</c>.</exception>
             <exception cref="T:System.InvalidOperationException">The CreateDocument method can only be used to parse root &lt;svg&gt; elements.</exception>
         </member>
         <member name="M:Svg.SvgElementFactory.CreateElement(System.Xml.XmlReader,Svg.SvgDocument)">
             <summary>
-            Creates an <see cref="T:Svg.SvgElement"/> from the current node in the specified <see cref="T:System.Xml.XmlTextReader"/>.
+            Creates an <see cref="T:Svg.SvgElement"/> from the current node in the specified <see cref="T:System.Xml.XmlReader"/>.
             </summary>
-            <param name="reader">The <see cref="T:System.Xml.XmlTextReader"/> containing the node to parse into a subclass of <see cref="T:Svg.SvgElement"/>.</param>
+            <param name="reader">The <see cref="T:System.Xml.XmlReader"/> containing the node to parse into a subclass of <see cref="T:Svg.SvgElement"/>.</param>
             <param name="document">The <see cref="T:Svg.SvgDocument"/> that the created element belongs to.</param>
             <exception cref="T:System.ArgumentNullException">The <paramref name="reader"/> and <paramref name="document"/> parameters cannot be <c>null</c>.</exception>
         </member>
@@ -2702,6 +2757,11 @@
         <member name="P:Svg.SvgElementFactory.ElementInfo.ElementType">
             <summary>
             Gets the <see cref="T:System.Type"/> of the <see cref="T:Svg.SvgElement"/> subclass.
+            </summary>
+        </member>
+        <member name="P:Svg.SvgElementFactory.ElementInfo.CreateInstance">
+            <summary>
+            Creates a new instance based on <see cref="P:Svg.SvgElementFactory.ElementInfo.ElementType"/> type.
             </summary>
         </member>
         <member name="M:Svg.SvgElementFactory.ElementInfo.#ctor(System.String,System.Type)">
@@ -2736,7 +2796,7 @@
         </member>
         <member name="M:Svg.SvgElementIdManager.AddAndForceUniqueID(Svg.SvgElement,Svg.SvgElement,System.Boolean,System.Action{Svg.SvgElement,System.String,System.String})">
             <summary>
-            Adds the specified <see cref="T:Svg.SvgElement"/> for ID management. 
+            Adds the specified <see cref="T:Svg.SvgElement"/> for ID management.
             And can auto fix the ID if it already exists or it starts with a number.
             </summary>
             <param name="element">The <see cref="T:Svg.SvgElement"/> to be managed.</param>
@@ -2795,21 +2855,14 @@
             Gets the text value of the current node.
             </summary>
             <value></value>
-            <returns>The value returned depends on the <see cref="P:System.Xml.XmlTextReader.NodeType"/> of the node. The following table lists node types that have a value to return. All other node types return String.Empty.Node Type Value AttributeThe value of the attribute. CDATAThe content of the CDATA section. CommentThe content of the comment. DocumentTypeThe internal subset. ProcessingInstructionThe entire content, excluding the target. SignificantWhitespaceThe white space within an xml:space= 'preserve' scope. TextThe content of the text node. WhitespaceThe white space between markup. XmlDeclarationThe content of the declaration. </returns>
+            <returns>The value returned depends on the <see cref="P:System.Xml.XmlNodeReader.NodeType"/> of the node. The following table lists node types that have a value to return. All other node types return String.Empty.Node Type Value AttributeThe value of the attribute. CDATAThe content of the CDATA section. CommentThe content of the comment. DocumentTypeThe internal subset. ProcessingInstructionThe entire content, excluding the target. SignificantWhitespaceThe white space within an xml:space= 'preserve' scope. TextThe content of the text node. WhitespaceThe white space between markup. XmlDeclarationThe content of the declaration. </returns>
         </member>
-        <member name="P:Svg.SvgNodeReader.LocalName">
+        <member name="M:Svg.SvgNodeReader.ReadAttributeValue">
             <summary>
-            Gets the local name of the current node.
-            </summary>
-            <value></value>
-            <returns>The name of the current node with the prefix removed. For example, LocalName is book for the element &lt;bk:book&gt;.For node types that do not have a name (like Text, Comment, and so on), this property returns String.Empty.</returns>
-        </member>
-        <member name="M:Svg.SvgNodeReader.MoveToNextAttribute">
-            <summary>
-            Moves to the next attribute.
+            Reads the attribute value.
             </summary>
             <returns>
-            true if there is a next attribute; false if there are no more attributes.
+            true if there is a attribute value; false if there are no attribute value.
             </returns>
         </member>
         <member name="M:Svg.SvgNodeReader.Read">
@@ -2833,19 +2886,12 @@
             <value></value>
             <returns>The value returned depends on the <see cref="P:System.Xml.XmlTextReader.NodeType"/> of the node. The following table lists node types that have a value to return. All other node types return String.Empty.Node Type Value AttributeThe value of the attribute. CDATAThe content of the CDATA section. CommentThe content of the comment. DocumentTypeThe internal subset. ProcessingInstructionThe entire content, excluding the target. SignificantWhitespaceThe white space within an xml:space= 'preserve' scope. TextThe content of the text node. WhitespaceThe white space between markup. XmlDeclarationThe content of the declaration. </returns>
         </member>
-        <member name="P:Svg.SvgTextReader.LocalName">
+        <member name="M:Svg.SvgTextReader.ReadAttributeValue">
             <summary>
-            Gets the local name of the current node.
-            </summary>
-            <value></value>
-            <returns>The name of the current node with the prefix removed. For example, LocalName is book for the element &lt;bk:book&gt;.For node types that do not have a name (like Text, Comment, and so on), this property returns String.Empty.</returns>
-        </member>
-        <member name="M:Svg.SvgTextReader.MoveToNextAttribute">
-            <summary>
-            Moves to the next attribute.
+            Reads the attribute.
             </summary>
             <returns>
-            true if there is a next attribute; false if there are no more attributes.
+            true if there is a attribute value; false if there are no attribute value.
             </returns>
         </member>
         <member name="M:Svg.SvgTextReader.Read">

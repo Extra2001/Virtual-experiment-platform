@@ -22,14 +22,10 @@ public static class ProcessManager
             RedirectStandardError = true,
             RedirectStandardOutput = true,
         };
-        string laji;
 
         process = Process.Start(startInfo);
         process.EnableRaisingEvents = true;
         process.Exited += Process_Exited;
-        process.BeginOutputReadLine();
-        process.OutputDataReceived += (p, e) => laji = e.Data;
-        process.ErrorDataReceived += (p, e) => laji = e.Data;
         
         Port = port;
         //Port = 5000;

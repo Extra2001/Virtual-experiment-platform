@@ -40,7 +40,7 @@ public class LatexEquationRender
                     }
                 }
             }
-            catch { errorHandler?.Invoke(); }
+            catch(Exception ex) { errorHandler?.Invoke(); }
             MainThread.Instance.Run(() =>
             {
                 if (buffers != null)

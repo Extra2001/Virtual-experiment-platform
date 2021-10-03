@@ -114,6 +114,21 @@ public class DataColumn : HTBehaviour
                 datas.Add(item.DifferencedData);
             }
         }
+        else if (type == DataColumnType.Graphic)
+        {
+            datas.Clear();
+            foreach (var item in RecordManager.tempRecord.quantities)
+            {
+                if (item.GraphicData == null)
+                    item.GraphicData = new DataColumnModel()
+                    {
+                        name = $"[ͼ] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
+                        quantitySymbol = item.Symbol,
+                        type = DataColumnType.Graphic
+                    };
+                datas.Add(item.GraphicData);
+            }
+        }
         _Dropdown.ClearOptions();
         _Dropdown.AddOptions(datas.Select(x => x.name).ToList());
         _Dropdown.disables.Clear();

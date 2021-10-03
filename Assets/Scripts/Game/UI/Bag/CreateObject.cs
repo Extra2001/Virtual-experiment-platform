@@ -24,11 +24,9 @@ public class CreateObject : HTBehaviour
     }
     private static void Create(GameObject obj)
     {
+        ObjectValue objectValue = null;
         var model = RecordManager.tempRecord.showedObject;
-        ObjectValue objectValue;
         // 挂载组件
-        if ((objectValue = obj.GetComponent<ObjectValue>()) == null)
-            (objectValue = obj.AddComponent<ObjectValue>()).ObjectModel = model;
         // 遍历计算点
         Vector3 ClosestPoint = new Vector3();
         Vector3 FarthestPoint = new Vector3();
@@ -36,6 +34,9 @@ public class CreateObject : HTBehaviour
         foreach (Transform item in obj.transform)
         {
             // 挂载组件
+            if ((objectValue = item.gameObject.GetComponent<ObjectValue>()) == null)
+                (objectValue = item.gameObject.AddComponent<ObjectValue>()).ObjectModel = model;
+
             if (item.gameObject.GetComponent<MeshCollider>() == null)
             {
                 var meshCollider = item.gameObject.AddComponent<MeshCollider>();
@@ -98,6 +99,7 @@ public class CreateObject : HTBehaviour
             //item.gameObject.GetComponent<ImportModelSetColor>().SetColor();//
         }
         // 计算基础大小
+
         objectValue.BaseSize = new Vector3(Mathf.Abs(FarthestPoint.x - ClosestPoint.x),
             Mathf.Abs(FarthestPoint.y - ClosestPoint.y),
             Mathf.Abs(FarthestPoint.z - ClosestPoint.z));
@@ -119,7 +121,11 @@ public class CreateObject : HTBehaviour
             obj.transform.position = model.position;
         if (!model.rotation.Equals(new MyVector4()))
             obj.transform.rotation = model.rotation;
-    }
+        foreach (Transform item in obj.transform)
+        {
+            item.localPosition = new Vector3(0, 0, 0);
+        }
+     }
     private static void CreateObj()
     {
         var model = RecordManager.tempRecord.showedObject;

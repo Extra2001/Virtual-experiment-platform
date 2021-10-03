@@ -74,8 +74,9 @@ public class ObjectInfo : HTBehaviour
             // 要步进缩放的轴
             var axis = _StepAxis.selectedSegmentIndex;
             var step = Convert.ToDouble(_Step.text);
-
-
+            Debug.Log(axis);
+            Debug.Log(step);
+            Debug.Log(objectValue.Scale);
             if (axis==0)
             {
                 objectValue.LineScaleX = objectValue.LineScaleX+ objectValue.Scale  * (float)step;
@@ -88,6 +89,9 @@ public class ObjectInfo : HTBehaviour
             {
                 objectValue.LineScaleZ = objectValue.LineScaleZ+ objectValue.Scale  * (float)step;
             }
+            Debug.Log("Lx="+objectValue.LineScaleX);
+            Debug.Log("Ly="+objectValue.LineScaleY);
+            Debug.Log("Lz="+ objectValue.LineScaleZ);
             // 步进增加
         });
         _StepSub.onClick.AddListener(() =>

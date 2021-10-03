@@ -26,6 +26,9 @@ public class MeasuredGraphic2 : HTBehaviour
         x = double.Parse(quantity.IndependentData.data[0]);
         y = double.Parse(quantity.MesuredData.data[0]);
         LineSerie.AddXYData(x, y);
+        x = double.Parse(quantity.IndependentData.data[quantity.IndependentData.data.Count - 1]);
+        y = double.Parse(quantity.MesuredData.data[quantity.MesuredData.data.Count - 1]);
+        LineSerie.AddXYData(x, y);
     }
 
     public bool CheckAll(bool silent = false)

@@ -12,8 +12,11 @@ using UnityEngine.UI;
 
 class VSyncSetting : MonoBehaviour
 {
+    public Toggle toggle;
+
     private void Start()
     {
-
+        toggle.onValueChanged.AddListener(x => QualitySettings.vSyncCount = x ? 1 : 0);
+        toggle.SetIsOnWithoutNotify(QualitySettings.vSyncCount > 0);
     }
 }

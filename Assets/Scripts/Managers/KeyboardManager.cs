@@ -41,7 +41,11 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
         {
             foreach (var item in registered)
                 if (Input.GetKeyDown(item.Key))
+                {
                     item.Value.Invoke();
+                    work = false;
+                    Invoke(nameof(Restore), 0.3f);
+                }
             foreach (var item in registeredHoldOn)
                 if (Input.GetKey(item.Key))
                     item.Value.Invoke();
@@ -49,6 +53,11 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
                 if (item.Value.Item1.Invoke())
                     item.Value.Item2.Invoke();
         }
+    }
+
+    private void Restore()
+    {
+        work = true;
     }
 
     /// <summary>

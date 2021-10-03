@@ -10,6 +10,7 @@ using System;
 using UnityEngine.EventSystems;
 using System.Reflection;
 using System.Collections;
+using DG.Tweening;
 
 public class InstrumentInfo : HTBehaviour
 {
@@ -63,10 +64,21 @@ public class InstrumentInfo : HTBehaviour
             item.Value.onValueChanged.Clear();
         _instrument = GameManager.Instance.GetInstrument(instrument);
         _instrument.ShowInfoPanel(infoItem);
-        StartCoroutine(CommonTools.DelayGet(_RootPanel.rectTransform().SetFloat));
+
+        _RootPanel.SetFloatWithAnimation(this);
     }
 
-    
+    public void Hide()
+    {
+        _RootPanel.transform.DOScale(0, 0.3f)
+            .SetEase(Ease.OutExpo);
+        Invoke(nameof(Close), 0.3f);
+    }
+
+    public void Close()
+    {
+        Main.m_UI.CloseUI<InstrmentInfoUILogic>();
+    }
 
     private void Initialize()
     {
@@ -88,7 +100,7 @@ public class InstrumentInfo : HTBehaviour
         {
             foreach (var item in infoItem)
                 item.Value.onValueChanged.Clear();
-            Main.m_UI.CloseUI<InstrmentInfoUILogic>();
+            Hide();
         });
         _MainValue.onValueChanged.AddListener(x =>
         {
@@ -101,7 +113,7 @@ public class InstrumentInfo : HTBehaviour
         _ConfirmButton.onClick.AddListener(() =>
         {
             infoItem[nameof(_ConfirmButton)].onValueChanged.ForEach(y => y.Invoke());
-            Main.m_UI.CloseUI<InstrmentInfoUILogic>();
+            Hide();
         });
         _SwitchRange.onClick.AddListener(() =>
         {

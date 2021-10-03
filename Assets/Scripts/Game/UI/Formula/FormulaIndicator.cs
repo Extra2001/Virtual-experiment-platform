@@ -2,6 +2,7 @@
     作者：荆煦添
     描述：公式编辑器提示框显示器
 *************************************************************************************/
+using DG.Tweening;
 using HT.Framework;
 using UnityEngine.UI;
 
@@ -19,10 +20,17 @@ public class FormulaIndicator : HTBehaviour
         Desc.text = desc;
         Value.text = value;
         gameObject.SetActive(true);
-        StartCoroutine(CommonTools.DelayGet(gameObject.rectTransform().SetFloat));
+        gameObject.SetFloatWithAnimation(this);
     }
 
     public void Hide()
+    {
+        gameObject.transform.DOScale(0, 0.3f)
+            .SetEase(Ease.OutExpo);
+        Invoke(nameof(Close), 0.3f);
+    }
+
+    public void Close()
     {
         gameObject.SetActive(false);
     }

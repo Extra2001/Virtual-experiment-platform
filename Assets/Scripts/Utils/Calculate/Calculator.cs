@@ -478,13 +478,21 @@ public static class StaticMethods {
             return true;
         }
     }
-    public static bool ValidExpression(string v) {//检查表达式v是否合法(后续要调)
+    public static (bool, string) ValidExpression(string v) {//检查表达式v是否合法(后续要调)
         try {
             var expr0 = symexpr.Parse(v);
-            return true;
+            var factors = new List<string>();
+            var symbols = RecordManager.tempRecord.quantities.Select(x => x.Symbol).ToList();
+            EnterExpression.GetAllFactors(expr0, factors);
+            foreach(var item in factors)
+            {
+                if (!symbols.Contains(item))
+                    return (false, $"因子{item}不在定义的范围内");
+            }
+            return (true, "");
         }
         catch(Exception) {
-            return false;
+            return (false, "表达式格式不正确");
         }
     }
     public static string PostResponse(string url, string data) {//发送web请求

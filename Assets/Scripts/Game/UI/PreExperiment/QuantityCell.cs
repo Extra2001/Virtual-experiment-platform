@@ -15,6 +15,7 @@ public class QuantityCell : HTBehaviour
     public Text _Range;
     public Text _Unit;
     public Button _Delete;
+    public Dropdown _processMethod;
 
     private List<InstrumentBase> instruments = new List<InstrumentBase>();
 
@@ -29,6 +30,10 @@ public class QuantityCell : HTBehaviour
             var inst = instruments[x];
             _Range.text = $"量程：{inst.LRV} ~ {inst.URV}";
             _Unit.text = $"最小分度值单位：{inst.UnitSymbol}";
+        });
+        _processMethod.onValueChanged.AddListener(x =>
+        {
+            QuantityReference.processMethod = x + 1;
         });
     }
     /// <summary>
@@ -52,6 +57,7 @@ public class QuantityCell : HTBehaviour
         index = index == -1 ? 0 : index;
         var inst = instruments[index];
         _Instrument.value = index;
+        _processMethod.SetValueWithoutNotify(model.processMethod - 1);
         _Range.text = $"量程：{inst.LRV} ~ {inst.URV}";
         _Unit.text = $"最小分度值单位：{inst.UnitSymbol}";
 

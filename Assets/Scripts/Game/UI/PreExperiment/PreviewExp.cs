@@ -26,7 +26,9 @@ public class PreviewExp : HTBehaviour
     /// </summary>
     public void Render()
     {
-        var exp = CalcArgs.GetSymexpr(RecordManager.tempRecord.stringExpression).ToLaTeX();
+        var exp = CalcArgs.GetSymexpr(
+            EnterExpression.ExpressionToShow(RecordManager.tempRecord.stringExpression))
+            .ToLaTeX();
         LatexEquationRender.Render(exp, x =>
         {
             _Image.FitHeight(x);

@@ -10,7 +10,7 @@ public class NextButtonOnEnterExpression : HTBehaviour
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
-            Main.m_UI.GetOpenedUI<EnterExpressionUILogic>().UIEntity.GetComponent<EnterExpression>().Validate(res =>
+            Main.m_UI.GetOpenedUI<EnterExpressionUILogic>().UIEntity.GetComponent<EnterExpression>().Validate((res, message) =>
             {
                 if (res)
                 {
@@ -22,7 +22,7 @@ public class NextButtonOnEnterExpression : HTBehaviour
                     {
                         ShowCancel = false,
                         Title = new BindableString("错误"),
-                        Message = new BindableString("渲染表达式错误，请检查输入。")
+                        Message = new BindableString($"{message}，请检查输入。")
                     });
                 }
             });

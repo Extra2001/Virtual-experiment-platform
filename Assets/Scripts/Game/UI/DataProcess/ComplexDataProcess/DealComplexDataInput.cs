@@ -61,7 +61,8 @@ public class DealComplexDataInput : HTBehaviour
     
     public void StartShow()
     {
-        LatexEquationRender.Render(RecordManager.tempRecord.stringExpression, res=> {
+        LatexEquationRender.Render(
+            EnterExpression.ExpressionToShow(RecordManager.tempRecord.stringExpression), res=> {
             Formula.GetComponent<Image>().FitHeight(res);
         });
 

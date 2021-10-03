@@ -20,5 +20,6 @@ public enum DataColumnType
     Mesured, // 原始数据
     Independent, // 一元线性回归的自变量
     Differenced, // 逐差法后的表格
+    Graphic,     //图示法的表格
     SingleQuantity // 单物理量的三个量
 }

@@ -33,17 +33,17 @@ public abstract class IndirectMeasurementInstrumentBase : InstrumentBase
             double re = Convert.ToDouble(infoItems["_RandomError"].GameObject.GetComponent<InputField>().text);
             double mainValue = Convert.ToDouble(infoItems["_MainValue"].GameObject.GetComponent<InputField>().text);
             if (re > ErrorLimit)
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString("随机误差不能大于仪器误差限")
+                    Message = "随机误差不能大于仪器误差限"
                 });
             else if (mainValue > URV || mainValue < LRV)
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString("主值不能超过量程")
+                    Message = "主值不能超过量程"
                 });
             }
             else

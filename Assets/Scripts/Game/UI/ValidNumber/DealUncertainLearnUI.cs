@@ -34,14 +34,22 @@ public class DealUncertainLearnUI : HTBehaviour
         string reason;
 
         input = UserInput.text;        
-
-        if (input == "")
+        if(Field.GetComponent<FormulaController>().Serialize().Count == 0)
         {
-            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            UIAPI.Instance.ShowModel(new SimpleModel()
             {
                 ShowCancel = false,
-                Title = new BindableString("警告"),
-                Message = new BindableString("请输入你认为的有效数字位数")
+                Title = "警告",
+                Message = "请输入公式"
+            });
+        }
+        else if (input == "")
+        {
+            UIAPI.Instance.ShowModel(new SimpleModel()
+            {
+                ShowCancel = false,
+                Title = "警告",
+                Message = "请输入你认为的有效数字位数"
             });
         }
         else
@@ -89,11 +97,11 @@ public class DealUncertainLearnUI : HTBehaviour
             catch
             {
                 //弹出报错提示框
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Title = new BindableString("错误"),
-                    Message = new BindableString("输入表达式不合法，请仔细检查")
+                    Title = "错误",
+                    Message = "输入表达式不合法，请仔细检查"
                 });
             }
         }
@@ -101,9 +109,9 @@ public class DealUncertainLearnUI : HTBehaviour
 
     private void ClickBackButton()
     {
-        UIAPI.Instance.ShowModel(new ModelDialogModel()
+        UIAPI.Instance.ShowModel(new SimpleModel()
         {
-            Message = new BindableString("继续返回将丢失当前进度，继续？"),
+            Message = "继续返回将丢失当前进度，继续？",
             ConfirmAction = () =>
             {
                 GameManager.Instance.SwitchBackToStart();

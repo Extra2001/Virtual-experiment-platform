@@ -49,10 +49,10 @@ public class MeasuredDifference1 : HTBehaviour
         if (quantity.MesuredData.data.Count / 2 != quantity.DifferencedData.data.Count)
         {
             if (!silent)
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString("你的逐差表格的数据组数不正确")
+                    Message = "你的逐差表格的数据组数不正确"
                 });
             return false;
         }
@@ -60,10 +60,10 @@ public class MeasuredDifference1 : HTBehaviour
         if (quantity.MesuredData.data.Count / 2 < 2)
         {
             if (!silent)
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString("你的逐差表格的数据组数过少，请增加测量组数")
+                    Message = "你的逐差表格的数据组数过少，请增加测量组数"
                 });
             return false;
         }
@@ -72,10 +72,10 @@ public class MeasuredDifference1 : HTBehaviour
         {
             if (!silent)
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString("你的逐差表格的数据不正确")
+                    Message = "你的逐差表格的数据不正确"
                 });
             }
 

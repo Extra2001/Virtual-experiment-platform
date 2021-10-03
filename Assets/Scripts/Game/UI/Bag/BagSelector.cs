@@ -158,10 +158,10 @@ public class BagSelector : HTBehaviour
 
     public void DeleteObject(BagItem bagItem)
     {
-        UIAPI.Instance.ShowModel(new ModelDialogModel()
+        UIAPI.Instance.ShowModel(new SimpleModel()
         {
-            Title = new BindableString("提示"),
-            Message = new BindableString($"确认要删除{bagItem.objectsModel.Name}吗？"),
+            Title = "提示",
+            Message = $"确认要删除{bagItem.objectsModel.Name}吗？",
             ConfirmAction = () =>
             {
                 ImportModel.DeleteModel(bagItem.objectsModel);

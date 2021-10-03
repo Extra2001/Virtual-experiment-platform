@@ -15,11 +15,11 @@ public class NextButtonOnEnterExpression : HTBehaviour
                 }
                 else
                 {
-                    UIAPI.Instance.ShowModel(new ModelDialogModel()
+                    UIAPI.Instance.ShowModel(new SimpleModel()
                     {
                         ShowCancel = false,
-                        Title = new BindableString("错误"),
-                        Message = new BindableString($"{message}，请检查输入。")
+                        Title = "错误",
+                        Message = $"{message}，请检查输入。"
                     });
                 }
             });

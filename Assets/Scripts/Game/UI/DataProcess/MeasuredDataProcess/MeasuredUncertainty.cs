@@ -147,11 +147,11 @@ public class MeasuredUncertainty : HTBehaviour
 
     protected void ShowModel(string message)
     {
-        UIAPI.Instance.ShowModel(new ModelDialogModel()
+        UIAPI.Instance.ShowModel(new SimpleModel()
         {
             ShowCancel = false,
-            Title = new BindableString("错误"),
-            Message = new BindableString(message)
+            Title = "错误",
+            Message = message
         });
     }
 }

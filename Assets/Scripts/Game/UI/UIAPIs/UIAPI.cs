@@ -48,14 +48,16 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
         Main.m_UI.OpenTemporaryUI<InstrmentInfoUILogic>(instrument);
     }
 
-    /// <summary>
-    /// 显示模态窗口
-    /// </summary>
-    /// <param name="model"></param>
     public void ShowModel(ModelDialogModel model)
     {
         Main.m_UI.OpenTemporaryUI<ModelUILogic>();
         Main.m_UI.GetOpenedUI<ModelUILogic>().ShowModel(model);
+    }
+
+    public void ShowModel(SimpleModel model)
+    {
+        Main.m_UI.OpenTemporaryUI<SimpleModelPanelUILogic>();
+        Main.m_UI.GetOpenedUI<SimpleModelPanelUILogic>().ShowModel(model);
     }
 
     public void ShowTips(string content, string title = "提示：", float width = 200)

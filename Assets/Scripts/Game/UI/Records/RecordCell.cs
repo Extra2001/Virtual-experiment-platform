@@ -30,7 +30,14 @@ public class RecordCell : HTBehaviour
         if (_LoadButton != null)
             _LoadButton.onClick.AddListener(() => { Main.m_UI.GetOpenedUI<ReadRecordUILogic>()?.NavigateBack(); RecordManager.records[recordId].Load(); });
         if (_DeleteButton != null)
-            _DeleteButton.onClick.AddListener(() => { RecordManager.records[recordId].Delete(); });
+            _DeleteButton.onClick.AddListener(() =>
+            {
+                UIAPI.Instance.ShowModel(new SimpleModel()
+                {
+                    Message = "确实要删除该存档吗？",
+                    ConfirmAction = () => RecordManager.records[recordId].Delete()
+                });
+            });
         if (_ShareButton != null)
             _ShareButton.onClick.AddListener(() => { SaveOpenRecord.ExportRecord(RecordManager.records[recordId]); });
     }

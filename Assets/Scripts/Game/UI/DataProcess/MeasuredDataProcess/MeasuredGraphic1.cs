@@ -20,10 +20,10 @@ public class MeasuredGraphic1 : HTBehaviour
         {
             if (!silent)
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString("你的数据组数不正确")
+                    Message = "你的数据组数不正确"
                 });
             }
 

@@ -95,11 +95,11 @@ public class MeasuredProcessController : HTBehaviour
         else if (quantity.processMethod == 4)
             return measuredGraphic1.CheckAll(silent) && measuredGraphic2.CheckAll(silent);
         if (!silent)
-            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            UIAPI.Instance.ShowModel(new SimpleModel()
             {
                 ShowCancel = false,
-                Title = new BindableString("提示"),
-                Message = new BindableString("您还没有处理完该物理量")
+                Title = "提示",
+                Message = "您还没有处理完该物理量"
             });
         return false;
     }

@@ -50,11 +50,11 @@ public class NextBackButtonOnComplexDataProcess : HTBehaviour
 
     private void ShowModel(string message)
     {
-        UIAPI.Instance.ShowModel(new ModelDialogModel()
+        UIAPI.Instance.ShowModel(new SimpleModel()
         {
             ShowCancel = false,
-            Title = new BindableString("´íÎó"),
-            Message = new BindableString(message)
+            Title = "´íÎó",
+            Message = message
         });
     }
 }

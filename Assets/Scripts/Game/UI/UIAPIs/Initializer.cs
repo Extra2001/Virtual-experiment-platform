@@ -15,6 +15,7 @@ public class UIAPIInitializer : SingletonBase<UIAPIInitializer>
         Main.m_UI.PreloadingResidentUI<UncertainLearnUILogic>();
         Main.m_UI.PreloadingTemporaryUI<PauseUILogic>();
         Main.m_UI.PreloadingTemporaryUI<ModelUILogic>();
+        Main.m_UI.PreloadingTemporaryUI<SimpleModelPanelUILogic>();
         Main.m_UI.PreloadingResidentUI<ChooseExpUILogic>();
         Main.m_UI.PreloadingResidentUI<EnterExpressionUILogic>();
         Main.m_UI.PreloadingResidentUI<AddValueUILogic>();

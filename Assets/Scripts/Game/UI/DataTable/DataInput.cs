@@ -75,20 +75,20 @@ public class DataInput : HTBehaviour
         {
             if (res1)
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Title = new BindableString("读数错误"),
-                    Message = new BindableString($"你的读数超出仪器的量程，请读入适合仪器：\"{instrument1.InstName}\"的数据。")
+                    Title = "读数错误",
+                    Message = $"你的读数超出仪器的量程，请读入适合仪器：\"{instrument1.InstName}\"的数据。"
                 });
             }
             else
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Title = new BindableString("读数错误"),
-                    Message = new BindableString($"你的读数精度不正确，请读入适合仪器：\"{instrument1.InstName}\"的数据。\n\n例：{answer1}")
+                    Title = "读数错误",
+                    Message = $"你的读数精度不正确，请读入适合仪器：\"{instrument1.InstName}\"的数据。\n\n例：{answer1}"
                 });
             }
         }
@@ -96,30 +96,30 @@ public class DataInput : HTBehaviour
         {
             if (res1)
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Title = new BindableString("读数错误"),
-                    Message = new BindableString($"你的读数超出仪器的量程，请读入适合仪器：\"{instrument2.InstName}\"的数据。")
+                    Title = "读数错误",
+                    Message = $"你的读数超出仪器的量程，请读入适合仪器：\"{instrument2.InstName}\"的数据。"
                 });
             }
             else
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Title = new BindableString("读数错误"),
-                    Message = new BindableString($"你的读数精度不正确，请读入适合仪器：\"{instrument2.InstName}\"的数据。\n\n例：{answer3}")
+                    Title = "读数错误",
+                    Message = $"你的读数精度不正确，请读入适合仪器：\"{instrument2.InstName}\"的数据。\n\n例：{answer3}"
                 });
             }
         }
         else
         {
-            UIAPI.Instance.ShowModel(new ModelDialogModel()
+            UIAPI.Instance.ShowModel(new SimpleModel()
             {
                 ShowCancel = false,
-                Title = new BindableString("读数错误"),
-                Message = new BindableString($"你的读数不正确，无法将读入的数据与已选择的任何仪器相匹配。")
+                Title = "读数错误",
+                Message = $"你的读数不正确，无法将读入的数据与已选择的任何仪器相匹配。"
             });
         }
         RecordManager.tempRecord.score.DataRecordError++;

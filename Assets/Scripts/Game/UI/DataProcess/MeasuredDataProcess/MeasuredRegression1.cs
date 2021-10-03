@@ -40,20 +40,20 @@ public class MeasuredRegression1 : HTBehaviour
         if (quantity.MesuredData.data.Count != quantity.IndependentData.data.Count)
         {
             if (!silent)
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString("自变量数据组数与因变量不相等")
+                    Message = "自变量数据组数与因变量不相等"
                 });
             return false;
         }
         if (quantity.IndependentData.data.Where(x => string.IsNullOrEmpty(x)).Count() > 0)
         {
             if (!silent)
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString("自变量数据有空值")
+                    Message = "自变量数据有空值"
                 });
             return false;
         }

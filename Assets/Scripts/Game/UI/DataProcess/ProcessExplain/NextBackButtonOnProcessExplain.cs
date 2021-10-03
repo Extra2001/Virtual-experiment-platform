@@ -38,19 +38,19 @@ public class NextBackButtonOnProcessExplain : HTBehaviour
         {
             if (item.MesuredData.data.Count == 0)
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString($"物理量 {item.Name}({item.Symbol}) 还没记录数据")
+                    Message = $"物理量 {item.Name}({item.Symbol}) 还没记录数据"
                 });
                 return false;
             }
             if (item.MesuredData.data.Where(x => string.IsNullOrEmpty(x)).Count() != 0)
             {
-                UIAPI.Instance.ShowModel(new ModelDialogModel()
+                UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = new BindableString($"物理量 {item.Name}({item.Symbol}) 存在空数据")
+                    Message = $"物理量 {item.Name}({item.Symbol}) 存在空数据"
                 });
                 return false;
             }

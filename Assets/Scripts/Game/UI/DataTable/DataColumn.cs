@@ -119,14 +119,14 @@ public class DataColumn : HTBehaviour
             datas.Clear();
             foreach (var item in RecordManager.tempRecord.quantities)
             {
-                if (item.GraphicData == null)
-                    item.GraphicData = new DataColumnModel()
+                if (item.IndependentData == null)
+                    item.IndependentData = new DataColumnModel()
                     {
                         name = $"[ͼ] {item.Name} ({item.InstrumentType.CreateInstrumentInstance().UnitSymbol})",
                         quantitySymbol = item.Symbol,
                         type = DataColumnType.Graphic
                     };
-                datas.Add(item.GraphicData);
+                datas.Add(item.IndependentData);
             }
         }
         _Dropdown.ClearOptions();

@@ -244,7 +244,7 @@ public class MeasuredProcessController : HTBehaviour
         HideAllPanel();
         quantity.processMethod = 4;
         ShowDatatable(dataColumn1, DataColumnType.Mesured, quantity.MesuredData);
-        ShowDatatable(dataColumn2, DataColumnType.Graphic, quantity.GraphicData, false);
+        ShowDatatable(dataColumn2, DataColumnType.Graphic, quantity.IndependentData, false);
         ShowNavigationBar("Í¼Ê¾·¨", 3);
         measuredGraphic1.gameObject.SetActive(true);
         measuredGraphic1.Show(quantity);

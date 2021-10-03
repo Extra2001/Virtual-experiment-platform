@@ -25,23 +25,27 @@ public class LatexEquationRender
             equation = tex
         }).ReceiveString().ContinueWith(xx =>
         {
-            MainThread.Instance.Run(() =>
+            byte[] buffers = null;
+            try
             {
-                try
+                using (var ms = new MemoryStream())
                 {
-                    using (var ms = new MemoryStream())
+                    var buffer = Encoding.Default.GetBytes(xx.Result);
+                    using (var rms = new MemoryStream(buffer))
                     {
-                        var buffer = Encoding.Default.GetBytes(xx.Result);
-                        using (var rms = new MemoryStream(buffer))
-                        {
-                            var svg = Svg.SvgDocument.Open<Svg.SvgDocument>(rms);
-                            var bitmap = svg.Draw(1000, (int)Math.Round((double)svg.Height / svg.Width * 1000));
-                            bitmap.Save(ms, ImageFormat.Png);
-                            action?.Invoke(CommonTools.GetSprite(ms.GetBuffer()));
-                        }
+                        var svg = Svg.SvgDocument.Open<Svg.SvgDocument>(rms);
+                        var bitmap = svg.Draw(1000, (int)Math.Round((double)svg.Height / svg.Width * 1000));
+                        bitmap.Save(ms, ImageFormat.Png);
+                        buffers = ms.GetBuffer();
                     }
                 }
-                catch { errorHandler?.Invoke(); }
+            }
+            catch { errorHandler?.Invoke(); }
+            MainThread.Instance.Run(() =>
+            {
+                if (buffers != null)
+                    action?.Invoke(CommonTools.GetSprite(buffers));
+                else errorHandler?.Invoke();
             });
         });
         return;

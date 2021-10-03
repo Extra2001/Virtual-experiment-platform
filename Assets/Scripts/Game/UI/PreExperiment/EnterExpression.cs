@@ -41,7 +41,7 @@ public class EnterExpression : HTBehaviour
     /// <param name="sprite"></param>
     public void LoadSprite(Sprite sprite)
     {
-        image.FitHeight(sprite);
+        image.FitImage(sprite, 270, 40);
     }
     /// <summary>
     /// ‰÷»æ±Ì¥Ô Ω
@@ -173,18 +173,39 @@ public class EnterExpression : HTBehaviour
                 {
                     var hh = sym.Expression as MathNet.Symbolics.Expression.Power;
                     if (hh.Item1.IsIdentifier)
+                    {
                         if (!list.Contains((hh.Item1 as MathNet.Symbolics.Expression.Identifier).Item.Item.ToString()))
                             list.Add((hh.Item1 as MathNet.Symbolics.Expression.Identifier).Item.Item.ToString());
+                    }
+                    else
+                    {
+                        var sym1 = new MathNet.Symbolics.SymbolicExpression(hh.Item1);
+                        GetAllFactors(sym1, list);
+                    }
                     if (hh.Item2.IsIdentifier)
+                    {
                         if (!list.Contains((hh.Item2 as MathNet.Symbolics.Expression.Identifier).Item.Item.ToString()))
                             list.Add((hh.Item2 as MathNet.Symbolics.Expression.Identifier).Item.Item.ToString());
+                    }
+                    else
+                    {
+                        var sym1 = new MathNet.Symbolics.SymbolicExpression(hh.Item2);
+                        GetAllFactors(sym1, list);
+                    }
                 }
                 else if (sym.Expression.IsFunction)
                 {
                     var hh = sym.Expression as MathNet.Symbolics.Expression.Function;
                     if (hh.Item2.IsIdentifier)
+                    {
                         if (!list.Contains((hh.Item2 as MathNet.Symbolics.Expression.Identifier).Item.Item.ToString()))
                             list.Add((hh.Item2 as MathNet.Symbolics.Expression.Identifier).Item.Item.ToString());
+                    }
+                    else
+                    {
+                        var sym1 = new MathNet.Symbolics.SymbolicExpression(hh.Item2);
+                        GetAllFactors(sym1, list);
+                    }
                 }
                 else if (!list.Contains(sym.ToString()))
                     list.Add(sym.ToString());

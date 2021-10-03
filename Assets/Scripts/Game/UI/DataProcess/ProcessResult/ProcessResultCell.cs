@@ -29,8 +29,7 @@ public class ProcessResultCell : HTBehaviour
             ExpressionPanel.SetActive(true);
             LatexEquationRender.Render(rightExpression, res =>
                 {
-                    Expression.FitHeight(res);
-                    //Expression.sprite = res;
+                    Expression.FitImage(res, 220, 50);
                 });
         }
         if (userExpression == null)

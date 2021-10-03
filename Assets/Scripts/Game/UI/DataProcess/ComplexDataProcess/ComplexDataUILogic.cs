@@ -8,7 +8,7 @@ using HT.Framework;
 /// 合成量数据处理的UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/DataProcess/ComplexDataProcess")]
-public class ComplexData : UILogicResident
+public class ComplexDataUILogic : UILogicResident
 {
 	/// <summary>
 	/// 打开UI
@@ -16,6 +16,6 @@ public class ComplexData : UILogicResident
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
-        UIEntity.GetComponent<DealComplexDataInput>().StartShow();
+        UIEntity.GetComponent<DealComplexDataInput>().Show();
     }
 }

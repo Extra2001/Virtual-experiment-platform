@@ -88,7 +88,7 @@ public class MeasuredDifference1 : HTBehaviour
     private void ShowImage()
     {
         var latex = $"{quantity.Symbol}=\\frac{{Z}}{{{quantity.stepLength}*{quantity.DifferencedData.data.Count}}}";
-        LatexEquationRender.Render(latex, previewImage.FitHeight);
+        LatexEquationRender.Render(latex, res => previewImage.FitImage(res, 170, 40));
     }
 
     private void OnDestroy()

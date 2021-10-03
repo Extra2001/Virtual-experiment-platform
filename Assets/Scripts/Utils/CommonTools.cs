@@ -83,9 +83,38 @@ public static class CommonTools
     {
         Texture2D texture2D = new Texture2D(0, 0);
         texture2D.LoadImage(bytes);
-
         Sprite ret = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
         return ret;
+    }
+    /// <summary>
+    /// 自适应图片大小
+    /// </summary>
+    /// <param name="image"></param>
+    /// <param name="sprite"></param>
+    /// <param name="maxWidth"></param>
+    /// <param name="maxHeight"></param>
+    public static void FitImage(this Image image, Sprite sprite, float maxWidth, float maxHeight)
+    {
+        if (sprite.texture.width > sprite.texture.height)
+        {
+            image.rectTransform().sizeDelta = new Vector2(maxWidth, maxHeight);
+            image.FitHeight(sprite);
+            if (image.rectTransform().sizeDelta.x > maxWidth)
+            {
+                image.rectTransform().sizeDelta = new Vector2(maxWidth, maxHeight);
+                image.FitWidth(sprite);
+            }
+        }
+        else
+        {
+            image.rectTransform().sizeDelta = new Vector2(maxWidth, maxHeight);
+            image.FitWidth(sprite);
+            if (image.rectTransform().sizeDelta.y > maxHeight)
+            {
+                image.rectTransform().sizeDelta = new Vector2(maxWidth, maxHeight);
+                image.FitHeight(sprite);
+            }
+        }
     }
     /// <summary>
     /// 不改变高度适应图片大小

@@ -110,10 +110,11 @@ public class MeasuredProcessController : HTBehaviour
 
     private void BackButton()
     {
-        if (measuredUncertainty.gameObject.activeSelf || measuredDifference1.gameObject.activeSelf 
-            || measuredRegression1.gameObject.activeSelf || measuredGraphic1.gameObject.activeSelf)
-            ShowChooser();
-        else if (measuredDifference2.gameObject.activeSelf)
+        //if (measuredUncertainty.gameObject.activeSelf || measuredDifference1.gameObject.activeSelf 
+        //    || measuredRegression1.gameObject.activeSelf || measuredGraphic1.gameObject.activeSelf)
+        //    ShowChooser();
+        //else
+        if (measuredDifference2.gameObject.activeSelf)
             ShowDifference1();
         else if (measuredRegression2.gameObject.activeSelf)
             ShowRegression1();
@@ -191,7 +192,6 @@ public class MeasuredProcessController : HTBehaviour
         ShowNavigationBar("直接计算不确定度", 2);
         measuredUncertainty.gameObject.SetActive(true);
         measuredUncertainty.Show(quantity);
-        _backButton.interactable = true;
     }
 
     private void ShowDifference1()
@@ -203,7 +203,6 @@ public class MeasuredProcessController : HTBehaviour
         ShowNavigationBar("逐差法第一步", 3);
         measuredDifference1.gameObject.SetActive(true);
         measuredDifference1.Show(quantity);
-        _backButton.interactable = true;
         _continueButton.interactable = true;
     }
 
@@ -227,7 +226,6 @@ public class MeasuredProcessController : HTBehaviour
         ShowNavigationBar("一元线性回归", 3);
         measuredRegression1.gameObject.SetActive(true);
         measuredRegression1.Show(quantity);
-        _backButton.interactable = true;
         _continueButton.interactable = true;
     }
 
@@ -250,7 +248,6 @@ public class MeasuredProcessController : HTBehaviour
         ShowNavigationBar("图示法", 3);
         measuredGraphic1.gameObject.SetActive(true);
         measuredGraphic1.Show(quantity);
-        _backButton.interactable = true;
         _continueButton.interactable = true;
     }
 

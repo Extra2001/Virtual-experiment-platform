@@ -31,7 +31,7 @@ public class PreviewExp : HTBehaviour
             .ToLaTeX();
         LatexEquationRender.Render(exp, x =>
         {
-            _Image.FitHeight(x);
+            _Image.FitImage(x, 270, 40);
         });
     }
     /// <summary>

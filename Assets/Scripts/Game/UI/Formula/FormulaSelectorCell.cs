@@ -76,7 +76,7 @@ public class FormulaSelectorCell : HTBehaviour, IPointerEnterHandler, IPointerEx
     /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Invoke("ShowIndicator", 0.8f);
+        Invoke(nameof(ShowIndicator), 0.8f);
     }
     /// <summary>
     /// œ‘ æ Ù–‘√Ê∞Â

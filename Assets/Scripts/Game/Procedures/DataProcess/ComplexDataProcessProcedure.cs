@@ -18,7 +18,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenResidentUI<ComplexData>();
+        Main.m_UI.OpenResidentUI<ComplexDataUILogic>();
         base.OnEnter(lastProcedure);
     }
 
@@ -29,7 +29,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
 
     public string GetStatisticValue(string quantityName, ComplexStatisticValue valueKind)
     {
-        //根据记录的数据给公式编辑器传值
+        // 根据记录的数据给公式编辑器传值
         string result = "error";
         var item = quantities.Where(x => x.Symbol.Equals(quantityName)).FirstOrDefault();
 
@@ -58,7 +58,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
     /// <param name="nextProcedure">下一个进入的流程</param>
     public override void OnLeave(ProcedureBase nextProcedure)
     {
-        Main.m_UI.CloseUI<ComplexData>();
+        Main.m_UI.CloseUI<ComplexDataUILogic>();
         base.OnLeave(nextProcedure);
     }
 }

@@ -1,8 +1,4 @@
 using HT.Framework;
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class NextBackButtonOnComplexDataProcess : HTBehaviour
@@ -10,22 +6,36 @@ public class NextBackButtonOnComplexDataProcess : HTBehaviour
     public Button BackButton;
     public Button NextButton;
 
-    void Start()
+    private void Start()
     {
-        BackButton.onClick.AddListener(Back);
+        BackButton.onClick.AddListener(GameManager.Instance.SwitchBackProcedure);
         NextButton.onClick.AddListener(Next);
     }
 
-    public void Back()
-    {
-        GameManager.Instance.SwitchBackProcedure();
-    }
-
-    public void Next()
+    private void Next()
     {
         bool flag;
         string reason;
-        (flag, reason) = StaticMethods.CheckUncertain(RecordManager.tempRecord.complexQuantityModel.AnswerAverage, RecordManager.tempRecord.complexQuantityModel.AnswerUncertain);
+        try
+        {
+            (flag, reason) = StaticMethods.CheckUncertain(RecordManager.tempRecord.complexQuantityModel.AnswerAverage, RecordManager.tempRecord.complexQuantityModel.AnswerUncertain);
+            var rec = RecordManager.tempRecord;
+            if (rec.complexQuantityModel.AverageExpression == null || rec.complexQuantityModel.AverageExpression.Count == 0)
+            {
+                ShowModel($"合成物理量的主值还未计算");
+                return;
+            }
+            if (rec.complexQuantityModel.UncertainExpression == null || rec.complexQuantityModel.UncertainExpression.Count == 0)
+            {
+                ShowModel($"合成物理量的不确定度还未计算");
+                return;
+            }
+        }
+        catch
+        {
+            ShowModel($"结果最终表述有误，请重新输入");
+            return;
+        }
 
         if (flag)
         {
@@ -34,11 +44,17 @@ public class NextBackButtonOnComplexDataProcess : HTBehaviour
         else
         {
             RecordManager.tempRecord.score.ComplexQuantityError += 1;
-            UIAPI.Instance.ShowModel(new ModelDialogModel()
-            {
-                ShowCancel = false,
-                Message = new BindableString(reason)
-            });
+            ShowModel(reason);
         }
+    }
+
+    private void ShowModel(string message)
+    {
+        UIAPI.Instance.ShowModel(new ModelDialogModel()
+        {
+            ShowCancel = false,
+            Title = new BindableString("错误"),
+            Message = new BindableString(message)
+        });
     }
 }

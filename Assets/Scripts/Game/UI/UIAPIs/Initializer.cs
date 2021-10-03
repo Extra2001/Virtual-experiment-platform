@@ -30,7 +30,7 @@ public class UIAPIInitializer : SingletonBase<UIAPIInitializer>
 
         Main.m_UI.PreloadingResidentUI<ProcessExplain>();
         Main.m_UI.PreloadingResidentUI<MeasuredDataProcess>();
-        Main.m_UI.PreloadingResidentUI<ComplexData>();
+        Main.m_UI.PreloadingResidentUI<ComplexDataUILogic>();
         Main.m_UI.PreloadingResidentUI<ProcessResult>();
     }
 }

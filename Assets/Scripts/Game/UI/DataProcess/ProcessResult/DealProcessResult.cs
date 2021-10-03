@@ -31,7 +31,7 @@ public class DealProcessResult : HTBehaviour
 
     List<QuantityError> quantityErrors = new List<QuantityError>();
 
-    bool MeasureErrorFlag = false;//直接测量量错误是否解决
+    //bool MeasureErrorFlag = false;//直接测量量错误是否解决
     int curError = 0;
 
     public class QuantityError
@@ -49,7 +49,6 @@ public class DealProcessResult : HTBehaviour
         public QuantityErrorMessage unc { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage answer { get; set; } = new QuantityErrorMessage();
         public QuantityErrorMessage answerunc { get; set; } = new QuantityErrorMessage();
-              
     }
 
     public class QuantityErrorMessage
@@ -78,7 +77,7 @@ public class DealProcessResult : HTBehaviour
     private void CheckRightOrWrong()
     {
         quantityErrors = new List<QuantityError>();
-        MeasureErrorFlag = false;
+        //MeasureErrorFlag = false;
         foreach (var item in RecordManager.tempRecord.quantities)
         {
             if (item.processMethod == 1)
@@ -98,7 +97,7 @@ public class DealProcessResult : HTBehaviour
                 CalcResult result = CalcResult.CheckTable(calc);
                 if (!result.err.right)
                 {
-                    MeasureErrorFlag = true;
+                    //MeasureErrorFlag = true;
                     if (!result.err.ua.right)
                     {
                         result.err.ua.userformula = item.UaExpression;
@@ -133,7 +132,7 @@ public class DealProcessResult : HTBehaviour
                 CalcResult result = CalcResult.CheckSuccessiveDifference(calc);
                 if (!result.err.right)
                 {
-                    MeasureErrorFlag = true;
+                    //MeasureErrorFlag = true;
                     if (!result.err.average.right)
                     {
                         result.err.average.userformula = item.AverageExpression;
@@ -180,7 +179,7 @@ public class DealProcessResult : HTBehaviour
                 CalcResult result = CalcResult.CheckRegression(calc);
                 if (!result.err.right)
                 {
-                    MeasureErrorFlag = true;
+                    //MeasureErrorFlag = true;
                     if (!result.err.a.right)
                     {
                         result.err.a.userformula = item.AExpression;
@@ -262,26 +261,6 @@ public class DealProcessResult : HTBehaviour
 
         CheckComplex(calc);*/
     }
-    /*
-    private void CheckMeasuredUncertainty(CalcArgs calc)
-    {
-        foreach (var item in RecordManager.tempRecord.quantities.Where(x => x.processMethod == 1))
-        {
-            calc.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
-            calc.Measure(item.Symbol, item.MesuredData.data.ToDouble().ToArray());
-            calc.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
-        }
-    }
-
-    private void CheckMeasuredDifferenced(CalcArgs calc)
-    {
-        // 啊！逐差这个还需要新写一个判断！
-    }
-
-    private void CheckMeasuredRegression(CalcArgs calc)
-    {
-        // 啊！回归这个还需要新写一个判断！
-    }*/
 
     private void CheckComplex(CalcArgs calc)
     {
@@ -321,6 +300,8 @@ public class DealProcessResult : HTBehaviour
             SuccessMessage.gameObject.SetActive(false);
             BackButton.GetComponentInChildren<Text>().text = "上一个";
             NextButton.GetComponentInChildren<Text>().text = "下一个";
+            if(curError == quantityErrors.Count - 1)
+                NextButton.GetComponentInChildren<Text>().text = "查看评分";
             var current = quantityErrors[curError];
             Title.text = $"你的错误{curError + 1}/{quantityErrors.Count}";
             ErrorTitle.text = current.Title;
@@ -429,7 +410,7 @@ public class DealProcessResult : HTBehaviour
             cell7.gameObject.SetActive(false);
             cell8.gameObject.SetActive(false);
             double score = RecordManager.tempRecord.score.CalcScore();
-            Title.text = "本次实验得分:" + String.Format("{0:F1}", score) + "/4.0";
+            Title.text = "本次实验得分:" + string.Format("{0:F1}", score) + "/4.0";
             if (score - 4 == 0)
             {
                 SuccessMessage.text = "你的实验已全部正确地完成！恭喜你掌握了本次误差理论的知识。";

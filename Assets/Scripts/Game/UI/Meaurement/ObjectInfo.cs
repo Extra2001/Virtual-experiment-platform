@@ -2,6 +2,7 @@
     作者：荆煦添
     描述：右键物体信息数据模型
 *************************************************************************************/
+using DG.Tweening;
 using HT.Framework;
 using System;
 using System.IO;
@@ -43,7 +44,7 @@ public class ObjectInfo : HTBehaviour
         _Step.text = "1";
         _Mask.onClick.AddListener(() =>
         {
-            Main.m_UI.CloseUI<ObjectInfoUILogic>();
+            Hide();
         });
         _ScaleInput.onEndEdit.AddListener(x =>
         {
@@ -115,6 +116,18 @@ public class ObjectInfo : HTBehaviour
         });
     }
 
+    public void Hide()
+    {
+        _RootPanel.transform.DOScale(0, 0.3f)
+            .SetEase(Ease.OutExpo);
+        Invoke(nameof(Close), 0.3f);
+    }
+
+    public void Close()
+    {
+        Main.m_UI.CloseUI<ObjectInfoUILogic>();
+    }
+
     public void Show(ObjectValue value)
     {
         objectValue = value;
@@ -138,6 +151,6 @@ public class ObjectInfo : HTBehaviour
             _ScaleInput.interactable = false;
         }
 
-        StartCoroutine(CommonTools.DelayGet(_RootPanel.rectTransform().SetFloat));
+        _RootPanel.SetFloatWithAnimation(this);
     }
 }

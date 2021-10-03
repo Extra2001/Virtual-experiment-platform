@@ -2,6 +2,7 @@
     ×÷Õß£º¾£ìãÌí
     ÃèÊö£ºUIÎ»ÖÃ¼ÆËãÆ÷
 *************************************************************************************/
+using DG.Tweening;
 using HT.Framework;
 using System;
 using System.Collections;
@@ -31,19 +32,63 @@ public static class PositionHelper
         var size = GetScaledSize(rect.size);
 
         var mousePosition = Input.mousePosition;
-        Vector3 position = new Vector3(mousePosition.x - size.x / 2 - 3, mousePosition.y + size.y / 2 + 3);
+        Vector3 position;
+        if (UIEntity.pivot.x > 0.4 && UIEntity.pivot.x < 0.6 && UIEntity.pivot.y > 0.4 && UIEntity.pivot.y < 0.6)
+        {
+            position = new Vector3(mousePosition.x - size.x / 2 - 3, mousePosition.y + size.y / 2 + 3);
 
-        if (mousePosition.y > ScreenRightTop.y / 2)
-            position.y -= 2 * (size.y / 2 + 3);
+            if (mousePosition.y > ScreenRightTop.y / 2)
+                position.y -= 2 * (size.y / 2 + 3);
 
-        if (position.x - size.x / 2 < 0)
-            position.x += size.x / 2 - position.x;
+            if (position.x - size.x / 2 < 0)
+                position.x += size.x / 2 - position.x;
 
-        if (position.y + size.y / 2 > ScreenRightTop.y)
-            position.y -= position.y + size.y / 2 - ScreenRightTop.y;
-        if (position.y - size.y / 2 < 0)
-            position.y += size.y / 2 - position.y;
-        return (position, size);
+            if (position.y + size.y / 2 > ScreenRightTop.y)
+                position.y -= position.y + size.y / 2 - ScreenRightTop.y;
+            if (position.y - size.y / 2 < 0)
+                position.y += size.y / 2 - position.y;
+            return (position, size);
+        }
+        else if(UIEntity.pivot.x > 0.9 && UIEntity.pivot.y > 0.9)
+        {
+            position = new Vector3(mousePosition.x - 3, mousePosition.y - 3);
+
+            if (position.x - size.x < 0)
+                position.x += size.x - position.x;
+            if (position.y - size.y < 0)
+                position.y += size.y - position.y;
+            return (position, size);
+        }
+        else if (UIEntity.pivot.x > 0.9 && UIEntity.pivot.y < 0.1)
+        {
+            position = new Vector3(mousePosition.x - 3, mousePosition.y + 3);
+
+            if (position.x - size.x < 0)
+                position.x += size.x - position.x;
+            if (position.y + size.y > ScreenRightTop.y)
+                position.y -= position.y + size.y - ScreenRightTop.y;
+            return (position, size);
+        }
+        else if (UIEntity.pivot.x < 0.1 && UIEntity.pivot.y > 0.9)
+        {
+            position = new Vector3(mousePosition.x + 3, mousePosition.y - 3);
+
+            if (position.x + size.x >ScreenRightTop.x)
+                position.x -= position.x + size.x - ScreenRightTop.x;
+            if (position.y - size.y < 0)
+                position.y += size.y - position.y;
+            return (position, size);
+        }
+        else
+        {
+            position = new Vector3(mousePosition.x + 3, mousePosition.y + 3);
+
+            if (position.x + size.x > ScreenRightTop.x)
+                position.x -= position.x + size.x - ScreenRightTop.x;
+            if (position.y + size.y > ScreenRightTop.y)
+                position.y -= position.y + size.y - ScreenRightTop.y;
+            return (position, size);
+        }
     }
 
     /// <summary>
@@ -118,5 +163,17 @@ public static class PositionHelper
         if (size.x == 0 || size.y == 0)
             return false;
         return true;
+    }
+
+    public static void SetFloatWithAnimation(this GameObject UIEntity, MonoBehaviour behaviour)
+    {
+        var mousePosition = Input.mousePosition;
+        float x = mousePosition.x > ScreenRightTop.x / 2 ? 1 : 0;
+        float y = mousePosition.y > ScreenRightTop.y / 2 ? 1 : 0;
+        UIEntity.rectTransform().pivot = new Vector2(x, y);
+        behaviour.StartCoroutine(CommonTools.DelayGet(UIEntity.rectTransform().SetFloat));
+        UIEntity.transform.localScale = new Vector3(0, 0);
+        UIEntity.transform.DOScale(1, 0.3f)
+            .SetEase(Ease.OutExpo);
     }
 }

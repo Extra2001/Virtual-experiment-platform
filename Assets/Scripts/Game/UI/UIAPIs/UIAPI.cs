@@ -58,6 +58,16 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
         Main.m_UI.GetOpenedUI<ModelUILogic>().ShowModel(model);
     }
 
+    public void ShowTips(string content, string title = "Ã· æ£∫", float width = 200)
+    {
+        Main.m_UI.OpenTemporaryUI<TipsUILogic>(content, title, width);
+    }
+
+    public void HideTips()
+    {
+        Main.m_UI.GetOpenedUI<TipsUILogic>()?.UIEntity.GetComponent<TipsPanel>().Hide();
+    }
+
     public void ShowIndicator<T>(string key, string message) where T : IndicatorBase
     {
         Main.m_UI.GetUI<T>().ShowIndicator(key, message);

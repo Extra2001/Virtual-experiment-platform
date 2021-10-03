@@ -15,6 +15,7 @@ public class PreviewUILogic : UILogicResident
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
+        KeyboardManager.Instance.work = false;
         UIEntity.GetComponent<PreviewExp>()?.Show();
         if(args.Length > 0)
         {
@@ -32,5 +33,11 @@ public class PreviewUILogic : UILogicResident
             UIEntity.GetComponentInChildren<NextButtonOnPreviewConfirm>(true).gameObject.SetActive(true);
             UIEntity.GetComponentInChildren<BackButton>(true).inverse = false;
         }
+    }
+
+    public override void OnClose()
+    {
+        base.OnClose();
+        KeyboardManager.Instance.work = true;
     }
 }

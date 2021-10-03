@@ -15,6 +15,7 @@ public class EnterExpressionUILogic : UILogicResident
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
+        KeyboardManager.Instance.work = false;
         UIEntity.GetComponent<EnterExpression>()?.Show();
         if (args.Length > 0)
         {
@@ -32,5 +33,11 @@ public class EnterExpressionUILogic : UILogicResident
             UIEntity.GetComponentInChildren<NextButtonOnEnterExpression>(true).gameObject.SetActive(true);
             UIEntity.GetComponentInChildren<BackButton>(true).inverse = false;
         }
+    }
+
+    public override void OnClose()
+    {
+        base.OnClose();
+        KeyboardManager.Instance.work = true;
     }
 }

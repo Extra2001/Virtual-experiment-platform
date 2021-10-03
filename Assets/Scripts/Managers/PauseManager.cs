@@ -9,7 +9,7 @@ public class PauseManager : SingletonBehaviorManager<PauseManager>
 {
     private void Start()
     {
-        KeyboardManager.Instance.Register(KeyCode.Escape, () =>
+        KeyboardManager.Instance.RegisterPermanant(KeyCode.Escape, () =>
         {
             if (Main.Current.Pause)
                 Continue();

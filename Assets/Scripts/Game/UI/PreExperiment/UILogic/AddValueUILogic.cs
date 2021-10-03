@@ -12,6 +12,7 @@ public class AddValueUILogic : UILogicResident
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);
+        KeyboardManager.Instance.work = false;
         UIEntity.GetComponentInChildren<QuantityManage>(true).LoadQuantities();
         if (args.Length > 0)
         {
@@ -29,5 +30,11 @@ public class AddValueUILogic : UILogicResident
             UIEntity.GetComponentInChildren<NextButtonOnAddQuantities>(true).gameObject.SetActive(true);
             UIEntity.GetComponentInChildren<BackButton>(true).inverse = false;
         }
+    }
+
+    public override void OnClose()
+    {
+        base.OnClose();
+        KeyboardManager.Instance.work = true;
     }
 }

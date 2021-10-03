@@ -6,12 +6,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
 {
+    public bool work = true;
+
     //此脚本控制非连续按下的所有键盘按键（移动及卡尺夹紧除外），下行标注所有按键作用
     //ESC：暂停，E：坐上凳子，B：打开关闭背包，~~~~~~~~~~~~~~
     private Dictionary<KeyCode, Action> registered = new Dictionary<KeyCode, Action>();
+    private Dictionary<KeyCode, Action> registeredPermanant = new Dictionary<KeyCode, Action>();
     private Dictionary<KeyCode, Action> registeredHoldOn = new Dictionary<KeyCode, Action>();
     private Dictionary<int, Tuple<Func<bool>, Action>> registedCustom = new Dictionary<int, Tuple<Func<bool>, Action>>();
 
@@ -26,19 +30,25 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
 
     private void Update()
     {
-        foreach (var item in registered)
+        foreach (var item in registeredPermanant)
             if (Input.GetKeyDown(item.Key))
-                item.Value.Invoke();
-        foreach (var item in registeredHoldOn)
-            if (Input.GetKey(item.Key))
                 item.Value.Invoke();
     }
 
     private void FixedUpdate()
     {
-        foreach (var item in registedCustom)
-            if (item.Value.Item1.Invoke())
-                item.Value.Item2.Invoke();
+        if (work)
+        {
+            foreach (var item in registered)
+                if (Input.GetKeyDown(item.Key))
+                    item.Value.Invoke();
+            foreach (var item in registeredHoldOn)
+                if (Input.GetKey(item.Key))
+                    item.Value.Invoke();
+            foreach (var item in registedCustom)
+                if (item.Value.Item1.Invoke())
+                    item.Value.Item2.Invoke();
+        }
     }
 
     /// <summary>
@@ -46,12 +56,7 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     /// </summary>
     public void Register(KeyCode key, Action action)
     {
-        if (registered.ContainsKey(key))
-        {
-            Debug.LogError($"{key}键已被注册");
-            throw new Exception("该按键已注册");
-        }
-        if (registeredHoldOn.ContainsKey(key))
+        if (registered.ContainsKey(key) || registeredPermanant.ContainsKey(key) || registeredHoldOn.ContainsKey(key))
         {
             Debug.LogError($"{key}键已被注册");
             throw new Exception("该按键已注册");
@@ -60,17 +65,23 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
         registered.Add(key, action);
     }
 
+    public void RegisterPermanant(KeyCode key, Action action)
+    {
+        if (registered.ContainsKey(key) || registeredPermanant.ContainsKey(key) || registeredHoldOn.ContainsKey(key))
+        {
+            Debug.LogError($"{key}键已被注册");
+            throw new Exception("该按键已注册");
+        }
+        //Debug.Log($"已注册{key}键");
+        registeredPermanant.Add(key, action);
+    }
+
     /// <summary>
     /// 注册按键，长按键会持续触发回调。
     /// </summary>
     public void RegisterHoldOn(KeyCode key, Action action)
     {
-        if (registered.ContainsKey(key))
-        {
-            Debug.LogError($"{key}键已被注册");
-            throw new Exception("该按键已注册");
-        }
-        if (registeredHoldOn.ContainsKey(key))
+        if (registered.ContainsKey(key) || registeredPermanant.ContainsKey(key) || registeredHoldOn.ContainsKey(key))
         {
             Debug.LogError($"{key}键已被注册");
             throw new Exception("该按键已注册");

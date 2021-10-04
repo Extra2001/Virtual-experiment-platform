@@ -234,7 +234,7 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
             return Math.Round(x, MidpointRounding.ToEven) * p;
         }
         else if(n < 0) {
-            for(int i = 0;i <-n;i++) {
+            for(int i = 0;i < -n;i++) {
                 p *= 10;
             }
             double x = truevalue * p;
@@ -442,6 +442,13 @@ public static class StaticMethods {
         double a_unca = Math.Sqrt(x2av) * b_unca;
         return (b, a, r, b_unca, a_unca);
     }
+    public static (double[] x, double[] y) MakeLine(double[] x0, double[] y0) {
+        var res = LinearRegression(x0, y0);
+        double xmin = x0.Min() - 1, xmax = x0.Max() + 1;
+        double[] x = Generate.LinearSpaced(8 * x0.Length, xmin, xmax);
+        double[] y = Generate.Map(x, (double k) => res.a + k * res.b);
+        return (x, y);
+    }
     public static (double avg, double ua, double u) CalcUncertain(IEnumerable<double> data, double ub) {
         //输入:测量数据data 仪器B类不确定度ub
         //返回:(主值,A类不确定度,合成不确定度)
@@ -484,9 +491,8 @@ public static class StaticMethods {
             var factors = new List<string>();
             var symbols = RecordManager.tempRecord.quantities.Select(x => x.Symbol).ToList();
             EnterExpression.GetAllFactors(expr0, factors);
-            foreach(var item in factors)
-            {
-                if (!symbols.Contains(item))
+            foreach(var item in factors) {
+                if(!symbols.Contains(item))
                     return (false, $"因子{item}不在定义的范围内");
             }
             return (true, "");
@@ -927,25 +933,21 @@ public class CalcResult {
             flag = false;
             result.err.ua.right = false;
             double k = input.data.values.Count;
-            if (userin.userua.AlmostEqual(ua*Math.Sqrt(k/(k-1))))
-            {
+            if(userin.userua.AlmostEqual(ua * Math.Sqrt(k / (k - 1)))) {
                 result.err.ua.message = "是否将k除成了k-1，请注意样本方差的含义";
             }
-            else
-            {
+            else {
                 result.err.ua.message = "其他错误";
-            }            
+            }
             result.err.ua.latex = StaticMethods.GetUaExprLatex(varname);
         }
         if(!userin.userub.AlmostEqual(userin.ub)) {
             flag = false;
             result.err.ub.right = false;
-            if (userin.userub.AlmostEqual(userin.ub * Math.Sqrt(3)))
-            {
+            if(userin.userub.AlmostEqual(userin.ub * Math.Sqrt(3))) {
                 result.err.ub.message = "是否忘除以根号3";
             }
-            else
-            {
+            else {
                 result.err.ub.message = "其他错误";
             }
             result.err.ub.latex = StaticMethods.GetUbExprLatex(varname);

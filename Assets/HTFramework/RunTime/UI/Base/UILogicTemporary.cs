@@ -1,4 +1,6 @@
-﻿namespace HT.Framework
+﻿using System.Collections.Generic;
+
+namespace HT.Framework
 {
     /// <summary>
     /// 非常驻UI
@@ -9,12 +11,7 @@
 
         public void NavigateBack()
         {
-            if (_lastUILogic != null)
-            {
-                Close();
-                _lastUILogic.Open();
-            }
-            else Close();
+            Main.m_UI.NavigateBackTemporaryUI();
         }
 
         /// <summary>

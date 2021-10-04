@@ -28,7 +28,7 @@ public class RecordCell : HTBehaviour
     void Start()
     {
         if (_LoadButton != null)
-            _LoadButton.onClick.AddListener(() => { Main.m_UI.GetOpenedUI<ReadRecordUILogic>()?.NavigateBack(); RecordManager.records[recordId].Load(); });
+            _LoadButton.onClick.AddListener(() => { Main.m_UI.NavigateBackTemporaryUI(); RecordManager.records[recordId].Load(); });
         if (_DeleteButton != null)
             _DeleteButton.onClick.AddListener(() =>
             {

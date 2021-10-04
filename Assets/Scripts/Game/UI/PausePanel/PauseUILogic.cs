@@ -39,7 +39,7 @@ public class PauseUILogic : UILogicTemporary
                 ContinueButton = item;
                 item.onClick.AddListener(() =>
                 {
-                    PauseManager.Instance.Continue();
+                    PauseManager.Instance.Continue(true);
                 });
             }
             else if (item.gameObject.name.Equals("QuitButton"))
@@ -64,7 +64,7 @@ public class PauseUILogic : UILogicTemporary
                 RestartButton = item;
                 item.onClick.AddListener(() =>
                 {
-                    PauseManager.Instance.Continue();
+                    PauseManager.Instance.Continue(true);
                     GameManager.Instance.SwitchBackToStart();
                 });
             }

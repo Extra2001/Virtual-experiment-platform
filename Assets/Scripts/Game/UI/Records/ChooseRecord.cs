@@ -45,7 +45,7 @@ public class ChooseRecord : HTBehaviour
                     title = NameInput.text
                 };
                 record.Save();
-                Main.m_UI.GetOpenedUI<SaveRecordUILogic>().NavigateBack();
+                Main.m_UI.NavigateBackTemporaryUI();
             }
             else
             {
@@ -62,7 +62,7 @@ public class ChooseRecord : HTBehaviour
                             title = NameInput.text
                         };
                         record.Save();
-                        Main.m_UI.GetOpenedUI<SaveRecordUILogic>().NavigateBack();
+                        Main.m_UI.NavigateBackTemporaryUI();
                     }
                 });
             }

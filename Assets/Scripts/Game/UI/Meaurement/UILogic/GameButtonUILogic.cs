@@ -37,7 +37,7 @@ public class GameButtonUILogic : UILogicResident
 
         UIEntity.FindChildren("PauseButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            PauseManager.Instance.Pause();
+            PauseManager.Instance.Pause(true);
         });
         UIEntity.FindChildren("BagButton").GetComponent<Button>().onClick.AddListener(() =>
         {

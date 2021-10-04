@@ -226,6 +226,13 @@ namespace HT.Framework
             return _helper.GetOpenedUI(type);
         }
         /// <summary>
+        /// 导航到上一个非常驻UI
+        /// </summary>
+        public void NavigateBackTemporaryUI()
+        {
+            _helper.NavigateBackTemporaryUI();
+        }
+        /// <summary>
         /// 置顶常驻UI
         /// </summary>
         /// <typeparam name="T">常驻UI逻辑类</typeparam>

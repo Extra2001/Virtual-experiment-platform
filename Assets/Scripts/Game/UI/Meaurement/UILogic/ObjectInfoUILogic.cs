@@ -20,5 +20,7 @@ public class ObjectInfoUILogic : UILogicTemporary
             var value = args[0] as ObjectValue;
             UIEntity.GetComponent<ObjectInfo>().Show(value);
         }
+        UIEntity.GetComponent<ObjectInfo>()._RootPanel
+            .SetFloatWithAnimation(UIEntity.GetComponent<ObjectInfo>());
     }
 }

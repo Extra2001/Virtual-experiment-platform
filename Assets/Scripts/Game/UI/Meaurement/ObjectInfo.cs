@@ -15,7 +15,7 @@ public class ObjectInfo : HTBehaviour
     [SerializeField]
     private Button _Mask;
     [SerializeField]
-    private GameObject _RootPanel;
+    public GameObject _RootPanel;
     [SerializeField]
     private Text _Title;
     [SerializeField]
@@ -38,6 +38,7 @@ public class ObjectInfo : HTBehaviour
     private Button _StepSub;
 
     private ObjectValue objectValue;
+    private int axis = 0;
 
     private void Start()
     {
@@ -114,6 +115,10 @@ public class ObjectInfo : HTBehaviour
                 objectValue.LineScaleZ = Math.Max(0, objectValue.LineScaleZ - objectValue.Scale  * (float)step);
             }
         });
+        _StepAxis.onValueChanged.AddListener(x =>
+        {
+            if (x != -1) axis = x;
+        });
     }
 
     public void Hide()
@@ -139,6 +144,7 @@ public class ObjectInfo : HTBehaviour
         _ScaleSlider.minValue = objectValue.BaseScale / 5;
         _MassInput.text = objectValue.Mass.ToString();
         _Gravity.isOn = objectValue.Gravity;
+        _StepAxis.selectedSegmentIndex = axis;
 
         if(value.ObjectModel.ResourcePath.EndsWith("obj") || Path.GetFileName(value.ObjectModel.ResourcePath).Contains("."))
         {
@@ -150,7 +156,5 @@ public class ObjectInfo : HTBehaviour
             _ScaleSlider.interactable = false;
             _ScaleInput.interactable = false;
         }
-
-        _RootPanel.SetFloatWithAnimation(this);
     }
 }

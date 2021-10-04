@@ -21,5 +21,7 @@ public class InstrmentInfoUILogic : UILogicTemporary
             Type instument = (Type)args[0];
             UIEntity.GetComponent<InstrumentInfo>().ShowInstrument(instument);
         }
+        UIEntity.GetComponent<InstrumentInfo>()._RootPanel
+            .SetFloatWithAnimation(UIEntity.GetComponent<InstrumentInfo>());
     }
 }

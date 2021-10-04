@@ -30,14 +30,15 @@ public class TipsPanel : HTBehaviour
 
     public void Close()
     {
-        Main.m_UI.CloseUI<TipsUILogic>();
+        Main.m_UI.NavigateBackTemporaryUI();
     }
 
     public void Show(string content, string title = "提示：", float width = 200)
     {
         _Title.text = title;
         _Content.text = content;
-        _RootPanel.SetFloatWithAnimation(this);
+        
         _RootPanel.rectTransform().sizeDelta = new Vector2(width, 150);
+        _RootPanel.SetFloatWithAnimation(this);
     }
 }

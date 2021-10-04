@@ -35,7 +35,7 @@ public class InstrumentInfo : HTBehaviour
     [SerializeField]
     private Button _ConfirmButton;
     [SerializeField]
-    private GameObject _RootPanel;
+    public GameObject _RootPanel;
     [SerializeField]
     private Button _SwitchRange;
     [SerializeField]
@@ -64,8 +64,6 @@ public class InstrumentInfo : HTBehaviour
             item.Value.onValueChanged.Clear();
         _instrument = GameManager.Instance.GetInstrument(instrument);
         _instrument.ShowInfoPanel(infoItem);
-
-        _RootPanel.SetFloatWithAnimation(this);
     }
 
     public void Hide()

@@ -13,22 +13,24 @@ public class MeasuredGraphic2 : HTBehaviour
     {
         chart.RemoveData();
         var ScatterSerie = chart.AddSerie(SerieType.Scatter);
-        double x, y;
+        double[] point_x = new double[quantity.IndependentData.data.Count];
+        double[] point_y = new double[quantity.MesuredData.data.Count];
         for (int i = 0; i < quantity.MesuredData.data.Count; i++)
         {
-            x = double.Parse(quantity.IndependentData.data[i]);
-            y = double.Parse(quantity.MesuredData.data[i]);
-            ScatterSerie.AddXYData(x, y);
+            point_x[i] = double.Parse(quantity.IndependentData.data[i]);
+            point_y[i] = double.Parse(quantity.MesuredData.data[i]);
+            ScatterSerie.AddXYData(point_x[i], point_y[i]);
         }
         
-
         var LineSerie = chart.AddSerie(SerieType.Line);
-        x = double.Parse(quantity.IndependentData.data[0]);
-        y = double.Parse(quantity.MesuredData.data[0]);
-        LineSerie.AddXYData(x, y);
-        x = double.Parse(quantity.IndependentData.data[quantity.IndependentData.data.Count - 1]);
-        y = double.Parse(quantity.MesuredData.data[quantity.MesuredData.data.Count - 1]);
-        LineSerie.AddXYData(x, y);
+        double[] line_x, line_y;
+        
+        (line_x, line_y) = StaticMethods.MakeLine(point_x, point_y);
+        for (int i = 0; i < line_x.Length; i++)
+        {
+            LineSerie.AddXYData(point_x[i], point_y[i]);
+        }
+
     }
 
     public bool CheckAll(bool silent = false)

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// 读取存档面板UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/Record/ReadRecord")]
-public class ReadRecordUILogic : UILogicTemporary
+public class ReadRecordUILogic : WithSingleModeUILogic
 {
     public Button ConfirmButton { get; set; }
     public Button CancelButton { get; set; }

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// 模态提示框UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/ModelPanel")]
-public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
+public class ModelUILogic : WithSingleModeUILogic, IDataDriver<ModelDialogModel>
 {
     public ModelDialogModel Data { get; set; } = new ModelDialogModel();
 
@@ -20,8 +20,6 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
 
     private Button CancelButton;
     private Button ConfirmButton;
-
-    private bool singleMode = true;
 
     /// <summary>
     /// 初始化
@@ -58,13 +56,13 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
         {
             UIShowHideHelper.HideToUp(UIEntity);
             Data.CancelAction?.Invoke();
-            MainThread.Instance.DelayAndRun(300, NavigateBack);
+            NavigateBack();
         });
         ConfirmButton.onClick.AddListener(() =>
         {
             UIShowHideHelper.HideToUp(UIEntity);
             Data.ConfirmAction?.Invoke();
-            MainThread.Instance.DelayAndRun(300, NavigateBack);
+            NavigateBack();
         });
     }
 
@@ -92,12 +90,6 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
             CancelButton.gameObject.SetActive(false);
         }
 
-        if (Main.Current.Pause == false)
-        {
-            PauseManager.Instance.Pause();
-            singleMode = true;
-        }
-        else singleMode = false;
         Main.m_UI.OpenTemporaryUI<ModelUILogic>();
     }
 
@@ -108,14 +100,5 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
     {
         base.OnOpen(args);
         UIShowHideHelper.ShowFromUp(UIEntity);
-    }
-
-    /// <summary>
-    /// 关闭UI
-    /// </summary>
-    public override void OnClose()
-    {
-        if (singleMode) PauseManager.Instance.Continue();
-        base.OnClose();
     }
 }

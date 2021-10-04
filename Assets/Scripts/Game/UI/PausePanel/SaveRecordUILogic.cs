@@ -8,14 +8,14 @@ using UnityEngine.UI;
 /// 保存存档面板UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/Record/SaveRecord")]
-public class SaveRecordUILogic : UILogicTemporary
+public class SaveRecordUILogic : WithSingleModeUILogic
 {
     public Button ConfirmButton { get; set; }
     public Button CancelButton { get; set; }
 
-	/// <summary>
-	/// 初始化
-	/// </summary>
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public override void OnInit()
     {
         base.OnInit();
@@ -35,15 +35,12 @@ public class SaveRecordUILogic : UILogicTemporary
                 CancelButton = item;
             }
         }
-        CancelButton.onClick.AddListener(() =>
-        {
-            NavigateBack();
-        });
+        CancelButton.onClick.AddListener(NavigateBack);
     }
 
-	/// <summary>
-	/// 打开UI
-	/// </summary>
+    /// <summary>
+    /// 打开UI
+    /// </summary>
     public override void OnOpen(params object[] args)
     {
         base.OnOpen(args);

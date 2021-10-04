@@ -442,7 +442,6 @@ public class DealProcessResult : HTBehaviour
         }
         else
         {
-            PauseManager.Instance.Pause();
             Main.m_UI.OpenTemporaryUI<SaveRecordUILogic>();
         }
     }

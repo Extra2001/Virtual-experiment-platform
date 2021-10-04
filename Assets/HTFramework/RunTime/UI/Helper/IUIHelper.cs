@@ -92,6 +92,10 @@ namespace HT.Framework
         /// <returns>UI逻辑对象</returns>
         UILogicBase GetUI(Type type);
         /// <summary>
+        /// 导航到上一个非常驻UI
+        /// </summary>
+        void NavigateBackTemporaryUI();
+        /// <summary>
         /// 置顶常驻UI
         /// </summary>
         /// <param name="type">常驻UI逻辑类</param>

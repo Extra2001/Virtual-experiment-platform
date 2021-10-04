@@ -21,7 +21,7 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
     private Button CancelButton;
     private Button ConfirmButton;
 
-    private bool needToRecover = true;
+    private bool singleMode = true;
 
     /// <summary>
     /// 初始化
@@ -57,20 +57,14 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
         CancelButton.onClick.AddListener(() =>
         {
             UIShowHideHelper.HideToUp(UIEntity);
-            MainThread.Instance.DelayAndRun(300, () =>
-            {
-                NavigateBack();
-                Data.CancelAction?.Invoke();
-            });
+            Data.CancelAction?.Invoke();
+            MainThread.Instance.DelayAndRun(300, NavigateBack);
         });
         ConfirmButton.onClick.AddListener(() =>
         {
             UIShowHideHelper.HideToUp(UIEntity);
-            MainThread.Instance.DelayAndRun(300, () =>
-            {
-                NavigateBack();
-                Data.ConfirmAction?.Invoke();
-            });
+            Data.ConfirmAction?.Invoke();
+            MainThread.Instance.DelayAndRun(300, NavigateBack);
         });
     }
 
@@ -80,7 +74,6 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
         this.Data.ConfirmText.Value = model.ConfirmText.Value;
         this.Data.Title.Value = model.Title.Value;
         this.Data.Message.Value = model.Message.Value;
-
         this.Data.ConfirmAction = model.ConfirmAction;
         this.Data.CancelAction = model.CancelAction;
 
@@ -101,11 +94,10 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
 
         if (Main.Current.Pause == false)
         {
-            PauseManager.Instance.Pause(false);
-            needToRecover = true;
+            PauseManager.Instance.Pause();
+            singleMode = true;
         }
-        else needToRecover = false;
-
+        else singleMode = false;
         Main.m_UI.OpenTemporaryUI<ModelUILogic>();
     }
 
@@ -123,8 +115,7 @@ public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
     /// </summary>
     public override void OnClose()
     {
-        if (needToRecover)
-            PauseManager.Instance.Continue(false);
+        if (singleMode) PauseManager.Instance.Continue();
         base.OnClose();
     }
 }

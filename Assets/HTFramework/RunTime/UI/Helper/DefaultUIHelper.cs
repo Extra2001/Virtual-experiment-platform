@@ -17,6 +17,8 @@ namespace HT.Framework
         private Dictionary<string, GameObject> _defineUIAndEntitys = new Dictionary<string, GameObject>();
         //当前打开的Overlay类型的非常驻UI（非常驻UI同时只能打开一个）
         private UILogicTemporary _currentOverlayTemporaryUI;
+        //当前已打开的非常驻UI栈
+        private List<UILogicTemporary> _temporaryUIStack = new List<UILogicTemporary>();
         //当前打开的Camera类型的非常驻UI（非常驻UI同时只能打开一个）
         private UILogicTemporary _currentCameraTemporaryUI;
         //所有UI根节点
@@ -517,6 +519,7 @@ namespace HT.Framework
                             }
                             else
                             {
+                                _temporaryUIStack.Add(ui);
                                 ui.UIEntity.transform.SetAsLastSibling();
                                 ui.UIEntity.SetActive(true);
                                 ui.OnOpen(args);
@@ -661,7 +664,6 @@ namespace HT.Framework
                         if (OverlayUIs.ContainsKey(type))
                         {
                             UILogicBase ui = OverlayUIs[type];
-
                             return ui;
                         }
                         else
@@ -672,7 +674,6 @@ namespace HT.Framework
                         if (CameraUIs.ContainsKey(type))
                         {
                             UILogicBase ui = CameraUIs[type];
-
                             return ui;
                         }
                         else
@@ -699,6 +700,17 @@ namespace HT.Framework
         public UILogicTemporary GetCurrentCameraTemporaryUI()
         {
             return _currentCameraTemporaryUI;
+        }
+
+        /// <summary>
+        /// 导航到上一个非常驻UI
+        /// </summary>
+        public void NavigateBackTemporaryUI()
+        {
+            if (_temporaryUIStack.Count == 0) return;
+            CloseUI(_temporaryUIStack.Last().GetType());
+            if (_temporaryUIStack.Count > 0)
+                OpenTemporaryUI(_temporaryUIStack.Last().GetType());
         }
 
         /// <summary>
@@ -785,6 +797,11 @@ namespace HT.Framework
                             if (!ui.IsOpened)
                             {
                                 return;
+                            }
+
+                            if(ui is UILogicTemporary)
+                            {
+                                _temporaryUIStack.Remove(ui as UILogicTemporary);
                             }
 
                             ui.OnClose();
@@ -933,7 +950,11 @@ namespace HT.Framework
                 uILogic.UIEntity.SetActive(true);
                 uILogic.OnInit();
                 uILogic.OnOpen(args);
-                if (uILogic is UILogicResident)
+                if(uILogic is UILogicTemporary)
+                {
+                    _temporaryUIStack.Add(uILogic.Cast<UILogicTemporary>());
+                }
+                else if (uILogic is UILogicResident)
                 {
                     uILogic.Cast<UILogicResident>().OnPlaceTop();
                 }
@@ -948,7 +969,11 @@ namespace HT.Framework
                     uILogic.UIEntity.SetActive(true);
                     uILogic.OnInit();
                     uILogic.OnOpen(args);
-                    if (uILogic is UILogicResident)
+                    if (uILogic is UILogicTemporary)
+                    {
+                        _temporaryUIStack.Add(uILogic.Cast<UILogicTemporary>());
+                    }
+                    else if (uILogic is UILogicResident)
                     {
                         uILogic.Cast<UILogicResident>().OnPlaceTop();
                     }

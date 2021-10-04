@@ -48,7 +48,7 @@ public class SimpleModelPanel : HTBehaviour
 
     private void Close()
     {
-        Main.m_UI.GetOpenedUI<SimpleModelPanelUILogic>().NavigateBack();
+        Main.m_UI.NavigateBackTemporaryUI();
     }
 
     public void ShowModel(SimpleModel model)

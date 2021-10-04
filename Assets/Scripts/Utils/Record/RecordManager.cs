@@ -73,7 +73,7 @@ public static class RecordManager
     public static void Load(this Record record)
     {
         LoadToTempRecord(record);
-        PauseManager.Instance.Continue();
+        PauseManager.Instance.Continue(true);
         GameManager.Instance.ContinueExp();
     }
     /// <summary>

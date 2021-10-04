@@ -11,40 +11,19 @@ public class PauseManager : SingletonBehaviorManager<PauseManager>
     {
         KeyboardManager.Instance.RegisterPermanant(KeyCode.Escape, () =>
         {
-            if (Main.Current.Pause)
-                Continue();
-            else
-                Pause();
+            if (Main.Current.Pause) Continue(true);
+            else Pause(true);
         });
     }
 
-    /// <summary>
-    /// ‘›Õ£”Œœ∑
-    /// </summary>
-    public void Pause()
-    {
-        Main.Current.Pause = true;
-        Time.timeScale = 0;
-        Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<PauseEventHandler>().Fill(true));
-    }
-    public void Pause(bool needOpenPauseMenu)
+    public void Pause(bool needOpenPauseMenu = false)
     {
         Main.Current.Pause = true;
         Time.timeScale = 0;
         Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<PauseEventHandler>().Fill(true, needOpenPauseMenu));
     }
 
-    /// <summary>
-    /// ºÃ–¯”Œœ∑
-    /// </summary>
-    public void Continue()
-    {
-        Main.Current.Pause = false;
-        Time.timeScale = 1;
-        Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<PauseEventHandler>().Fill(false));
-    }
-
-    public void Continue(bool needOpenPauseMenu)
+    public void Continue(bool needOpenPauseMenu = false)
     {
         Main.Current.Pause = false;
         Time.timeScale = 1;

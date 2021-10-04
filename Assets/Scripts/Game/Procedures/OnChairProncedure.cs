@@ -18,7 +18,7 @@ public class OnChairProcedure : ProcedureBase
     {
         RenderManager.Instance.Show();
         var Position = NearChair.Instance.transform.position;
-        Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill(Position.x, Position.y, Position.z));
+        Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<SitdownEventHandler>().Fill(Position.x, Position.y, Position.z));
         //人物可否移动
         GameManager.Instance.FPSable = true;
         //记录人物位置

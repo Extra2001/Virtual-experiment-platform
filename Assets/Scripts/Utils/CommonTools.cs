@@ -49,14 +49,7 @@ public static class CommonTools
     public static byte[] GetBytes(string path)
     {
         if (bytesPool.ContainsKey(path)) return bytesPool[path];
-        byte[] bytes;
-        using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-        {
-            fs.Seek(0, SeekOrigin.Begin);
-            bytes = new byte[fs.Length];
-            fs.Read(bytes, 0, (int)fs.Length);
-            fs.Close();
-        }
+        byte[] bytes = File.ReadAllBytes(path);
         bytesPool.Add(path, bytes);
         return bytes;
     }

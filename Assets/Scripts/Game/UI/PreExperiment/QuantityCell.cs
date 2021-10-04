@@ -43,7 +43,8 @@ public class QuantityCell : HTBehaviour
     private void SetQuantity(QuantityModel model)
     {
         instruments.Clear();
-        foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract))
+        foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase))
+            .Where(x => !x.IsAbstract).OrderBy(x => x.CreateInstrumentInstance().ID))
         {
             var i = item.CreateInstrumentInstance();
             instruments.Add(i);

@@ -7,11 +7,10 @@ using UnityEngine.UI;
 
 public class QuantityPreviewCell : HTBehaviour
 {
-    //启用自动化
-    protected override bool IsAutomate => true;
     public Text _Name;
     public Text _Symbol;
     public Text _InstrumentName;
+    public Text _ProcessMethod;
     public Text _InstrumentUnit;
 
     public void SetQuantity(QuantityModel model)
@@ -21,5 +20,7 @@ public class QuantityPreviewCell : HTBehaviour
         var inst = model.InstrumentType.CreateInstrumentInstance();
         _InstrumentName.text = inst.InstName;
         _InstrumentUnit.text = inst.UnitSymbol;
+        string[] methods = new string[] { "直接计算", "逐差法", "一元线性回归法", "图示法" };
+        _ProcessMethod.text = methods[model.processMethod - 1];
     }
 }

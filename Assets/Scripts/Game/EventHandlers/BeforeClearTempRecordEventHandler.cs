@@ -6,12 +6,12 @@ using DG.Tweening;
 /// <summary>
 /// 新建事件
 /// </summary>
-public class UncertainLearnEventHandler : EventHandlerBase
+public class BeforeClearTempRecordEventHandler : EventHandlerBase
 {
     /// <summary>
     /// 填充数据，所有属性、字段的初始化工作可以在这里完成
     /// </summary>
-    public UncertainLearnEventHandler Fill()
+    public BeforeClearTempRecordEventHandler Fill()
     {
         return this;
     }

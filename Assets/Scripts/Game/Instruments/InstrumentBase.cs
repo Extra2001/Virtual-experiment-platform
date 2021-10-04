@@ -34,6 +34,10 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 {
     public Vector3 Position = new Vector3();
     /// <summary>
+    /// 排序ID
+    /// </summary>
+    public virtual int ID { get; } = int.MaxValue;
+    /// <summary>
     /// 仪器名称
     /// </summary>
     public abstract string InstName { get; }

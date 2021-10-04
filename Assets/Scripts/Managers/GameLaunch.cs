@@ -49,7 +49,8 @@ public class GameLaunch : MonoBehaviour
         Initializer.InitializeExperiments();
         StartCoroutine(Initializer.PreLoadImages());
         // 加载仪器
-        foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract))
+        foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase))
+            .Where(x => !x.IsAbstract).OrderBy(x => x.CreateInstrumentInstance().ID))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
     }
     /// <summary>

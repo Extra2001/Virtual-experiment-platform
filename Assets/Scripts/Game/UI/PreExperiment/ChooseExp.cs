@@ -13,12 +13,6 @@ public class ChooseExp : HTBehaviour
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
-            if (RecordManager.tempRecord.showedInstrument != null
-            && RecordManager.tempRecord.showedInstrument.instrumentType != null)
-                Main.m_Entity.HideEntity(GameManager.Instance.CurrentInstrument);
-            CreateObject.HideCurrent();
-            CreateInstrument.HideCurrent();
-            RecordManager.ClearTempRecord();
             Initializer.GetPresetRecord(expName).Load();
         });
     }

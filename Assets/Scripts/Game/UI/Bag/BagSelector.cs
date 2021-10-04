@@ -146,14 +146,9 @@ public class BagSelector : HTBehaviour
 
         byte[] bytes = tex.EncodeToPNG();
         string filepath = path.Replace(".obj", ".png");
-        FileStream file = File.Open(filepath, FileMode.Create);
-        BinaryWriter writer = new BinaryWriter(file);
-        writer.Write(bytes);
-        file.Close();
-        writer.Close();
+        File.WriteAllBytes(filepath, bytes);
         PreviewImageCamera.GetComponent<Camera>().enabled = false;
         Destroy(tex);
-
     }
 
     public void DeleteObject(BagItem bagItem)
@@ -181,7 +176,9 @@ public class BagSelector : HTBehaviour
     private void LoadInstruments()
     {
         ClearBagMenu();
-        var list = CommonTools.GetSubClassNames(typeof(InstrumentBase)).Where(x => !x.IsAbstract).ToList();
+        var list = CommonTools.GetSubClassNames(typeof(InstrumentBase))
+            .Where(x => !x.IsAbstract)
+            .OrderBy(x => x.CreateInstrumentInstance().ID).ToList();
         var instances = new List<BagItem>();
         foreach (var item in list)
         {

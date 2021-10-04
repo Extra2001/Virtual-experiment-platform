@@ -76,18 +76,15 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         firstPersonController = GameObject.Find("FPSController")
             .GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         FPSable = false;
-        if (ProcedureStack.Count == 0)
-            ProcedureStack.Add(typeof(StartProcedure));
+        Main.m_Event.Subscribe<BeforeClearTempRecordEventHandler>(ClearObjects);
     }
 
     public void ClearAll()
     {
         Storage.DeleteAll();
         RecordManager.ClearTempRecord();
-        Main.m_Procedure.SwitchProcedure<ChooseExpProcedure>();
+        Main.m_Procedure.SwitchProcedure<StartProcedure>();
         ProcedureStack.Clear();
-        if (!ProcedureStack.Last().Name.Equals(typeof(StartProcedure).Name))
-            ProcedureStack.Add(typeof(StartProcedure));
     }
 
     /// <summary>
@@ -99,6 +96,12 @@ public class GameManager : SingletonBehaviorManager<GameManager>
         Storage.CommonStorage.SetStorage("objectsModels", _objectsModels);
     }
     #endregion
+
+    public void ClearObjects()
+    {
+        CreateObject.HideCurrent();
+        CreateInstrument.HideCurrent();
+    }
 
     public InstrumentBase GetInstrument(InstrumentInfoModel model)
     {

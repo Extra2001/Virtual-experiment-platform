@@ -9,6 +9,7 @@ using System.Linq;
 [EntityResource(null, null, "Instruments/Ruler/Ruler")]
 public class RulerInstrument : DirectMeasurementInstrumentBase
 {
+    public override int ID => 2;
     //override的变量和函数请参考基类InstrumentBase中的说明
     public override string InstName => "钢板尺"; 
 

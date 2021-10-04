@@ -10,6 +10,7 @@ using UnityEngine;
 [EntityResource(null, null, "Instruments/Caliper/Caliper")]
 public class CaliperInstrument : DirectMeasurementInstrumentBase
 {
+    public override int ID => 1;
     //仪器归类：直接测量仪器
     public override string InstName => "游标卡尺";
     //仪器名称字符

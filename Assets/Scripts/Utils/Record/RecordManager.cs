@@ -95,6 +95,7 @@ public static class RecordManager
     /// </summary>
     private static Record LoadToTempRecord(this Record record)
     {
+        Main.m_Event.Throw<BeforeClearTempRecordEventHandler>();
         Initializer.InitializeObjects();
         var ret = record.DeepCopy<Record>();
         ret.info = tempRecord.info;
@@ -107,7 +108,9 @@ public static class RecordManager
     /// </summary>
     public static void ClearTempRecord()
     {
+        Main.m_Event.Throw<BeforeClearTempRecordEventHandler>();
         _tempRecord = new Record(-2);
+        Main.m_Event.Throw<ChangeRecordEventHandler>();
     }
     /// <summary>
     /// 覆盖保存存档内容

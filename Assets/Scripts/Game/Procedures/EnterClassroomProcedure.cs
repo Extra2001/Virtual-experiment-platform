@@ -23,7 +23,7 @@ public class EnterClassroomProcedure : ProcedureBase
         MainThread.Instance.DelayAndRun(1000, () =>
         {
             var Position = NearChair.Instance.transform.position;
-            Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<Sitdown>().Fill(Position.x, Position.y, Position.z));
+            Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<SitdownEventHandler>().Fill(Position.x, Position.y, Position.z));
             GameManager.Instance.SwitchProcedure<OnChairProcedure>();
         });
         return;

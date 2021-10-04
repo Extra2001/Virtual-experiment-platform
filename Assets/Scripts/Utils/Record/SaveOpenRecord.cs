@@ -20,12 +20,7 @@ public class SaveOpenRecord
         if (info != null) record.info = info;
         var data = JsonConvert.SerializeObject(record);
         var encoded = new SymmetricMethod().Encrypto(data);
-        using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
-        {
-            StreamWriter streamWriter = new StreamWriter(fs);
-            streamWriter.Write(encoded);
-            streamWriter.Close();
-        }
+        File.WriteAllText(path, encoded);
         UIAPI.Instance.ShowTips($"已将存档保存至{path}，发送该文件给好友并导入程序。");
     }
 
@@ -33,14 +28,10 @@ public class SaveOpenRecord
     {
         var path = GetOpenFilePath();
         if (string.IsNullOrEmpty(path)) return;
-        string encoded;
+        
         try
         {
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                StreamReader sr = new StreamReader(fs);
-                encoded = sr.ReadToEnd();
-            }
+            string encoded = File.ReadAllText(path);
             var data = new SymmetricMethod().Decrypto(encoded);
             var info = RecordManager.Import(data);
             Main.m_Event.Throw<RecordUpdateEventHandler>();

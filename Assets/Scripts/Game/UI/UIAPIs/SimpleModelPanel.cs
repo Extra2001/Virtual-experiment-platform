@@ -53,6 +53,7 @@ public class SimpleModelPanel : HTBehaviour
 
     public void ShowModel(SimpleModel model)
     {
+        CancelInvoke();
         _RootPanel.SetFloatWithAnimation(this);
         simpleModel = model;
         _Title.text = model.Title;

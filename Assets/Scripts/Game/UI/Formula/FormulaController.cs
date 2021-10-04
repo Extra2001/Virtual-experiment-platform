@@ -7,13 +7,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
+using System.Collections;
 
 public partial class FormulaController : MonoBehaviour
 {
     /// <summary>
-    /// 获取实例对象
+    /// 全局开关
     /// </summary>
-    public static Dictionary<string, FormulaController> Instances { get; } = new Dictionary<string, FormulaController>();
+    public bool interactable
+    {
+        get => !EnabledMask.activeSelf;
+        set
+        {
+            EnabledMask.SetActive(!value);
+            Selector.SetActive(value);
+            MeasuredSelector.SetActive(value);
+            ComplexSelector.SetActive(value);
+        }
+    }
     /// <summary>
     /// 获取当前的表达式，如果未完成填写会抛异常
     /// </summary>
@@ -52,72 +63,44 @@ public partial class FormulaController : MonoBehaviour
     [SerializeField]
     private GameObject EnabledMask;
     #endregion
+
     private List<FormulaCell> showedCells = new List<FormulaCell>();
     private Button clickedButton;
     private FormulaCell clickedCell;
-    public bool interactable
-    {
-        get => !EnabledMask.activeSelf;
-        set
-        {
-            EnabledMask.SetActive(!value);
-            Selector.SetActive(value);
-            MeasuredSelector.SetActive(value);
-            ComplexSelector.SetActive(value);
-        }
-    }
 
     public delegate void OnSelectCell();
     public event OnSelectCell onSelectCell;
 
     private void Start()
     {
+        Mask.GetComponent<Button>().onClick.AddListener(HideSelector);
+        AddClickListener(baseCell, baseCell.Value1);
         CheckActive();
     }
     /// <summary>
-    /// 在公式选择器里选择节点
+    /// 初始化公式编辑器，此操作会清空其中所有内容。
     /// </summary>
-    /// <param name="cellName"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public FormulaCell SelectCell(string cellName, string value = "0", string name = "x")
+    public void Initialize()
     {
+        // 清空根节点下的替换内容
+        baseCell.ReplaceFlags.Clear();
+        baseCell.ReplaceFlags.Add(baseCell.Value1, "{0}");
+        baseCell.value = "{0}";
+        // 清空保存的已显示的方块
+        showedCells.Clear();
+        showedCells.Add(baseCell);
+        DeleteChild(baseCell, baseCell.Value1);
+        // 重新设置当前为根节点
+        clickedButton = baseCell.Value1;
+        clickedCell = baseCell;
+
+        // 隐藏一些乱七八糟的东西
+        Indicator.Hide();
         HideSelector();
-        var cell = GetCell(cellName);
-        DeleteChild(clickedButton.transform);
-        var hh = Instantiate(cell, clickedButton.gameObject.transform);
-        hh.thisGUID = clickedCell.ReplaceFlags[clickedButton];
-        hh.GenerateReplaceFlags();
-        showedCells.Add(hh);
-        if (hh.Value1 != null)
-            hh.Value1.onClick.AddListener(() =>
-            {
-                clickedButton = hh.Value1;
-                clickedCell = hh;
-                ShowSelector();
-            });
-        if (hh.Value2 != null)
-            hh.Value2.onClick.AddListener(() =>
-            {
-                clickedButton = hh.Value2;
-                clickedCell = hh;
-                ShowSelector();
-            });
-        if (cellName.Equals("Customize"))
-        {
-            hh.value = value;
-            if (hh.NameShower)
-                hh.NameShower.text = value;
-        }
-        else if (cellName.StartsWith("Statistic"))
-        {
-            hh.value = value;
-            if (hh.NameShower)
-                hh.NameShower.text = name;
-        }
-        RefreshContentSizeFitter(showedCells[0].gameObject);
-        onSelectCell?.Invoke();
-        return hh;
+        Selector.SetActive(true);
+        MeasuredSelector.SetActive(true);
+        ComplexSelector.SetActive(true);
+        Mask.SetActive(false);
     }
     /// <summary>
     /// 获取序列化后的公式节点
@@ -129,8 +112,7 @@ public partial class FormulaController : MonoBehaviour
         var ret = new List<FormulaNode>();
         foreach (var item in showedCells)
         {
-            if (!item)
-                continue;
+            if (!item) continue;
             var node = new FormulaNode()
             {
                 value = item.value,
@@ -153,17 +135,12 @@ public partial class FormulaController : MonoBehaviour
         if (nodes.Count == 0 || nodes[0].PrefabName != "Base")
         {
             Log.Error("加载的公式节点并非控制器产生");
-            Initialize();
+            return;
         }
         // 清空当前显示
-        for (int i = 1; i < showedCells.Count; i++)
-        {
-            try { Destroy(showedCells[i]?.gameObject); } catch { }
-        }
-        for (int i = 1; i < showedCells.Count; i++)
-            showedCells.RemoveAt(i);
-        RefreshContentSizeFitter(showedCells[0].gameObject);
-
+        Initialize();
+        if (baseCell.gameObject.activeInHierarchy) StartCoroutine(RefreshContentSize(baseCell.gameObject));
+        else RefreshContentSizeFitter(baseCell.gameObject);
         // 处理根节点
         var copyNodes = nodes.DeepCopy<List<FormulaNode>>();
         var baseNode = copyNodes[0];
@@ -179,55 +156,54 @@ public partial class FormulaController : MonoBehaviour
         RestoreCell(baseCell, copyNodes);
     }
     /// <summary>
-    /// 初始化公式编辑器，此操作会清空其中所有内容。
+    /// 在公式选择器里选择节点
     /// </summary>
-    public void Initialize()
+    /// <param name="cellName"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public FormulaCell SelectCell(string cellName, string value = "0", string name = "x")
     {
-        AddInstance();
-        baseCell.ReplaceFlags.Clear();
-        baseCell.ReplaceFlags.Add(baseCell.Value1, "{0}");
-        DeleteChild(baseCell.Value1.transform);
-        showedCells.Clear();
-        showedCells.Add(baseCell);
-        clickedButton = baseCell.Value1;
-        clickedCell = baseCell;
-        Indicator.Hide();
-        this.Mask.GetComponent<Button>().onClick.AddListener(() =>
-        {
-            HideSelector();
-        });
-        baseCell.Value1.onClick.AddListener(() =>
-        {
-            clickedButton = baseCell.Value1;
-            clickedCell = baseCell;
-            ShowSelector();
-        });
-
-        var v = Selector.transform.position;
-        v.y = 1000;
-        Selector.transform.position = v;
-
-        v = MeasuredSelector.transform.position;
-        v.y = -1000;
-        MeasuredSelector.transform.position = v;
-
-        v = ComplexSelector.transform.position;
-        v.y = -1000;
-        ComplexSelector.transform.position = v;
-
         HideSelector();
-        Selector.SetActive(true);
-        MeasuredSelector.SetActive(true);
-        ComplexSelector.SetActive(true);
+        var cell = GetCell(cellName);
+        DeleteChild(clickedCell, clickedButton);
+        var newCell = Instantiate(cell, clickedButton.gameObject.transform);
+        newCell.thisGUID = clickedCell.ReplaceFlags[clickedButton];
+        newCell.GenerateReplaceFlags();
+        showedCells.Add(newCell);
+        AddClickListener(newCell, newCell.Value1);
+        AddClickListener(newCell, newCell.Value2);
+        if (cellName.Equals("Customize"))
+        {
+            newCell.value = value;
+            if (newCell.NameShower) newCell.NameShower.text = value;
+        }
+        else if (cellName.StartsWith("Statistic"))
+        {
+            newCell.value = value;
+            if (newCell.NameShower) newCell.NameShower.text = name;
+        }
+        if (baseCell.gameObject.activeInHierarchy) StartCoroutine(RefreshContentSize(baseCell.gameObject));
+        else RefreshContentSizeFitter(baseCell.gameObject);
+        onSelectCell?.Invoke();
+        return newCell;
+    }
 
-        Mask.SetActive(false);
+    private void AddClickListener(FormulaCell formulaCell, Button button)
+    {
+        if (button != null)
+            button.onClick.AddListener(() =>
+            {
+                clickedButton = button;
+                clickedCell = formulaCell;
+                ShowSelector();
+            });
     }
     /// <summary>
     /// 检查节点是否存在
     /// </summary>
     private void CheckActive()
     {
-        if (showedCells.Count == 0)
+        if (showedCells.Count == 0) 
             Initialize();
     }
     /// <summary>
@@ -261,31 +237,33 @@ public partial class FormulaController : MonoBehaviour
     private void ShowSelector()
     {
         Mask.SetActive(true);
-        var v = Selector.transform.position;
-        v.x = 0;
-        Selector.transform.position = v;
         UIShowHideHelper.ShowFromUp(Selector, 0);
         if (Main.m_Procedure.CurrentProcedure is MeasuredDataProcessProcedure)
         {
+            // 获取方块的值
             var procedure = Main.m_Procedure.CurrentProcedure as MeasuredDataProcessProcedure;
             foreach (var item in MeasuredSelector.GetComponentsInChildren<FormulaSelectorCell>(true))
                 item.SetSelectorName(procedure.GetStatisticValue(MeasuredStatisticValue.Symbol));
+            // 逐差、线性回归的独特方法
             MeasuredDifference.SetActive(false);
             MeasuredRegression.SetActive(false);
             if (GameManager.Instance.CurrentQuantity.processMethod == 2)
                 MeasuredDifference.SetActive(true);
             else if (GameManager.Instance.CurrentQuantity.processMethod == 3)
                 MeasuredRegression.SetActive(true);
+            // 刷新并显示
             RefreshContentSizeFitter(MeasuredSelector.gameObject);
             UIShowHideHelper.ShowFromButtom(MeasuredSelector, 0);
         }
         else if (Main.m_Procedure.CurrentProcedure is ComplexDataProcessProcedure)
         {
+            // 获取方块的值
             var procedure = Main.m_Procedure.CurrentProcedure as ComplexDataProcessProcedure;
             for (int i = 0; i < ComplexPanelRoot.childCount; i++)
                 Destroy(ComplexPanelRoot.GetChild(i).gameObject);
             foreach (var item in procedure.GetQuantitiesName())
                 Instantiate(ComplexPanel, ComplexPanelRoot).GetComponent<FormulaComplexSelectorCell>().Show(item, this);
+            // 刷新并显示
             RefreshContentSizeFitter(ComplexPanelRoot.gameObject);
             UIShowHideHelper.ShowFromButtom(ComplexSelector, 0);
         }
@@ -297,10 +275,8 @@ public partial class FormulaController : MonoBehaviour
     {
         Mask.SetActive(false);
         UIShowHideHelper.HideToUp(Selector);
-        if (Main.m_Procedure.CurrentProcedure is MeasuredDataProcessProcedure)
-            UIShowHideHelper.HideToButtom(MeasuredSelector);
-        else if (Main.m_Procedure.CurrentProcedure is ComplexDataProcessProcedure)
-            UIShowHideHelper.HideToButtom(ComplexSelector);
+        UIShowHideHelper.HideToButtom(MeasuredSelector);
+        UIShowHideHelper.HideToButtom(ComplexSelector);
     }
     /// <summary>
     /// 获取方块对象
@@ -308,20 +284,36 @@ public partial class FormulaController : MonoBehaviour
     private FormulaCell GetCell(string cellName)
     {
         var obj = Resources.Load<GameObject>($"UI/Formula/Cells/{cellName}");
-        var ret = obj.GetComponent<FormulaCell>();
-        return ret;
+        return obj.GetComponent<FormulaCell>();
     }
     /// <summary>
     /// 删除该节点从属的所有节点
     /// </summary>
-    private void DeleteChild(Transform cell)
+    private void DeleteChild(FormulaCell cell, Button button)
     {
-        int childCnt = cell.childCount;
-        var hh = cell.gameObject.GetComponentsInChildren<FormulaCell>(true);
-        for (int i = 1; i < hh.Length; i++)
-            showedCells.Remove(hh[i]);
+        int childCnt = button.gameObject.transform.childCount;
+        var cells = button.gameObject.GetComponentsInChildren<FormulaCell>(true)
+            .Where(x => x.thisGUID != cell.thisGUID).ToList();
+        // 从记录中删除
+        foreach (var item in cells)
+        {
+            var find = showedCells.Find(x => x.thisGUID.Equals(item.thisGUID));
+            if (find != null) showedCells.Remove(find);
+        }
+        // 销毁GameObject
         for (int i = 0; i < childCnt; i++)
-            Destroy(cell.transform.GetChild(i).gameObject);
+            Destroy(button.transform.GetChild(i).gameObject);
+        if (baseCell.gameObject.activeInHierarchy) StartCoroutine(RefreshContentSize(baseCell.gameObject));
+        else RefreshContentSizeFitter(baseCell.gameObject);
+    }
+    private IEnumerator RefreshContentSize(GameObject baseObject)
+    {
+        RefreshContentSizeFitter(baseObject);
+        yield return 1;
+        RefreshContentSizeFitter(baseObject);
+        yield return 1;
+        RefreshContentSizeFitter(baseObject);
+        yield return 1;
     }
     /// <summary>
     /// 刷新UI适应布局
@@ -332,16 +324,16 @@ public partial class FormulaController : MonoBehaviour
         var list = baseObject.GetComponentsInChildren<ContentSizeFitter>();
         for (int i = 0; i < list.Length; i++)
             LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
         for (int i = list.Length - 1; i >= 0; i--)
             LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
         for (int i = 0; i < list.Length; i++)
             LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
         for (int i = list.Length - 1; i >= 0; i--)
             LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        LayoutRebuilder.ForceRebuildLayoutImmediate(showedCells[0].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
     }
     /// <summary>
     /// 递归获取当前表达式
@@ -356,27 +348,5 @@ public partial class FormulaController : MonoBehaviour
             value = value.Replace(item.Value, $"({GetExpression(item.Value)})");
         }
         return value;
-    }
-    
-    /// <summary>
-    /// 添加至所有FormulaInstance
-    /// </summary>
-    private void AddInstance()
-    {
-        if (string.IsNullOrEmpty(InstanceName))
-        {
-            for (int i = 0; string.IsNullOrEmpty(InstanceName); i++)
-                if (!Instances.ContainsKey(i.ToString()))
-                    InstanceName = i.ToString();
-        }
-        Instances.Remove(InstanceName);
-        Instances.Add(InstanceName, this);
-
-        foreach (var item in Selector.GetComponentsInChildren<FormulaSelectorCell>(true))
-            item.FormulaControllerInstance = this;
-    }
-    private void OnDestroy()
-    {
-        Instances.Remove(InstanceName);
     }
 }

@@ -40,11 +40,13 @@ public class FormulaCell : HTBehaviour
     /// <returns></returns>
     public string GenerateReplaceFlags()
     {
-        ReplaceFlags.Clear();
-        if (Value1 != null)
-            ReplaceFlags.Add(Value1, "{0}");
-        if (Value2 != null)
-            ReplaceFlags.Add(Value2, "{1}");
+        if (ReplaceFlags.Count == 0)
+        {
+            if (Value1 != null)
+                ReplaceFlags.Add(Value1, "{0}");
+            if (Value2 != null)
+                ReplaceFlags.Add(Value2, "{1}");
+        }
         for (int i = 0; i < ReplaceFlags.Count; i++)
         {
             var item = ReplaceFlags.ElementAt(i);

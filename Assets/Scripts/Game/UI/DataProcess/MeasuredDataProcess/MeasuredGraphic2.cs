@@ -8,7 +8,8 @@ using XCharts;
 
 public class MeasuredGraphic2 : HTBehaviour
 {
-    public ScatterChart chart;
+    public ScatterChart linechart;
+    public ScatterChart pointchart;
 
     public InputField UserPoint1_X;
     public InputField UserPoint1_y;
@@ -24,24 +25,11 @@ public class MeasuredGraphic2 : HTBehaviour
 
     public void Show(QuantityModel quantity)
     {
-        chart.RemoveData();        
-        var LineSerie = chart.AddSerie(SerieType.Line);
-        var ScatterSerie = chart.AddSerie(SerieType.Scatter);
-        var UserScatterSerie = chart.AddSerie(SerieType.Scatter);
-
-        //—˘ Ω…Ë÷√
-        ScatterSerie.itemStyle.show = true;
-        ScatterSerie.itemStyle.color = Color.red;
-        ScatterSerie.symbol.size = 10;
-        ScatterSerie.symbol.selectedSize = 15;
-        LineSerie.itemStyle.show = true;
-        LineSerie.itemStyle.color = Color.black;
-        LineSerie.symbol.size = 1;
-        LineSerie.symbol.selectedSize = 1;
-        UserScatterSerie.itemStyle.show = true;
-        UserScatterSerie.itemStyle.color = Color.black;
-        UserScatterSerie.symbol.size = 10;
-        UserScatterSerie.symbol.selectedSize = 15;
+        linechart.ClearData();
+        pointchart.ClearData();
+        var LineSerie = linechart.series.list[0];
+        var ScatterSerie = pointchart.series.list[0];
+        var UserScatterSerie = pointchart.series.list[1];
 
 
         double[] point_x = new double[quantity.IndependentData.data.Count];
@@ -50,17 +38,25 @@ public class MeasuredGraphic2 : HTBehaviour
         {
             point_x[i] = double.Parse(quantity.IndependentData.data[i]);
             point_y[i] = double.Parse(quantity.MesuredData.data[i]);
-            ScatterSerie.AddXYData(point_x[i], point_y[i]);
         }
         string[] line_x, line_y;
-        
+
         (line_x, line_y) = StaticMethods.MakeLine(point_x, point_y);
         for (int i = 0; i < line_x.Length; i++)
         {
             LineSerie.AddXYData(double.Parse(line_x[i]), double.Parse(line_y[i]));
         }
 
-        
+        pointchart.xAxis0.min = linechart.xAxis0.min;
+        pointchart.xAxis0.max = linechart.xAxis0.max;
+        pointchart.yAxis0.min = linechart.yAxis0.min;
+        pointchart.yAxis0.max = linechart.yAxis0.max;
+
+        for (int i = 0; i < quantity.MesuredData.data.Count; i++)
+        {
+            ScatterSerie.AddXYData(point_x[i], point_y[i]);
+        }
+
     }
 
     private void userponit1listener(string input)
@@ -70,7 +66,7 @@ public class MeasuredGraphic2 : HTBehaviour
         {
             x = double.Parse(UserPoint1_X.text);
             y = double.Parse(input);
-            chart.series.list[chart.series.list.Count - 1].AddXYData(x, y);
+            pointchart.series.list[1].AddXYData(x, y);
         }
     }
 
@@ -81,7 +77,7 @@ public class MeasuredGraphic2 : HTBehaviour
         {
             x = double.Parse(UserPoint2_X.text);
             y = double.Parse(input);
-            chart.series.list[chart.series.list.Count - 1].AddXYData(x, y);
+            pointchart.series.list[1].AddXYData(x, y);
         }
     }
 

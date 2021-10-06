@@ -442,12 +442,17 @@ public static class StaticMethods {
         double a_unca = Math.Sqrt(x2av) * b_unca;
         return (b, a, r, b_unca, a_unca);
     }
-    public static (double[] x, double[] y) MakeLine(double[] x0, double[] y0) {
+    public static (string[] x,string[] y) MakeLine(double[] x0, double[] y0) {
         var res = LinearRegression(x0, y0);
         double xmin = x0.Min() - 1, xmax = x0.Max() + 1;
         double[] x = Generate.LinearSpaced(8 * x0.Length, xmin, xmax);
         double[] y = Generate.Map(x, (double k) => res.a + k * res.b);
-        return (x, y);
+        string[] xx = new string[x.Length], yy = new string[y.Length];
+        for(int i = 0;i < x.Length;i++) {
+            xx[i] = NumberFormat(x[i]);
+            yy[i] = NumberFormat(y[i]);
+        }
+        return (xx, yy);
     }
     public static (double avg, double ua, double u) CalcUncertain(IEnumerable<double> data, double ub) {
         //输入:测量数据data 仪器B类不确定度ub

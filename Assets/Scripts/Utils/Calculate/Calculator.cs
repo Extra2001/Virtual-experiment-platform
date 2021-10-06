@@ -997,6 +997,24 @@ public class CalcResult {
         result.status = flag ? "正确" : "错误";
         return result;
     }
+    public static CalcResult CheckGraphic(UserInputGraphic input)
+    {
+        var result = new CalcResult();
+        result.err = new QuantityError();
+        bool flag = true;
+        float change_rate = (input.point_2.y - input.point_1.y) / (input.point_2.x - input.point_1.y);
+        if (!((double)change_rate).AlmostEqual(input.change_rate))
+        {
+            flag = false;
+            result.err.average.right = false;
+            result.err.average.message = "其他错误";
+            result.err.average.latex = symexpr.Parse("k=(y_2-y_1)/(x_2-x_1)").ToLaTeX();
+        }
+        result.err.right = flag;
+        result.err.Title = $"检查{input.varname}的处理结果";
+        result.status = flag ? "正确" : "错误";
+        return result;
+    }
 }
 public class UserInputSuccessiveDifference {
     public string name;
@@ -1017,4 +1035,10 @@ public class UserInputLinearRegression {
 public class UserInputTable {
     public string varname;
     public CalcVariable data;
+}
+public class UserInputGraphic
+{
+    public string varname;
+    public Vector2 point_1, point_2;
+    public double change_rate;
 }

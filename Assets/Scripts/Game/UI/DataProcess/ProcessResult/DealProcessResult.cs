@@ -207,6 +207,24 @@ public class DealProcessResult : HTBehaviour
                     quantityErrors.Add(result.err);
                 }
             }
+            else if(item.processMethod == 4)
+            {
+                UserInputGraphic userInput = new UserInputGraphic()
+                {
+                    change_rate = double.Parse(item.change_rate),
+                    point_1 = item.point_1,
+                    point_2 = item.point_2,
+                    varname = item.Symbol
+                };
+                CalcResult result = CalcResult.CheckGraphic(userInput);
+                if (!result.err.right)
+                {
+                    //MeasureErrorFlag = true;
+                    if (!result.err.average.right)
+                        result.err.average.userformula = item.AverageExpression;
+                    quantityErrors.Add(result.err);
+                }
+            }
         }
 
         if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
@@ -214,36 +232,49 @@ public class DealProcessResult : HTBehaviour
         else if (quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
             RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
 
+        
+        CheckComplex();
+    }
+
+    private void CheckComplex()
+    {
+        //if (!MeasureErrorFlag)
+        //{
         CalcArgs calc_complex = new CalcArgs();
         foreach (var item in RecordManager.tempRecord.quantities)
         {
             calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
             calc_complex.Measure(item.Symbol, item.MesuredData.data.ToDouble().ToArray());
-            calc_complex.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
+            if(item.processMethod == 4)
+                calc_complex.MeasureUserUnput(item.Symbol, 0, 0, 0);
+            else calc_complex.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
         }
-        CheckComplex(calc_complex);
-    }
+        CalcResult complexresult;
+        if (RecordManager.tempRecord.quantities.Where(x => x.processMethod == 4).Any())
+        {
+            calc_complex.ComplexUserUnput(RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted(), 0);
+            complexresult = CalcArgs.CalculateComplexValueNoUncertain(RecordManager.tempRecord.stringExpression, calc_complex);
+        }
+        else
+        {
+            calc_complex.ComplexUserUnput(RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted(), RecordManager.tempRecord.complexQuantityModel.UncertainExpression.GetExpressionExecuted());
+            complexresult = CalcArgs.CalculateComplexValue(RecordManager.tempRecord.stringExpression, calc_complex);
+        }
 
-    private void CheckComplex(CalcArgs calc)
-    {
-        //if (!MeasureErrorFlag)
-        //{
-            calc.ComplexUserUnput(RecordManager.tempRecord.complexQuantityModel.AverageExpression.GetExpressionExecuted(), RecordManager.tempRecord.complexQuantityModel.UncertainExpression.GetExpressionExecuted());
-            var complexresult = CalcArgs.CalculateComplexValue(RecordManager.tempRecord.stringExpression, calc);
-            if (complexresult.status != "计算无误")
+        if (complexresult.status != "计算无误")
+        {
+            if (!complexresult.err.answer.right)
             {
-                if (!complexresult.err.answer.right)
-                {
-                    RecordManager.tempRecord.score.ComplexQuantityError += 1;
-                    complexresult.err.answer.userformula = RecordManager.tempRecord.complexQuantityModel.AverageExpression;
-                }
-                if (!complexresult.err.answerunc.right)
-                {
-                    RecordManager.tempRecord.score.ComplexQuantityError += 1;
-                    complexresult.err.answerunc.userformula = RecordManager.tempRecord.complexQuantityModel.UncertainExpression;
-                }
-                quantityErrors.Add(complexresult.err);
+                RecordManager.tempRecord.score.ComplexQuantityError += 1;
+                complexresult.err.answer.userformula = RecordManager.tempRecord.complexQuantityModel.AverageExpression;
             }
+            if (!complexresult.err.answerunc.right)
+            {
+                RecordManager.tempRecord.score.ComplexQuantityError += 1;
+                complexresult.err.answerunc.userformula = RecordManager.tempRecord.complexQuantityModel.UncertainExpression;
+            }
+            quantityErrors.Add(complexresult.err);
+        }
         //}
     }
 

@@ -31,6 +31,24 @@ public class ObjectsModel
 }
 
 [Serializable]
+public class MyVector2 : IEquatable<MyVector2>
+{
+    public float x { get; set; }
+    public float y { get; set; }
+
+    public bool Equals(MyVector2 other)
+    {
+        return x == other.x && y == other.y;
+    }
+
+    public static implicit operator Vector2(MyVector2 vector3)
+    {
+        return new Vector2(vector3.x, vector3.y);
+    }
+}
+
+
+[Serializable]
 public class MyVector3 : IEquatable<MyVector3>
 {
     public float x { get; set; }

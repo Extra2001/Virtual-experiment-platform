@@ -22,11 +22,13 @@ public abstract class IndirectMeasurementInstrumentBase : InstrumentBase
         infoItems["_Step"].GameObject.SetActive(true);
         infoItems["_StepAdd"].onValueChangedDouble.Add(step =>
         {
-            // 步进增加
+            infoItems["_MainValue"].GameObject.GetComponent<InputField>().text = (MainValue + step).ToString();
+            ShowValue(step + MainValue);
         });
         infoItems["_StepSub"].onValueChangedDouble.Add(step =>
         {
-            // 步进减少
+            infoItems["_MainValue"].GameObject.GetComponent<InputField>().text = (MainValue - step).ToString();
+            ShowValue(MainValue - step);
         });
         infoItems["_ConfirmButton"].onValueChanged.Add(() =>
         {
@@ -38,25 +40,13 @@ public abstract class IndirectMeasurementInstrumentBase : InstrumentBase
                     ShowCancel = false,
                     Message = "随机误差不能大于仪器误差限"
                 });
-            else if (mainValue > URV || mainValue < LRV)
-            {
-                UIAPI.Instance.ShowModel(new SimpleModel()
-                {
-                    ShowCancel = false,
-                    Message = "主值不能超过量程"
-                });
-            }
             else
             {
                 RandomErrorLimit = re;
-                MainValue = mainValue;
                 ShowValue(mainValue);
             }
-        }); 
-
+        });
     }
 
     public abstract void ReshowValue();//主值不变，随机误差变化重新生成读数
-
-
 }

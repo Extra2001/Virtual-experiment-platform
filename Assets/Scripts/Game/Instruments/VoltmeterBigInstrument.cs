@@ -34,9 +34,14 @@ public class VoltmeterBigInstrument : IndirectMeasurementInstrumentBase
     {
         throw new System.NotImplementedException();
     }
-    public override void ShowValue(double value)
+    public override bool ShowValue(double value)
     {
-        Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().ShowNum((float)value);
+        if (base.ShowValue(value))
+        {
+            Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().ShowNum((float)value);
+            return true;
+        }
+        return false;
     }
     public override void GenMainValueAndRandomErrorLimit()
     {

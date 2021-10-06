@@ -34,9 +34,14 @@ public class AmmeterBigInstrument : IndirectMeasurementInstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override void ShowValue(double value)
+    public override bool ShowValue(double value)
     {
-        Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
+        if (base.ShowValue(value))
+        {
+            Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
+            return true;
+        }
+        return false;
     }
 
     public override void GenMainValueAndRandomErrorLimit()
@@ -70,7 +75,6 @@ public class AmmeterBigInstrument : IndirectMeasurementInstrumentBase
         {
             ReshowValue();
         });
-
     }
 }
  

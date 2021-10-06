@@ -559,6 +559,9 @@ public static class StaticMethods {
             return (false, "有效数字没有对齐");
         }
     }
+    public static bool CheckLine(double x1,double y1,double x2,double y2,double userk) {
+        return userk.AlmostEqual((y2 - y1) / (x2 - x1));
+    }
 }
 public class CalcVariable {//2021.8.20
     public List<double> values;
@@ -802,7 +805,38 @@ public class CalcArgs {//一次计算
         return res;
     }
 
-
+    public static CalcResult CalculateComplexValueNoUncertain(string expression, CalcArgs argobj) {
+        (symexpr valexpr, _) = Calculate(expression, argobj);
+        QuantityError error = new QuantityError();
+        bool flag = false;
+        var res = new CalcResult();
+        StringBuilder answer = new StringBuilder();
+        Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + argobj.vars.Count);
+        foreach(var item in argobj.cons) {
+            vals[item.Key] = argobj.cons[item.Key];
+        }
+        foreach(var item in argobj.vars) {
+            var u = StaticMethods.Average(argobj.vars[item.Key].values);
+            vals[item.Key] = u;
+        }
+        double val1 = valexpr.Evaluate(vals).RealValue;//对的val
+        if(!val1.AlmostEqual(argobj.userval)) {
+            flag = true;
+            error.answer.right = false;
+            error.answer.latex = valexpr.ToLaTeX();
+            if(true) {
+                answer.Append("主值应代入各物理量平均值");
+            }
+            error.answer.message = answer.ToString();
+        }
+        error.right = !flag;
+        error.Title = "合成量的检查";
+        res.status = flag ? "计算有误" : "计算无误";
+        res.err = error;
+        //res.calcexpr = valexpr;
+        //res.uncexpr = uncexpr;
+        return res;
+    }
     public static symexpr GetSymexpr(string expression) {
         return symexpr.Parse(expression);
     }

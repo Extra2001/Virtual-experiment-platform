@@ -44,6 +44,8 @@ public class InstrumentInfo : HTBehaviour
     private Button _StepAdd;
     [SerializeField]
     private Button _StepSub;
+    [SerializeField]
+    private Button _Righting;
 
     private Dictionary<string, IntrumentInfoItem> infoItem = new Dictionary<string, IntrumentInfoItem>();
     private InstrumentBase _instrument;
@@ -81,6 +83,7 @@ public class InstrumentInfo : HTBehaviour
     private void Initialize()
     {
         infoItem.Clear();
+        _Step.text = "1";
         foreach (var item in typeof(InstrumentInfo).GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
         {
             UIBehaviour gameobj = null;
@@ -97,7 +100,11 @@ public class InstrumentInfo : HTBehaviour
         _Mask.onClick.AddListener(() =>
         {
             foreach (var item in infoItem)
+            {
                 item.Value.onValueChanged.Clear();
+                item.Value.onValueChangedDouble.Clear();
+                item.Value.onValueChangedString.Clear();
+            }
             Hide();
         });
         _MainValue.onValueChanged.AddListener(x =>
@@ -125,10 +132,47 @@ public class InstrumentInfo : HTBehaviour
         {
             infoItem[nameof(_StepSub)].onValueChangedDouble.ForEach(y => y.Invoke(Step));
         });
+        _Righting.onClick.AddListener(RightIt);
         initialized = true;
     }
-}
 
+    public void RightIt()
+    {
+        var TarX = _instrument.Entity.transform.GetChild(0).rotation.eulerAngles.x;
+        var TarY = _instrument.Entity.transform.GetChild(0).rotation.eulerAngles.y;
+        var TarZ = _instrument.Entity.transform.GetChild(0).rotation.eulerAngles.z;
+        if (TarX < 45 || TarX > 315)
+            TarX = 0;
+        else if (TarX < 135 && TarX > 45)
+            TarX = 90;
+        else if (TarX < 225 && TarX > 135)
+            TarX = 180;
+        else if (TarX < 315 && TarX > 225)
+            TarX = 270;
+        if (TarY < 45 || TarY > 315)
+            TarY = 0;
+        else if (TarY < 135 && TarY > 45)
+            TarY = 90;
+        else if (TarY < 225 && TarY > 135)
+            TarY = 180;
+        else if (TarY < 315 && TarY > 225)
+            TarY = 270;
+        if (TarZ < 45 || TarZ > 315)
+            TarZ = 0;
+        else if (TarZ < 135 && TarZ > 45)
+            TarZ = 90;
+        else if (TarZ < 225 && TarZ > 135)
+            TarZ = 180;
+        else if (TarZ < 315 && TarZ > 225)
+            TarZ = 270;
+        _instrument.Entity.transform.GetChild(0).gameObject.transform
+            .DORotate(new Vector3(TarX, TarY, TarZ), 0.3f)
+            .SetEase(Ease.OutExpo);
+        MainThread.Instance.DelayAndRun(300, () =>
+            _instrument.Entity.transform.GetChild(0).rotation = new Vector3(TarX, TarY, TarZ).ToQuaternion());
+        Hide();
+    }
+}
 
 public class IntrumentInfoItem
 {

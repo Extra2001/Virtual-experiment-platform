@@ -34,9 +34,14 @@ public class AmmeterSmallInstrument : IndirectMeasurementInstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override void ShowValue(double value)
+    public override bool ShowValue(double value)
     {
-        Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
+        if (base.ShowValue(value))
+        {
+            Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
+            return true;
+        }
+        return false;
     }
 
     public override void GenMainValueAndRandomErrorLimit()
@@ -58,7 +63,6 @@ public class AmmeterSmallInstrument : IndirectMeasurementInstrumentBase
         ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
     }
 
-
     public override void ShowGameButton(List<GameButtonItem> buttonItems)
     {
         base.ShowGameButton(buttonItems);
@@ -70,7 +74,6 @@ public class AmmeterSmallInstrument : IndirectMeasurementInstrumentBase
         {
             ReshowValue();
         });
-
     }
 }
  

@@ -80,53 +80,53 @@ public class SelfRotate : HTBehaviour
         TarZ = this.transform.localEulerAngles.z;
         if (RTF.GetComponent<EditorObjectSelection>().Skode_Press() == 0)
         {
-            if (this.transform.localEulerAngles.x < 15 || this.transform.localEulerAngles.x > 375)
+            if (this.transform.localEulerAngles.x < 30 || this.transform.localEulerAngles.x > 330)
             {
                 TarX = 0;
             }
-            if (this.transform.localEulerAngles.x < 105 && this.transform.localEulerAngles.x > 75)
+            if (this.transform.localEulerAngles.x < 120 && this.transform.localEulerAngles.x > 60)
             {
                 TarX = 90;
             }
-            if (this.transform.localEulerAngles.x < 195 && this.transform.localEulerAngles.x > 165)
+            if (this.transform.localEulerAngles.x < 210 && this.transform.localEulerAngles.x > 150)
             {
                 TarX = 180;
             }
-            if (this.transform.localEulerAngles.x < 285 && this.transform.localEulerAngles.x > 255)
+            if (this.transform.localEulerAngles.x < 300 && this.transform.localEulerAngles.x > 240)
             {
                 TarX = 270;
             }
 
-            if (this.transform.localEulerAngles.y < 15 || this.transform.localEulerAngles.y > 375)
+            if (this.transform.localEulerAngles.y < 30 || this.transform.localEulerAngles.y > 330)
             {
                 TarY = 0;
             }
-            if (this.transform.localEulerAngles.y < 105 && this.transform.localEulerAngles.y > 75)
+            if (this.transform.localEulerAngles.y < 120 && this.transform.localEulerAngles.y > 60)
             {
                 TarY = 90;
             }
-            if (this.transform.localEulerAngles.y < 195 && this.transform.localEulerAngles.y > 165)
+            if (this.transform.localEulerAngles.y < 210 && this.transform.localEulerAngles.y > 150)
             {
                 TarY = 180;
             }
-            if (this.transform.localEulerAngles.y < 285 && this.transform.localEulerAngles.y > 255)
+            if (this.transform.localEulerAngles.y < 300 && this.transform.localEulerAngles.y > 240)
             {
                 TarY = 270;
             }
 
-            if (this.transform.localEulerAngles.z < 15 || this.transform.localEulerAngles.z > 375)
+            if (this.transform.localEulerAngles.z < 30 || this.transform.localEulerAngles.z > 330)
             {
                 TarZ = 0;
             }
-            if (this.transform.localEulerAngles.z < 105 && this.transform.localEulerAngles.z > 75)
+            if (this.transform.localEulerAngles.z < 120 && this.transform.localEulerAngles.z > 60)
             {
                 TarZ = 90;
             }
-            if (this.transform.localEulerAngles.z < 195 && this.transform.localEulerAngles.z > 165)
+            if (this.transform.localEulerAngles.z < 210 && this.transform.localEulerAngles.z > 150)
             {
                 TarZ = 180;
             }
-            if (this.transform.localEulerAngles.z < 285 && this.transform.localEulerAngles.z > 255)
+            if (this.transform.localEulerAngles.z < 300 && this.transform.localEulerAngles.z > 240)
             {
                 TarZ = 270;
             }

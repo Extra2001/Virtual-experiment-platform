@@ -49,6 +49,15 @@ public class Initializer
             new ObjectsModel()
             {
                 id = 0,
+                Name = "书本",
+                DetailMessage = "一本书，23页。若要加减一页请将步进间隔改为0.043。",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/book.png",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/book.obj"
+            },
+            new ObjectsModel()
+            {
+                id = 1,
                 Name = "立方体",
                 DetailMessage = "纯正立方体",
                 Integrated = true,
@@ -57,7 +66,16 @@ public class Initializer
             },
             new ObjectsModel()
             {
-                id = 1,
+                id = 2,
+                Name = "无盖盒",
+                DetailMessage = "具有内径和深度的盒子，可用于游标卡尺的内径及深度测量。",
+                Integrated = true,
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/box.png",
+                ResourcePath = $"Objects/Cube"
+            },
+            new ObjectsModel()
+            {
+                id = 3,
                 Name = "圆柱",
                 DetailMessage = "较高的一个圆柱",
                 Integrated = true,
@@ -66,7 +84,7 @@ public class Initializer
             },
             new ObjectsModel()
             {
-                id = 2,
+                id = 4,
                 Name = "圆柱",
                 DetailMessage = "较胖的一个圆柱",
                 Integrated = true,
@@ -75,7 +93,7 @@ public class Initializer
             },
             new ObjectsModel()
             {
-                id = 3,
+                id = 5,
                 Name = "圆环",
                 DetailMessage = "圆环",
                 Integrated = true,
@@ -84,7 +102,7 @@ public class Initializer
             },
             new ObjectsModel()
             {
-                id = 4,
+                id = 6,
                 Name = "圆筒",
                 DetailMessage = "带底的一个圆筒",
                 Integrated = true,
@@ -93,7 +111,7 @@ public class Initializer
             },
             new ObjectsModel()
             {
-                id = 5,
+                id = 7,
                 Name = "正四面体",
                 DetailMessage = "标准的正四面体",
                 Integrated = true,
@@ -102,7 +120,7 @@ public class Initializer
             },
             new ObjectsModel()
             {
-                id = 6,
+                id = 8,
                 Name = "杯子",
                 DetailMessage = "户外用杯子。可以用来测内径",
                 Integrated = true,
@@ -111,7 +129,7 @@ public class Initializer
             },
             new ObjectsModel()
             {
-                id = 7,
+                id = 9,
                 Name = "杯盖",
                 DetailMessage = "与杯子匹配的杯盖",
                 Integrated = true,
@@ -120,35 +138,20 @@ public class Initializer
             },
             new ObjectsModel()
             {
-                id = 8,
-                Name = "无盖盒",
-                DetailMessage = "具有内径和深度的盒子",
-                Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/box.png",
-                //ResourcePath = $"{Application.streamingAssetsPath}/Objects/object8.obj"
-                ResourcePath = $"Objects/Cube"
-            },
-
-            new ObjectsModel()
-            {
-                id = 9,
+                id = 10,
                 Name = "细丝",
                 DetailMessage = "极细的丝线",
-                 Integrated = true,
+                Integrated = true,
                 PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/st.png",
                 ResourcePath = $"{Application.streamingAssetsPath}/Objects/object12.obj"
             },
         });
 
         var preset = JsonConvert.SerializeObject(PresetObjects);
-        var now = JsonConvert.SerializeObject(GameManager.Instance.objectsModels.Where(x => x.Integrated).ToList());
 
-        if (!preset.Equals(now))
-        {
-            var imported = GameManager.Instance.objectsModels.Where(x => !x.Integrated).ToList();
-            GameManager.Instance.objectsModels = imported
-                .Concat(JsonConvert.DeserializeObject<List<ObjectsModel>>(preset)).ToList();
-        }
+        var imported = GameManager.Instance.objectsModels.Where(x => !x.Integrated).ToList();
+        GameManager.Instance.objectsModels = imported
+            .Concat(JsonConvert.DeserializeObject<List<ObjectsModel>>(preset)).ToList();
 
         foreach (var item in GameManager.Instance.objectsModels)
         {

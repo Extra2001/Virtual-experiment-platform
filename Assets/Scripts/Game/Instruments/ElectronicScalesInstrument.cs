@@ -36,17 +36,14 @@ public class ElectronicScalesInstrument : IndirectMeasurementInstrumentBase
     {
         throw new System.NotImplementedException();
     }
-    public override void ShowValue(double value)
+    public override bool ShowValue(double value)
     {
-        if (value < LRV)
+        if (base.ShowValue(value))
         {
-            value = LRV;
-        }else if (value > URV)
-        {
-            value = URV;
+            Entity.FindChildren("ElectronicScales_son").GetComponent<ElectronicScales_main>().ShowNum((float)value);
+            return true;
         }
-        Entity.FindChildren("ElectronicScales_son").GetComponent<ElectronicScales_main>().ShowNum((float)value);
-
+        return false;
     }
 
     public override void GenMainValueAndRandomErrorLimit()

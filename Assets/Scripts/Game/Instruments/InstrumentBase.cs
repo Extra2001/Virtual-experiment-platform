@@ -22,7 +22,7 @@ public interface IResetable
 
 public interface IShowValuable
 {
-    void ShowValue(double value);
+    bool ShowValue(double value);
 }
 
 public interface IShowInfoPanelable
@@ -92,8 +92,19 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// <returns>测量数据</returns>
     public abstract double GetMeasureResult();
 
-    public virtual void ShowValue(double value)
+    public virtual bool ShowValue(double value)
     {
+        if (value > URV || value < LRV)
+        {
+            UIAPI.Instance.ShowModel(new SimpleModel()
+            {
+                ShowCancel = false,
+                Message = "主值不能超过量程"
+            });
+            return false;
+        }
+        MainValue = value;
+        return true;
     }
 
     public virtual void GenMainValueAndRandomErrorLimit()//随机生成主值和误差
@@ -108,7 +119,6 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     {
         Entity.transform.GetChild(0).localPosition = initPosition;
         Entity.transform.GetChild(0).localRotation = initRotation;
-        MainValue = 0;
         RandomErrorLimit = 0;
         ShowValue(0);
     }
@@ -123,7 +133,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
 
     public virtual void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems)//右键菜单展示哪些信息
     {
-        var keys = new string[] { "_Name", "_LRV", "_URV", "_Unit", "_UnitSymbol", "_Mask", "_RootPanel" };
+        var keys = new string[] { "_Name", "_LRV", "_URV", "_Unit", "_UnitSymbol", "_Mask", "_RootPanel", "_Righting" };
         infoItems["_Name"].GameObject.GetComponent<Text>().text = InstName;
         infoItems["_LRV"].GameObject.GetComponent<Text>().text = LRV.ToString();
         infoItems["_URV"].GameObject.GetComponent<Text>().text = URV.ToString();
@@ -139,12 +149,9 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         }
     }
 
-    public virtual void ShowGameButton(List<GameButtonItem> buttonItems)//屏幕右下角快捷键按钮
+    public virtual void ShowGameButton(List<GameButtonItem> buttonItems)
     {
-        //buttonItems.Where(x => x.GameObject.name.Equals("AmmeterInstruction")).FirstOrDefault().OnClick.Add(() =>
-        //{
-        //    Debug.Log("...");
-        //});
+
     }
 
     public virtual (bool, string) CheckErrorLimit(string value)

@@ -222,44 +222,6 @@ public class DealProcessResult : HTBehaviour
             calc_complex.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
         }
         CheckComplex(calc_complex);
-
-        /*CalcArgs calc = new CalcArgs();
-        quantityErrors = new List<QuantityError>();
-
-        CheckMeasuredUncertainty(calc);
-        CheckMeasuredDifferenced(calc);
-        CheckMeasuredRegression(calc);
-
-        var measureresult = CalcArgs.CalculateMeasureValue(calc);
-
-        MeasureErrorFlag = false;
-        foreach (var item in measureresult.err)
-        {
-            if (!item.right)
-            {
-                if (!item.ua.right)
-                {
-                    item.ua.userformula = RecordManager.tempRecord.quantities.Where(x => x.Symbol.Equals(item.Symbol)).FirstOrDefault().UaExpression;
-                }
-                if (!item.ub.right)
-                {
-                    item.ub.userformula = RecordManager.tempRecord.quantities.Where(x => x.Symbol.Equals(item.Symbol)).FirstOrDefault().UbExpression;
-                }
-                if (!item.unc.right)
-                {
-                    item.unc.userformula = RecordManager.tempRecord.quantities.Where(x => x.Symbol.Equals(item.Symbol)).FirstOrDefault().ComplexExpression;
-                }
-                MeasureErrorFlag = true;
-                quantityErrors.Add(item);
-            }
-        }
-
-        if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
-            RecordManager.tempRecord.score.MeasureQuantityError = quantityErrors.Count;
-        else if (quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
-            RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
-
-        CheckComplex(calc);*/
     }
 
     private void CheckComplex(CalcArgs calc)

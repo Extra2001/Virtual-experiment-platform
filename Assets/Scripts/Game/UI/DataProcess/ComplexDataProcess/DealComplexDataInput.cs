@@ -4,6 +4,7 @@
 *************************************************************************************/
 using HT.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,8 @@ public class DealComplexDataInput : HTBehaviour
 
     public InputField MainValue;
     public InputField Uncertain;
+
+    public GameObject HidePanel;
 
     public Sprite[] Sprites = new Sprite[3];
     public FormulaController formulaController;
@@ -45,6 +48,10 @@ public class DealComplexDataInput : HTBehaviour
         RenderFormula();
         formulaController.Initialize();
         ComplexQuantityModel model = RecordManager.tempRecord.complexQuantityModel;
+
+        if (RecordManager.tempRecord.quantities.Where(x => x.processMethod == 4).Any())
+            HidePanel.SetActive(false);
+        else HidePanel.SetActive(true);
 
         if (model.AverageExpression != null && model.AverageExpression.Count != 0)
         {

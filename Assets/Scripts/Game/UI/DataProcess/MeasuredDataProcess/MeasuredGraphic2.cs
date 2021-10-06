@@ -52,12 +52,12 @@ public class MeasuredGraphic2 : HTBehaviour
             point_y[i] = double.Parse(quantity.MesuredData.data[i]);
             ScatterSerie.AddXYData(point_x[i], point_y[i]);
         }
-        double[] line_x, line_y;
+        string[] line_x, line_y;
         
         (line_x, line_y) = StaticMethods.MakeLine(point_x, point_y);
         for (int i = 0; i < line_x.Length; i++)
         {
-            LineSerie.AddXYData(line_x[i], line_y[i]);
+            LineSerie.AddXYData(double.Parse(line_x[i]), double.Parse(line_y[i]));
         }
 
         

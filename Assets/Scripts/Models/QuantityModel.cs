@@ -31,7 +31,7 @@ public class QuantityModel
 
     //图示法需要的内容
     public int Yaxis { get; set; } = 0; // 纵轴0为原始数据，1为自变量数据
-    public int graphicNextValue { get; set; } = 0; // 0为斜率，1为y轴截距，2为x轴截距
+    public int graphicNextValue { get; set; } = 0; // 0为斜率，1为x轴截距，2为y轴截距
     public string selfSymbol { get; set; }//自变量符号
     public string point1_x { get; set; }
     public string point1_y { get; set; }

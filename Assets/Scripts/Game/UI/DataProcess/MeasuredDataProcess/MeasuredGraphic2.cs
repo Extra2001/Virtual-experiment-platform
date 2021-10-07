@@ -14,6 +14,7 @@ public class MeasuredGraphic2 : HTBehaviour
     public ScatterChart linechart;
     //public ScatterChart pointchart;
 
+    public Text ChangeRateText;
     public InputField ChangeRate;
     public InputField UserPoint1_x;
     public InputField UserPoint1_y;
@@ -129,6 +130,19 @@ public class MeasuredGraphic2 : HTBehaviour
         if (quantity.change_rate != null)
         {
             ChangeRate.text = quantity.change_rate;
+        }
+
+        if (quantity.graphicNextValue == 0)
+        {
+            ChangeRateText.text = "–±¬ k";
+        }
+        else if(quantity.graphicNextValue == 1)
+        {
+            ChangeRateText.text = "x÷·Ωÿæ‡";
+        }
+        else if (quantity.graphicNextValue == 2)
+        {
+            ChangeRateText.text = "y÷·Ωÿæ‡";
         }
     }
 
@@ -263,6 +277,32 @@ public class MeasuredGraphic2 : HTBehaviour
 
     public bool CheckAll(bool silent = false)
     {
+        if (quantity.change_rate == null)
+        {
+            if (!silent)
+            {
+                string message = "";
+                if (quantity.graphicNextValue == 0)
+                {
+                    message = "ƒ„√ª”–ÃÓ–¥–±¬ ";
+                }
+                else if (quantity.graphicNextValue == 1)
+                {
+                    message = "ƒ„√ª”–ÃÓ–¥x÷·Ωÿæ‡";
+                }
+                else if (quantity.graphicNextValue == 2)
+                {
+                    message = "ƒ„√ª”–ÃÓ–¥y÷·Ωÿæ‡";
+                }
+                UIAPI.Instance.ShowModel(new SimpleModel()
+                {
+                    ShowCancel = false,
+                    Message = message
+                });
+            }
+
+            return false;
+        }
         return true;
     }
 }

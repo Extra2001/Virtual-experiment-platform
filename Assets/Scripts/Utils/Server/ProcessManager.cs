@@ -19,8 +19,6 @@ public static class ProcessManager
             Arguments = $@"{port}",
             CreateNoWindow = true,
             UseShellExecute = false,
-            RedirectStandardError = true,
-            RedirectStandardOutput = true,
         };
 
         process = Process.Start(startInfo);

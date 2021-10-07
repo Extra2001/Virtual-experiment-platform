@@ -33,9 +33,14 @@ public class ThermometerInstruction : IndirectMeasurementInstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override void ShowValue(double value)
+    public override bool ShowValue(double value)
     {
-        Entity.FindChildren("Thermometer_son").GetComponent<thermometer_main>().ShowNum((float)value);
+        if (base.ShowValue(value))
+        {
+            Entity.FindChildren("Thermometer_son").GetComponent<thermometer_main>().ShowNum((float)value);
+            return true;
+        }
+        return false;
     }
 
     public override void GenMainValueAndRandomErrorLimit()

@@ -102,7 +102,7 @@ public class GameButtonUILogic : UILogicResident
     }
     private void ShowButtons(InstrumentBase instrument)
     {
-        string[] names = new string[] { "PauseButton", "BagButton", "TableButton", "UncertaintyButton" };
+        string[] names = new string[] { "PauseButton", "BagButton", "TableButton", "UncertaintyButton", "OptionsButton" };
 
         gameButtonItems.ForEach(x =>
         {

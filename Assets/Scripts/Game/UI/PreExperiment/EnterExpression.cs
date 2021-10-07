@@ -93,7 +93,7 @@ public class EnterExpression : HTBehaviour
                 }
                 else if (item.processMethod == 3 || item.processMethod == 4)
                 {
-                    if (list.Contains("k_" + item.Symbol) || list.Contains("Δ" + item.Symbol))
+                    if (list.Contains(item.Symbol) || list.Contains("Δ" + item.Symbol))
                     {
                         Loading.SetActive(false);
                         error?.Invoke(false, $"物理量{item.Name}不能直接使用其测量平均值或变化量");

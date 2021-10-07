@@ -1,4 +1,5 @@
 using HT.Framework;
+using System.Linq;
 using UnityEngine.UI;
 
 public class NextBackButtonOnComplexDataProcess : HTBehaviour
@@ -18,17 +19,25 @@ public class NextBackButtonOnComplexDataProcess : HTBehaviour
         string reason;
         try
         {
-            (flag, reason) = StaticMethods.CheckUncertain(RecordManager.tempRecord.complexQuantityModel.AnswerAverage, RecordManager.tempRecord.complexQuantityModel.AnswerUncertain);
             var rec = RecordManager.tempRecord;
             if (rec.complexQuantityModel.AverageExpression == null || rec.complexQuantityModel.AverageExpression.Count == 0)
             {
                 ShowModel($"合成物理量的主值还未计算");
                 return;
             }
-            if (rec.complexQuantityModel.UncertainExpression == null || rec.complexQuantityModel.UncertainExpression.Count == 0)
+            if (RecordManager.tempRecord.quantities.Where(x => x.processMethod == 4).Any())
             {
-                ShowModel($"合成物理量的不确定度还未计算");
-                return;
+                flag = true;
+                reason = "";
+            }
+            else
+            {
+                if (rec.complexQuantityModel.UncertainExpression == null || rec.complexQuantityModel.UncertainExpression.Count == 0)
+                {
+                    ShowModel($"合成物理量的不确定度还未计算");
+                    return;
+                }
+                (flag, reason) = StaticMethods.CheckUncertain(RecordManager.tempRecord.complexQuantityModel.AnswerAverage, RecordManager.tempRecord.complexQuantityModel.AnswerUncertain);
             }
         }
         catch
@@ -36,7 +45,6 @@ public class NextBackButtonOnComplexDataProcess : HTBehaviour
             ShowModel($"结果最终表述有误，请重新输入");
             return;
         }
-
         if (flag)
         {
             GameManager.Instance.SwitchProcedure<ProcessResultProcedure>();

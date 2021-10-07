@@ -79,8 +79,8 @@ public class ObjectValue : HTBehaviour
         set => gameObject.GetComponentsInChildren<Rigidbody>().Foreach((x, y) =>
         {
             x.useGravity = value;
-            x.isKinematic = !value;
-            x.GetComponent<Collider>().isTrigger = !value;
+            //x.isKinematic = !value;
+            //x.GetComponent<Collider>().isTrigger = !value;
         });
     }
 

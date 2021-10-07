@@ -442,12 +442,17 @@ public static class StaticMethods {
         double a_unca = Math.Sqrt(x2av) * b_unca;
         return (b, a, r, b_unca, a_unca);
     }
-    public static (double[] x, double[] y) MakeLine(double[] x0, double[] y0) {
+    public static (string[] x,string[] y) MakeLine(double[] x0, double[] y0) {
         var res = LinearRegression(x0, y0);
         double xmin = x0.Min() - 1, xmax = x0.Max() + 1;
         double[] x = Generate.LinearSpaced(8 * x0.Length, xmin, xmax);
         double[] y = Generate.Map(x, (double k) => res.a + k * res.b);
-        return (x, y);
+        string[] xx = new string[x.Length], yy = new string[y.Length];
+        for(int i = 0;i < x.Length;i++) {
+            xx[i] = NumberFormat(x[i]);
+            yy[i] = NumberFormat(y[i]);
+        }
+        return (xx, yy);
     }
     public static (double avg, double ua, double u) CalcUncertain(IEnumerable<double> data, double ub) {
         //输入:测量数据data 仪器B类不确定度ub
@@ -558,6 +563,9 @@ public static class StaticMethods {
             }
             return (false, "有效数字没有对齐");
         }
+    }
+    public static bool CheckLine(double x1,double y1,double x2,double y2,double userk) {
+        return userk.AlmostEqual((y2 - y1) / (x2 - x1));
     }
 }
 public class CalcVariable {//2021.8.20
@@ -802,7 +810,38 @@ public class CalcArgs {//一次计算
         return res;
     }
 
-
+    public static CalcResult CalculateComplexValueNoUncertain(string expression, CalcArgs argobj) {
+        (symexpr valexpr, _) = Calculate(expression, argobj);
+        QuantityError error = new QuantityError();
+        bool flag = false;
+        var res = new CalcResult();
+        StringBuilder answer = new StringBuilder();
+        Dictionary<string, FloatingPoint> vals = new Dictionary<string, FloatingPoint>(argobj.cons.Count + argobj.vars.Count);
+        foreach(var item in argobj.cons) {
+            vals[item.Key] = argobj.cons[item.Key];
+        }
+        foreach(var item in argobj.vars) {
+            var u = StaticMethods.Average(argobj.vars[item.Key].values);
+            vals[item.Key] = u;
+        }
+        double val1 = valexpr.Evaluate(vals).RealValue;//对的val
+        if(!val1.AlmostEqual(argobj.userval)) {
+            flag = true;
+            error.answer.right = false;
+            error.answer.latex = valexpr.ToLaTeX();
+            if(true) {
+                answer.Append("主值应代入各物理量平均值");
+            }
+            error.answer.message = answer.ToString();
+        }
+        error.right = !flag;
+        error.Title = "合成量的检查";
+        res.status = flag ? "计算有误" : "计算无误";
+        res.err = error;
+        //res.calcexpr = valexpr;
+        //res.uncexpr = uncexpr;
+        return res;
+    }
     public static symexpr GetSymexpr(string expression) {
         return symexpr.Parse(expression);
     }
@@ -963,6 +1002,24 @@ public class CalcResult {
         result.status = flag ? "正确" : "错误";
         return result;
     }
+    public static CalcResult CheckGraphic(UserInputGraphic input)
+    {
+        var result = new CalcResult();
+        result.err = new QuantityError();
+        bool flag = true;
+        float change_rate = (input.point_2.y - input.point_1.y) / (input.point_2.x - input.point_1.y);
+        if (!((double)change_rate).AlmostEqual(input.change_rate))
+        {
+            flag = false;
+            result.err.average.right = false;
+            result.err.average.message = "其他错误";
+            result.err.average.latex = symexpr.Parse("k=(y_2-y_1)/(x_2-x_1)").ToLaTeX();
+        }
+        result.err.right = flag;
+        result.err.Title = $"检查{input.varname}的处理结果";
+        result.status = flag ? "正确" : "错误";
+        return result;
+    }
 }
 public class UserInputSuccessiveDifference {
     public string name;
@@ -983,4 +1040,10 @@ public class UserInputLinearRegression {
 public class UserInputTable {
     public string varname;
     public CalcVariable data;
+}
+public class UserInputGraphic
+{
+    public string varname;
+    public Vector2 point_1, point_2;
+    public double change_rate;
 }

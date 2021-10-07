@@ -1007,8 +1007,8 @@ public class CalcResult {
         var result = new CalcResult();
         result.err = new QuantityError();
         bool flag = true;
-        float change_rate = (input.point_2.y - input.point_1.y) / (input.point_2.x - input.point_1.y);
-        if (!((double)change_rate).AlmostEqual(input.change_rate))
+        double change_rate = (input.point2_y - input.point1_y) / (input.point2_x - input.point1_y);
+        if (!(change_rate).AlmostEqual(input.change_rate))
         {
             flag = false;
             result.err.average.right = false;
@@ -1044,6 +1044,6 @@ public class UserInputTable {
 public class UserInputGraphic
 {
     public string varname;
-    public Vector2 point_1, point_2;
+    public double point1_x, point1_y, point2_x, point2_y;
     public double change_rate;
 }

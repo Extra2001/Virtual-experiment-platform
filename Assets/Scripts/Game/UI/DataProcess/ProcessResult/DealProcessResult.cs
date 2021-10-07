@@ -212,8 +212,10 @@ public class DealProcessResult : HTBehaviour
                 UserInputGraphic userInput = new UserInputGraphic()
                 {
                     change_rate = double.Parse(item.change_rate),
-                    point_1 = item.point_1,
-                    point_2 = item.point_2,
+                    point1_x = double.Parse(item.point1_x),
+                    point1_y = double.Parse(item.point1_y),
+                    point2_x = double.Parse(item.point2_x),
+                    point2_y = double.Parse(item.point1_y),
                     varname = item.Symbol
                 };
                 CalcResult result = CalcResult.CheckGraphic(userInput);

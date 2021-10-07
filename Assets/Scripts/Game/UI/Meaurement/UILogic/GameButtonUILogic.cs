@@ -13,6 +13,7 @@ using System;
 public class GameButtonUILogic : UILogicResident
 {
     public List<GameButtonItem> gameButtonItems = new List<GameButtonItem>();
+    private bool inGameShowTips = true;
     private bool showTips
     {
         get => Storage.CommonStorage.GetStorage<ShowTips>("showTips").showTips;
@@ -85,7 +86,7 @@ public class GameButtonUILogic : UILogicResident
         CreateObject.CreateRecord();
         CreateInstrument.CreateRecord();
         UIAPI.Instance.HideLoading();
-        if (showTips)
+        if (showTips && inGameShowTips)
         {
             MainThread.Instance.DelayAndRun(3000, () =>
                 UIAPI.Instance.ShowModel(new SimpleModel()
@@ -97,6 +98,7 @@ public class GameButtonUILogic : UILogicResident
                     ConfirmText = "不再显示",
                     ConfirmAction = () => showTips = false
                 }));
+            inGameShowTips = false;
         }
     }
 

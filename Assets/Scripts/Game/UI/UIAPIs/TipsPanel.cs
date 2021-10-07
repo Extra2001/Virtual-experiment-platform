@@ -37,8 +37,8 @@ public class TipsPanel : HTBehaviour
     {
         _Title.text = title;
         _Content.text = content;
-        
-        _RootPanel.rectTransform().sizeDelta = new Vector2(width, 150);
+        var y = _RootPanel.rectTransform().sizeDelta.y;
+        _RootPanel.rectTransform().sizeDelta = new Vector2(width, y);
         _RootPanel.SetFloatWithAnimation(this);
     }
 }

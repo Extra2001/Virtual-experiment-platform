@@ -57,7 +57,7 @@ public class MeasuredGraphic1 : HTBehaviour
 
             return false;
         }
-        if (quantity.selfSymbol == null)
+        if (quantity.selfSymbol == "")
         {
             if (!silent)
             {

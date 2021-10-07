@@ -277,7 +277,7 @@ public class MeasuredGraphic2 : HTBehaviour
 
     public bool CheckAll(bool silent = false)
     {
-        if (quantity.change_rate == null)
+        if (quantity.change_rate == "")
         {
             if (!silent)
             {

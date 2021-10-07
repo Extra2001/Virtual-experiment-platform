@@ -1011,9 +1011,9 @@ public class CalcResult {
         if (!(change_rate).AlmostEqual(input.change_rate))
         {
             flag = false;
-            result.err.average.right = false;
-            result.err.average.message = "其他错误";
-            result.err.average.latex = symexpr.Parse("k=(y_2-y_1)/(x_2-x_1)").ToLaTeX();
+            result.err.k.right = false;
+            result.err.k.message = "其他错误";
+            result.err.k.latex = symexpr.Parse("k=(y_2-y_1)/(x_2-x_1)").ToLaTeX();
         }
         result.err.right = flag;
         result.err.Title = $"检查{input.varname}的处理结果";

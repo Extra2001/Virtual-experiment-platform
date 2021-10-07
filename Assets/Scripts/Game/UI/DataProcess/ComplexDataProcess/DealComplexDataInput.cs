@@ -47,6 +47,7 @@ public class DealComplexDataInput : HTBehaviour
     {
         RenderFormula();
         formulaController.Initialize();
+        formulaController.gameObject.SetActive(false);
         ComplexQuantityModel model = RecordManager.tempRecord.complexQuantityModel;
 
         if (RecordManager.tempRecord.quantities.Where(x => x.processMethod == 4).Any())
@@ -88,6 +89,11 @@ public class DealComplexDataInput : HTBehaviour
 
     protected void ShowFormulaEditor(Button button, Text text, List<FormulaNode> nodes)
     {
+        if (formulaController.gameObject.activeInHierarchy && currentButton == button)
+        {
+            formulaController.gameObject.SetActive(false);
+            return;
+        }
         currentButton = button;
         currentValue = text;
         currentNodes = nodes;

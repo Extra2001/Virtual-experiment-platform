@@ -13,6 +13,11 @@ using System;
 public class GameButtonUILogic : UILogicResident
 {
     public List<GameButtonItem> gameButtonItems = new List<GameButtonItem>();
+    private bool showTips
+    {
+        get => Storage.CommonStorage.GetStorage<ShowTips>("showTips").showTips;
+        set => Storage.CommonStorage.SetStorage("showTips", new ShowTips() { showTips = value });
+    }
 
     /// <summary>
     /// 初始化
@@ -80,6 +85,19 @@ public class GameButtonUILogic : UILogicResident
         CreateObject.CreateRecord();
         CreateInstrument.CreateRecord();
         UIAPI.Instance.HideLoading();
+        if (showTips)
+        {
+            MainThread.Instance.DelayAndRun(3000, () =>
+                UIAPI.Instance.ShowModel(new SimpleModel()
+                {
+                    ShowCancel = false,
+                    Message = "按“背包”或B键选择需要的仪器和被测物体。\n\n" +
+                    "鼠标左键单击物体即可移动物体，此时按E键切换为旋转模式，按Q键切换为平移模式。\n\n" +
+                    "右键物体可打开物体菜单。可以一键扶正物体，调整仪器参数。",
+                    ConfirmText = "不再显示",
+                    ConfirmAction = () => showTips = false
+                }));
+        }
     }
 
     /// <summary>
@@ -117,6 +135,10 @@ public class GameButtonUILogic : UILogicResident
             if (item.OnClick.Count != 0 || item.OnTap.Count != 0)
                 item.GameObject.gameObject.SetActive(true);
     }
+}
+public class ShowTips
+{
+    public bool showTips = true;
 }
 
 public class GameButtonItem

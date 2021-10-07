@@ -21,7 +21,11 @@ public class SimpleModelPanel : HTBehaviour
 
     void Start()
     {
-        _Mask.onClick.AddListener(Hide);
+        _Mask.onClick.AddListener(() =>
+        {
+            Hide();
+            simpleModel.CancelAction?.Invoke();
+        });
         _Confirm1.onClick.AddListener(() =>
         {
             Hide();

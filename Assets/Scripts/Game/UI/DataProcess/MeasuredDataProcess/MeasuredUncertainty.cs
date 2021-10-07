@@ -136,6 +136,11 @@ public class MeasuredUncertainty : HTBehaviour
 
     protected void ShowFormulaEditor(Button button, Text text, List<FormulaNode> nodes)
     {
+        if (formulaController.gameObject.activeInHierarchy && currentButton == button)
+        {
+            formulaController.gameObject.SetActive(false);
+            return;
+        }
         currentButton = button;
         currentValue = text;
         currentNodes = nodes;

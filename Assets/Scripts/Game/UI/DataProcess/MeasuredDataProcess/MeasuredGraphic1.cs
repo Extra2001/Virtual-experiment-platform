@@ -35,6 +35,14 @@ public class MeasuredGraphic1 : HTBehaviour
     public void Show(QuantityModel quantity)
     {
         this.quantity = quantity;
+        if (quantity.IndependentData == null) quantity.IndependentData = new DataColumnModel()
+        {
+            name = $"[自] 自变量 {quantity.Name}",
+            quantitySymbol = quantity.Symbol,
+            type = DataColumnType.Independent
+        };
+        yaxis.options[0].text = quantity.MesuredData.name;
+        yaxis.options[1].text = quantity.IndependentData.name;
         if (quantity.selfSymbol != null)
         {
             symbol.text = quantity.selfSymbol;

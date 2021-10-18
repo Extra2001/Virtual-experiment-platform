@@ -65,7 +65,7 @@ public class MeasuredGraphic1 : HTBehaviour
 
             return false;
         }
-        if (quantity.selfSymbol == "")
+        if (string.IsNullOrEmpty(quantity.selfSymbol))
         {
             if (!silent)
             {

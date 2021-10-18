@@ -415,6 +415,7 @@ public class DealProcessResult : HTBehaviour
             cell6.gameObject.SetActive(false);
             cell7.gameObject.SetActive(false);
             cell8.gameObject.SetActive(false);
+            cell9.gameObject.SetActive(false);
             double score = RecordManager.tempRecord.score.CalcScore();
             Title.text = "本次实验得分:" + string.Format("{0:F1}", score) + "/4.0";
             if (score - 4 == 0)

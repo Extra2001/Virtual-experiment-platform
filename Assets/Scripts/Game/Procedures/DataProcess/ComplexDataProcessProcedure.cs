@@ -44,6 +44,10 @@ public class ComplexDataProcessProcedure : ProcedureBase
                 result = item.BExpression.GetExpressionExecuted().ToString();
             else if (item.processMethod == 3 && item.nextValue == 1)
                 result = item.AExpression.GetExpressionExecuted().ToString();
+            else if (item.processMethod == 4 && item.nextValue == 0)
+                result = string.IsNullOrEmpty(item.change_rate) ? "0" : item.change_rate;
+            else if (item.processMethod == 4 && item.nextValue == 1)
+                result = string.IsNullOrEmpty(item.change_rate) ? "0" : item.change_rate;
         }
         else if (ComplexStatisticValue.Uncertain == valueKind)
         {

@@ -44,4 +44,5 @@ public class QuantityModel
     public List<FormulaNode> UaExpression { get; set; } = null;
     public List<FormulaNode> UbExpression { get; set; } = null;
     public List<FormulaNode> ComplexExpression { get; set; } = null;
+    public object Convert { get; internal set; }
 }

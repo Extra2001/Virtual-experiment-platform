@@ -1007,13 +1007,13 @@ public class CalcResult {
         var result = new CalcResult();
         result.err = new QuantityError();
         bool flag = true;
-        double change_rate = (input.point2_y - input.point1_y) / (input.point2_x - input.point1_y);
+        double change_rate = (input.point2_y - input.point1_y) / (input.point2_x - input.point1_x);
         if (!(change_rate).AlmostEqual(input.change_rate))
         {
             flag = false;
             result.err.k.right = false;
-            result.err.k.message = "其他错误";
-            result.err.k.latex = symexpr.Parse("k=(y_2-y_1)/(x_2-x_1)").ToLaTeX();
+            result.err.k.message = "选取的点是否间距过小";
+            result.err.k.latex = @"k=\frac{y_2-y_1}{x_2-x_1}";
         }
         result.err.right = flag;
         result.err.Title = $"检查{input.varname}的处理结果";

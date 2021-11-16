@@ -217,7 +217,7 @@ public class DealProcessResult : HTBehaviour
                     point1_x = double.Parse(item.point1_x),
                     point1_y = double.Parse(item.point1_y),
                     point2_x = double.Parse(item.point2_x),
-                    point2_y = double.Parse(item.point1_y),
+                    point2_y = double.Parse(item.point2_y),
                     varname = item.Symbol
                 };
                 CalcResult result = CalcResult.CheckGraphic(userInput);
@@ -278,6 +278,7 @@ public class DealProcessResult : HTBehaviour
                 complexresult.err.answerunc.userformula = RecordManager.tempRecord.complexQuantityModel.UncertainExpression;
             }
             quantityErrors.Add(complexresult.err);
+            RecordManager.tempRecord.score.ComplexQuantityError += 1;
         }
         //}
     }
@@ -429,11 +430,11 @@ public class DealProcessResult : HTBehaviour
                 {
                     SuccessMessage.text += "数据记录过程犯了" + RecordManager.tempRecord.score.DataRecordError + "次错误\n";
                 }
-                else if (RecordManager.tempRecord.score.MeasureQuantityError > 0)
+                if (RecordManager.tempRecord.score.MeasureQuantityError > 0)
                 {
                     SuccessMessage.text += "直接测量量数据处理过程犯了" + RecordManager.tempRecord.score.MeasureQuantityError + "次错误\n";
                 }
-                else if (RecordManager.tempRecord.score.ComplexQuantityError > 0)
+                if (RecordManager.tempRecord.score.ComplexQuantityError > 0)
                 {
                     SuccessMessage.text += "合成量数据处理过程犯了" + RecordManager.tempRecord.score.ComplexQuantityError + "次错误\n";
                 }

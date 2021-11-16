@@ -227,7 +227,7 @@ public class EnterExpression : HTBehaviour
             Dictionary<string, string> replacement = new Dictionary<string, string>();
             foreach (var item in factors)
             {
-                string guid = Guid.NewGuid().ToString();
+                string guid = GetUniqueIDTO22();
                 replacement.Add(guid, item);
                 expr = expr.Replace(item, guid);
             }
@@ -248,5 +248,14 @@ public class EnterExpression : HTBehaviour
         }
         catch { }
         return expr;
+    }
+
+    public static string GetUniqueIDTO22()
+    {
+        System.Threading.Thread.Sleep(1);
+        //±£Ö¤yyyyMMddHHmmssffffÎ¨Ò»
+        System.Random rd = new System.Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray(), 0));
+        string strUniqueID = DateTime.Now.ToString("yyyyMMddHHmmssffff") + rd.Next(1000, 9999);
+        return strUniqueID;
     }
 }

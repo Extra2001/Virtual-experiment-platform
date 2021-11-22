@@ -709,7 +709,7 @@ namespace HT.Framework
         /// </summary>
         public void NavigateBackTemporaryUI()
         {
-            if (_temporaryUIStack.Count == 0 && _currentOverlayTemporaryUI != null)
+            if (_temporaryUIStack.Count == 0 || _currentOverlayTemporaryUI != null)
                 CloseUI(_currentOverlayTemporaryUI.GetType());
             else
             {

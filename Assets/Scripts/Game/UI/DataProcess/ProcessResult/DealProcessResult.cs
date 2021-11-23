@@ -247,8 +247,29 @@ public class DealProcessResult : HTBehaviour
         CalcArgs calc_complex = new CalcArgs();
         foreach (var item in RecordManager.tempRecord.quantities)
         {
-            calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
-            calc_complex.Measure(item.Symbol, item.MesuredData.data.ToDouble().ToArray());
+            if(item.processMethod == 1)
+            {
+                calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
+                calc_complex.Measure(item.Symbol, item.MesuredData.data.ToDouble().ToArray());
+            }
+            else if (item.processMethod == 2)
+            {
+                calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
+                calc_complex.Measure(item.Symbol, item.DifferencedData.data.ToDouble().ToArray());
+            }
+            else
+            {
+                double[] x = new double[item.MesuredData.data.Count];
+                double[] y = new double[item.MesuredData.data.Count];
+                for (int i = 0; i < item.MesuredData.data.Count; i++)
+                {
+                    x[i] = double.Parse(item.MesuredData.data[i]);
+                    y[i] = double.Parse(item.IndependentData.data[i]);
+                }
+
+                calc_complex.AddRegression(item.Symbol, x, y);
+            }
+            
             if(item.processMethod == 4)
                 calc_complex.MeasureUserUnput(item.Symbol, 0, 0, 0);
             else calc_complex.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
@@ -278,7 +299,15 @@ public class DealProcessResult : HTBehaviour
                 complexresult.err.answerunc.userformula = RecordManager.tempRecord.complexQuantityModel.UncertainExpression;
             }
             quantityErrors.Add(complexresult.err);
-            RecordManager.tempRecord.score.ComplexQuantityError += 1;
+            if (RecordManager.tempRecord.score.ComplexQuantityError < 3)
+            {
+                RecordManager.tempRecord.score.ComplexQuantityError += 1;
+            }
+            else
+            {
+                RecordManager.tempRecord.score.ComplexQuantityError = 4;
+            }
+            
         }
         //}
     }

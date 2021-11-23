@@ -739,7 +739,7 @@ public class CalcArgs {//一次计算
             unc += (val.Differentiate(item.Key) * uncvar).Pow(2);
         }
         return (val, unc.Sqrt());
-=    }
+    }
     public static CalcMeasureResult CalculateMeasureValue(CalcArgs argobj) {//代入数据
         List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
         QuantityError temp = new QuantityError();

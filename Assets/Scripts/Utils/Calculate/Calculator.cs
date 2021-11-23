@@ -18,6 +18,7 @@ using symdiff = MathNet.Symbolics.Calculus;
 using symfuncs = MathNet.Symbolics.Function;
 using UnityEngine;
 using static DealProcessResult;
+using UnityScript.Steps;
 
 public partial class FormulaController {
     ///<summary>
@@ -182,12 +183,12 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
             HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
             LoDigit = HiDigit - EffectiveDigit + 1;
             if(HiDigit > 0) {
-                for(int i = 0;i < HiDigit;i++) {
+                for(int i = 0; i < HiDigit; i++) {
                     Value /= 10;
                 }
             }
             else if(HiDigit < 0) {
-                for(int i = 0;i < -HiDigit;i++) {
+                for(int i = 0; i < -HiDigit; i++) {
                     Value *= 10;
                 }
             }
@@ -227,14 +228,14 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
     public static double KeepTo(double truevalue, int n) {//保留到第n位有效数字
         int p = 1;
         if(n > 0) {
-            for(int i = 0;i < n;i++) {
+            for(int i = 0; i < n; i++) {
                 p *= 10;
             }
             double x = truevalue / p;
             return Math.Round(x, MidpointRounding.ToEven) * p;
         }
         else if(n < 0) {
-            for(int i = 0;i < -n;i++) {
+            for(int i = 0; i < -n; i++) {
                 p *= 10;
             }
             double x = truevalue * p;
@@ -385,13 +386,13 @@ public static class StaticMethods {
         int n;
         if(measure.Count % 2 == 0) {
             n = measure.Count / 2;
-            for(int i = 0;i < n;i++) {
+            for(int i = 0; i < n; i++) {
                 answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])) - double.Parse(userdifference[i]));
             }
         }
         else {
             n = (measure.Count + 1) / 2;
-            for(int i = 0;i < n - 1;i++) {
+            for(int i = 0; i < n - 1; i++) {
                 answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])) - double.Parse(userdifference[i]));
             }
         }
@@ -409,7 +410,7 @@ public static class StaticMethods {
         Span<double> y1 = y.AsSpan(0, n / 2), y2 = y.AsSpan(n % 2 == 0 ? n / 2 : n / 2 + 1, n / 2);
         Span<double> bk = k >= 1024 ? new double[k] : stackalloc double[k];
         double b = 0, xx = 0, yy = 0;
-        for(int i = 0;i < k;i++) {
+        for(int i = 0; i < k; i++) {
             bk[i] = (y2[i] - y1[i]) / (x2[i] - x1[i]);
             b += bk[i];
             xx += x1[i]; xx += x2[i]; yy += y1[i]; yy += y2[i];
@@ -417,7 +418,7 @@ public static class StaticMethods {
         b /= k;
         double a = (yy - b * xx) / (2 * k);
         double uncb = 0.0;
-        for(int i = 0;i < k;i++) {
+        for(int i = 0; i < k; i++) {
             uncb += (bk[i] - b) * (bk[i] - b);
         }
         uncb = Math.Sqrt(uncb / (k * (k - 1)));
@@ -426,7 +427,7 @@ public static class StaticMethods {
     public static (double b, double a, double r, double b_unca, double a_unca) LinearRegression(double[] x, double[] y) {
         //y=bx+a
         double[] xy = new double[x.Length], x2 = new double[x.Length], y2 = new double[x.Length];
-        for(int i = 0;i < x.Length;i++) {
+        for(int i = 0; i < x.Length; i++) {
             xy[i] = x[i] * y[i];
             x2[i] = x[i] * x[i];
             y2[i] = y[i] * y[i];
@@ -434,7 +435,7 @@ public static class StaticMethods {
         double xav = Average(x), yav = Average(y), xyav = Average(xy), x2av = Average(x2), y2av = Average(y2);
         double b = (xav * yav - xyav) / (xav * xav - x2av), a = yav - b * xav, r = (xyav - xav * yav) / Math.Sqrt((y2av - yav * yav) * (x2av - xav * xav));
         double sy0 = 0;
-        for(int i = 0;i < x.Length;i++) {
+        for(int i = 0; i < x.Length; i++) {
             sy0 += (y[i] - (a + b * x[i])) * (y[i] - (a + b * x[i]));
         }
         sy0 = Math.Sqrt(sy0 / (x.Length - 2));
@@ -442,13 +443,13 @@ public static class StaticMethods {
         double a_unca = Math.Sqrt(x2av) * b_unca;
         return (b, a, r, b_unca, a_unca);
     }
-    public static (string[] x,string[] y) MakeLine(double[] x0, double[] y0) {
+    public static (string[] x, string[] y) MakeLine(double[] x0, double[] y0) {
         var res = LinearRegression(x0, y0);
         double xmin = x0.Min() - 1, xmax = x0.Max() + 1;
         double[] x = Generate.LinearSpaced(8 * x0.Length, xmin, xmax);
         double[] y = Generate.Map(x, (double k) => res.a + k * res.b);
         string[] xx = new string[x.Length], yy = new string[y.Length];
-        for(int i = 0;i < x.Length;i++) {
+        for(int i = 0; i < x.Length; i++) {
             xx[i] = NumberFormat(x[i]);
             yy[i] = NumberFormat(y[i]);
         }
@@ -564,17 +565,20 @@ public static class StaticMethods {
             return (false, "有效数字没有对齐");
         }
     }
-    public static bool CheckLine(double x1,double y1,double x2,double y2,double userk) {
+    public static bool CheckLine(double x1, double y1, double x2, double y2, double userk) {
         return userk.AlmostEqual((y2 - y1) / (x2 - x1));
     }
 }
 public class CalcVariable {//2021.8.20
+    public int vartype;//0表示有原始数据 1表示没有原始数据[] 只有值不确定度
     public List<double> values;
+    public double val;
     public double ub;
     public double userua, userub, userunc, useraver;//用户测量的ua,ub,用户的合成的不确定度
 
-    public CalcVariable(double ub, int measures) {//测量了measures个数据
+    public CalcVariable(double ub, int measures, int vartype = 0) {//测量了measures个数据
         this.ub = ub; values = new List<double>(measures);
+        this.vartype = vartype;
     }
     public (double average, double ua, double unc) CalcUncertain() {// value,ua,u
         int n = 0;
@@ -590,44 +594,52 @@ public class CalcVariable {//2021.8.20
     }
     //下面的是8月20号加的
     public (string UaError, string UbError, string UncError, string AverError, bool IfError) CheckInfo() {
-        var uu = CalcUncertain();
-        bool flag = false;
-        StringBuilder sua = new StringBuilder();
-        StringBuilder sub = new StringBuilder();
-        StringBuilder sunc = new StringBuilder();
-        string s = null;
-        if(!userua.AlmostEqual(uu.ua)) {
-            flag = true;
-            if(userua.AlmostEqual(uu.ua * Math.Sqrt(1.0 * values.Count / (values.Count - 1)))) {
-                sua.Append("是否将根号下分母除成了k-1,S^2代表的样本方差的分母也是k-1哟\r\n");
+        if(this.vartype == 0) {
+            var uu = CalcUncertain();
+            bool flag = false;
+            StringBuilder sua = new StringBuilder();
+            StringBuilder sub = new StringBuilder();
+            StringBuilder sunc = new StringBuilder();
+            string s = null;
+            if(!userua.AlmostEqual(uu.ua)) {
+                flag = true;
+                if(userua.AlmostEqual(uu.ua * Math.Sqrt(1.0 * values.Count / (values.Count - 1)))) {
+                    sua.Append("是否将根号下分母除成了k-1,S^2代表的样本方差的分母也是k-1哟\r\n");
+                }
+                else {
+                    sua.Append("其他错误");
+                }
             }
-            else {
-                sua.Append("其他错误");
+            if(!ub.AlmostEqual(userub)) {
+                flag = true;
+                if(userub.AlmostEqual(ub * Math.Sqrt(3))) {
+                    sub.Append("是否忘除根号3?\r\n");
+                }
+                else {
+                    sub.Append("其他错误");
+                }
             }
+            if(!userunc.AlmostEqual(uu.unc)) {
+                flag = true;
+                if(userunc.AlmostEqual(uu.ua + ub)) {
+                    sunc.Append("是否直接将A类和B类不确定度直接相加，两者应该各自平方后相加开方\r\n");
+                }
+                else {
+                    sunc.Append("其他错误");
+                }
+            }
+            if(!useraver.AlmostEqual(uu.average)) {
+                flag = true;
+                s = "平均值计算错了";
+            }
+            return (sua.ToString(), sub.ToString(), sunc.ToString(), s, flag);
         }
-        if(!ub.AlmostEqual(userub)) {
-            flag = true;
-            if(userub.AlmostEqual(ub * Math.Sqrt(3))) {
-                sub.Append("是否忘除根号3?\r\n");
-            }
-            else {
-                sub.Append("其他错误");
-            }
+        else {//一元线性回归
+            bool flag = false;
+
+            return (null, null, ub.AlmostEqual(userunc) ? null : "不确定度计算错误", useraver.AlmostEqual(val) ? null : "计算值错误", flag);
         }
-        if(!userunc.AlmostEqual(uu.unc)) {
-            flag = true;
-            if(userunc.AlmostEqual(uu.ua + ub)) {
-                sunc.Append("是否直接将A类和B类不确定度直接相加，两者应该各自平方后相加开方\r\n");
-            }
-            else {
-                sunc.Append("其他错误");
-            }
-        }
-        if(!useraver.AlmostEqual(uu.average)) {
-            flag = true;
-            s = "平均值计算错了";
-        }
-        return (sua.ToString(), sub.ToString(), sunc.ToString(), s, flag);
+        
 
         /*if(flag) {
             sb.Append("A类不确定度，B类不确定度及合成不确定度的正确答案如下");
@@ -683,6 +695,18 @@ public class CalcArgs {//一次计算
             return false;
         }
     }
+    public bool AddRegression(string varname, double[] x,double[] y) {
+        var regres = StaticMethods.LinearRegression(x, y);
+        
+        if(ValidVarname(varname)) {
+            vars[varname] = new CalcVariable(regres.b_unca, 1, 1);
+            vars[varname].val = regres.b;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     public bool Measure(string varname, double[] values) {
         //修改测量值 成功返回true
         if(vars.ContainsKey(varname)) {
@@ -723,37 +747,43 @@ public class CalcArgs {//一次计算
         var res = new CalcMeasureResult();
 
         foreach(var item in argobj.vars) {
-            var CheckResult = argobj.vars[item.Key].CheckInfo();
-            temp = new QuantityError();
-            if(CheckResult.IfError) {
-                flag = true;
-                temp.right = false;
-                if(CheckResult.UaError != "") {
-                    temp.ua.right = false;
-                    temp.ua.latex = StaticMethods.GetUaExprLatex(item.Key);
-                    temp.ua.message = CheckResult.UaError;
-                }
-                if(CheckResult.UbError != "") {
-                    temp.ub.right = false;
-                    temp.ub.latex = StaticMethods.GetUbExprLatex(item.Key);
-                    temp.ub.message = CheckResult.UbError;
-                }
-                if(CheckResult.UncError != "") {
-                    temp.unc.right = false;
-                    temp.unc.latex = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub);
-                    temp.unc.message = CheckResult.UncError;
-                }
-                if(CheckResult.AverError != "") {
-                    temp.average.right = false;
-                    temp.average.latex = StaticMethods.GetAverageLatex(item.Key);
-                    temp.average.message = CheckResult.AverError;
-                }
-                temp.Symbol = item.Key;
-                temp.Title = "对物理量" + item.Key + "的检查";
+            if(item.Value.vartype != 0) {
+                
+                continue;
             }
             else {
-                temp.right = true;
-            }
+                var CheckResult = argobj.vars[item.Key].CheckInfo();
+                temp = new QuantityError();
+                if(CheckResult.IfError) {
+                    flag = true;
+                    temp.right = false;
+                    if(CheckResult.UaError != "") {
+                        temp.ua.right = false;
+                        temp.ua.latex = StaticMethods.GetUaExprLatex(item.Key);
+                        temp.ua.message = CheckResult.UaError;
+                    }
+                    if(CheckResult.UbError != "") {
+                        temp.ub.right = false;
+                        temp.ub.latex = StaticMethods.GetUbExprLatex(item.Key);
+                        temp.ub.message = CheckResult.UbError;
+                    }
+                    if(CheckResult.UncError != "") {
+                        temp.unc.right = false;
+                        temp.unc.latex = StaticMethods.GetUncLatex(item.Key, item.Value.userua, item.Value.userub);
+                        temp.unc.message = CheckResult.UncError;
+                    }
+                    if(CheckResult.AverError != "") {
+                        temp.average.right = false;
+                        temp.average.latex = StaticMethods.GetAverageLatex(item.Key);
+                        temp.average.message = CheckResult.AverError;
+                    }
+                    temp.Symbol = item.Key;
+                    temp.Title = "对物理量" + item.Key + "的检查";
+                }
+                else {
+                    temp.right = true;
+                }
+            }            
             errors.Add(temp);
         }
 
@@ -774,9 +804,16 @@ public class CalcArgs {//一次计算
             vals[item.Key] = argobj.cons[item.Key];
         }
         foreach(var item in argobj.vars) {
-            var u = argobj.vars[item.Key].CalcUncertain();
-            vals[item.Key] = u.average;
-            vals[$"u_{item.Key}"] = u.unc;
+            if(argobj.vars[item.Key].vartype == 1) {//20211123修改
+                vals[item.Key] = argobj.vars[item.Key].val;
+                vals[$"u_{item.Key}"] = argobj.vars[item.Key].ub;
+            }
+            else {
+                var u = argobj.vars[item.Key].CalcUncertain();
+                vals[item.Key] = u.average;
+                vals[$"u_{item.Key}"] = u.unc;
+            }
+            
         }
         double val1 = valexpr.Evaluate(vals).RealValue;//对的val
         double unc1 = uncexpr.Evaluate(vals).RealValue;//对的unc
@@ -821,15 +858,20 @@ public class CalcArgs {//一次计算
             vals[item.Key] = argobj.cons[item.Key];
         }
         foreach(var item in argobj.vars) {
-            var u = StaticMethods.Average(argobj.vars[item.Key].values);
-            vals[item.Key] = u;
+            if(item.Value.vartype == 0) {
+                var u = StaticMethods.Average(argobj.vars[item.Key].values);
+                vals[item.Key] = u;
+            }
+            else {//一元线性回归和图表法 20211123
+                vals[item.Key] = item.Value.val;
+            }
         }
         double val1 = valexpr.Evaluate(vals).RealValue;//对的val
         if(!val1.AlmostEqual(argobj.userval)) {
             flag = true;
             error.answer.right = false;
             error.answer.latex = valexpr.ToLaTeX();
-            if(true) {
+            if(flag) {
                 answer.Append("主值应代入各物理量平均值");
             }
             error.answer.message = answer.ToString();
@@ -924,11 +966,11 @@ public class CalcResult {
         bool flag = true;
         CalcResult result = new CalcResult();
         result.err = new QuantityError();
-        for(int i = 0;i < bk.Length;i++) {
+        for(int i = 0; i < bk.Length; i++) {
             bk[i] = input.y_nplusi_minus_y_i[i] / input.x_nplusi_minus_x_i;
         }
         b = StaticMethods.Average(bk);
-        for(int i = 0;i < bk.Length;i++) {
+        for(int i = 0; i < bk.Length; i++) {
             uncb += ((bk[i] - b) * (bk[i] - b));
         }
         uncb = Math.Sqrt(uncb / (bk.Length * (bk.Length - 1)));
@@ -1002,14 +1044,12 @@ public class CalcResult {
         result.status = flag ? "正确" : "错误";
         return result;
     }
-    public static CalcResult CheckGraphic(UserInputGraphic input)
-    {
+    public static CalcResult CheckGraphic(UserInputGraphic input) {
         var result = new CalcResult();
         result.err = new QuantityError();
         bool flag = true;
         double change_rate = (input.point2_y - input.point1_y) / (input.point2_x - input.point1_x);
-        if (!(change_rate).AlmostEqual(input.change_rate))
-        {
+        if(!(change_rate).AlmostEqual(input.change_rate)) {
             flag = false;
             result.err.k.right = false;
             result.err.k.message = "选取的点是否间距过小";
@@ -1041,8 +1081,7 @@ public class UserInputTable {
     public string varname;
     public CalcVariable data;
 }
-public class UserInputGraphic
-{
+public class UserInputGraphic {
     public string varname;
     public double point1_x, point1_y, point2_x, point2_y;
     public double change_rate;

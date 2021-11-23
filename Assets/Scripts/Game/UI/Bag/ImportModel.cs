@@ -22,7 +22,8 @@ public class ImportModel
         pth.maxFile = pth.file.Length;
         pth.fileTitle = new string(new char[64]);
         pth.maxFileTitle = pth.fileTitle.Length;
-        pth.initialDir = Application.dataPath;
+        //pth.initialDir = Application.dataPath;
+        pth.initialDir = @"C:\Users\91812\Desktop\ForImportModel";
         pth.title = "选择要导入的模型";
         pth.defExt = "obj";
         pth.flags = 0x00080000 | 0x00001000 | 0x00000800 | 0x00000008;

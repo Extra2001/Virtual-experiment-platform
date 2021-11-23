@@ -977,13 +977,32 @@ public class CalcResult {
         if(!input.correct_b_uncb.AlmostEqual(input.user_b_uncb)) {
             flag = false;
             result.err.ub.right = false;
-            result.err.ub.message = "b类不确定度计算错误";
+            if (input.correct_b_uncb.AlmostEqual(input.user_b_uncb / Math.Sqrt(3)))
+            {
+                result.err.ub.message = "是否忘除以根号3";
+            }
+            else
+            {
+                result.err.ub.message = "b类不确定度计算错误";
+            }
+            
             result.err.ub.latex = StaticMethods.GetUbExprLatex("b");
         }
         if(!input.user_b_unca.AlmostEqual(uncb)) {
             flag = false;
             result.err.ua.right = false;
-            result.err.ua.message = "a类不确定度计算错误";
+            double k = input.y_nplusi_minus_y_i.Length;
+            if (input.y_nplusi_minus_y_i.Length % 2 == 0)
+
+            if (input.user_b_unca.AlmostEqual(uncb * Math.Sqrt(k / (k - 1))))
+            {
+                result.err.ua.message = "是否将n除成了n-1，请注意样本方差的含义";
+            }
+            else
+            {
+                result.err.ua.message = "a类不确定度计算错误";
+            }
+            
             result.err.ua.latex = @"u_a(b)=s(\overline{b})=\sqrt{\frac{(b_i-\overline{b})^2}{n(n-1)}}";
         }
         if(!input.user_aver_b.AlmostEqual(b)) {

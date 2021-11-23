@@ -471,7 +471,6 @@ public static class StaticMethods {
     public static double CalcUncertain(double ua, double ub) {
         //输入:A类不确定度ua 仪器B类不确定度ub
         //返回:合成不确定度
-        double temp = Math.Sqrt(ua * ua + ub * ub);
         return Math.Sqrt(ua * ua + ub * ub);
     }
     public static double MakeWrongUncertain(double ua, double ub) {
@@ -716,7 +715,7 @@ public class CalcArgs {//一次计算
             unc += (val.Differentiate(item.Key) * uncvar).Pow(2);
         }
         return (val, unc.Sqrt());
-    }
+=    }
     public static CalcMeasureResult CalculateMeasureValue(CalcArgs argobj) {//代入数据
         List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
         QuantityError temp = new QuantityError();

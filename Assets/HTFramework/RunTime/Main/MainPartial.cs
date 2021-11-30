@@ -313,7 +313,7 @@ namespace HT.Framework
                 }
             }
 
-            m_AspectTrack = GetInternalModule(HTFrameworkModule.AspectTrack) as AspectTracker;
+            //m_AspectTrack = GetInternalModule(HTFrameworkModule.AspectTrack) as AspectTracker;
             m_Audio = GetInternalModule(HTFrameworkModule.Audio) as AudioManager;
             m_Controller = GetInternalModule(HTFrameworkModule.Controller) as ControllerManager;
             m_Coroutiner = GetInternalModule(HTFrameworkModule.Coroutiner) as Coroutiner;

@@ -18,7 +18,6 @@ using symdiff = MathNet.Symbolics.Calculus;
 using symfuncs = MathNet.Symbolics.Function;
 using UnityEngine;
 using static DealProcessResult;
-using UnityScript.Steps;
 
 public partial class FormulaController {
     ///<summary>

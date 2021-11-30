@@ -1,0 +1,80 @@
+================================================================================
+  SVG Tools - Manual
+================================================================================
+
+Thank you for choosing SVG Tools!
+Just place SVG file inside your Assets folder and they automatically converts
+into meshes.
+
+--------------------------------------------------------------------------------
+Installation
+--------------------------------------------------------------------------------
+
+Once you have downloaded SVG Tools from Unity’s Asset Store, go to:
+“Assets->Import Package->Custom Package...”. In the Import Asset window, find
+and select the SVG Tools.unitypackage file. After the “Importing package” window
+appears in Unity, verify that all items to import are selected and then click
+the Import button in the bottom right of the window.
+
+--------------------------------------------------------------------------------
+Mesh Settings
+--------------------------------------------------------------------------------
+
+Type Normal        - Opaque shapes are drawn from near to far, transparent
+                     shapes are drawn from far to near. This greatly improves
+                     the performance, because you draw only what you see.
+					 					 
+Type Transparent   - All shapes are drawn from far to near.
+
+Antialiasing Width - Anti-aliasing width to be applied to all imported shapes.
+
+Scale              - This scale factor is used for compensating difference in
+                     units between Unity and grphic tool - it rescales whole
+                     file. Normally you can simply set it to 1.
+
+Optimize Mesh      - This option determines the order in which triangles will be
+                     listed in the mesh.
+
+Curve Quality      - Approximation level of curves. Value ranges from zero to
+                     infinity. The higher the value is the lower the quality.
+
+Quality            - For reduce duplicate points or points which are very close
+                     to each other. Value ranges from zero to infinity. The
+                     higher the value is the lower the quality. Zero is almost
+                     nothing and one is the original shape of the SVG.
+
+Depth Offset       - Only if Type is set to Normal. Layered shapes are
+                     automatically offset in the Z-axis by this amount during
+                     import. If it’s set to zero you might get overlay
+                     artifacts.
+
+Mesh Compression   - Increasing this value will reduce the file size of the
+                     mesh, but might introduce irregularities. It’s best to turn
+                     it up as high as possible without the mesh looking too
+                     different from the uncompressed version.
+					 
+Use Light          - Enabling/disabling lighting.
+
+Pivot              - The point, which Unity uses as the coordinate origin and
+                     main “anchor point” of the graphic. You can choose from a
+                     number of default rectangle-relative positions
+                     (eg, Center, Top Right, etc).
+
+Custom Pivot       - The point, which Unity uses as the coordinate origin and
+                     main “anchor point” of the graphic. You can use custom
+                     coordinates.
+
+--------------------------------------------------------------------------------
+Collider Settings
+--------------------------------------------------------------------------------
+
+Generate - If this is enabled, your meshes will be imported with Mesh Colliders
+           automatically attached. This is useful for quickly generating a
+           collision mesh.
+
+Margin   - adds an offset to the margin of collider.
+
+Quality  - For reduce duplicate points or points which are very close to each
+           other. Value ranges from zero to infinity. The higher the value is
+           the lower the quality.Zero is almost nothing and one is the original
+           shape of the SVG.

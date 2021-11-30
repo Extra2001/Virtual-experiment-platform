@@ -6,7 +6,7 @@ namespace HT.Framework
     /// <summary>
     /// 默认的切面代理追踪器助手
     /// </summary>
-    public sealed class DefaultAspectTrackHelper : IAspectTrackHelper
+    public sealed class DefaultAspectTrackHelper
     {
         /// <summary>
         /// 切面代理追踪器
@@ -46,7 +46,6 @@ namespace HT.Framework
         public void OnTermination()
         {
             ClearInterceptCondition();
-            ClearProxyer();
         }
         /// <summary>
         /// 暂停助手
@@ -101,87 +100,6 @@ namespace HT.Framework
         public void ClearInterceptCondition()
         {
             InterceptConditions.Clear();
-        }
-
-        /// <summary>
-        /// 创建代理者
-        /// </summary>
-        /// <typeparam name="T">代理对象类型</typeparam>
-        /// <param name="proxyObject">代理者</param>
-        /// <returns>代理对象</returns>
-        public T CreateProxyer<T>(AspectProxyBase<T> proxyObject) where T : class, IAspectTrackObject
-        {
-            IAspectTrackObject proxyObj = proxyObject.GetTransparentProxy() as IAspectTrackObject;
-            IAspectTrackObject realObj = proxyObject.RealObject;
-
-            if (!ProxyObjects.ContainsKey(realObj))
-            {
-                ProxyObjects.Add(realObj, proxyObj);
-            }
-            if (!Proxys.ContainsKey(realObj))
-            {
-                Proxys.Add(realObj, proxyObject);
-            }
-
-            return proxyObj as T;
-        }
-        /// <summary>
-        /// 移除代理者
-        /// </summary>
-        /// <param name="realObject">真实对象</param>
-        public void RemoveProxyer(IAspectTrackObject realObject)
-        {
-            if (ProxyObjects.ContainsKey(realObject))
-            {
-                ProxyObjects.Remove(realObject);
-            }
-            if (Proxys.ContainsKey(realObject))
-            {
-                Proxys.Remove(realObject);
-            }
-        }
-        /// <summary>
-        /// 获取代理对象
-        /// </summary>
-        /// <typeparam name="T">代理对象类型</typeparam>
-        /// <param name="realObject">真实对象</param>
-        /// <returns>代理对象</returns>
-        public T GetProxyObject<T>(IAspectTrackObject realObject) where T : class, IAspectTrackObject
-        {
-            if (ProxyObjects.ContainsKey(realObject))
-            {
-                return ProxyObjects[realObject] as T;
-            }
-            else
-            {
-                Log.Warning("获取代理对象失败：真实对象 " + realObject.ToString() + " 并不存在代理对象！");
-                return null;
-            }
-        }
-        /// <summary>
-        /// 获取代理者
-        /// </summary>
-        /// <param name="realObject">真实对象</param>
-        /// <returns>代理者</returns>
-        public object GetProxyer(IAspectTrackObject realObject)
-        {
-            if (Proxys.ContainsKey(realObject))
-            {
-                return Proxys[realObject];
-            }
-            else
-            {
-                Log.Warning("获取代理者失败：真实对象 " + realObject.ToString() + " 并不存在代理者！");
-                return null;
-            }
-        }
-        /// <summary>
-        /// 清空所有代理者、代理对象
-        /// </summary>
-        public void ClearProxyer()
-        {
-            ProxyObjects.Clear();
-            Proxys.Clear();
         }
     }
 }

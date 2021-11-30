@@ -77,50 +77,5 @@ namespace HT.Framework
         {
             _helper.ClearInterceptCondition();
         }
-
-        /// <summary>
-        /// 创建代理者
-        /// </summary>
-        /// <typeparam name="T">代理对象类型</typeparam>
-        /// <param name="proxyObject">代理者</param>
-        /// <returns>代理对象</returns>
-        public T CreateProxyer<T>(AspectProxyBase<T> proxyObject) where T : class, IAspectTrackObject
-        {
-            return _helper.CreateProxyer(proxyObject);
-        }
-        /// <summary>
-        /// 移除代理者
-        /// </summary>
-        /// <param name="realObject">真实对象</param>
-        public void RemoveProxyer(IAspectTrackObject realObject)
-        {
-            _helper.RemoveProxyer(realObject);
-        }
-        /// <summary>
-        /// 获取代理对象
-        /// </summary>
-        /// <typeparam name="T">代理对象类型</typeparam>
-        /// <param name="realObject">真实对象</param>
-        /// <returns>代理对象</returns>
-        public T GetProxyObject<T>(IAspectTrackObject realObject) where T : class, IAspectTrackObject
-        {
-            return _helper.GetProxyObject<T>(realObject);
-        }
-        /// <summary>
-        /// 获取代理者
-        /// </summary>
-        /// <param name="realObject">真实对象</param>
-        /// <returns>代理者</returns>
-        public object GetProxyer(IAspectTrackObject realObject)
-        {
-            return _helper.GetProxyer(realObject);
-        }
-        /// <summary>
-        /// 清空所有代理者、代理对象
-        /// </summary>
-        public void ClearProxyer()
-        {
-            _helper.ClearProxyer();
-        }
     }
 }

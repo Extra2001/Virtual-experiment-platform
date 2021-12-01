@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using HT.Framework;
 using UnityEngine.UI;
 using System;
+using Common;
+using UnityEngine;
 /// <summary>
 /// 面板按钮UI逻辑类
 /// </summary>
@@ -47,7 +49,7 @@ public class GameButtonUILogic : UILogicResident
         });
         UIEntity.FindChildren("BagButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            Main.m_UI.OpenTemporaryUI<BagControl>();
+            Main.m_UI.OpenUI<BagControl>();
         });
         UIEntity.FindChildren("TableButton").GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -67,6 +69,7 @@ public class GameButtonUILogic : UILogicResident
     /// </summary>
     public override void OnOpen(params object[] args)
     {
+        Debug.Log("已打开GameButton");
         base.OnOpen(args);
         Main.m_Event.Subscribe<SelectInstrumentEventHandler>(ShowButtons);
         if (GameManager.Instance.CurrentInstrument != null)
@@ -85,6 +88,7 @@ public class GameButtonUILogic : UILogicResident
         //复现存档仪器被测物体位置等信息
         CreateObject.CreateRecord();
         CreateInstrument.CreateRecord();
+        Debug.Log("已fuxian");
         UIAPI.Instance.HideLoading();
         if (showTips && inGameShowTips)
         {

@@ -7,21 +7,29 @@ using UnityEngine;
 
 namespace HT.Framework
 {
-    internal sealed class Builder : HTFEditorWindow
+    /// <summary>
+    /// 框架构建器
+    /// </summary>
+    public sealed class Builder : HTFEditorWindow
     {
         /// <summary>
         /// 检查项目构建的前置条件，如果至少有一个条件返回false，将禁止打包，全部返回true，才启用打包
         /// </summary>
         public static List<HTFFunc<bool>> CheckBuildPreconditions = new List<HTFFunc<bool>>();
         /// <summary>
-        /// 项目发布完成事件
+        /// 项目发布前事件
         /// </summary>
-        public static event HTFAction<BuildTarget,string> PostProcessBuildEvent;
+        public static event HTFAction<BuildPlayerOptions> PreProcessBuildEvent;
+        /// <summary>
+        /// 项目发布后事件
+        /// </summary>
+        public static event HTFAction<BuildTarget, string> PostProcessBuildEvent;
 
         [InitializeOnLoadMethod]
         private static void RegisterUpdate()
         {
             EditorApplication.update += CheckBuildPlayerWindow;
+            BuildPlayerWindow.RegisterBuildPlayerHandler(OnRegisterBuildPlayerHandler);
         }
         private static void CheckBuildPlayerWindow()
         {
@@ -35,12 +43,33 @@ namespace HT.Framework
             }
         }
         
+        /// <summary>
+        /// 项目发布后处理
+        /// </summary>
+        /// <param name="target">发布平台</param>
+        /// <param name="pathToBuildProject">发布路径</param>
         [PostProcessBuild(0)]
         private static void OnPostProcessBuild(BuildTarget target, string pathToBuildProject)
         {
             Log.Info("项目发布成功！发布平台：" + target.ToString() + "！发布路径：" + pathToBuildProject + "！");
 
             PostProcessBuildEvent?.Invoke(target, pathToBuildProject);
+        }
+        /// <summary>
+        /// 项目发布前处理
+        /// </summary>
+        /// <param name="options">发布参数</param>
+        private static void OnRegisterBuildPlayerHandler(BuildPlayerOptions options)
+        {
+            if (options.options.HasFlag(BuildOptions.AutoRunPlayer))
+            {
+                Log.Error("项目发布失败：由于某些特殊原因，框架不支持 Build And Run 形式发布项目！");
+                return;
+            }
+
+            PreProcessBuildEvent?.Invoke(options);
+
+            BuildPlayerWindow.DefaultBuildMethods.BuildPlayer(options);
         }
 
         private BuildPlayerWindow _buildPlayerWindow;
@@ -52,13 +81,7 @@ namespace HT.Framework
         private bool _isCanBuild = false;
         private bool _isShowBuildABButton = false;
 
-        protected override bool IsEnableTitleGUI
-        {
-            get
-            {
-                return false;
-            }
-        }
+        protected override bool IsEnableTitleGUI => false;
 
         protected override void OnEnable()
         {
@@ -75,12 +98,10 @@ namespace HT.Framework
             CheckResourceMode();
             Check();
         }
-
         private void OnDisable()
         {
             _onDisableMethod.Invoke(_buildPlayerWindow, null);
         }
-        
         protected override void OnBodyGUI()
         {
             base.OnBodyGUI();
@@ -126,7 +147,6 @@ namespace HT.Framework
                 setter.Show();
             }
         }
-
         private void Update()
         {
             if (!_buildPlayerWindow)
@@ -140,7 +160,6 @@ namespace HT.Framework
                 _updateMethod.Invoke(_buildPlayerWindow, null);
             }
         }
-        
         private void BuildButtonMaskGUI()
         {
             if (IsSelectedCurrentBuildTarget())
@@ -151,7 +170,6 @@ namespace HT.Framework
                 GUI.color = Color.white;
             }
         }
-
         private bool IsSelectedCurrentBuildTarget()
         {
             BuildTarget selectedBuildTarget = (BuildTarget)_calculateSelectedBuildTarget.Invoke(null, null);
@@ -159,7 +177,6 @@ namespace HT.Framework
             BuildTargetGroup activeBuildTargetGroup = (BuildTargetGroup)_activeBuildTargetGroup.GetValue(null);
             return EditorUserBuildSettings.activeBuildTarget == selectedBuildTarget && activeBuildTargetGroup == selectedBuildTargetGroup;
         }
-        
         private void CheckResourceMode()
         {
             _isShowBuildABButton = false;
@@ -174,7 +191,6 @@ namespace HT.Framework
                 }
             }
         }
-
         private void Check()
         {
             for (int i = 0; i < CheckBuildPreconditions.Count; i++)

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace HT.Framework
@@ -9,21 +9,21 @@ namespace HT.Framework
     /// </summary>
     public sealed class DefaultControllerHelper : IControllerHelper
     {
+        private ControllerManager _module;
         private CameraTarget _cameraTarget;
         private MousePosition _mousePosition;
         private MouseRotation _mouseRotation;
         private MouseRay _mouseRay;
         private HighlightingEffect _highlightingEffect;
-        private Dictionary<MouseRayTargetBase, HTFAction> _mouseClickTargets = new Dictionary<MouseRayTargetBase, HTFAction>();
 
         /// <summary>
         /// 操作控制器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 控制模式
         /// </summary>
-        public ControlMode TheControlMode { get; set; }
+        public ControlMode Mode { get; set; }
         /// <summary>
         /// 主摄像机
         /// </summary>
@@ -129,19 +129,6 @@ namespace HT.Framework
             }
         }
         /// <summary>
-        /// 当前射线击中的目标
-        /// </summary>
-        public GameObject RayTargetObj
-        {
-            get
-            {
-                if (_mouseRay.Target)
-                    return _mouseRay.Target.gameObject;
-                else
-                    return null;
-            }
-        }
-        /// <summary>
         /// 当前射线击中的点
         /// </summary>
         public Vector3 RayHitPoint
@@ -165,10 +152,10 @@ namespace HT.Framework
                 _highlightingEffect.enabled = value;
                 if (!value)
                 {
-                    HighlightableToolkit.CloseAllFlashHighLight();
-                    HighlightableToolkit.CloseAllHighLight();
-                    HighlightableToolkit.CloseAllOccluder();
-                    MeshOutlineToolkit.CloseAllMeshOutline();
+                    HighlightableToolkit.CloseAllFlashHighLight(HighlightAutoDie);
+                    HighlightableToolkit.CloseAllHighLight(HighlightAutoDie);
+                    HighlightableToolkit.CloseAllOccluder(HighlightAutoDie);
+                    MeshOutlineToolkit.CloseAllMeshOutline(HighlightAutoDie);
                 }
             }
         }
@@ -205,6 +192,20 @@ namespace HT.Framework
             }
         }
         /// <summary>
+        /// 高亮组件是否自动销毁
+        /// </summary>
+        public bool HighlightAutoDie
+        {
+            get
+            {
+                return _mouseRay.IsAutoDie;
+            }
+            set
+            {
+                _mouseRay.IsAutoDie = value;
+            }
+        }
+        /// <summary>
         /// 射线投射事件(MouseRayTargetBase：当前射中的目标，Vector3：当前射中的点，Vector2：当前鼠标位置转换后的UGUI坐标)
         /// </summary>
         public event HTFAction<MouseRayTargetBase, Vector3, Vector2> RayEvent;
@@ -214,15 +215,15 @@ namespace HT.Framework
         /// </summary>
         public void OnInitialization()
         {
-            MainCamera = Module.GetComponentByChild<Camera>("MainCamera");
-            _cameraTarget = Module.GetComponentByChild<CameraTarget>("CameraTarget");
+            _module = Module as ControllerManager;
+            MainCamera = _module.GetComponentByChild<Camera>("MainCamera");
+            _cameraTarget = _module.GetComponentByChild<CameraTarget>("CameraTarget");
             _mousePosition = MainCamera.GetComponent<MousePosition>();
             _mouseRotation = MainCamera.GetComponent<MouseRotation>();
             _mouseRay = MainCamera.GetComponent<MouseRay>();
             _highlightingEffect = MainCamera.GetComponent<HighlightingEffect>();
 
             _mousePosition.Target = _cameraTarget;
-            _mousePosition.MR = _mouseRotation;
             _mousePosition.Manager = Module as ControllerManager;
             _mouseRotation.Target = _cameraTarget;
             _mouseRotation.Manager = Module as ControllerManager;
@@ -236,29 +237,26 @@ namespace HT.Framework
         /// 助手准备工作
         /// </summary>
         public void OnPreparatory()
-        { }
+        {
+
+        }
         /// <summary>
         /// 刷新助手
         /// </summary>
         public void OnRefresh()
         {
             _mouseRay.OnRefresh();
-            switch (TheControlMode)
+            if (Mode == ControlMode.FreeControl)
             {
-                case ControlMode.FreeControl:
-                    _mousePosition.OnRefresh();
-                    _mouseRotation.OnRefresh();
-                    break;
+                _mousePosition.OnRefresh();
+                _mouseRotation.OnRefresh();
             }
 
             if (Main.m_Input.GetButtonDown(InputButtonType.MouseLeft))
             {
                 if (RayTarget != null)
                 {
-                    if (_mouseClickTargets.ContainsKey(RayTarget))
-                    {
-                        _mouseClickTargets[RayTarget]?.Invoke();
-                    }
+                    RayTarget.OnMouseClick.Invoke();
                 }
             }
             if (Main.m_Input.GetButtonDown(InputButtonType.MouseLeftDoubleClick))
@@ -278,7 +276,7 @@ namespace HT.Framework
         /// </summary>
         public void OnTermination()
         {
-            ClearClickListener();
+            
         }
         /// <summary>
         /// 暂停助手
@@ -290,7 +288,7 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
             
         }
@@ -340,6 +338,26 @@ namespace HT.Framework
             _mouseRotation.MSpeed = m;
         }
         /// <summary>
+        /// 自由控制：设置摄像机旋转时视角Y轴的限制
+        /// </summary>
+        /// <param name="min">最小值</param>
+        /// <param name="max">最大值</param>
+        public void SetAngleLimit(float min, float max)
+        {
+            _mouseRotation.YMinAngleLimit = min;
+            _mouseRotation.YMaxAngleLimit = max;
+        }
+        /// <summary>
+        /// 自由控制：设置摄像机注视距离的最小值和最大值
+        /// </summary>
+        /// <param name="min">最小值</param>
+        /// <param name="max">最大值</param>
+        public void SetMinMaxDistance(float min, float max)
+        {
+            _mouseRotation.MinDistance = min;
+            _mouseRotation.MaxDistance = max;
+        }
+        /// <summary>
         /// 自由控制：进入保持追踪模式
         /// </summary>
         /// <param name="target">追踪目标</param>
@@ -386,38 +404,47 @@ namespace HT.Framework
         /// </summary>
         /// <param name="target">目标</param>
         /// <param name="callback">点击事件回调</param>
-        public void AddClickListener(GameObject target, HTFAction callback)
+        public void AddClickListener(GameObject target, UnityAction callback)
         {
+            if (target == null || callback == null)
+                return;
+
             MouseRayTargetBase mouseRayTargetBase = target.GetComponent<MouseRayTargetBase>();
             if (mouseRayTargetBase)
             {
-                if (!_mouseClickTargets.ContainsKey(mouseRayTargetBase))
-                {
-                    _mouseClickTargets.Add(mouseRayTargetBase, callback);
-                }
+                mouseRayTargetBase.OnMouseClick.AddListener(callback);
             }
         }
         /// <summary>
         /// 为挂载 MouseRayTargetBase 的目标移除鼠标左键点击事件
         /// </summary>
         /// <param name="target">目标</param>
-        public void RemoveClickListener(GameObject target)
+        /// <param name="callback">点击事件回调</param>
+        public void RemoveClickListener(GameObject target, UnityAction callback)
         {
+            if (target == null || callback == null)
+                return;
+
             MouseRayTargetBase mouseRayTargetBase = target.GetComponent<MouseRayTargetBase>();
             if (mouseRayTargetBase)
             {
-                if (_mouseClickTargets.ContainsKey(mouseRayTargetBase))
-                {
-                    _mouseClickTargets.Remove(mouseRayTargetBase);
-                }
+                mouseRayTargetBase.OnMouseClick.RemoveListener(callback);
             }
         }
         /// <summary>
-        /// 清空所有点击事件
+        /// 为挂载 MouseRayTargetBase 的目标移除所有的鼠标左键点击事件
         /// </summary>
-        public void ClearClickListener()
+        /// <param name="target">目标</param>
+        public void RemoveAllClickListener(GameObject target)
         {
-            _mouseClickTargets.Clear();
+            if (target == null)
+                return;
+
+            MouseRayTargetBase mouseRayTargetBase = target.GetComponent<MouseRayTargetBase>();
+            if (mouseRayTargetBase)
+            {
+                mouseRayTargetBase.OnMouseClick.RemoveAllListeners();
+            }
         }
     }
 }

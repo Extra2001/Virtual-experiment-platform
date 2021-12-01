@@ -80,21 +80,21 @@ public class BagSelector : HTBehaviour
     {
         CreateInstrument.HideCurrent();
         CreateInstrument.Create(panel.instrumentType);
-        Main.m_UI.GetUI<BagControl>().Hide();
+        (Main.m_UI.GetUI<BagControl>() as BagControl).Hide();
     }
 
     public void GenerateObjects(ObjectsPanel panel)
     {
         CreateObject.HideCurrent();
         CreateObject.Create(panel.objectsModel.DeepCopy<ObjectsModel>());
-        Main.m_UI.GetUI<BagControl>().Hide();
+        (Main.m_UI.GetUI<BagControl>() as BagControl).Hide();
     }
 
     public void GenerateHistory(HistorysPanel panel)
     {
         CreateInstrument.HideCurrent();
         CreateInstrument.Create(panel.model);
-        Main.m_UI.GetUI<BagControl>().Hide();
+        (Main.m_UI.GetUI<BagControl>() as BagControl).Hide();
     }
 
     public void SelectInstrument(BagItem bagItem)

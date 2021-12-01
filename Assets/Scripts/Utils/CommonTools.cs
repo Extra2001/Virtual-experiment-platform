@@ -46,12 +46,30 @@ public static class CommonTools
     /// </summary>
     private static Dictionary<string, Sprite> spritePool = new Dictionary<string, Sprite>();
     private static Dictionary<string, byte[]> bytesPool = new Dictionary<string, byte[]>();
-    public static byte[] GetBytes(string path)
+    public static byte[] GetBytes(string path, bool wait = true)
     {
         if (bytesPool.ContainsKey(path)) return bytesPool[path];
-        byte[] bytes = File.ReadAllBytes(path);
-        bytesPool.Add(path, bytes);
-        return bytes;
+        if (path.StartsWith("http"))
+        {
+            Request(path);
+            return null;
+        }
+        else
+        {
+            byte[] bytes = File.ReadAllBytes(path);
+            bytesPool.Add(path, bytes);
+            return bytes;
+        }
+    }
+    private static void Request(string path)
+    {
+        var www = UnityEngine.Networking.UnityWebRequest.Get(path);
+        www.SendWebRequest().completed += x =>
+        {
+            var ret = www.downloadHandler.data;
+            if (ret != null && !bytesPool.ContainsKey(path))
+                bytesPool.Add(path, ret);
+        };
     }
     /// <summary>
     /// 根据路径加载图片到Sprite

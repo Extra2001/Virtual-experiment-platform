@@ -9,18 +9,18 @@ namespace HT.Framework
     public sealed class DefaultReferencePoolHelper : IReferencePoolHelper
     {
         /// <summary>
+        /// 对象池默认上限
+        /// </summary>
+        private int _limit;
+
+        /// <summary>
         /// 引用池管理器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 所有引用池
         /// </summary>
         public Dictionary<Type, ReferenceSpawnPool> SpawnPools { get; private set; } = new Dictionary<Type, ReferenceSpawnPool>();
-
-        /// <summary>
-        /// 对象池默认上限
-        /// </summary>
-        private int _limit;
         
         /// <summary>
         /// 初始化助手
@@ -60,7 +60,7 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
 
         }
@@ -114,6 +114,9 @@ namespace HT.Framework
         /// <param name="refe">对象</param>
         public void Despawn(IReference refe)
         {
+            if (refe == null)
+                return;
+
             Type type = refe.GetType();
             if (!SpawnPools.ContainsKey(type))
             {
@@ -129,6 +132,9 @@ namespace HT.Framework
         /// <param name="refes">对象集合</param>
         public void Despawns<T>(List<T> refes) where T : class, IReference, new()
         {
+            if (refes == null)
+                return;
+
             Type type = typeof(T);
             if (!SpawnPools.ContainsKey(type))
             {
@@ -148,6 +154,9 @@ namespace HT.Framework
         /// <param name="refes">对象数组</param>
         public void Despawns<T>(T[] refes) where T : class, IReference, new()
         {
+            if (refes == null)
+                return;
+
             Type type = typeof(T);
             if (!SpawnPools.ContainsKey(type))
             {

@@ -23,17 +23,17 @@ public class ExpOptionsButton : HTBehaviour
         _Close.onClick.AddListener(Hide);
         _SetValue.onClick.AddListener(() =>
         {
-            Main.m_UI.OpenResidentUI<AddValueUILogic>(true);
+            Main.m_UI.OpenUI<AddValueUILogic>(true);
             Hide();
         });
         _SetExpression.onClick.AddListener(() =>
         {
-            Main.m_UI.OpenResidentUI<EnterExpressionUILogic>(true);
+            Main.m_UI.OpenUI<EnterExpressionUILogic>(true);
             Hide();
         });
         _Preview.onClick.AddListener(() =>
         {
-            Main.m_UI.OpenResidentUI<PreviewUILogic>(true);
+            Main.m_UI.OpenUI<PreviewUILogic>(true);
             Hide();
         });
     }

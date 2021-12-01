@@ -12,17 +12,27 @@ namespace HT.Framework
     /// </summary>
     public sealed class DefaultWebRequestHelper : IWebRequestHelper
     {
+        private WebRequestManager _module;
+
         /// <summary>
         /// Web请求管理器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 所有网络接口
         /// </summary>
         public Dictionary<string, WebInterfaceBase> WebInterfaces { get; private set; } = new Dictionary<string, WebInterfaceBase>();
+        /// <summary>
+        /// 是否已连接到因特网
+        /// </summary>
+        public bool IsConnectedInternet
+        {
+            get
+            {
+                return Application.internetReachability != NetworkReachability.NotReachable;
+            }
+        }
 
-        private WebRequestManager _module;
-        
         /// <summary>
         /// 初始化助手
         /// </summary>
@@ -61,7 +71,7 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
 
         }
@@ -86,7 +96,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "添加接口失败：已存在名为 " + interfaceName + " 的网络接口！");
+                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
             }
         }
         /// <summary>
@@ -109,7 +119,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "添加接口失败：已存在名为 " + interfaceName + " 的网络接口！");
+                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
             }
         }
         /// <summary>
@@ -132,7 +142,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "添加接口失败：已存在名为 " + interfaceName + " 的网络接口！");
+                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
             }
         }
         /// <summary>
@@ -159,7 +169,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "添加接口失败：已存在名为 " + interfaceName + " 的网络接口！");
+                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
             }
         }
         /// <summary>
@@ -178,7 +188,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "添加接口失败：已存在名为 " + interfaceName + " 的网络接口！");
+                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
             }
         }
         /// <summary>
@@ -194,7 +204,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "获取接口失败：不存在名为 " + interfaceName + " 的网络接口！");
+                return null;
             }
         }
         /// <summary>
@@ -216,10 +226,6 @@ namespace HT.Framework
             {
                 Main.m_ReferencePool.Despawn(WebInterfaces[interfaceName]);
                 WebInterfaces.Remove(interfaceName);
-            }
-            else
-            {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "移除接口失败：不存在名为 " + interfaceName + " 的网络接口！");
             }
         }
         /// <summary>
@@ -244,25 +250,25 @@ namespace HT.Framework
         {
             if (WebInterfaces.ContainsKey(interfaceName))
             {
-                if (_module.IsOfflineState || WebInterfaces[interfaceName].IsOffline)
+                if (_module.IsOfflineState || WebInterfaces[interfaceName].IsOffline || !IsConnectedInternet)
                 {
                     WebInterfaces[interfaceName].OfflineHandler?.Invoke();
                 }
                 else
                 {
-                    return Main.Current.StartCoroutine(SendRequestCoroutine(interfaceName, parameter));
+                    return Main.Current.StartCoroutine(SendRequestCoroutine(WebInterfaces[interfaceName], parameter));
                 }
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "发起网络请求失败：不存在名为 " + interfaceName + " 的网络接口！");
+                throw new HTFrameworkException(HTFrameworkModule.WebRequest, string.Format("发起网络请求失败：不存在名为 {0} 的网络接口！", interfaceName));
             }
             return null;
         }
-        private IEnumerator SendRequestCoroutine(string interfaceName, params string[] parameter)
+        private IEnumerator SendRequestCoroutine(WebInterfaceBase wif, params string[] parameter)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(WebInterfaces[interfaceName].Url);
+            builder.Append(wif.Url);
             if (parameter.Length > 0)
             {
                 builder.Append("?");
@@ -279,7 +285,7 @@ namespace HT.Framework
             {
                 DateTime begin = DateTime.Now;
 
-                WebInterfaces[interfaceName].OnSetDownloadHandler(request);
+                wif.OnSetDownloadHandler(request);
                 yield return request.SendWebRequest();
 
                 DateTime end = DateTime.Now;
@@ -287,15 +293,15 @@ namespace HT.Framework
                 if (!request.isNetworkError && !request.isHttpError)
                 {
                     Log.Info(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 收到回复：{4}字节  string:{5}"
-                        , begin.ToString("mm:ss:fff"), interfaceName, url, end.ToString("mm:ss:fff"), request.downloadHandler.data.Length, WebInterfaces[interfaceName].OnGetDownloadString(request.downloadHandler)));
+                        , begin.ToString("mm:ss:fff"), wif.Name, url, end.ToString("mm:ss:fff"), request.downloadHandler.data.Length, wif.OnGetDownloadString(request.downloadHandler)));
 
-                    WebInterfaces[interfaceName].OnRequestFinished(request.downloadHandler);
+                    wif.OnRequestFinished(request.downloadHandler);
                 }
                 else
                 {
-                    Log.Error(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 网络请求出错：{4}", begin.ToString("mm:ss:fff"), interfaceName, url, end.ToString("mm:ss:fff"), request.error));
+                    Log.Error(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 网络请求出错：{4}", begin.ToString("mm:ss:fff"), wif, url, end.ToString("mm:ss:fff"), request.error));
 
-                    WebInterfaces[interfaceName].OnRequestFinished(null);
+                    wif.OnRequestFinished(null);
                 }
             }
         }
@@ -309,30 +315,30 @@ namespace HT.Framework
         {
             if (WebInterfaces.ContainsKey(interfaceName))
             {
-                if (_module.IsOfflineState || WebInterfaces[interfaceName].IsOffline)
+                if (_module.IsOfflineState || WebInterfaces[interfaceName].IsOffline || !IsConnectedInternet)
                 {
                     WebInterfaces[interfaceName].OfflineHandler?.Invoke();
                 }
                 else
                 {
-                    return Main.Current.StartCoroutine(SendRequestCoroutine(interfaceName, form));
+                    return Main.Current.StartCoroutine(SendRequestCoroutine(WebInterfaces[interfaceName], form));
                 }
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "发起网络请求失败：不存在名为 " + interfaceName + " 的网络接口！");
+                throw new HTFrameworkException(HTFrameworkModule.WebRequest, string.Format("发起网络请求失败：不存在名为 {0} 的网络接口！", interfaceName));
             }
             return null;
         }
-        private IEnumerator SendRequestCoroutine(string interfaceName, WWWForm form)
+        private IEnumerator SendRequestCoroutine(WebInterfaceBase wif, WWWForm form)
         {
-            string url = WebInterfaces[interfaceName].Url;
+            string url = wif.Url;
 
             using (UnityWebRequest request = UnityWebRequest.Post(url, form))
             {
                 DateTime begin = DateTime.Now;
 
-                WebInterfaces[interfaceName].OnSetDownloadHandler(request);
+                wif.OnSetDownloadHandler(request);
                 yield return request.SendWebRequest();
 
                 DateTime end = DateTime.Now;
@@ -340,15 +346,15 @@ namespace HT.Framework
                 if (!request.isNetworkError && !request.isHttpError)
                 {
                     Log.Info(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 收到回复：{4}字节  string:{5}"
-                        , begin.ToString("mm:ss:fff"), interfaceName, url, end.ToString("mm:ss:fff"), request.downloadHandler.data.Length, WebInterfaces[interfaceName].OnGetDownloadString(request.downloadHandler)));
+                        , begin.ToString("mm:ss:fff"), wif.Name, url, end.ToString("mm:ss:fff"), request.downloadHandler.data.Length, wif.OnGetDownloadString(request.downloadHandler)));
 
-                    WebInterfaces[interfaceName].OnRequestFinished(request.downloadHandler);
+                    wif.OnRequestFinished(request.downloadHandler);
                 }
                 else
                 {
-                    Log.Error(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 网络请求出错：{4}", begin.ToString("mm:ss:fff"), interfaceName, url, end.ToString("mm:ss:fff"), request.error));
+                    Log.Error(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 网络请求出错：{4}", begin.ToString("mm:ss:fff"), wif, url, end.ToString("mm:ss:fff"), request.error));
 
-                    WebInterfaces[interfaceName].OnRequestFinished(null);
+                    wif.OnRequestFinished(null);
                 }
             }
         }
@@ -362,25 +368,25 @@ namespace HT.Framework
         {
             if (WebInterfaces.ContainsKey(interfaceName) && WebInterfaces[interfaceName] is WebInterfaceDownloadFile)
             {
-                if (_module.IsOfflineState || WebInterfaces[interfaceName].IsOffline)
+                if (_module.IsOfflineState || WebInterfaces[interfaceName].IsOffline || !IsConnectedInternet)
                 {
                     WebInterfaces[interfaceName].OfflineHandler?.Invoke();
                 }
                 else
                 {
-                    return Main.Current.StartCoroutine(SendDownloadFileCoroutine(interfaceName, parameter));
+                    return Main.Current.StartCoroutine(SendDownloadFileCoroutine(WebInterfaces[interfaceName] as WebInterfaceDownloadFile, parameter));
                 }
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, "发起下载文件请求失败：不存在名为 " + interfaceName + " 的文件请求接口！");
+                throw new HTFrameworkException(HTFrameworkModule.WebRequest, string.Format("发起下载文件请求失败：不存在名为 {0} 的文件请求接口！", interfaceName));
             }
             return null;
         }
-        private IEnumerator SendDownloadFileCoroutine(string interfaceName, params string[] parameter)
+        private IEnumerator SendDownloadFileCoroutine(WebInterfaceDownloadFile wif, params string[] parameter)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(WebInterfaces[interfaceName].Url);
+            builder.Append(wif.Url);
             if (parameter.Length > 0)
             {
                 builder.Append("?");
@@ -397,15 +403,14 @@ namespace HT.Framework
             {
                 DateTime begin = DateTime.Now;
 
-                WebInterfaceDownloadFile wi = WebInterfaces[interfaceName] as WebInterfaceDownloadFile;
-                wi.OnSetDownloadHandler(request);
+                wif.OnSetDownloadHandler(request);
                 request.SendWebRequest();
                 while (!request.isDone)
                 {
-                    wi.OnLoading(request.downloadProgress);
+                    wif.OnLoading(request.downloadProgress);
                     yield return null;
                 }
-                wi.OnLoading(1f);
+                wif.OnLoading(1f);
                 yield return null;
 
                 DateTime end = DateTime.Now;
@@ -413,16 +418,16 @@ namespace HT.Framework
                 if (!request.isNetworkError && !request.isHttpError)
                 {
                     Log.Info(string.Format("[{0}] 发起下载文件请求：[{1}] {2}\r\n[{3}] 成功下载至：{4}"
-                        , begin.ToString("mm:ss:fff"), interfaceName, url, end.ToString("mm:ss:fff"), wi.Path));
+                        , begin.ToString("mm:ss:fff"), wif.Name, url, end.ToString("mm:ss:fff"), wif.Path));
 
-                    wi.OnFinished(true);
+                    wif.OnFinished(true);
                 }
                 else
                 {
                     Log.Error(string.Format("[{0}] 发起下载文件请求：[{1}] {2}\r\n[{3}] 下载失败：{4}"
-                        , begin.ToString("mm:ss:fff"), interfaceName, url, end.ToString("mm:ss:fff"), request.error));
+                        , begin.ToString("mm:ss:fff"), wif.Name, url, end.ToString("mm:ss:fff"), request.error));
 
-                    wi.OnFinished(false);
+                    wif.OnFinished(false);
                 }
             }
         }

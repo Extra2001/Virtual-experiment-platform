@@ -15,7 +15,7 @@ public class Initializer
         var list = GameManager.Instance.objectsModels;
         foreach (var item in list)
         {
-            yield return CommonTools.GetBytes(item.PreviewImage);
+            yield return CommonTools.GetBytes(item.PreviewImage, false);
             yield return CommonTools.GetSprite(item.PreviewImage);
         }
     }

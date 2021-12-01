@@ -9,88 +9,79 @@ namespace HT.Framework
     internal sealed class HighlightableObject : HTBehaviour
     {
         #region Static Fields
-        //高亮物体所在的层
+        /// <summary>
+        /// 高亮物体所在的层
+        /// </summary>
         public static int HighlightingLayer = 7;
-        //高亮开启速度
+        /// <summary>
+        /// 高亮开启速度
+        /// </summary>
         private static float ConstantOnSpeed = 4.5f;
-        //高亮关闭速度
+        /// <summary>
+        /// 高亮关闭速度
+        /// </summary>
         private static float ConstantOffSpeed = 4f;
-        //默认剪切值用于没有剪切属性的着色器
+        /// <summary>
+        /// 默认剪切值用于没有剪切属性的着色器
+        /// </summary>
         private static float TransparentCutoff = 0.5f;
         #endregion
 
         #region Private Fields
         //2倍的PI值
         private const float DoublePI = 2f * Mathf.PI;
-
         //所有的缓存材质
-        private List<HighlightingRendererCache> _highlightableRenderers;
-        
+        private List<HighlightingRendererCache> _highlightableRenderers = new List<HighlightingRendererCache>();
         //材质是否已修改
         private bool _materialsIsDirty = true;
-
         //当前是否是高亮状态
         private bool _currentHighlightingState = false;
-
         //当前高亮颜色
         private Color _currentHighlightingColor;
-
         //是否启用转换
         private bool _transitionActive = false;
-
         //转换值
         private float _transitionValue = 0f;
-        
         //是否只高亮一帧
         private bool _isOnce = false;
-
         //高亮一帧的颜色
         private Color _onceColor = Color.red;
-
         //是否启用闪光
         private bool _isFlashing = false;
-
         //闪光频率
         private float _flashingFrequency = 2f;
-
         //闪光开始颜色
         private Color _flashingColorMin = new Color(0.0f, 1.0f, 1.0f, 0.0f);
-
         //闪光结束颜色
         private Color _flashingColorMax = new Color(0.0f, 1.0f, 1.0f, 1.0f);
-
         //是否是持续闪光
         private bool _isConstantly = false;
-
         //持续闪光颜色
         private Color _constantColor = Color.yellow;
-
         //是否启用遮光板
         private bool _isOccluder = false;
-
         //是否启用深度缓冲
         private bool _isZWrite = false;
-
         //遮光板颜色
         private readonly Color _occluderColor = new Color(0.0f, 0.0f, 0.0f, 0.005f);
 
         //高亮材质
-        private Material _highlightingMaterial
+        private Material HighlightingMaterial
         {
             get
             {
-                return _isZWrite ? opaqueZMaterial : opaqueMaterial;
+                return _isZWrite ? OpaqueZMaterial : OpaqueMaterial;
             }
         }
 
         private Material _opaqueMaterial;
-        private Material opaqueMaterial
+        private Material OpaqueMaterial
         {
             get
             {
                 if (_opaqueMaterial == null)
                 {
-                    _opaqueMaterial = new Material(opaqueShader);
+                    _opaqueMaterial = new Material(OpaqueShader);
                     _opaqueMaterial.hideFlags = HideFlags.HideAndDontSave;
                 }
                 return _opaqueMaterial;
@@ -98,13 +89,13 @@ namespace HT.Framework
         }
 
         private Material _opaqueZMaterial;
-        private Material opaqueZMaterial
+        private Material OpaqueZMaterial
         {
             get
             {
                 if (_opaqueZMaterial == null)
                 {
-                    _opaqueZMaterial = new Material(opaqueZShader);
+                    _opaqueZMaterial = new Material(OpaqueZShader);
                     _opaqueZMaterial.hideFlags = HideFlags.HideAndDontSave;
                 }
                 return _opaqueZMaterial;
@@ -112,7 +103,7 @@ namespace HT.Framework
         }
 
         private static Shader _opaqueShader;
-        private static Shader opaqueShader
+        private static Shader OpaqueShader
         {
             get
             {
@@ -125,7 +116,7 @@ namespace HT.Framework
         }
 
         private static Shader _transparentShader;
-        private static Shader transparentShader
+        private static Shader TransparentShader
         {
             get
             {
@@ -138,7 +129,7 @@ namespace HT.Framework
         }
 
         private static Shader _opaqueZShader;
-        private static Shader opaqueZShader
+        private static Shader OpaqueZShader
         {
             get
             {
@@ -151,7 +142,7 @@ namespace HT.Framework
         }
 
         private static Shader _transparentZShader;
-        private static Shader transparentZShader
+        private static Shader TransparentZShader
         {
             get
             {
@@ -202,7 +193,7 @@ namespace HT.Framework
                     string tag = sourceMaterial.GetTag("RenderType", true);
                     if (tag == "Transparent" || tag == "TransparentCutout")
                     {
-                        Material replacementMaterial = new Material(writeDepth ? transparentZShader : transparentShader);
+                        Material replacementMaterial = new Material(writeDepth ? TransparentZShader : TransparentShader);
                         if (sourceMaterial.HasProperty("_MainTex"))
                         {
                             replacementMaterial.SetTexture("_MainTex", sourceMaterial.mainTexture);
@@ -268,16 +259,12 @@ namespace HT.Framework
             StartCoroutine(EndOfFrame());
             HighlightingEffect.HighlightingEvent += UpdateHighlighting;
         }
-
         private void OnDisable()
         {
             StopAllCoroutines();
             HighlightingEffect.HighlightingEvent -= UpdateHighlighting;
 
-            if (_highlightableRenderers != null)
-            {
-                _highlightableRenderers.Clear();
-            }
+            _highlightableRenderers.Clear();
 
             //重置高亮参数
             _materialsIsDirty = true;
@@ -311,7 +298,6 @@ namespace HT.Framework
         {
             _materialsIsDirty = true;
         }
-
         /// <summary>
         /// 设置只高亮一帧的参数
         /// </summary>
@@ -320,7 +306,6 @@ namespace HT.Framework
         {
             _onceColor = color;
         }
-
         /// <summary>
         /// 开启高亮一帧
         /// </summary>
@@ -328,7 +313,6 @@ namespace HT.Framework
         {
             _isOnce = true;
         }
-
         /// <summary>
         /// 开启高亮一帧
         /// </summary>
@@ -338,7 +322,6 @@ namespace HT.Framework
             _onceColor = color;
             _isOnce = true;
         }
-
         /// <summary>
         /// 设置闪光参数
         /// </summary>
@@ -351,7 +334,6 @@ namespace HT.Framework
             _flashingColorMax = color2;
             _flashingFrequency = freq;
         }
-
         /// <summary>
         /// 开启闪光
         /// </summary>
@@ -359,7 +341,6 @@ namespace HT.Framework
         {
             _isFlashing = true;
         }
-
         /// <summary>
         /// 开启闪光
         /// </summary>
@@ -371,7 +352,6 @@ namespace HT.Framework
             _flashingColorMax = color2;
             _isFlashing = true;
         }
-
         /// <summary>
         /// 开启闪光
         /// </summary>
@@ -385,7 +365,6 @@ namespace HT.Framework
             _flashingFrequency = freq;
             _isFlashing = true;
         }
-
         /// <summary>
         /// 开启闪光
         /// </summary>
@@ -395,7 +374,6 @@ namespace HT.Framework
             _flashingFrequency = freq;
             _isFlashing = true;
         }
-
         /// <summary>
         /// 关闭闪光
         /// </summary>
@@ -403,7 +381,6 @@ namespace HT.Framework
         {
             _isFlashing = false;
         }
-
         /// <summary>
         /// 闪光模式切换
         /// </summary>
@@ -411,7 +388,6 @@ namespace HT.Framework
         {
             _isFlashing = !_isFlashing;
         }
-
         /// <summary>
         /// 设置持续高亮参数
         /// </summary>
@@ -420,7 +396,6 @@ namespace HT.Framework
         {
             _constantColor = color;
         }
-
         /// <summary>
         /// 开启持续高亮
         /// </summary>
@@ -429,7 +404,6 @@ namespace HT.Framework
             _isConstantly = true;
             _transitionActive = true;
         }
-
         /// <summary>
         /// 开启持续高亮
         /// </summary>
@@ -440,7 +414,6 @@ namespace HT.Framework
             _isConstantly = true;
             _transitionActive = true;
         }
-
         /// <summary>
         /// 关闭持续高亮
         /// </summary>
@@ -449,7 +422,6 @@ namespace HT.Framework
             _isConstantly = false;
             _transitionActive = true;
         }
-
         /// <summary>
         /// 持续高亮模式切换
         /// </summary>
@@ -458,7 +430,6 @@ namespace HT.Framework
             _isConstantly = !_isConstantly;
             _transitionActive = true;
         }
-
         /// <summary>
         /// 立即开启持续高亮
         /// </summary>
@@ -468,7 +439,6 @@ namespace HT.Framework
             _transitionValue = 1f;
             _transitionActive = false;
         }
-
         /// <summary>
         /// 立即开启持续高亮
         /// </summary>
@@ -480,7 +450,6 @@ namespace HT.Framework
             _transitionValue = 1f;
             _transitionActive = false;
         }
-
         /// <summary>
         /// 立即关闭持续高亮
         /// </summary>
@@ -490,7 +459,6 @@ namespace HT.Framework
             _transitionValue = 0f;
             _transitionActive = false;
         }
-
         /// <summary>
         /// 持续高亮模式立即切换
         /// </summary>
@@ -500,7 +468,6 @@ namespace HT.Framework
             _transitionValue = _isConstantly ? 1f : 0f;
             _transitionActive = false;
         }
-
         /// <summary>
         /// 开启遮光板
         /// </summary>
@@ -508,7 +475,6 @@ namespace HT.Framework
         {
             _isOccluder = true;
         }
-
         /// <summary>
         /// 关闭遮光板
         /// </summary>
@@ -516,7 +482,6 @@ namespace HT.Framework
         {
             _isOccluder = false;
         }
-
         /// <summary>
         /// 遮光板模式切换
         /// </summary>
@@ -524,7 +489,6 @@ namespace HT.Framework
         {
             _isOccluder = !_isOccluder;
         }
-
         /// <summary>
         /// 关闭所有高亮模式
         /// </summary>
@@ -537,7 +501,6 @@ namespace HT.Framework
             _transitionValue = 0f;
             _transitionActive = false;
         }
-
         /// <summary>
         /// 死亡
         /// </summary>
@@ -554,7 +517,7 @@ namespace HT.Framework
 
             _isZWrite = writeDepth;
 
-            _highlightableRenderers = new List<HighlightingRendererCache>();
+            _highlightableRenderers.Clear();
 
             MeshRenderer[] mr = GetComponentsInChildren<MeshRenderer>();
             CacheRenderers(mr);
@@ -566,7 +529,6 @@ namespace HT.Framework
             _materialsIsDirty = false;
             _currentHighlightingColor = Color.clear;
         }
-
         private void CacheRenderers(Renderer[] renderers)
         {
             for (int i = 0; i < renderers.Length; i++)
@@ -575,11 +537,10 @@ namespace HT.Framework
 
                 if (materials != null)
                 {
-                    _highlightableRenderers.Add(new HighlightingRendererCache(renderers[i], materials, _highlightingMaterial, _isZWrite));
+                    _highlightableRenderers.Add(new HighlightingRendererCache(renderers[i], materials, HighlightingMaterial, _isZWrite));
                 }
             }
         }
-
         private void SetColor(Color color)
         {
             if (_currentHighlightingColor == color)
@@ -589,11 +550,11 @@ namespace HT.Framework
 
             if (_isZWrite)
             {
-                opaqueZMaterial.SetColor("_Outline", color);
+                OpaqueZMaterial.SetColor("_Outline", color);
             }
             else
             {
-                opaqueMaterial.SetColor("_Outline", color);
+                OpaqueMaterial.SetColor("_Outline", color);
             }
 
             for (int i = 0; i < _highlightableRenderers.Count; i++)
@@ -603,7 +564,6 @@ namespace HT.Framework
 
             _currentHighlightingColor = color;
         }
-
         private void UpdateColors()
         {
             if (_currentHighlightingState == false)
@@ -642,7 +602,6 @@ namespace HT.Framework
                 return;
             }
         }
-
         private void PerformTransition()
         {
             if (_transitionActive == false)
@@ -669,7 +628,6 @@ namespace HT.Framework
                 return;
             }
         }
-
         private void UpdateHighlighting(bool enable, bool writeDepth)
         {
             if (enable)
@@ -692,28 +650,25 @@ namespace HT.Framework
 
                     PerformTransition();
 
-                    if (_highlightableRenderers != null)
+                    for (int i = 0; i < _highlightableRenderers.Count; i++)
                     {
-                        for (int i = 0; i < _highlightableRenderers.Count; i++)
+                        if (_highlightableRenderers[i].IsValid)
                         {
-                            if (_highlightableRenderers[i].IsValid)
-                            {
-                                _highlightableRenderers[i].CacheLayer();
-                                _highlightableRenderers[i].SetLayer(HighlightingLayer);
-                                _highlightableRenderers[i].SetState(true);
-                            }
-                            else
-                            {
-                                _highlightableRenderers[i].ResetLayer();
-                                _highlightableRenderers[i].SetState(false);
-                            }
+                            _highlightableRenderers[i].CacheLayer();
+                            _highlightableRenderers[i].SetLayer(HighlightingLayer);
+                            _highlightableRenderers[i].SetState(true);
+                        }
+                        else
+                        {
+                            _highlightableRenderers[i].ResetLayer();
+                            _highlightableRenderers[i].SetState(false);
                         }
                     }
                 }
             }
             else
             {
-                if (_currentHighlightingState && _highlightableRenderers != null)
+                if (_currentHighlightingState)
                 {
                     for (int i = 0; i < _highlightableRenderers.Count; i++)
                     {
@@ -723,7 +678,6 @@ namespace HT.Framework
                 }
             }
         }
-
         private IEnumerator EndOfFrame()
         {
             while (enabled)

@@ -3,58 +3,107 @@
     描述：Latex公式渲染器
 *************************************************************************************/
 using UnityEngine;
-using Flurl.Http;
 using System;
 using UnityEngine.Events;
 using System.IO;
-//using System.Drawing.Imaging;
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+using System.Drawing.Imaging;
+#endif
 using System.Text;
-using Unity.VectorGraphics;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class LatexEquationRender
+public class LatexEquationRender : MonoBehaviour
 {
-    /// <summary>
-    /// 渲染Latex到Sprite
-    /// </summary>
-    /// <param name="tex">公式字符串</param>
-    /// <param name="action">渲染成功回调</param>
-    /// <param name="errorHandler">渲染失败回调</param>
+    LatexEquationRender Instance = null;
+    static List<Model> stack = new List<Model>();
+    int callback = 0;
+    string base64 = "";
+    [DllImport("__Internal")]
+    private static extern void Render(string latex, string callbackMono, string callbackFuncName);
+    private void Start()
+    {
+        Instance = this;
+    }
+    private void Update()
+    {
+        if (callback == 2)
+        {
+            Debug.Log(base64);
+            if (base64.Contains("错误"))
+                stack[0].errorHandler.Invoke();
+            else
+                stack[0].action.Invoke(CommonTools.GetSprite(Convert.FromBase64String(base64)));
+            stack.RemoveAt(0);
+            callback = 0;
+        }
+        if (callback == 0 && stack.Count > 0)
+        {
+            Render(stack[0].tex, nameof(LatexEquationRender), nameof(Callback));
+            callback = 1;
+        }
+    }
+    public void Callback(string base64)
+    {
+        callback = 2;
+        Debug.Log(base64);
+        this.base64 = base64.Replace("data:image/png;base64,", "");
+    }
     public static void Render(string tex, UnityAction<Sprite> action = null, UnityAction errorHandler = null)
     {
-        var x = $"http://localhost:{ProcessManager.Port}/".PostJsonAsync(new
+#if !UNITY_EDITOR && UNITY_WEBGL
+        stack.Add(new Model()
         {
-            equation = tex
-        }).ReceiveString().ContinueWith(xx =>
-        {
-            string result = "";
-            try
-            {
-                //using (var ms = new MemoryStream())
-                //{
-                    result = xx.Result.Replace("ex\"", "px\"").Replace("ex\";", "px\";");
-                //    var buffer = Encoding.Default.GetBytes(xx.Result);
-                //    //var svg = Svg.SvgDocument.Open<Svg.SvgDocument>(rms);
-                //    //var bitmap = svg.Draw(1000, (int)Math.Round((double)svg.Height / svg.Width * 1000));
-                //    //bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                //    //buffers = ms.GetBuffer();
-                //}
-            }
-            catch(Exception ex) { errorHandler?.Invoke(); }
-            MainThread.Instance.Run(() =>
-            {
-                byte[] buffers = Encoding.Default.GetBytes(result);
-                using (var rms = new MemoryStream(buffers))
-                {
-                    var scene = SVGParser.ImportSVG(new StreamReader(rms));
-                    var geo = VectorUtils.TessellateScene(scene.Scene, new VectorUtils.TessellationOptions());
-                    Sprite ret = VectorUtils.BuildSprite(geo, 10, VectorUtils.Alignment.Center, new Vector2(0.5f, 0.5f), 10);
-                    if (buffers != null)
-                        //action?.Invoke(CommonTools.GetSprite(buffers));
-                        action?.Invoke(ret);
-                    else errorHandler?.Invoke();
-                }
-            });
+            tex = tex,
+            action = action,
+            errorHandler = errorHandler
         });
-        return;
+#endif
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+        string postbody = "{\"equation\":\"" + tex + "\"}";
+        byte[] postData = Encoding.UTF8.GetBytes(postbody); // 把字符串转换为bype数组
+        var www = new UnityWebRequest($"http://localhost:{ProcessManager.Port}/", UnityWebRequest.kHttpVerbPOST);
+        www.uploadHandler = new UploadHandlerRaw(postData);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.uploadHandler.contentType = "application/json";
+        www.SetRequestHeader("Content-Type", "application/json");
+        www.SetRequestHeader("Accept", "application/json");
+        www.SendWebRequest().completed += x =>
+          {
+              if (www.responseCode == 200)
+              {
+                  byte[] buffers = null;
+                  try
+                  {
+                      using (var ms = new MemoryStream())
+                      {
+                          var buffer = Encoding.Default.GetBytes(www.downloadHandler.text);
+                          using (var rms = new MemoryStream(buffer))
+                          {
+                              var svg = Svg.SvgDocument.Open<Svg.SvgDocument>(rms);
+                              var bitmap = svg.Draw(1000, (int)Math.Round((double)svg.Height / svg.Width * 1000));
+                              bitmap.Save(ms, ImageFormat.Png);
+                              buffers = ms.GetBuffer();
+                          }
+                      }
+                  }
+                  catch { errorHandler?.Invoke(); }
+                  if (buffers != null)
+                      action?.Invoke(CommonTools.GetSprite(buffers));
+                  else errorHandler?.Invoke();
+              }
+              else
+              {
+                  errorHandler?.Invoke();
+              }
+          };
+#endif
+    }
+    public class Model
+    {
+        public string tex;
+        public UnityAction<Sprite> action;
+        public UnityAction errorHandler;
     }
 }

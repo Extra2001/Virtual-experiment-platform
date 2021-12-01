@@ -20,6 +20,6 @@ public class CloseBag : HTBehaviour
     /// </summary>
     private void CloseIt()
     {
-        Main.m_UI.GetUI<BagControl>().Hide();
+        (Main.m_UI.GetUI<BagControl>() as BagControl).Hide();
     }
 }

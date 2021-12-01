@@ -479,7 +479,7 @@ public class DealProcessResult : HTBehaviour
         }
         else
         {
-            Main.m_UI.OpenTemporaryUI<SaveRecordUILogic>();
+            Main.m_UI.OpenUI<SaveRecordUILogic>();
         }
     }
 }

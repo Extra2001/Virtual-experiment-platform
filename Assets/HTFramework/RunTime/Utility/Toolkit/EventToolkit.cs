@@ -19,6 +19,9 @@ namespace HT.Framework
         /// <param name="callback">回调函数</param>
         public static void AddCommonEventListener(this RectTransform target, EventTriggerType type, UnityAction<BaseEventData> callback)
         {
+            if (target == null)
+                return;
+
             EventTrigger trigger = target.GetComponent<EventTrigger>();
             if (trigger == null)
             {
@@ -45,6 +48,9 @@ namespace HT.Framework
         /// <param name="target">事件监听目标</param>
         public static void RemoveAllCommonEventListener(this RectTransform target)
         {
+            if (target == null)
+                return;
+
             EventTrigger trigger = target.GetComponent<EventTrigger>();
             if (trigger != null)
             {
@@ -61,6 +67,9 @@ namespace HT.Framework
         /// <param name="callback">回调函数</param>
         public static void AddEventListener(this RectTransform target, UnityAction callback)
         {
+            if (target == null)
+                return;
+
             Button button = target.GetComponent<Button>();
             if (button)
             {
@@ -77,6 +86,9 @@ namespace HT.Framework
         /// <param name="target">事件监听目标</param>
         public static void RemoveAllEventListener(this RectTransform target)
         {
+            if (target == null)
+                return;
+
             Button button = target.GetComponent<Button>();
             if (button)
             {
@@ -92,7 +104,7 @@ namespace HT.Framework
         /// </summary>
         /// <param name="target">目标</param>
         /// <param name="callback">点击事件回调</param>
-        public static void AddClickListener(this GameObject target, HTFAction callback)
+        public static void AddClickListener(this GameObject target, UnityAction callback)
         {
             Main.m_Controller.AddClickListener(target, callback);
         }
@@ -100,9 +112,18 @@ namespace HT.Framework
         /// 为挂载 MouseRayTargetBase 的目标移除鼠标左键点击事件
         /// </summary>
         /// <param name="target">目标</param>
-        public static void RemoveClickListener(this GameObject target)
+        /// <param name="callback">点击事件回调</param>
+        public static void RemoveClickListener(this GameObject target, UnityAction callback)
         {
-            Main.m_Controller.RemoveClickListener(target);
+            Main.m_Controller.RemoveClickListener(target, callback);
+        }
+        /// <summary>
+        /// 为挂载 MouseRayTargetBase 的目标移除所有的鼠标左键点击事件
+        /// </summary>
+        /// <param name="target">目标</param>
+        public static void RemoveAllClickListener(this GameObject target)
+        {
+            Main.m_Controller.RemoveAllClickListener(target);
         }
     }
 }

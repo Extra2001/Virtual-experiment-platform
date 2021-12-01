@@ -14,7 +14,7 @@ public class EnterExpressionProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenResidentUI<EnterExpressionUILogic>();
+        Main.m_UI.OpenUI<EnterExpressionUILogic>();
         base.OnEnter(lastProcedure);
     }
 

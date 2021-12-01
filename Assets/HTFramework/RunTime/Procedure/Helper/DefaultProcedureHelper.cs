@@ -9,10 +9,13 @@ namespace HT.Framework
     /// </summary>
     public sealed class DefaultProcedureHelper : IProcedureHelper
     {
+        private float _timer = 0;
+        private string _defaultProcedure;
+
         /// <summary>
         /// 流程管理器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 当前流程
         /// </summary>
@@ -29,9 +32,6 @@ namespace HT.Framework
         /// 任意流程切换事件（上一个离开的流程、下一个进入的流程）
         /// </summary>
         public event HTFAction<ProcedureBase, ProcedureBase> AnyProcedureSwitchEvent;
-
-        private float _timer = 0;
-        private string _defaultProcedure;
         
         /// <summary>
         /// 初始化助手
@@ -72,26 +72,18 @@ namespace HT.Framework
         public void OnPreparatory()
         {
             //流程初始化
-            foreach (var procedureInstance in Procedures)
+            foreach (var procedure in Procedures)
             {
-                procedureInstance.Value.OnInit();
+                procedure.Value.OnInit();
             }
 
             //进入默认流程
-            if (_defaultProcedure != "")
+            if (!string.IsNullOrEmpty(_defaultProcedure))
             {
                 Type type = ReflectionToolkit.GetTypeInRunTimeAssemblies(_defaultProcedure);
                 if (type != null)
                 {
-                    if (Procedures.ContainsKey(type))
-                    {
-                        CurrentProcedure = Procedures[type];
-                        CurrentProcedure.OnEnter(null);
-                    }
-                    else
-                    {
-                        throw new HTFrameworkException(HTFrameworkModule.Procedure, "进入流程失败：不存在流程 " + type.Name + " 或者流程未激活！");
-                    }
+                    SwitchProcedure(type);
                 }
                 else
                 {
@@ -114,7 +106,7 @@ namespace HT.Framework
                 }
                 else
                 {
-                    _timer = 0;
+                    _timer -= 1;
                     CurrentProcedure.OnUpdateSecond();
                 }
             }
@@ -137,7 +129,7 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
 
         }
@@ -159,7 +151,7 @@ namespace HT.Framework
             }
         }
         /// <summary>
-        /// 是否存在流程
+        /// 是否存在指定类型的流程
         /// </summary>
         /// <param name="type">流程类</param>
         /// <returns>是否存在</returns>
@@ -167,7 +159,17 @@ namespace HT.Framework
         {
             return Procedures.ContainsKey(type);
         }
-        
+        /// <summary>
+        /// 是否存在指定序号的流程（依据编辑器面板的序号）
+        /// </summary>
+        /// <param name="index">流程序号</param>
+        /// <returns>是否存在</returns>
+        public bool IsExistProcedure(int index)
+        {
+            index = index - 1;
+            return index >= 0 && index < ProcedureTypes.Count;
+        }
+
         /// <summary>
         /// 切换流程
         /// </summary>
@@ -217,16 +219,15 @@ namespace HT.Framework
         /// </summary>
         public void SwitchLastProcedure()
         {
-            throw new HTFrameworkException(HTFrameworkModule.Procedure, "不允许使用此方法，请使用GameManager中的方法代替。");
-            //int index = ProcedureTypes.IndexOf(CurrentProcedure.GetType());
-            //if (index <= 0)
-            //{
-            //    SwitchProcedure(ProcedureTypes[ProcedureTypes.Count - 1]);
-            //}
-            //else
-            //{
-            //    SwitchProcedure(ProcedureTypes[index - 1]);
-            //}
+            int index = ProcedureTypes.IndexOf(CurrentProcedure.GetType());
+            if (index <= 0)
+            {
+                SwitchProcedure(ProcedureTypes[ProcedureTypes.Count - 1]);
+            }
+            else
+            {
+                SwitchProcedure(ProcedureTypes[index - 1]);
+            }
         }
         /// <summary>
         /// 切换至指定序号的流程（依据编辑器面板的序号）

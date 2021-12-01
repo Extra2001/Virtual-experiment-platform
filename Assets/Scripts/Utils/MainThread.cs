@@ -13,18 +13,22 @@ public class MainThread : SingletonBehaviorManager<MainThread>
     /// <summary>
     /// 要运行的任务
     /// </summary>
-    List<Action> tasks = new List<Action>();
+    List<Model> models = new List<Model>();
 
     /// <summary>
     /// 每帧时都检测是否有任务要运行
     /// </summary>
     void Update()
     {
-        for (int i = tasks.Count - 1; i >= 0; i--)
+        long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        for (int i = models.Count - 1; i >= 0; i--)
         {
-            if (tasks[i] != null)
-                tasks[i].Invoke();
-            tasks.RemoveAt(i);
+            if (now - models[i].startTime > models[i].delay)
+            {
+                if (models[i].action != null)
+                    models[i].action.Invoke();
+                models.RemoveAt(i);
+            }
         }
     }
     /// <summary>
@@ -32,26 +36,25 @@ public class MainThread : SingletonBehaviorManager<MainThread>
     /// </summary>
     public void Run(Action action)
     {
-        tasks.Add(action);
+        DelayAndRun(0, action);
     }
     /// <summary>
     /// 在主线程上延迟并运行
     /// </summary>
-    public Task DelayAndRun(int delay, Action action)
+    public void DelayAndRun(int delay, Action action)
     {
-        return Task.Delay(delay).ContinueWith(_ =>
+        long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        models.Add(new Model()
         {
-            Run(action);
+            startTime = now,
+            delay = delay,
+            action = action
         });
     }
-    /// <summary>
-    /// 在主线程上延迟并运行，可配置取消
-    /// </summary>
-    public Task DelayAndRun(int delay, CancellationToken cancellationToken, Action action)
+    public class Model
     {
-        return Task.Delay(delay, cancellationToken).ContinueWith(_ =>
-        {
-            Run(action);
-        });
+        public int delay;
+        public long startTime;
+        public Action action;
     }
 }

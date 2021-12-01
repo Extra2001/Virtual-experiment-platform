@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -20,7 +22,6 @@ namespace HT.Framework
         {
             OnInitHierarchy();
             OnInitProject();
-            OnInitLnkTools();
         }
         #endregion
 
@@ -28,7 +29,7 @@ namespace HT.Framework
         /// <summary>
         /// About
         /// </summary>
-        [@MenuItem("HTFramework/About", false, 0)]
+        [MenuItem("HTFramework/About", false, 0)]
         private static void About()
         {
             About about = EditorWindow.GetWindow<About>(true, "HTFramework About", true);
@@ -43,7 +44,7 @@ namespace HT.Framework
         /// <summary>
         /// 打开ComponentBatch窗口
         /// </summary>
-        [@MenuItem("HTFramework/Batch/Component Batch", false, 100)]
+        [MenuItem("HTFramework/Batch/Component Batch", false, 100)]
         private static void OpenComponentBatch()
         {
             ComponentBatch cb = EditorWindow.GetWindow<ComponentBatch>();
@@ -56,7 +57,7 @@ namespace HT.Framework
         /// <summary>
         /// 打开ProjectBatch窗口
         /// </summary>
-        [@MenuItem("HTFramework/Batch/Project Batch", false, 101)]
+        [MenuItem("HTFramework/Batch/Project Batch", false, 101)]
         private static void OpenProjectBatch()
         {
             ProjectBatch pb = EditorWindow.GetWindow<ProjectBatch>();
@@ -69,7 +70,7 @@ namespace HT.Framework
         /// <summary>
         /// 【验证函数】添加边界框碰撞器
         /// </summary>
-        [@MenuItem("HTFramework/Batch/Add Bounds Box Collider", true)]
+        [MenuItem("HTFramework/Batch/Add Bounds Box Collider", true)]
         private static bool AddBoundsBoxColliderValidate()
         {
             return Selection.gameObjects.Length > 0;
@@ -77,16 +78,19 @@ namespace HT.Framework
         /// <summary>
         /// 添加边界框碰撞器
         /// </summary>
-        [@MenuItem("HTFramework/Batch/Add Bounds Box Collider", false, 120)]
+        [MenuItem("HTFramework/Batch/Add Bounds Box Collider", false, 120)]
         private static void AddBoundsBoxCollider()
         {
             GameObject[] objs = Selection.gameObjects;
             for (int i = 0; i < objs.Length; i++)
             {
-                if (objs[i].GetComponent<MeshRenderer>())
+                if (objs[i].GetComponent<Renderer>())
                 {
                     if (!objs[i].GetComponent<Collider>())
-                        objs[i].AddComponent<BoxCollider>();
+                    {
+                        Undo.AddComponent<BoxCollider>(objs[i]);
+                        EditorUtility.SetDirty(objs[i]);
+                    }
                     continue;
                 }
 
@@ -105,7 +109,7 @@ namespace HT.Framework
                 Collider[] colliders = trans.GetComponents<Collider>();
                 foreach (Collider collider in colliders)
                 {
-                    UnityEngine.Object.DestroyImmediate(collider);
+                    Undo.DestroyObjectImmediate(collider);
                 }
 
                 Vector3 center = Vector3.zero;
@@ -121,20 +125,22 @@ namespace HT.Framework
                     bounds.Encapsulate(child.bounds);
                 }
 
-                BoxCollider boxCollider = trans.gameObject.AddComponent<BoxCollider>();
+                BoxCollider boxCollider = Undo.AddComponent<BoxCollider>(trans.gameObject);
                 boxCollider.center = bounds.center - trans.position;
                 boxCollider.size = bounds.size;
 
                 trans.position = postion;
                 trans.rotation = rotation;
                 trans.localScale = scale;
+
+                EditorUtility.SetDirty(trans.gameObject);
             }
         }
 
         /// <summary>
         /// 【验证函数】设置鼠标射线可捕获物体目标
         /// </summary>
-        [@MenuItem("HTFramework/Batch/Set Mouse Ray Target", true)]
+        [MenuItem("HTFramework/Batch/Set Mouse Ray Target", true)]
         private static bool SetMouseRayTargetValidate()
         {
             return Selection.gameObjects.Length > 0;
@@ -142,7 +148,7 @@ namespace HT.Framework
         /// <summary>
         /// 设置鼠标射线可捕获物体目标
         /// </summary>
-        [@MenuItem("HTFramework/Batch/Set Mouse Ray Target", false, 121)]
+        [MenuItem("HTFramework/Batch/Set Mouse Ray Target", false, 121)]
         private static void SetMouseRayTarget()
         {
             AddBoundsBoxCollider();
@@ -151,19 +157,23 @@ namespace HT.Framework
             for (int i = 0; i < objs.Length; i++)
             {
                 Collider collider = objs[i].GetComponent<Collider>();
-                if (!collider) collider = objs[i].AddComponent<BoxCollider>();
-                collider.isTrigger = true;
+                if (collider)
+                {
+                    collider.isTrigger = true;
 
-                MouseRayTarget rayTarget = objs[i].GetComponent<MouseRayTarget>();
-                if (!rayTarget) rayTarget = objs[i].AddComponent<MouseRayTarget>();
-                rayTarget.Name = objs[i].name;
+                    MouseRayTarget rayTarget = objs[i].GetComponent<MouseRayTarget>();
+                    if (!rayTarget) rayTarget = Undo.AddComponent<MouseRayTarget>(objs[i]);
+                    rayTarget.Name = objs[i].name;
+
+                    EditorUtility.SetDirty(objs[i]);
+                }
             }
         }
 
         /// <summary>
         /// 【验证函数】设置鼠标射线可捕获UI目标
         /// </summary>
-        [@MenuItem("HTFramework/Batch/Set Mouse Ray UI Target", true)]
+        [MenuItem("HTFramework/Batch/Set Mouse Ray UI Target", true)]
         private static bool SetMouseRayUITargetValidate()
         {
             return Selection.gameObjects.Length > 0;
@@ -171,23 +181,27 @@ namespace HT.Framework
         /// <summary>
         /// 设置鼠标射线可捕获UI目标
         /// </summary>
-        [@MenuItem("HTFramework/Batch/Set Mouse Ray UI Target", false, 122)]
+        [MenuItem("HTFramework/Batch/Set Mouse Ray UI Target", false, 122)]
         private static void SetMouseRayUITarget()
         {
             GameObject[] objs = Selection.gameObjects;
             for (int i = 0; i < objs.Length; i++)
             {
                 Graphic graphic = objs[i].GetComponent<Graphic>();
-                if (!graphic)
+                if (graphic)
+                {
+                    graphic.raycastTarget = true;
+
+                    MouseRayUITarget rayUITarget = objs[i].GetComponent<MouseRayUITarget>();
+                    if (!rayUITarget) rayUITarget = Undo.AddComponent<MouseRayUITarget>(objs[i]);
+                    rayUITarget.Name = objs[i].name;
+
+                    EditorUtility.SetDirty(objs[i]);
+                }
+                else
                 {
                     Log.Warning("对象 " + objs[i].name + " 没有Graphic组件，无法做为可捕获UI目标！");
-                    continue;
                 }
-                graphic.raycastTarget = true;
-
-                MouseRayUITarget rayUITarget = objs[i].GetComponent<MouseRayUITarget>();
-                if (!rayUITarget) rayUITarget = objs[i].AddComponent<MouseRayUITarget>();
-                rayUITarget.Name = objs[i].name;
             }
         }
         #endregion
@@ -196,7 +210,7 @@ namespace HT.Framework
         /// <summary>
         /// 清理控制台
         /// </summary>
-        [@MenuItem("HTFramework/Console/Clear &1", false, 101)]
+        [MenuItem("HTFramework/Console/Clear &1", false, 101)]
         private static void ClearConsole()
         {
             Type logEntries = EditorReflectionToolkit.GetTypeInEditorAssemblies("UnityEditor.LogEntries");
@@ -207,7 +221,7 @@ namespace HT.Framework
         /// <summary>
         /// 打印普通日志
         /// </summary>
-        [@MenuItem("HTFramework/Console/Debug Log", false, 102)]
+        [MenuItem("HTFramework/Console/Debug Log", false, 102)]
         private static void ConsoleDebugLog()
         {
             Log.Info("Debug.Log!");
@@ -216,7 +230,7 @@ namespace HT.Framework
         /// <summary>
         /// 打印警告日志
         /// </summary>
-        [@MenuItem("HTFramework/Console/Debug LogWarning", false, 103)]
+        [MenuItem("HTFramework/Console/Debug LogWarning", false, 103)]
         private static void ConsoleDebugLogWarning()
         {
             Log.Warning("Debug.LogWarning!");
@@ -225,7 +239,7 @@ namespace HT.Framework
         /// <summary>
         /// 打印错误日志
         /// </summary>
-        [@MenuItem("HTFramework/Console/Debug LogError", false, 104)]
+        [MenuItem("HTFramework/Console/Debug LogError", false, 104)]
         private static void ConsoleDebugLogError()
         {
             Log.Error("Debug.LogError!");
@@ -236,7 +250,7 @@ namespace HT.Framework
         /// <summary>
         /// 运行场景
         /// </summary>
-        [@MenuItem("HTFramework/Editor/Run &2", false, 102)]
+        [MenuItem("HTFramework/Editor/Run &2", false, 102)]
         private static void RunScene()
         {
             EditorApplication.isPlaying = !EditorApplication.isPlaying;
@@ -245,12 +259,54 @@ namespace HT.Framework
         /// <summary>
         /// 打开编辑器安装路径
         /// </summary>
-        [@MenuItem("HTFramework/Editor/Open Installation Path", false, 103)]
+        [MenuItem("HTFramework/Editor/Open Installation Path", false, 103)]
         private static void OpenInstallationPath()
         {
             string path = EditorApplication.applicationPath.Substring(0, EditorApplication.applicationPath.LastIndexOf("/"));
-            System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo(path);
-            System.Diagnostics.Process.Start(psi);
+            ProcessStartInfo psi = new ProcessStartInfo(path);
+            Process.Start(psi);
+        }
+
+        /// <summary>
+        /// 打开DataPath文件夹
+        /// </summary>
+        [MenuItem("HTFramework/Editor/Open DataPath Folder", false, 104)]
+        private static void OpenDataPathFolder()
+        {
+            string path = Application.dataPath;
+            ProcessStartInfo psi = new ProcessStartInfo(path);
+            Process.Start(psi);
+        }
+
+        /// <summary>
+        /// 打开StreamingAssets文件夹
+        /// </summary>
+        [MenuItem("HTFramework/Editor/Open StreamingAssets Folder", false, 105)]
+        private static void OpenStreamingAssetsFolder()
+        {
+            string path = Application.streamingAssetsPath;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                AssetDatabase.Refresh();
+            }
+            ProcessStartInfo psi = new ProcessStartInfo(path);
+            Process.Start(psi);
+        }
+
+        /// <summary>
+        /// 打开PersistentData文件夹
+        /// </summary>
+        [MenuItem("HTFramework/Editor/Open PersistentData Folder", false, 106)]
+        private static void OpenPersistentDataFolder()
+        {
+            string path = Application.persistentDataPath;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            ProcessStartInfo psi = new ProcessStartInfo(path);
+            Process.Start(psi);
         }
         #endregion
 
@@ -258,7 +314,7 @@ namespace HT.Framework
         /// <summary>
         /// 标记目标为ECS系统的实体
         /// </summary>
-        [@MenuItem("HTFramework/ECS/Mark As To Entity", false, 103)]
+        [MenuItem("HTFramework/ECS/Mark As To Entity", false, 103)]
         private static void MarkAsToEntity()
         {
             int index = 0;
@@ -273,7 +329,7 @@ namespace HT.Framework
         /// <summary>
         /// 打开ECS系统检视器
         /// </summary>
-        [@MenuItem("HTFramework/ECS/Inspector", false, 104)]
+        [MenuItem("HTFramework/ECS/Inspector", false, 104)]
         private static void OpenECSInspector()
         {
             ECS_Inspector inspector = EditorWindow.GetWindow<ECS_Inspector>();
@@ -287,7 +343,7 @@ namespace HT.Framework
         /// <summary>
         /// 合并多个模型网格
         /// </summary>
-        [@MenuItem("HTFramework/Tools/Mesh/Mesh Combines", false, 104)]
+        [MenuItem("HTFramework/Tools/Mesh/Mesh Combines", false, 104)]
         private static void MeshCombines()
         {
             if (Selection.gameObjects.Length <= 1)
@@ -337,7 +393,7 @@ namespace HT.Framework
         /// <summary>
         /// 展示模型信息
         /// </summary>
-        [@MenuItem("HTFramework/Tools/Mesh/Mesh Info", false, 105)]
+        [MenuItem("HTFramework/Tools/Mesh/Mesh Info", false, 105)]
         private static void ShowMeshInfo()
         {
             for (int i = 0; i < Selection.gameObjects.Length; i++)
@@ -345,7 +401,7 @@ namespace HT.Framework
                 MeshFilter filter = Selection.gameObjects[i].GetComponent<MeshFilter>();
                 if (filter)
                 {
-                    Log.Info("Mesh [" + filter.name + "] : vertices " + filter.sharedMesh.vertexCount + ", triangles " + filter.sharedMesh.triangles.Length);
+                    Log.Info("Mesh [" + filter.name + "] : vertices " + filter.sharedMesh.vertexCount + ", triangles " + (filter.sharedMesh.triangles.Length / 3));
                 }
             }
         }
@@ -353,7 +409,7 @@ namespace HT.Framework
         /// <summary>
         /// 打开 Assets Master
         /// </summary>
-        [@MenuItem("HTFramework/Tools/Assets Master", false, 106)]
+        [MenuItem("HTFramework/Tools/Assets Master", false, 106)]
         private static void OpenAssetsMaster()
         {
             AssetsMaster master = EditorWindow.GetWindow<AssetsMaster>();
@@ -367,7 +423,7 @@ namespace HT.Framework
         /// <summary>
         /// 打开 Assembly Viewer
         /// </summary>
-        [@MenuItem("HTFramework/Tools/Assembly Viewer", false, 107)]
+        [MenuItem("HTFramework/Tools/Assembly Viewer", false, 107)]
         private static void OpenAssemblyViewer()
         {
             AssemblyViewer viewer = EditorWindow.GetWindow<AssemblyViewer>();
@@ -379,7 +435,7 @@ namespace HT.Framework
         /// <summary>
         /// 打开 Custom Executer
         /// </summary>
-        [@MenuItem("HTFramework/Tools/Custom Executer", false, 108)]
+        [MenuItem("HTFramework/Tools/Custom Executer", false, 108)]
         private static void OpenCustomExecuter()
         {
             CustomExecuter tools = EditorWindow.GetWindow<CustomExecuter>();
@@ -390,46 +446,10 @@ namespace HT.Framework
             tools.Show();
         }
 
-        private static List<MethodInfo> CustomTools = new List<MethodInfo>();
-
-        /// <summary>
-        /// 执行 Custom Tool
-        /// </summary>
-        [@MenuItem("HTFramework/Tools/Custom Tool", false, 109)]
-        private static void ExecuteCustomTool()
-        {
-            CustomTools.Clear();
-            List<Type> types = EditorReflectionToolkit.GetTypesInEditorAssemblies();
-            for (int i = 0; i < types.Count; i++)
-            {
-                MethodInfo[] methods = types[i].GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                for (int j = 0; j < methods.Length; j++)
-                {
-                    if (methods[j].IsDefined(typeof(CustomToolAttribute), false))
-                    {
-                        CustomTools.Add(methods[j]);
-                    }
-                }
-            }
-            if (CustomTools.Count <= 0)
-            {
-                Log.Warning("当前不存在至少一个自定义工具！为任何处于 Editor 文件夹中的类的无参静态函数添加 CustomTool 特性，可将该函数附加至自定义工具菜单！");
-            }
-            else
-            {
-                for (int i = 0; i < CustomTools.Count; i++)
-                {
-                    CustomTools[i].Invoke(null, null);
-                }
-                Log.Info("已执行 " + CustomTools.Count + " 个自定义工具！");
-                CustomTools.Clear();
-            }
-        }
-
         /// <summary>
         /// 打开 Extended Inspector
         /// </summary>
-        [@MenuItem("HTFramework/Tools/Extended Inspector", false, 110)]
+        [MenuItem("HTFramework/Tools/Extended Inspector", false, 109)]
         private static void OpenExtendedInspector()
         {
             ExtendedInspectorWindow window = EditorWindow.GetWindow<ExtendedInspectorWindow>();
@@ -443,22 +463,36 @@ namespace HT.Framework
         /// <summary>
         /// ProjectWizard
         /// </summary>
-        [@MenuItem("HTFramework/Project Wizard", false, 1000)]
-        private static void ProjectWizard()
+        [MenuItem("HTFramework/Project Wizard", false, 1000)]
+        private static void OpenProjectWizard()
         {
             ProjectWizard wizard = EditorWindow.GetWindow<ProjectWizard>();
             wizard.titleContent.image = EditorGUIUtility.IconContent("SocialNetworks.UDNLogo").image;
             wizard.titleContent.text = "Project Wizard";
-            wizard.position = new Rect(200, 200, 600, 500);
+            wizard.position = new Rect(200, 200, 600, 600);
             wizard.Show();
         }
         #endregion
 
-        #region HTFramework Setting... 【优先级1001】
+        #region Execution Order 【优先级1001】
+        /// <summary>
+        /// Execution Order
+        /// </summary>
+        [MenuItem("HTFramework/Execution Order", false, 1001)]
+        private static void OpenExecutionOrder()
+        {
+            ExecutionOrder window = EditorWindow.GetWindow<ExecutionOrder>();
+            window.titleContent.image = EditorGUIUtility.IconContent("SortingGroup Icon").image;
+            window.titleContent.text = "Execution Order";
+            window.Show();
+        }
+        #endregion
+
+        #region HTFramework Setting... 【优先级1002】
         /// <summary>
         /// HTFramework Setting...
         /// </summary>
-        [@MenuItem("HTFramework/HTFramework Settings...", false, 1001)]
+        [MenuItem("HTFramework/HTFramework Settings...", false, 1002)]
         private static void OpenHTFrameworkSettings()
         {
             Setter setter = EditorWindow.GetWindow<Setter>();
@@ -473,7 +507,7 @@ namespace HT.Framework
         /// <summary>
         /// 【验证函数】新建框架主环境
         /// </summary>
-        [@MenuItem("GameObject/HTFramework/Main Environment", true)]
+        [MenuItem("GameObject/HTFramework/Main Environment", true)]
         private static bool CreateMainValidate()
         {
             return UnityEngine.Object.FindObjectOfType<Main>() == null;
@@ -481,7 +515,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建框架主环境
         /// </summary>
-        [@MenuItem("GameObject/HTFramework/Main Environment", false, 0)]
+        [MenuItem("GameObject/HTFramework/Main Environment", false, 0)]
         private static void CreateMain()
         {
             UnityEngine.Object asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>("Assets/HTFramework/HTFramework.prefab");
@@ -504,7 +538,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建FSM
         /// </summary>
-        [@MenuItem("GameObject/HTFramework/FSM", false, 1)]
+        [MenuItem("GameObject/HTFramework/FSM", false, 1)]
         private static void CreateFSM()
         {
             GameObject fsm = new GameObject();
@@ -522,7 +556,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建AspectProxy类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# AspectProxy Script", false, 11)]
+        [MenuItem("Assets/Create/HTFramework/C# AspectProxy Script", false, 11)]
         private static void CreateAspectProxy()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_AspectProxy_Folder, "AspectProxy", "AspectProxyTemplate");
@@ -531,7 +565,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建CustomModule类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# CustomModule Script", false, 12)]
+        [MenuItem("Assets/Create/HTFramework/C# CustomModule Script", false, 12)]
         private static void CreateCustomModule()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_CustomModule_Folder, "CustomModule", "CustomModuleTemplate", "#MODULENAME#");
@@ -540,7 +574,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建DataSet类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# DataSet Script", false, 13)]
+        [MenuItem("Assets/Create/HTFramework/C# DataSet Script", false, 13)]
         private static void CreateDataSet()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_DataSet_Folder, "DataSet", "DataSetTemplate");
@@ -549,7 +583,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建EntityLogic类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# EntityLogic Script", false, 14)]
+        [MenuItem("Assets/Create/HTFramework/C# EntityLogic Script", false, 14)]
         private static void CreateEntityLogic()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_EntityLogic_Folder, "EntityLogic", "EntityLogicTemplate");
@@ -558,7 +592,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建EventHandler类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# EventHandler Script", false, 15)]
+        [MenuItem("Assets/Create/HTFramework/C# EventHandler Script", false, 15)]
         private static void CreateEventHandler()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_EventHandler_Folder, "EventHandler", "EventHandlerTemplate");
@@ -567,7 +601,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建FiniteState类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# FiniteState Script", false, 16)]
+        [MenuItem("Assets/Create/HTFramework/C# FiniteState Script", false, 16)]
         private static void CreateFiniteState()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_FiniteState_Folder, "FiniteState", "FiniteStateTemplate", "#STATENAME#");
@@ -576,7 +610,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建Procedure类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# Procedure Script", false, 17)]
+        [MenuItem("Assets/Create/HTFramework/C# Procedure Script", false, 17)]
         private static void CreateProcedure()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_Procedure_Folder, "Procedure", "ProcedureTemplate");
@@ -585,7 +619,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建ProtocolChannel类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# Protocol Channel Script", false, 18)]
+        [MenuItem("Assets/Create/HTFramework/C# Protocol Channel Script", false, 18)]
         private static void CreateProtocolChannel()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_ProtocolChannel_Folder, "ProtocolChannel", "ProtocolChannelTemplate");
@@ -594,7 +628,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建UILogicResident类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# UILogicResident Script", false, 19)]
+        [MenuItem("Assets/Create/HTFramework/C# UILogicResident Script", false, 19)]
         private static void CreateUILogicResident()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_UILogicResident_Folder, "UILogicResident", "UILogicResidentTemplate");
@@ -603,7 +637,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建UILogicTemporary类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/C# UILogicTemporary Script", false, 20)]
+        [MenuItem("Assets/Create/HTFramework/C# UILogicTemporary Script", false, 20)]
         private static void CreateUILogicTemporary()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_UILogicTemporary_Folder, "UILogicTemporary", "UILogicTemporaryTemplate");
@@ -612,7 +646,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建ECS的组件类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/[ECS] C# Component Script", false, 1000)]
+        [MenuItem("Assets/Create/HTFramework/[ECS] C# Component Script", false, 1000)]
         private static void CreateECSComponent()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_ECSComponent_Folder, "ECSComponent", "ECSComponentTemplate");
@@ -621,7 +655,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建ECS的系统类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/[ECS] C# System Script", false, 1001)]
+        [MenuItem("Assets/Create/HTFramework/[ECS] C# System Script", false, 1001)]
         private static void CreateECSSystem()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_ECSSystem_Folder, "ECSSystem", "ECSSystemTemplate");
@@ -630,7 +664,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建ECS的指令类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/[ECS] C# Order Script", false, 1002)]
+        [MenuItem("Assets/Create/HTFramework/[ECS] C# Order Script", false, 1002)]
         private static void CreateECSOrder()
         {
             CreateScriptFormTemplate(EditorPrefsTable.Script_ECSOrder_Folder, "ECSOrder", "ECSOrderTemplate");
@@ -639,7 +673,7 @@ namespace HT.Framework
         /// <summary>
         /// 【验证函数】新建HotfixProcedure类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/[Hotfix] C# HotfixProcedure Script", true)]
+        [MenuItem("Assets/Create/HTFramework/[Hotfix] C# HotfixProcedure Script", true)]
         private static bool CreateHotfixProcedureValidate()
         {
             return AssetDatabase.IsValidFolder("Assets/Hotfix");
@@ -647,7 +681,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建HotfixProcedure类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/[Hotfix] C# HotfixProcedure Script", false, 2000)]
+        [MenuItem("Assets/Create/HTFramework/[Hotfix] C# HotfixProcedure Script", false, 2000)]
         private static void CreateHotfixProcedure()
         {
             EditorPrefs.SetString(EditorPrefsTable.Script_HotfixProcedure_Folder, "/Hotfix");
@@ -657,7 +691,7 @@ namespace HT.Framework
         /// <summary>
         /// 【验证函数】新建HotfixObject类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/[Hotfix] C# HotfixObject Script", true)]
+        [MenuItem("Assets/Create/HTFramework/[Hotfix] C# HotfixObject Script", true)]
         private static bool CreateHotfixObjectValidate()
         {
             return AssetDatabase.IsValidFolder("Assets/Hotfix");
@@ -665,7 +699,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建HotfixObject类
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/[Hotfix] C# HotfixObject Script", false, 2001)]
+        [MenuItem("Assets/Create/HTFramework/[Hotfix] C# HotfixObject Script", false, 2001)]
         private static void CreateHotfixObject()
         {
             EditorPrefs.SetString(EditorPrefsTable.Script_HotfixObject_Folder, "/Hotfix");
@@ -675,7 +709,7 @@ namespace HT.Framework
         /// <summary>
         /// 【验证函数】新建WebGL插件
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/WebGL Plugin", true)]
+        [MenuItem("Assets/Create/HTFramework/WebGL Plugin", true)]
         private static bool CreateWebGLPluginValidate()
         {
 #if UNITY_WEBGL
@@ -687,7 +721,7 @@ namespace HT.Framework
         /// <summary>
         /// 新建WebGL插件
         /// </summary>
-        [@MenuItem("Assets/Create/HTFramework/WebGL Plugin", false, 3000)]
+        [MenuItem("Assets/Create/HTFramework/WebGL Plugin", false, 3000)]
         private static void CreateWebGLPlugin()
         {
             string pluginsDirectory = Application.dataPath + "/Plugins";
@@ -702,7 +736,7 @@ namespace HT.Framework
                 TextAsset asset = AssetDatabase.LoadAssetAtPath(EditorPrefsTable.ScriptTemplateFolder + "WebGLPluginTemplate.txt", typeof(TextAsset)) as TextAsset;
                 if (asset)
                 {
-                    File.AppendAllText(pluginPath, asset.text);
+                    File.AppendAllText(pluginPath, asset.text, Encoding.UTF8);
                     asset = null;
                 }
             }
@@ -711,7 +745,7 @@ namespace HT.Framework
                 TextAsset asset = AssetDatabase.LoadAssetAtPath(EditorPrefsTable.ScriptTemplateFolder + "WebGLCallerTemplate.txt", typeof(TextAsset)) as TextAsset;
                 if (asset)
                 {
-                    File.AppendAllText(callerPath, asset.text);
+                    File.AppendAllText(callerPath, asset.text, Encoding.UTF8);
                     asset = null;
                 }
             }
@@ -730,7 +764,7 @@ namespace HT.Framework
         /// <param name="templateName">脚本模板名称</param>
         /// <param name="replace">脚本替换字段</param>
         /// <returns>脚本名称</returns>
-        public static string CreateScriptFormTemplate(string prefsKey, string scriptType,string templateName, params string[] replace)
+        public static string CreateScriptFormTemplate(string prefsKey, string scriptType, string templateName, params string[] replace)
         {
             string directory = EditorPrefs.GetString(prefsKey, "");
             string fullPath = Application.dataPath + directory;
@@ -760,7 +794,74 @@ namespace HT.Framework
                                 code = code.Replace(replace[i], className);
                             }
                         }
-                        File.AppendAllText(path, code);
+                        File.AppendAllText(path, code, Encoding.UTF8);
+                        asset = null;
+                        AssetDatabase.Refresh();
+
+                        string assetPath = path.Substring(path.LastIndexOf("Assets"));
+                        TextAsset csFile = AssetDatabase.LoadAssetAtPath(assetPath, typeof(TextAsset)) as TextAsset;
+                        EditorGUIUtility.PingObject(csFile);
+                        Selection.activeObject = csFile;
+                        AssetDatabase.OpenAsset(csFile);
+                        EditorPrefs.SetString(prefsKey, path.Substring(0, path.LastIndexOf("/")).Replace(Application.dataPath, ""));
+                        return className;
+                    }
+                    else
+                    {
+                        Log.Error("新建 " + scriptType + " 失败：丢失脚本模板文件！");
+                    }
+                }
+                else
+                {
+                    Log.Error("新建 " + scriptType + " 失败：已存在类文件 " + className);
+                }
+            }
+            return "<None>";
+        }
+        /// <summary>
+        /// 从模板创建脚本
+        /// </summary>
+        /// <param name="prefsKey">脚本配置路径Key</param>
+        /// <param name="scriptType">脚本类型</param>
+        /// <param name="templateName">脚本模板名称</param>
+        /// <param name="handler">自定义处理者</param>
+        /// <param name="replace">脚本替换字段</param>
+        /// <returns>脚本名称</returns>
+        public static string CreateScriptFormTemplate(string prefsKey, string scriptType, string templateName, HTFFunc<string, string> handler, params string[] replace)
+        {
+            string directory = EditorPrefs.GetString(prefsKey, "");
+            string fullPath = Application.dataPath + directory;
+            if (!Directory.Exists(fullPath)) fullPath = Application.dataPath;
+
+            string path = EditorUtility.SaveFilePanel("Create " + scriptType + " Class", fullPath, "New" + scriptType, "cs");
+            if (!string.IsNullOrEmpty(path))
+            {
+                if (!path.Contains(Application.dataPath))
+                {
+                    Log.Error("新建 " + scriptType + " 失败：创建路径必须在当前项目的 Assets 路径下！");
+                    return "<None>";
+                }
+
+                string className = path.Substring(path.LastIndexOf("/") + 1).Replace(".cs", "");
+                if (!File.Exists(path))
+                {
+                    TextAsset asset = AssetDatabase.LoadAssetAtPath(EditorPrefsTable.ScriptTemplateFolder + templateName + ".txt", typeof(TextAsset)) as TextAsset;
+                    if (asset)
+                    {
+                        string code = asset.text;
+                        code = code.Replace("#SCRIPTNAME#", className);
+                        if (replace != null && replace.Length > 0)
+                        {
+                            for (int i = 0; i < replace.Length; i++)
+                            {
+                                code = code.Replace(replace[i], className);
+                            }
+                        }
+                        if (handler != null)
+                        {
+                            code = handler(code);
+                        }
+                        File.AppendAllText(path, code, Encoding.UTF8);
                         asset = null;
                         AssetDatabase.Refresh();
 
@@ -798,6 +899,56 @@ namespace HT.Framework
             return StringToolkit.Concat(value.x.ToString(format), "f,", value.y.ToString(format), "f");
         }
         /// <summary>
+        /// Vector3转换为标准Copy字符串
+        /// </summary>
+        /// <param name="value">Vector3值</param>
+        /// <param name="format">格式</param>
+        /// <returns>Copy字符串</returns>
+        public static string ToCopyString(this Vector3 value, string format)
+        {
+            return StringToolkit.Concat(value.x.ToString(format), "f,", value.y.ToString(format), "f,", value.z.ToString(format), "f");
+        }
+        /// <summary>
+        /// Vector4转换为标准Copy字符串
+        /// </summary>
+        /// <param name="value">Vector4值</param>
+        /// <param name="format">格式</param>
+        /// <returns>Copy字符串</returns>
+        public static string ToCopyString(this Vector4 value, string format)
+        {
+            return StringToolkit.Concat(value.x.ToString(format), "f,", value.y.ToString(format), "f,", value.z.ToString(format), "f,", value.w.ToString(format), "f");
+        }
+        /// <summary>
+        /// Vector2Int转换为标准Copy字符串
+        /// </summary>
+        /// <param name="value">Vector2Int值</param>
+        /// <param name="format">格式</param>
+        /// <returns>Copy字符串</returns>
+        public static string ToCopyString(this Vector2Int value)
+        {
+            return StringToolkit.Concat(value.x.ToString(), ",", value.y.ToString());
+        }
+        /// <summary>
+        /// Vector3Int转换为标准Copy字符串
+        /// </summary>
+        /// <param name="value">Vector3Int值</param>
+        /// <param name="format">格式</param>
+        /// <returns>Copy字符串</returns>
+        public static string ToCopyString(this Vector3Int value)
+        {
+            return StringToolkit.Concat(value.x.ToString(), ",", value.y.ToString(), ",", value.z.ToString());
+        }
+        /// <summary>
+        /// Quaternion转换为标准Copy字符串
+        /// </summary>
+        /// <param name="value">Quaternion值</param>
+        /// <param name="format">格式</param>
+        /// <returns>Copy字符串</returns>
+        public static string ToCopyString(this Quaternion value, string format)
+        {
+            return StringToolkit.Concat(value.x.ToString(format), "f,", value.y.ToString(format), "f,", value.z.ToString(format), "f,", value.w.ToString(format), "f");
+        }
+        /// <summary>
         /// 标准Paste字符串转换为Vector2
         /// </summary>
         /// <param name="value">Paste字符串</param>
@@ -817,16 +968,6 @@ namespace HT.Framework
                 }
             }
             return defaultValue;
-        }
-        /// <summary>
-        /// Vector3转换为标准Copy字符串
-        /// </summary>
-        /// <param name="value">Vector3值</param>
-        /// <param name="format">格式</param>
-        /// <returns>Copy字符串</returns>
-        public static string ToCopyString(this Vector3 value, string format)
-        {
-            return StringToolkit.Concat(value.x.ToString(format), "f,", value.y.ToString(format), "f,", value.z.ToString(format), "f");
         }
         /// <summary>
         /// 标准Paste字符串转换为Vector3
@@ -851,14 +992,65 @@ namespace HT.Framework
             return defaultValue;
         }
         /// <summary>
-        /// Quaternion转换为标准Copy字符串
+        /// 标准Paste字符串转换为Vector4
         /// </summary>
-        /// <param name="value">Quaternion值</param>
-        /// <param name="format">格式</param>
-        /// <returns>Copy字符串</returns>
-        public static string ToCopyString(this Quaternion value, string format)
+        /// <param name="value">Paste字符串</param>
+        /// <param name="defaultValue">转换失败时的默认值</param>
+        /// <returns>Vector4值</returns>
+        public static Vector4 ToPasteVector4(this string value, Vector4 defaultValue = default)
         {
-            return StringToolkit.Concat(value.x.ToString(format), "f,", value.y.ToString(format), "f,", value.z.ToString(format), "f,", value.w.ToString(format), "f");
+            string[] vector4 = value.Split(',');
+            if (vector4.Length == 4)
+            {
+                float x, y, z, w;
+                vector4[0] = vector4[0].Replace("f", "");
+                vector4[1] = vector4[1].Replace("f", "");
+                vector4[2] = vector4[2].Replace("f", "");
+                vector4[3] = vector4[3].Replace("f", "");
+                if (float.TryParse(vector4[0], out x) && float.TryParse(vector4[1], out y) && float.TryParse(vector4[2], out z) && float.TryParse(vector4[3], out w))
+                {
+                    return new Vector4(x, y, z, w);
+                }
+            }
+            return defaultValue;
+        }
+        /// <summary>
+        /// 标准Paste字符串转换为Vector2Int
+        /// </summary>
+        /// <param name="value">Paste字符串</param>
+        /// <param name="defaultValue">转换失败时的默认值</param>
+        /// <returns>Vector2Int值</returns>
+        public static Vector2Int ToPasteVector2Int(this string value, Vector2Int defaultValue = default)
+        {
+            string[] vector2 = value.Split(',');
+            if (vector2.Length == 2)
+            {
+                int x, y;
+                if (int.TryParse(vector2[0], out x) && int.TryParse(vector2[1], out y))
+                {
+                    return new Vector2Int(x, y);
+                }
+            }
+            return defaultValue;
+        }
+        /// <summary>
+        /// 标准Paste字符串转换为Vector3Int
+        /// </summary>
+        /// <param name="value">Paste字符串</param>
+        /// <param name="defaultValue">转换失败时的默认值</param>
+        /// <returns>Vector3Int值</returns>
+        public static Vector3Int ToPasteVector3Int(this string value, Vector3Int defaultValue = default)
+        {
+            string[] vector3 = value.Split(',');
+            if (vector3.Length == 3)
+            {
+                int x, y, z;
+                if (int.TryParse(vector3[0], out x) && int.TryParse(vector3[1], out y) && int.TryParse(vector3[2], out z))
+                {
+                    return new Vector3Int(x, y, z);
+                }
+            }
+            return defaultValue;
         }
         /// <summary>
         /// 标准Paste字符串转换为Quaternion
@@ -891,36 +1083,14 @@ namespace HT.Framework
         /// </summary>
         public static void CoerciveCompile()
         {
-            MonoScript monoScript = MonoImporter.GetAllRuntimeMonoScripts()[0];
-            int order = MonoImporter.GetExecutionOrder(monoScript);
-            MonoImporter.SetExecutionOrder(monoScript, order);
-        }
-        #endregion
-
-        #region IO工具
-        /// <summary>
-        /// 删除文件夹及以下的所有文件夹、文件
-        /// </summary>
-        /// <param name="folderPath">文件夹路径</param>
-        public static void DeleteFolder(string folderPath)
-        {
-            if (Directory.Exists(folderPath))
+            Type type = EditorReflectionToolkit.GetTypeInEditorAssemblies("UnityEditor.Scripting.ScriptCompilation.EditorCompilationInterface");
+            if (type != null)
             {
-                DirectoryInfo directory = new DirectoryInfo(folderPath);
-
-                FileInfo[] files = directory.GetFiles();
-                foreach (var file in files)
+                MethodInfo method = type.GetMethod("RecompileAllScriptsOnNextTick", BindingFlags.Static | BindingFlags.Public);
+                if (method != null)
                 {
-                    file.Delete();
+                    method.Invoke(null, null);
                 }
-
-                DirectoryInfo[] folders = directory.GetDirectories();
-                foreach (var folder in folders)
-                {
-                    DeleteFolder(folder.FullName);
-                }
-
-                directory.Delete();
             }
         }
         #endregion
@@ -928,6 +1098,7 @@ namespace HT.Framework
         #region Hierarchy窗口扩展
         private static GUIStyle HierarchyIconStyle;
         private static Texture HTFrameworkLOGO;
+        private static Texture HTFSMIcon;
 
         /// <summary>
         /// 编辑器初始化
@@ -938,6 +1109,7 @@ namespace HT.Framework
             HierarchyIconStyle.alignment = TextAnchor.MiddleRight;
             HierarchyIconStyle.normal.textColor = Color.cyan;
             HTFrameworkLOGO = AssetDatabase.LoadAssetAtPath<Texture>("Assets/HTFramework/Editor/Main/Texture/HTFrameworkLOGO.png");
+            HTFSMIcon = AssetDatabase.LoadAssetAtPath<Texture>("Assets/HTFramework/Editor/Main/Texture/HTFSMIcon.png");
 
             EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyWindowItemOnGUI;
         }
@@ -946,12 +1118,16 @@ namespace HT.Framework
         /// </summary>
         private static void OnHierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
         {
-            GameObject main = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
-            if (main)
+            GameObject instance = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            if (instance)
             {
-                if (main.GetComponent<Main>())
+                if (instance.GetComponent<Main>())
                 {
                     GUI.Box(selectionRect, HTFrameworkLOGO, HierarchyIconStyle);
+                }
+                else if (instance.GetComponent<FSM>())
+                {
+                    GUI.Box(selectionRect, HTFSMIcon, HierarchyIconStyle);
                 }
             }
         }
@@ -989,19 +1165,33 @@ namespace HT.Framework
         private static void OnFinishedDefaultHeaderGUI(Editor editor)
         {
             if (editor.targets != null && editor.targets.Length > 1)
-            {
                 return;
-            }
+
+            string path = AssetDatabase.GetAssetPath(editor.target);
+            if (string.IsNullOrEmpty(path) || !path.StartsWith("Assets/")
+                || editor.target is MonoScript
+                || editor.target is Shader)
+                return;
 
             if (editor.target is DefaultAsset)
             {
-                string path = AssetDatabase.GetAssetPath(editor.target);
-                if (string.Equals(path, "Assets/HTFramework"))
+                if (AssetDatabase.IsValidFolder(path))
                 {
-                    GUI.DrawTexture(new Rect(6, 6, 32, 32), HTFolderLarge);
+                    if (string.Equals(path, "Assets/HTFramework"))
+                    {
+                        GUI.DrawTexture(new Rect(6, 6, 32, 32), HTFolderLarge);
 
-                    EditorGUILayout.HelpBox("Unity HTFramework, a rapid development framework of client to the unity.", MessageType.Info);
+                        EditorGUILayout.HelpBox("Unity HTFramework, a rapid development framework of client to the unity.", MessageType.Info);
+                    }
                 }
+                else
+                {
+                    DrawNotepadPlusButton(editor);
+                }
+            }
+            else
+            {
+                DrawNotepadPlusButton(editor);
             }
         }
         /// <summary>
@@ -1012,7 +1202,7 @@ namespace HT.Framework
             if (IsSmallIcon(selectionRect))
             {
                 string mainFolder = AssetDatabase.GUIDToAssetPath(guid);
-                if (string.Equals(mainFolder, "Assets/HTFramework"))
+                if (AssetDatabase.IsValidFolder(mainFolder) && string.Equals(mainFolder, "Assets/HTFramework"))
                 {
                     GUI.Box(selectionRect, HTFrameworkLOGOTitle, ProjectIconStyle);
 
@@ -1030,123 +1220,28 @@ namespace HT.Framework
         {
             return rect.width > rect.height;
         }
-        #endregion
-
-        #region LnkTools
-        private static bool IsEnableLnkTools = false;
-        private static bool IsExpansionLnkTools = false;
-        private static List<LnkTools> LnkToolss = new List<LnkTools>();
-
         /// <summary>
-        /// LnkTools初始化
+        /// 绘制 Edit with Notepad++ 按钮
         /// </summary>
-        private static void OnInitLnkTools()
+        private static void DrawNotepadPlusButton(Editor editor)
         {
-            IsEnableLnkTools = EditorPrefs.GetBool(EditorPrefsTable.LnkTools_Enable, false);
-            IsExpansionLnkTools = EditorPrefs.GetBool(EditorPrefsTable.LnkTools_Expansion, false);
-
-            if (IsEnableLnkTools)
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Edit with Notepad++", EditorStyles.miniButton))
             {
-                LnkToolss.Clear();
-                List<Type> types = EditorReflectionToolkit.GetTypesInEditorAssemblies();
-                for (int i = 0; i < types.Count; i++)
-                {
-                    MethodInfo[] methods = types[i].GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                    for (int j = 0; j < methods.Length; j++)
-                    {
-                        if (methods[j].IsDefined(typeof(LnkToolsAttribute), false))
-                        {
-                            LnkToolsAttribute attribute = methods[j].GetCustomAttribute<LnkToolsAttribute>();
-                            LnkTools lnkTools = new LnkTools(attribute.Tooltip, attribute.Priority, methods[j]);
-                            LnkToolss.Add(lnkTools);
-                        }
-                    }
-                }
-
-                LnkToolss.Sort((x, y) =>
-                {
-                    if (x.Priority < y.Priority) return -1;
-                    else if (x.Priority == y.Priority) return 0;
-                    else return 1;
-                });
-
-                SceneView.duringSceneGui += OnLnkToolsGUI;
+                EditWithNotepadPlus(PathToolkit.ProjectPath + AssetDatabase.GetAssetPath(editor.target));
             }
+            EditorGUILayout.EndHorizontal();
         }
         /// <summary>
-        /// LnkTools界面
+        /// 打开 Edit with Notepad++ 编辑
         /// </summary>
-        private static void OnLnkToolsGUI(SceneView sceneView)
+        private static void EditWithNotepadPlus(string filePath)
         {
-            Handles.BeginGUI();
-
-            Rect rect = Rect.zero;
-            int h = sceneView.in2DMode ? 5 : 120;
-
-            if (IsExpansionLnkTools)
+            bool succeed = ExecutableToolkit.ExecuteRegistry("notepad++.exe", "\"" + filePath + "\"");
+            if (!succeed)
             {
-                rect.Set(sceneView.position.width - 115, h, 110, (LnkToolss.Count + 1) * 22 + 8);
-                GUI.Box(rect, "");
-            }
-
-            rect.Set(sceneView.position.width - 110, h + 5, 100, 20);
-            bool expansion = GUI.Toggle(rect, IsExpansionLnkTools, "LnkTools", "Prebutton");
-            if (expansion != IsExpansionLnkTools)
-            {
-                IsExpansionLnkTools = expansion;
-                EditorPrefs.SetBool(EditorPrefsTable.LnkTools_Expansion, IsExpansionLnkTools);
-            }
-            rect.y += 22;
-
-            if (IsExpansionLnkTools)
-            {
-                for (int i = 0; i < LnkToolss.Count; i++)
-                {
-                    if (GUI.Button(rect, LnkToolss[i].Tooltip))
-                    {
-                        LnkToolss[i].Method.Invoke(null, null);
-                    }
-                    rect.y += 22;
-                }
-            }
-
-            Handles.EndGUI();
-        }
-        
-        /// <summary>
-        /// LnkTools，看向指定目标
-        /// </summary>
-        [LnkTools("Look At")]
-        private static void LookAt()
-        {
-            if (EditorApplication.isPlaying && Main.m_Controller != null)
-            {
-                if (Selection.activeGameObject != null)
-                {
-                    Main.m_Controller.SetLookPoint(Selection.activeGameObject.transform.position);
-                }
-                else
-                {
-                    Log.Warning("请选中一个LookAt的目标！");
-                }
-            }
-            else
-            {
-                Log.Warning("仅在运行时才能调用框架的Controller模块LookAt至选中目标！");
-            }
-        }
-
-        private class LnkTools
-        {
-            public string Tooltip;
-            public int Priority;
-            public MethodInfo Method;
-
-            public LnkTools(string tooltip, int priority, MethodInfo method)
-            {
-                Tooltip = tooltip;
-                Priority = priority;
-                Method = method;
+                Log.Error("未找到 Notepad++ 可执行程序，或本机未安装 Notepad++，Notepad++ 官网：https://notepad-plus-plus.org");
             }
         }
         #endregion

@@ -16,6 +16,7 @@ public class OnChairProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        Debug.Log("已进入Onchair");
         RenderManager.Instance.Show();
         var Position = NearChair.Instance.transform.position;
         Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<SitdownEventHandler>().Fill(Position.x, Position.y, Position.z));
@@ -27,11 +28,11 @@ public class OnChairProcedure : ProcedureBase
 
         base.OnEnter(lastProcedure);
         //打开相应UI
-        Main.m_UI.OpenResidentUI<GameButtonUILogic>();
+        Main.m_UI.OpenUI<GameButtonUILogic>();
 
-        Main.m_UI.OpenTemporaryUI<BagControl>();
-        Main.m_UI.CloseUI<BagControl>();
-
+        Main.m_UI.OpenUI<BagControl>();
+        (Main.m_UI.GetUI<BagControl>() as BagControl).Hide();
+        Debug.Log("已注册案件");
         //注册按键
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {
@@ -43,9 +44,9 @@ public class OnChairProcedure : ProcedureBase
         KeyboardManager.Instance.Register(KeyCode.B, () =>
         {
             if (Main.m_UI.GetOpenedUI<BagControl>() == null)
-                Main.m_UI.OpenTemporaryUI<BagControl>();
+                Main.m_UI.OpenUI<BagControl>();
             else
-                Main.m_UI.GetUI<BagControl>().Hide();
+                (Main.m_UI.GetUI<BagControl>() as BagControl).Hide();
         });
     }
 
@@ -60,7 +61,7 @@ public class OnChairProcedure : ProcedureBase
         GameManager.Instance.FPSable = false;
         base.OnLeave(nextProcedure);
         UIAPI.Instance.HideDataTable();
-        Main.m_UI.CloseUI<BagControl>();
+        (Main.m_UI.GetUI<BagControl>() as BagControl).Hide();
         Main.m_UI.CloseUI<GameButtonUILogic>();
         KeyboardManager.Instance.UnRegister(KeyCode.T);
         KeyboardManager.Instance.UnRegister(KeyCode.B);

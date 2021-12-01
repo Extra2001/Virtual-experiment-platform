@@ -14,7 +14,7 @@ public class StartProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenResidentUI<StartUILogic>();
+        Main.m_UI.OpenUI<StartUILogic>();
         base.OnEnter(lastProcedure);
     }
 

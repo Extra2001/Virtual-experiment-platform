@@ -13,7 +13,7 @@ namespace HT.Framework
     }
     
     /// <summary>
-    /// 下拉框检视器
+    /// 下拉框检视器（支持 string、int、float 类型）
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     [Conditional("UNITY_EDITOR")]
@@ -25,7 +25,7 @@ namespace HT.Framework
         public string[] DisplayOptions { get; private set; }
 #endif
         /// <summary>
-        /// 下拉框检视器
+        /// 下拉框检视器（string、int、float）
         /// </summary>
         /// <param name="values">下拉框可选值</param>
         public DropdownAttribute(params string[] values)
@@ -37,7 +37,7 @@ namespace HT.Framework
 #endif
         }
         /// <summary>
-        /// 下拉框检视器
+        /// 下拉框检视器（string、int、float）
         /// </summary>
         /// <param name="values">下拉框可选值</param>
         public DropdownAttribute(params int[] values)
@@ -54,7 +54,7 @@ namespace HT.Framework
 #endif
         }
         /// <summary>
-        /// 下拉框检视器
+        /// 下拉框检视器（string、int、float）
         /// </summary>
         /// <param name="values">下拉框可选值</param>
         public DropdownAttribute(params float[] values)
@@ -73,7 +73,7 @@ namespace HT.Framework
     }
 
     /// <summary>
-    /// 层级检视器
+    /// 层级检视器（支持 string 类型）
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     [Conditional("UNITY_EDITOR")]
@@ -83,7 +83,7 @@ namespace HT.Framework
     }
 
     /// <summary>
-    /// 可排序列表检视器
+    /// 可排序列表检视器（支持数组、List 类型）
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     [Conditional("UNITY_EDITOR")]
@@ -93,7 +93,7 @@ namespace HT.Framework
     }
 
     /// <summary>
-    /// 密码检视器
+    /// 密码检视器（支持 string 类型）
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     [Conditional("UNITY_EDITOR")]
@@ -103,7 +103,7 @@ namespace HT.Framework
     }
 
     /// <summary>
-    /// 超链接检视器
+    /// 超链接检视器（支持 string 类型）
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     [Conditional("UNITY_EDITOR")]
@@ -112,7 +112,7 @@ namespace HT.Framework
         public string Name { get; private set; }
 
         /// <summary>
-        /// 超链接检视器
+        /// 超链接检视器（支持 string 类型）
         /// </summary>
         /// <param name="name">显示名称</param>
         public HyperlinkAttribute(string name)
@@ -122,7 +122,7 @@ namespace HT.Framework
     }
 
     /// <summary>
-    /// 文件路径检视器
+    /// 文件路径检视器（支持 string 类型）
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     [Conditional("UNITY_EDITOR")]
@@ -131,7 +131,7 @@ namespace HT.Framework
         public string Extension { get; private set; }
 
         /// <summary>
-        /// 文件路径检视器
+        /// 文件路径检视器（支持 string 类型）
         /// </summary>
         /// <param name="extension">文件扩展名</param>
         public FilePathAttribute(string extension = "*.*")
@@ -141,7 +141,7 @@ namespace HT.Framework
     }
 
     /// <summary>
-    /// 文件夹路径检视器
+    /// 文件夹路径检视器（支持 string 类型）
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     [Conditional("UNITY_EDITOR")]
@@ -246,6 +246,47 @@ namespace HT.Framework
     }
 
     /// <summary>
+    /// 预览检视器
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [Conditional("UNITY_EDITOR")]
+    public sealed class PreviewAttribute : InspectorAttribute
+    {
+        public float Size { get; private set; }
+
+        /// <summary>
+        /// 预览检视器
+        /// </summary>
+        /// <param name="size">预览框的大小</param>
+        public PreviewAttribute(float size = 100)
+        {
+            Size = size;
+        }
+    }
+
+    /// <summary>
+    /// 通用菜单检视器（支持 string 类型）
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [Conditional("UNITY_EDITOR")]
+    public sealed class GenericMenuAttribute : InspectorAttribute
+    {
+        public string GenerateMenu { get; private set; }
+        public string ChooseMenu { get; private set; }
+
+        /// <summary>
+        /// 通用菜单检视器（支持 string 类型）
+        /// </summary>
+        /// <param name="generateMenu">生成菜单的所有选项的方法名称，返回值必须为string[]</param>
+        /// <param name="chooseMenu">选择菜单选项后调用的方法名称，必须带有一个string参数</param>
+        public GenericMenuAttribute(string generateMenu, string chooseMenu = null)
+        {
+            GenerateMenu = generateMenu;
+            ChooseMenu = chooseMenu;
+        }
+    }
+
+    /// <summary>
     /// 抽屉检视器
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
@@ -253,6 +294,7 @@ namespace HT.Framework
     public sealed class DrawerAttribute : InspectorAttribute
     {
         public string Name { get; private set; }
+        public string Condition { get; private set; }
         public string Style { get; private set; }
         public bool DefaultOpened { get; private set; }
         public bool ToggleOnLabelClick { get; private set; }
@@ -261,15 +303,68 @@ namespace HT.Framework
         /// 抽屉检视器
         /// </summary>
         /// <param name="name">显示名称</param>
+        /// <param name="defaultOpened">默认是否打开</param>
+        /// <param name="toggleOnLabelClick">抽屉的标签是否也可点击</param>
+        public DrawerAttribute(string name, bool defaultOpened = false, bool toggleOnLabelClick = true)
+        {
+            Name = name;
+            Condition = null;
+            Style = null;
+            DefaultOpened = defaultOpened;
+            ToggleOnLabelClick = toggleOnLabelClick;
+        }
+        /// <summary>
+        /// 抽屉检视器
+        /// </summary>
+        /// <param name="name">显示名称</param>
+        /// <param name="condition">显示条件判断方法的名称，返回值必须为bool</param>
+        /// <param name="defaultOpened">默认是否打开</param>
+        /// <param name="toggleOnLabelClick">抽屉的标签是否也可点击</param>
+        public DrawerAttribute(string name, string condition, bool defaultOpened = false, bool toggleOnLabelClick = true)
+        {
+            Name = name;
+            Condition = condition;
+            Style = null;
+            DefaultOpened = defaultOpened;
+            ToggleOnLabelClick = toggleOnLabelClick;
+        }
+        /// <summary>
+        /// 抽屉检视器
+        /// </summary>
+        /// <param name="name">显示名称</param>
+        /// <param name="condition">显示条件判断方法的名称，返回值必须为bool</param>
         /// <param name="style">GUI样式</param>
         /// <param name="defaultOpened">默认是否打开</param>
         /// <param name="toggleOnLabelClick">抽屉的标签是否也可点击</param>
-        public DrawerAttribute(string name, string style = null, bool defaultOpened = false, bool toggleOnLabelClick = true)
+        public DrawerAttribute(string name, string condition, string style, bool defaultOpened = false, bool toggleOnLabelClick = true)
         {
             Name = name;
+            Condition = condition;
             Style = style;
             DefaultOpened = defaultOpened;
             ToggleOnLabelClick = toggleOnLabelClick;
+        }
+    }
+
+    /// <summary>
+    /// 公共属性检视器
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    [Conditional("UNITY_EDITOR")]
+    public sealed class PropertyDisplayAttribute : InspectorAttribute
+    {
+        public string Text { get; private set; }
+        public bool DisplayOnlyRuntime { get; private set; }
+
+        /// <summary>
+        /// 公共属性检视器
+        /// </summary>
+        /// <param name="text">显示名称</param>
+        /// <param name="displayOnlyRuntime">是否仅在编辑器运行时显示</param>
+        public PropertyDisplayAttribute(string text = null, bool displayOnlyRuntime = true)
+        {
+            Text = text;
+            DisplayOnlyRuntime = displayOnlyRuntime;
         }
     }
 
@@ -282,6 +377,10 @@ namespace HT.Framework
     {
         public string Text { get; private set; }
 
+        /// <summary>
+        /// 事件、委托检视器
+        /// </summary>
+        /// <param name="text">显示名称</param>
         public EventAttribute(string text = null)
         {
             Text = text;

@@ -11,27 +11,27 @@ public class UIAPIInitializer : SingletonBase<UIAPIInitializer>
     /// </summary>
     public void Initialize()
     {
-        Main.m_UI.PreloadingResidentUI<StartUILogic>();
-        Main.m_UI.PreloadingResidentUI<UncertainLearnUILogic>();
-        Main.m_UI.PreloadingTemporaryUI<PauseUILogic>();
-        Main.m_UI.PreloadingTemporaryUI<ModelUILogic>();
-        Main.m_UI.PreloadingTemporaryUI<SimpleModelPanelUILogic>();
-        Main.m_UI.PreloadingResidentUI<ChooseExpUILogic>();
-        Main.m_UI.PreloadingResidentUI<EnterExpressionUILogic>();
-        Main.m_UI.PreloadingResidentUI<AddValueUILogic>();
-        Main.m_UI.PreloadingResidentUI<PreviewUILogic>();
+        Main.m_UI.PreloadingUI<StartUILogic>();
+        Main.m_UI.PreloadingUI<UncertainLearnUILogic>();
+        Main.m_UI.PreloadingUI<PauseUILogic>();
+        Main.m_UI.PreloadingUI<ModelUILogic>();
+        Main.m_UI.PreloadingUI<SimpleModelPanelUILogic>();
+        Main.m_UI.PreloadingUI<ChooseExpUILogic>();
+        Main.m_UI.PreloadingUI<EnterExpressionUILogic>();
+        Main.m_UI.PreloadingUI<AddValueUILogic>();
+        Main.m_UI.PreloadingUI<PreviewUILogic>();
 
-        Main.m_UI.PreloadingResidentUI<Indicator1UILogic>();
-        Main.m_UI.PreloadingResidentUI<Indicator2UILogic>();
-        Main.m_UI.PreloadingResidentUI<Indicator3UILogic>();
+        Main.m_UI.PreloadingUI<Indicator1UILogic>();
+        Main.m_UI.PreloadingUI<Indicator2UILogic>();
+        Main.m_UI.PreloadingUI<Indicator3UILogic>();
 
-        Main.m_UI.PreloadingResidentUI<DatatableUILogic>();
-        Main.m_UI.PreloadingTemporaryUI<BagControl>();
-        Main.m_UI.PreloadingTemporaryUI<InstrmentInfoUILogic>();
+        Main.m_UI.PreloadingUI<DatatableUILogic>();
+        Main.m_UI.PreloadingUI<BagControl>();
+        Main.m_UI.PreloadingUI<InstrmentInfoUILogic>();
 
-        Main.m_UI.PreloadingResidentUI<ProcessExplain>();
-        Main.m_UI.PreloadingResidentUI<MeasuredDataProcess>();
-        Main.m_UI.PreloadingResidentUI<ComplexDataUILogic>();
-        Main.m_UI.PreloadingResidentUI<ProcessResult>();
+        Main.m_UI.PreloadingUI<ProcessExplain>();
+        Main.m_UI.PreloadingUI<MeasuredDataProcess>();
+        Main.m_UI.PreloadingUI<ComplexDataUILogic>();
+        Main.m_UI.PreloadingUI<ProcessResult>();
     }
 }

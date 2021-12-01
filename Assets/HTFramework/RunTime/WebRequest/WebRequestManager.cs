@@ -5,9 +5,8 @@ namespace HT.Framework
     /// <summary>
     /// Web请求管理器
     /// </summary>
-    [DisallowMultipleComponent]
     [InternalModule(HTFrameworkModule.WebRequest)]
-    public sealed class WebRequestManager : InternalModuleBase
+    public sealed class WebRequestManager : InternalModuleBase<IWebRequestHelper>
     {
         /// <summary>
         /// 当前是否是离线状态
@@ -18,19 +17,17 @@ namespace HT.Framework
         /// </summary>
         public AudioType DownloadAudioType = AudioType.WAV;
         
-        private IWebRequestHelper _helper;
-
-        private WebRequestManager()
+        /// <summary>
+        /// 是否已连接到因特网
+        /// </summary>
+        public bool IsConnectedInternet
         {
-
+            get
+            {
+                return _helper.IsConnectedInternet;
+            }
         }
-        internal override void OnInitialization()
-        {
-            base.OnInitialization();
-
-            _helper = Helper as IWebRequestHelper;
-        }
-
+        
         /// <summary>
         /// 注册接口（获取 string）
         /// </summary>

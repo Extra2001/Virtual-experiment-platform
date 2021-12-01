@@ -12,12 +12,10 @@ namespace HT.Framework
         /// 框架根路径
         /// </summary>
         public static readonly string HTFrameworkRootPath = "Assets/HTFramework";
-
         /// <summary>
         /// 快捷创建Script的模板文件夹
         /// </summary>
         public static readonly string ScriptTemplateFolder = "Assets/HTFramework/Editor/Utility/Template/";
-
         /// <summary>
         /// 框架相关目录
         /// </summary>
@@ -33,6 +31,14 @@ namespace HT.Framework
         /// 新建FiniteState脚本的文件夹
         /// </summary>
         public static readonly string Script_FiniteState_Folder = "HT.Framework.Script.FiniteState";
+        /// <summary>
+        /// 新建FSMArgs脚本的文件夹
+        /// </summary>
+        public static readonly string Script_FSMArgs_Folder = "HT.Framework.Script.FSMArgs";
+        /// <summary>
+        /// 新建FSMData脚本的文件夹
+        /// </summary>
+        public static readonly string Script_FSMData_Folder = "HT.Framework.Script.FSMData";
         /// <summary>
         /// 新建Procedure脚本的文件夹
         /// </summary>
@@ -103,30 +109,9 @@ namespace HT.Framework
         public static readonly string Script_HotfixObject_Folder = "HT.Framework.Script.HotfixObject";
 
         /// <summary>
-        /// Transform组件Inspector面板配置：是否展开Property
+        /// Transform组件Inspector面板配置：是否仅显示局部坐标
         /// </summary>
-        public static readonly string Transform_Property= "HT.Framework.Transform.Property";
-        /// <summary>
-        /// Transform组件Inspector面板配置：是否展开Hierarchy
-        /// </summary>
-        public static readonly string Transform_Hierarchy= "HT.Framework.Transform.Hierarchy";
-        /// <summary>
-        /// Transform组件Inspector面板配置：是否展开Copy
-        /// </summary>
-        public static readonly string Transform_Copy= "HT.Framework.Transform.Copy";
-        /// <summary>
-        /// RectTransform组件Inspector面板配置：是否展开Property
-        /// </summary>
-        public static readonly string RectTransform_Property= "HT.Framework.RectTransform.Property";
-        /// <summary>
-        /// RectTransform组件Inspector面板配置：是否展开Hierarchy
-        /// </summary>
-        public static readonly string RectTransform_Hierarchy= "HT.Framework.RectTransform.Hierarchy";
-        /// <summary>
-        /// RectTransform组件Inspector面板配置：是否展开Copy
-        /// </summary>
-        public static readonly string RectTransform_Copy= "HT.Framework.RectTransform.Copy";
-
+        public static readonly string Transform_OnlyShowLocal = "HT.Framework.Transform.OnlyShowLocal";
         /// <summary>
         /// 快捷工具是否启用
         /// </summary>
@@ -144,9 +129,9 @@ namespace HT.Framework
         /// </summary>
         public static readonly string ScriptingDefine_Record = "HT.Framework.ScriptingDefineRecord";
         /// <summary>
-        /// 步骤编辑器窗口样式-步骤列表背景
+        /// AssemblyViewer窗口的ILSpy程序启动路径
         /// </summary>
-        public static readonly string StepEditor_Style_StepListBG = "HT.Framework.StepEditor.Style.StepListBG";
+        public static readonly string AssemblyViewer_ILSpyPath = "HT.Framework.AssemblyViewer.ILSpyPath";
         #endregion
     }
 }

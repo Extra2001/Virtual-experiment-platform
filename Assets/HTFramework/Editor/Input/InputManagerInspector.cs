@@ -9,23 +9,9 @@ namespace HT.Framework
     [GiteeURL("https://gitee.com/SaiTingHu/HTFramework")]
     [GithubURL("https://github.com/SaiTingHu/HTFramework")]
     [CSDNBlogURL("https://wanderer.blog.csdn.net/article/details/89001848")]
-    internal sealed class InputManagerInspector : InternalModuleInspector<InputManager>
+    internal sealed class InputManagerInspector : InternalModuleInspector<InputManager, IInputHelper>
     {
-        protected override string Intro
-        {
-            get
-            {
-                return "Input manager, this is a cross platform input solution!";
-            }
-        }
-
-        protected override Type HelperInterface
-        {
-            get
-            {
-                return typeof(IInputHelper);
-            }
-        }
+        protected override string Intro => "Input manager, this is a cross platform input solution!";
 
         protected override void OnInspectorDefaultGUI()
         {
@@ -34,8 +20,8 @@ namespace HT.Framework
             GUI.enabled = !EditorApplication.isPlaying;
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("InputDevice ");
-            if (GUILayout.Button(Target.InputDeviceType, EditorGlobalTools.Styles.MiniPopup))
+            GUILayout.Label("InputDevice ", GUILayout.Width(LabelWidth));
+            if (GUILayout.Button(Target.InputDeviceType, EditorStyles.popup, GUILayout.Width(EditorGUIUtility.currentViewWidth - LabelWidth - 25)))
             {
                 GenericMenu gm = new GenericMenu();
                 List<Type> types = ReflectionToolkit.GetTypesInRunTimeAssemblies(type =>
@@ -58,7 +44,6 @@ namespace HT.Framework
 
             GUI.enabled = true;
         }
-
         protected override void OnInspectorRuntimeGUI()
         {
             base.OnInspectorRuntimeGUI();

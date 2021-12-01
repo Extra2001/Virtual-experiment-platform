@@ -9,9 +9,14 @@ namespace HT.Framework
     public sealed class DefaultECSHelper : IECSHelper
     {
         /// <summary>
+        /// 当前ECS环境是否是脏的
+        /// </summary>
+        private bool _isDirty = false;
+
+        /// <summary>
         /// ECS管理器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 所有系统【系统类型，系统对象】
         /// </summary>
@@ -20,11 +25,6 @@ namespace HT.Framework
         /// 所有实体【实体ID，实体对象】
         /// </summary>
         public Dictionary<string, ECS_Entity> Entities { get; private set; } = new Dictionary<string, ECS_Entity>();
-
-        /// <summary>
-        /// 当前ECS环境是否是脏的
-        /// </summary>
-        private bool _isDirty = false;
         
         /// <summary>
         /// 初始化助手
@@ -101,7 +101,7 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
 
         }

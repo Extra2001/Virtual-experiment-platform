@@ -28,7 +28,7 @@ public class MeasuredDataProcessProcedure : ProcedureBase
     {
         CurrentQuantity = quantity;
         Main.m_UI.CloseUI<MeasuredDataProcess>();
-        Main.m_UI.OpenResidentUI<MeasuredDataProcess>(quantity);
+        Main.m_UI.OpenUI<MeasuredDataProcess>(quantity);
     }
 
     public string GetStatisticValue(MeasuredStatisticValue valueKind)

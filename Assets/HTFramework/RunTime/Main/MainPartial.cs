@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using UnityEngine;
 using UObject = UnityEngine.Object;
 
@@ -16,10 +17,9 @@ namespace HT.Framework
     /// <summary>
     /// HTFramework 主模块
     /// </summary>
-    [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1000)]
     [InternalModule(HTFrameworkModule.Main)]
-    public sealed partial class Main : InternalModuleBase
+    public sealed partial class Main : InternalModuleBase<IMainHelper>
     {
         #region Static Method
         /// <summary>
@@ -92,10 +92,15 @@ namespace HT.Framework
             obj.transform.SetParent(original.transform.parent);
             if (isUI)
             {
-                obj.rectTransform().anchoredPosition3D = original.rectTransform().anchoredPosition3D;
-                obj.rectTransform().sizeDelta = original.rectTransform().sizeDelta;
-                obj.rectTransform().anchorMin = original.rectTransform().anchorMin;
-                obj.rectTransform().anchorMax = original.rectTransform().anchorMax;
+                RectTransform rect = obj.rectTransform();
+                RectTransform originalRect = original.rectTransform();
+                rect.anchoredPosition3D = originalRect.anchoredPosition3D;
+                rect.sizeDelta = originalRect.sizeDelta;
+                rect.offsetMin = originalRect.offsetMin;
+                rect.offsetMax = originalRect.offsetMax;
+                rect.anchorMin = originalRect.anchorMin;
+                rect.anchorMax = originalRect.anchorMax;
+                rect.pivot = originalRect.pivot;
             }
             else
             {
@@ -150,10 +155,6 @@ namespace HT.Framework
         #endregion
 
         #region Lifecycle
-        private Main()
-        {
-
-        }
         protected override void Awake()
         {
             base.Awake();
@@ -170,19 +171,25 @@ namespace HT.Framework
         }
         private void FixedUpdate()
         {
-            OnFixedRefresh();
+            LogicFixedLoopRefresh();
         }
         private void OnGUI()
         {
-            OnMainGUI();
+            LicenseOnGUI();
         }
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             OnTermination();
+        }
+        private void OnApplicationFocus(bool focus)
+        {
+            ApplicationFocusEvent?.Invoke(focus);
         }
         private void OnApplicationQuit()
         {
-            OnMainQuit();
+            ApplicationQuitEvent?.Invoke();
         }
         #endregion
 
@@ -190,7 +197,7 @@ namespace HT.Framework
         /// <summary>
         /// 切面调试模块
         /// </summary>
-        public static AspectTracker m_AspectTrack { get; private set; }
+        public static AspectTrackManager m_AspectTrack { get; private set; }
         /// <summary>
         /// 音频模块
         /// </summary>
@@ -202,7 +209,7 @@ namespace HT.Framework
         /// <summary>
         /// 协程调度模块
         /// </summary>
-        public static Coroutiner m_Coroutiner { get; private set; }
+        public static CoroutinerManager m_Coroutiner { get; private set; }
         /// <summary>
         /// 自定义模块
         /// </summary>
@@ -230,7 +237,7 @@ namespace HT.Framework
         /// <summary>
         /// 异常处理模块
         /// </summary>
-        public static ExceptionHandler m_ExceptionHandler { get; private set; }
+        public static ExceptionManager m_Exception { get; private set; }
         /// <summary>
         /// 有限状态机模块
         /// </summary>
@@ -284,46 +291,76 @@ namespace HT.Framework
         /// </summary>
         public static WebRequestManager m_WebRequest { get; private set; }
 
-        private Dictionary<HTFrameworkModule, InternalModuleBase> _internalModules = new Dictionary<HTFrameworkModule, InternalModuleBase>();
+        private Dictionary<HTFrameworkModule, IModuleManager> _internalModules = new Dictionary<HTFrameworkModule, IModuleManager>();
         private bool _isPause = false;
+
+        /// <summary>
+        /// 暂停主程序
+        /// </summary>
+        public bool Pause
+        {
+            get
+            {
+                return _isPause;
+            }
+            set
+            {
+                if (_isPause == value)
+                {
+                    return;
+                }
+
+                _isPause = value;
+                if (_isPause)
+                {
+                    OnPause();
+                    m_Event.Throw<EventPauseGame>();
+                }
+                else
+                {
+                    OnResume();
+                    m_Event.Throw<EventResumeGame>();
+                }
+            }
+        }
 
         private void ModuleInitialization()
         {
-            InternalModuleBase[] internalModules = transform.GetComponentsInChildren<InternalModuleBase>(true);
-            for (int i = 0; i < internalModules.Length; i++)
+            IModuleManager[] modules = transform.GetComponentsInChildren<IModuleManager>(true);
+            for (int i = 0; i < modules.Length; i++)
             {
-                InternalModuleAttribute attribute = internalModules[i].GetType().GetCustomAttribute<InternalModuleAttribute>();
+                InternalModuleAttribute attribute = modules[i].GetType().GetCustomAttribute<InternalModuleAttribute>();
                 if (attribute != null)
                 {
                     if (!_internalModules.ContainsKey(attribute.ModuleName))
                     {
                         if (attribute.ModuleName != HTFrameworkModule.Main)
                         {
-                            _internalModules.Add(attribute.ModuleName, internalModules[i]);
+                            _internalModules.Add(attribute.ModuleName, modules[i]);
                         }
                     }
                     else
                     {
-                        throw new HTFrameworkException(HTFrameworkModule.Main, "获取内置模块失败：内置模块类 " + internalModules[i].GetType().FullName + " 的 InternalModule 标记与已有模块重复！");
+                        throw new HTFrameworkException(HTFrameworkModule.Main, "获取内置模块失败：内置模块类 " + modules[i].GetType().FullName + " 的 InternalModule 标记与已有模块重复！");
                     }
                 }
                 else
                 {
-                    throw new HTFrameworkException(HTFrameworkModule.Main, "获取内置模块失败：内置模块类 " + internalModules[i].GetType().FullName + " 丢失了 InternalModule 标记！");
+                    throw new HTFrameworkException(HTFrameworkModule.Main, "获取内置模块失败：内置模块类 " + modules[i].GetType().FullName + " 丢失了 InternalModule 标记！");
                 }
             }
 
-            //m_AspectTrack = GetInternalModule(HTFrameworkModule.AspectTrack) as AspectTracker;
+            m_AspectTrack = GetInternalModule(HTFrameworkModule.AspectTrack) as AspectTrackManager;
             m_Audio = GetInternalModule(HTFrameworkModule.Audio) as AudioManager;
             m_Controller = GetInternalModule(HTFrameworkModule.Controller) as ControllerManager;
-            m_Coroutiner = GetInternalModule(HTFrameworkModule.Coroutiner) as Coroutiner;
+            m_Coroutiner = GetInternalModule(HTFrameworkModule.Coroutiner) as CoroutinerManager;
             m_CustomModule = GetInternalModule(HTFrameworkModule.CustomModule) as CustomModuleManager;
             m_DataSet = GetInternalModule(HTFrameworkModule.DataSet) as DataSetManager;
             m_Debug = GetInternalModule(HTFrameworkModule.Debug) as DebugManager;
             m_ECS = GetInternalModule(HTFrameworkModule.ECS) as ECSManager;
             m_Entity = GetInternalModule(HTFrameworkModule.Entity) as EntityManager;
             m_Event = GetInternalModule(HTFrameworkModule.Event) as EventManager;
-            m_ExceptionHandler = GetInternalModule(HTFrameworkModule.ExceptionHandler) as ExceptionHandler;
+            m_Exception = GetInternalModule(HTFrameworkModule.Exception) as ExceptionManager;
             m_FSM = GetInternalModule(HTFrameworkModule.FSM) as FSMManager;
             m_Hotfix = GetInternalModule(HTFrameworkModule.Hotfix) as HotfixManager;
             m_Input = GetInternalModule(HTFrameworkModule.Input) as InputManager;
@@ -333,8 +370,8 @@ namespace HT.Framework
             m_Procedure = GetInternalModule(HTFrameworkModule.Procedure) as ProcedureManager;
             m_ReferencePool = GetInternalModule(HTFrameworkModule.ReferencePool) as ReferencePoolManager;
             m_Resource = GetInternalModule(HTFrameworkModule.Resource) as ResourceManager;
-            m_StepMaster = GetInternalModule(HTFrameworkModule.StepEditor) as StepMaster;
-            m_TaskMaster = GetInternalModule(HTFrameworkModule.TaskEditor) as TaskMaster;
+            m_StepMaster = GetInternalModule(HTFrameworkModule.StepMaster) as StepMaster;
+            m_TaskMaster = GetInternalModule(HTFrameworkModule.TaskMaster) as TaskMaster;
             m_UI = GetInternalModule(HTFrameworkModule.UI) as UIManager;
             m_WebRequest = GetInternalModule(HTFrameworkModule.WebRequest) as WebRequestManager;
 
@@ -352,7 +389,7 @@ namespace HT.Framework
         }
         private void ModuleRefresh()
         {
-            if (_isPause)
+            if (Pause)
             {
                 return;
             }
@@ -376,11 +413,11 @@ namespace HT.Framework
                 internalModule.Value.OnPause();
             }
         }
-        private void ModuleUnPause()
+        private void ModuleResume()
         {
             foreach (var internalModule in _internalModules)
             {
-                internalModule.Value.OnUnPause();
+                internalModule.Value.OnResume();
             }
         }
 
@@ -389,7 +426,7 @@ namespace HT.Framework
         /// </summary>
         /// <param name="moduleName">内置模块名称</param>
         /// <returns>内置模块对象</returns>
-        public InternalModuleBase GetInternalModule(HTFrameworkModule moduleName)
+        public IModuleManager GetInternalModule(HTFrameworkModule moduleName)
         {
             if (moduleName == HTFrameworkModule.Main)
             {
@@ -403,35 +440,6 @@ namespace HT.Framework
             else
             {
                 throw new HTFrameworkException(HTFrameworkModule.Main, "获取内置模块失败：不存在名为 " + moduleName.ToString() + " 的内置模块！");
-            }
-        }
-        /// <summary>
-        /// 暂停主程序
-        /// </summary>
-        public bool Pause
-        {
-            get
-            {
-                return _isPause;
-            }
-            set
-            {
-                if (_isPause == value)
-                {
-                    return;
-                }
-
-                _isPause = value;
-                if (_isPause)
-                {
-                    OnPause();
-                    m_Event.Throw(this, m_ReferencePool.Spawn<EventPauseGame>());
-                }
-                else
-                {
-                    OnUnPause();
-                    m_Event.Throw(this, m_ReferencePool.Spawn<EventUnPauseGame>());
-                }
             }
         }
         #endregion
@@ -661,7 +669,8 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.Main, "当前不存在参数：" + parameterName + "！");
+                Log.Error("获取参数失败：当前不存在参数 " + parameterName + "！");
+                return null;
             }
         }
         /// <summary>
@@ -678,7 +687,8 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.Main, "当前不存在参数：" + parameterName + "！");
+                Log.Error("获取参数失败：当前不存在参数 " + parameterName + "！");
+                return null;
             }
         }
         /// <summary>
@@ -982,7 +992,7 @@ namespace HT.Framework
 
         private void LogicLoopRefresh()
         {
-            if (_isPause)
+            if (Pause)
             {
                 return;
             }
@@ -999,7 +1009,7 @@ namespace HT.Framework
 
         private void LogicFixedLoopRefresh()
         {
-            if (_isPause)
+            if (Pause)
             {
                 return;
             }
@@ -1029,15 +1039,81 @@ namespace HT.Framework
         }
 
         /// <summary>
-        /// 返回到主线程
+        /// 将执行委托排到主线程调用（在子线程中）
         /// </summary>
-        /// <param name="action">返回到主线程执行的操作</param>
+        /// <param name="action">执行委托</param>
         public void QueueOnMainThread(HTFAction action)
         {
             _isCanDoQueue = false;
             _actionQueue.Add(action);
             _isCanDoQueue = true;
         }
+        /// <summary>
+        /// 将执行委托排到子线程调用（在主线程中）
+        /// </summary>
+        /// <param name="action">执行委托</param>
+        /// <param name="backToMainThread">执行委托完成后，返回到主线程中回调的委托</param>
+        /// <returns>是否执行成功</returns>
+        public bool QueueOnSubThread(HTFAction<object> action, HTFAction backToMainThread = null)
+        {
+            WaitCallback callback = (args) =>
+            {
+                try
+                {
+                    action?.Invoke(args);
+                }
+                catch (Exception e)
+                {
+                    string error = string.Format("子线程执行中出现异常，子线程方法：{0}.{1}，异常信息：{2}", action.Target.GetType().FullName, action.Method.Name, e.Message);
+                    Log.Error(error);
+                }
+                finally
+                {
+                    if (backToMainThread != null)
+                    {
+                        QueueOnMainThread(backToMainThread);
+                    }
+                }
+            };
+            return ThreadPool.QueueUserWorkItem(callback);
+        }
+        /// <summary>
+        /// 将执行委托排到子线程调用（在主线程中）
+        /// </summary>
+        /// <param name="action">执行委托</param>
+        /// <param name="state">委托的参数</param>
+        /// <param name="backToMainThread">执行委托完成后，返回到主线程中回调的委托</param>
+        /// <returns>是否执行成功</returns>
+        public bool QueueOnSubThread(HTFAction<object> action, object state, HTFAction backToMainThread = null)
+        {
+            WaitCallback callback = (args) =>
+            {
+                try
+                {
+                    action?.Invoke(args);
+                }
+                catch (Exception e)
+                {
+                    string error = string.Format("子线程执行中出现异常，子线程方法：{0}.{1}，异常信息：{2}", action.Target.GetType().FullName, action.Method.Name, e.Message);
+                    Log.Error(error);
+                }
+                finally
+                {
+                    if (backToMainThread != null)
+                    {
+                        QueueOnMainThread(backToMainThread);
+                    }
+                }
+            };
+            return ThreadPool.QueueUserWorkItem(callback, state);
+        }
+        #endregion
+
+        #region ApplicationFocus
+        /// <summary>
+        /// 程序焦点事件
+        /// </summary>
+        public event HTFAction<bool> ApplicationFocusEvent;
         #endregion
 
         #region ApplicationQuit
@@ -1063,7 +1139,7 @@ namespace HT.Framework
         ECS,
         Entity,
         Event,
-        ExceptionHandler,
+        Exception,
         FSM,
         Hotfix,
         Input,
@@ -1073,8 +1149,8 @@ namespace HT.Framework
         Procedure,
         ReferencePool,
         Resource,
-        StepEditor,
-        TaskEditor,
+        StepMaster,
+        TaskMaster,
         UI,
         Utility,
         WebRequest

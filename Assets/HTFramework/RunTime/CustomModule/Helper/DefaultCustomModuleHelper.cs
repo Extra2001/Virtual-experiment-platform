@@ -12,7 +12,7 @@ namespace HT.Framework
         /// <summary>
         /// 自定义模块管理器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 所有自定义模块
         /// </summary>
@@ -89,11 +89,11 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
             foreach (var module in CustomModules)
             {
-                module.Value.OnUnPause();
+                module.Value.OnResume();
             }
         }
     }

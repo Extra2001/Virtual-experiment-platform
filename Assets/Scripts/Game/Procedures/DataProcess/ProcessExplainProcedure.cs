@@ -15,7 +15,7 @@ public class ProcessExplainProcedure : ProcedureBase
     public override void OnEnter(ProcedureBase lastProcedure)
     {
         base.OnEnter(lastProcedure);
-        Main.m_UI.OpenResidentUI<ProcessExplain>();
+        Main.m_UI.OpenUI<ProcessExplain>();
     }
 
     /// <summary>

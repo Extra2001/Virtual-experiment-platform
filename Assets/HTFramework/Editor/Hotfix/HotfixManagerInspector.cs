@@ -1,5 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -10,31 +10,32 @@ namespace HT.Framework
     [GiteeURL("https://gitee.com/SaiTingHu/HTFramework")]
     [GithubURL("https://github.com/SaiTingHu/HTFramework")]
     [CSDNBlogURL("https://wanderer.blog.csdn.net/article/details/90479971")]
-    internal sealed class HotfixManagerInspector : InternalModuleInspector<HotfixManager>
+    internal sealed class HotfixManagerInspector : InternalModuleInspector<HotfixManager, IHotfixHelper>
     {
-        private static readonly string SourceDllPath = "/Library/ScriptAssemblies/Hotfix.dll";
-        private static readonly string AssetsDllPath = "/Assets/Hotfix/Hotfix.dll.bytes";
+        private static readonly string SourceDllPath = "Library/ScriptAssemblies/Hotfix.dll";
+        private static readonly string AssetsDllPath = "Assets/Hotfix/Hotfix.dll.bytes";
+
+        [InitializeOnLoadMethod]
+        private static void CopyHotfixDll()
+        {
+            if (!EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                string sourcePath = PathToolkit.ProjectPath + SourceDllPath;
+                if (File.Exists(sourcePath))
+                {
+                    File.Copy(sourcePath, PathToolkit.ProjectPath + AssetsDllPath, true);
+                    AssetDatabase.Refresh();
+                    Log.Info("已更新：Assets/Hotfix/Hotfix.dll");
+                }
+            }
+        }
 
         private bool _hotfixIsCreated = false;
         private string _hotfixDirectory = "/Hotfix/";
         private string _hotfixEnvironmentPath = "/Hotfix/Environment/HotfixEnvironment.cs";
         private string _hotfixAssemblyDefinitionPath = "/Hotfix/Hotfix.asmdef";
 
-        protected override string Intro
-        {
-            get
-            {
-                return "Hotfix manager, help you implement basic hot fixes in your game!";
-            }
-        }
-
-        protected override Type HelperInterface
-        {
-            get
-            {
-                return typeof(IHotfixHelper);
-            }
-        }
+        protected override string Intro => "Hotfix manager, help you implement basic hot fixes in your game!";
 
         protected override void OnDefaultEnable()
         {
@@ -55,16 +56,13 @@ namespace HT.Framework
                 }
             }
         }
-
         protected override void OnInspectorDefaultGUI()
         {
             base.OnInspectorDefaultGUI();
 
             GUI.enabled = !EditorApplication.isPlaying;
 
-            GUILayout.BeginHorizontal();
-            Toggle(Target.IsEnableHotfix, out Target.IsEnableHotfix, "Is Enable Hotfix");
-            GUILayout.EndHorizontal();
+            PropertyField(nameof(HotfixManager.IsEnableHotfix), "Enable Hotfix");
 
             if (Target.IsEnableHotfix)
             {
@@ -75,18 +73,14 @@ namespace HT.Framework
                 GUILayout.Label("HotfixDll AssetBundleName");
                 GUILayout.EndHorizontal();
 
-                GUILayout.BeginHorizontal();
-                TextField(Target.HotfixDllAssetBundleName, out Target.HotfixDllAssetBundleName, "");
-                GUILayout.EndHorizontal();
-
+                PropertyField(nameof(HotfixManager.HotfixDllAssetBundleName), "");
+                
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("HotfixDll AssetsPath");
                 GUILayout.EndHorizontal();
 
-                GUILayout.BeginHorizontal();
-                TextField(Target.HotfixDllAssetsPath, out Target.HotfixDllAssetsPath, "");
-                GUILayout.EndHorizontal();
-
+                PropertyField(nameof(HotfixManager.HotfixDllAssetsPath), "");
+                
                 GUILayout.EndVertical();
                 #endregion
 
@@ -110,20 +104,24 @@ namespace HT.Framework
                     GUILayout.EndVertical();
 
                     GUILayout.BeginHorizontal();
+                    GUI.backgroundColor = Color.yellow;
                     if (GUILayout.Button("Correct Hotfix Environment", EditorGlobalTools.Styles.LargeButton))
                     {
                         SetHotfixAssemblyDefinition(Application.dataPath + _hotfixAssemblyDefinitionPath);
                     }
+                    GUI.backgroundColor = Color.white;
                     GUILayout.EndHorizontal();
                 }
                 else
                 {
                     GUILayout.BeginHorizontal();
+                    GUI.backgroundColor = Color.green;
                     if (GUILayout.Button("Create Hotfix Environment", EditorGlobalTools.Styles.LargeButton))
                     {
                         CreateHotfixEnvironment();
                         _hotfixIsCreated = true;
                     }
+                    GUI.backgroundColor = Color.white;
                     GUILayout.EndHorizontal();
                 }
                 #endregion
@@ -131,7 +129,6 @@ namespace HT.Framework
 
             GUI.enabled = true;
         }
-
         protected override void OnInspectorRuntimeGUI()
         {
             base.OnInspectorRuntimeGUI();
@@ -200,28 +197,13 @@ namespace HT.Framework
         }
         private void CreateHotfixEnvironment(string filePath)
         {
-            TextAsset asset = AssetDatabase.LoadAssetAtPath("Assets/HTFramework/Editor/Utility/Template/HotfixEnvironmentTemplate.txt", typeof(TextAsset)) as TextAsset;
+            TextAsset asset = AssetDatabase.LoadAssetAtPath(EditorPrefsTable.ScriptTemplateFolder + "HotfixEnvironmentTemplate.txt", typeof(TextAsset)) as TextAsset;
             if (asset)
             {
                 string code = asset.text;
-                File.AppendAllText(filePath, code);
+                File.AppendAllText(filePath, code, Encoding.UTF8);
                 asset = null;
                 AssetDatabase.Refresh();
-            }
-        }
-
-        [InitializeOnLoadMethod]
-        private static void CopyHotfixDll()
-        {
-            if (!EditorApplication.isPlayingOrWillChangePlaymode)
-            {
-                string sourcePath = GlobalTools.GetDirectorySameLevelOfAssets(SourceDllPath);
-                if (File.Exists(sourcePath))
-                {
-                    File.Copy(sourcePath, GlobalTools.GetDirectorySameLevelOfAssets(AssetsDllPath), true);
-                    AssetDatabase.Refresh();
-                    Log.Info("更新：Assets/Hotfix/Hotfix.dll");
-                }
             }
         }
     }

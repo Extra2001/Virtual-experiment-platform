@@ -8,7 +8,6 @@ namespace HT.Framework
     /// <summary>
     /// 鼠标位置射线发射器
     /// </summary>
-    [RequireComponent(typeof(Camera))]
     [DisallowMultipleComponent]
     internal sealed class MouseRay : HTBehaviour
     {
@@ -53,11 +52,11 @@ namespace HT.Framework
         /// </summary>
         public bool IsAutoDie = false;
         /// <summary>
-        /// 提示框背景
+        /// 提示框背景（基于屏幕中心对齐，且父级中最好不要有偏移对齐的节点）
         /// </summary>
         public Image RayHitBG;
         /// <summary>
-        /// 提示框文本
+        /// 提示框文本（基于屏幕左侧对齐，父级为 RayHitBG，并使用 Content Size Fitter 进行水平自动布局）
         /// </summary>
         public Text RayHitText;
         /// <summary>
@@ -65,21 +64,17 @@ namespace HT.Framework
         /// </summary>
         public UIType RayHitImageType = UIType.Overlay;
         /// <summary>
-        /// 提示框背景位置偏移
+        /// 提示框背景位置偏移（RayHitBG 的位置基于射线击中坐标的偏移值）
         /// </summary>
         public Vector2 BGPosOffset = Vector2.zero;
         /// <summary>
-        /// 提示框背景宽度偏移
+        /// 提示框背景宽度偏移（RayHitBG 的宽度基于 RayHitText 的宽度的偏移值）
         /// </summary>
         public float BGWidthOffset = 40;
         /// <summary>
         /// 设定的屏幕宽度的一半
         /// </summary>
         public int ScreenWidthHalf = 640;
-        /// <summary>
-        /// 设定的屏幕高度的一半
-        /// </summary>
-        public int ScreenHeightHalf = 360;
         /// <summary>
         /// 射线投射事件(MouseRayTargetBase：当前射中的目标，Vector3：当前射中的点，Vector2：当前鼠标位置转换后的UGUI位置)
         /// </summary>
@@ -98,12 +93,10 @@ namespace HT.Framework
         /// 射线发射摄像机
         /// </summary>
         public Camera RayCamera { get; set; }
-
         /// <summary>
         /// 当前被射线捕获的目标
         /// </summary>
         public MouseRayTargetBase Target { get; private set; }
-
         /// <summary>
         /// 当前被射线击中的点
         /// </summary>
@@ -139,7 +132,6 @@ namespace HT.Framework
                 RayEvent?.Invoke(Target, HitPoint, pos);
             }
         }
-
         /// <summary>
         /// 关闭射线投射
         /// </summary>
@@ -160,9 +152,7 @@ namespace HT.Framework
         private void RaycastHiting(GameObject target)
         {
             if (_rayTarget == target)
-            {
                 return;
-            }
 
             if (_rayTarget)
             {
@@ -234,7 +224,6 @@ namespace HT.Framework
                 }
             }
         }
-
         /// <summary>
         /// 射线击中目标的名字显示框跟随
         /// </summary>
@@ -244,15 +233,15 @@ namespace HT.Framework
             {
                 _rayHitBGPos.Set(pos.x + BGPosOffset.x, pos.y + BGPosOffset.y);
                 _rayHitBGSize.Set(RayHitText.rectTransform.sizeDelta.x + BGWidthOffset, RayHitBG.rectTransform.sizeDelta.y);
-
-                _rayHitBGPos.x = Mathf.Clamp(_rayHitBGPos.x, -ScreenWidthHalf, ScreenWidthHalf - _rayHitBGSize.x);
-                _rayHitBGPos.y = Mathf.Clamp(_rayHitBGPos.y, -ScreenHeightHalf, ScreenHeightHalf - _rayHitBGSize.y);
+                
+                float minX = -ScreenWidthHalf + _rayHitBGSize.x * RayHitBG.rectTransform.pivot.x;
+                float maxX = ScreenWidthHalf - _rayHitBGSize.x * (1 - RayHitBG.rectTransform.pivot.x);
+                _rayHitBGPos.x = Mathf.Clamp(_rayHitBGPos.x, minX, maxX);
 
                 RayHitBG.rectTransform.anchoredPosition = _rayHitBGPos;
                 RayHitBG.rectTransform.sizeDelta = _rayHitBGSize;
             }
         }
-
         /// <summary>
         /// 获取当前鼠标位置的UGUI控件
         /// </summary>

@@ -2,7 +2,6 @@
 
 namespace HT.Framework
 {
-    [RequireComponent(typeof(Camera))]
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-800)]
     internal sealed class HighlightingEffect : HTBehaviour
@@ -194,16 +193,15 @@ namespace HT.Framework
 
             _camera = GetComponent<Camera>();
         }
-
         private void Start()
         {
             //不支持后期特效
-            //if (!SystemInfo.supportsImageEffects)
-            //{
-            //    Log.Warning("HighlightingSystem : Image effects is not supported on this platform! Disabling.");
-            //    enabled = false;
-            //    return;
-            //}
+            if (!SystemInfo.supportsImageEffects)
+            {
+                Log.Warning("HighlightingSystem : Image effects is not supported on this platform! Disabling.");
+                enabled = false;
+                return;
+            }
 
             //不支持渲染纹理格式
             if (!SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGB32))
@@ -263,7 +261,6 @@ namespace HT.Framework
 
             BlurMaterial.SetFloat("_Intensity", BlurIntensity);
         }
-
         private void OnDisable()
         {
             if (_shaderCameraObject != null)
@@ -297,21 +294,18 @@ namespace HT.Framework
                 _stencilBuffer = null;
             }
         }
-
         private void FourTapCone(RenderTexture source, RenderTexture dest, int iteration)
         {
             float off = BlurMinSpread + iteration * BlurSpread;
             BlurMaterial.SetFloat("_OffsetScale", off);
             Graphics.Blit(source, dest, BlurMaterial);
         }
-
         private void DownSample4x(RenderTexture source, RenderTexture dest)
         {
             float off = 1.0f;
             BlurMaterial.SetFloat("_OffsetScale", off);
             Graphics.Blit(source, dest, BlurMaterial);
         }
-
         private void OnPreRender()
         {
             if (enabled == false || gameObject.activeSelf == false)
@@ -362,7 +356,6 @@ namespace HT.Framework
             //关闭渲染
             HighlightingEvent?.Invoke(false, false);
         }
-
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
             if (_stencilBuffer == null)

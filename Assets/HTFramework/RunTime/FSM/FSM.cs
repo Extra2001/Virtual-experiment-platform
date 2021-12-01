@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace HT.Framework
@@ -17,34 +18,25 @@ namespace HT.Framework
         /// </summary>
         [SerializeField] internal bool IsAutoRegister = true;
         /// <summary>
-        /// 有限状态机数据类型【请勿在代码中修改】
-        /// </summary>
-        [SerializeField] internal string Data = "<None>";
-        /// <summary>
         /// 当前激活的所有状态类名【请勿在代码中修改】
         /// </summary>
         [SerializeField] internal List<string> States = new List<string>();
         /// <summary>
-        /// 当前激活的所有状态名称【请勿在代码中修改】
-        /// </summary>
-        [SerializeField] internal List<string> StateNames = new List<string>();
-        /// <summary>
         /// 当前初始状态类名【请勿在代码中修改】
         /// </summary>
-        [SerializeField] internal string DefaultState = "";
-        /// <summary>
-        /// 当前初始状态名称【请勿在代码中修改】
-        /// </summary>
-        [SerializeField] internal string DefaultStateName = "";
+        [SerializeField] internal string DefaultState = null;
         /// <summary>
         /// 当前最终状态类名【请勿在代码中修改】
         /// </summary>
-        [SerializeField] internal string FinalState = "";
+        [SerializeField] internal string FinalState = null;
         /// <summary>
-        /// 当前最终状态名称【请勿在代码中修改】
+        /// 有限状态机数据类型【请勿在代码中修改】
         /// </summary>
-        [SerializeField] internal string FinalStateName = "";
-
+        [SerializeField] internal string Data = "<None>";
+        /// <summary>
+        /// 有限状态机参数【请勿在代码中修改】
+        /// </summary>
+        [SerializeField] internal FSMArgsBase Args;
         /// <summary>
         /// 有限状态机名称
         /// </summary>
@@ -57,17 +49,12 @@ namespace HT.Framework
         /// 任意状态切换事件（上一个离开的状态、下一个进入的状态）
         /// </summary>
         public event HTFAction<FiniteStateBase, FiniteStateBase> AnyStateSwitchEvent;
-        
-        private FSMDataBase _data;
+
         private Dictionary<Type, FiniteStateBase> _stateInstances = new Dictionary<Type, FiniteStateBase>();
-        private FiniteStateBase _currentState;
         private Type _defaultState;
         private Type _finalState;
-
-        private FSM()
-        {
-
-        }
+        private bool _isAutomate;
+        private bool _isSupportedDataDriver;
 
         protected override void Awake()
         {
@@ -85,9 +72,8 @@ namespace HT.Framework
                 {
                     if (type.IsSubclassOf(typeof(FSMDataBase)))
                     {
-                        _data = Activator.CreateInstance(type) as FSMDataBase;
-                        _data.StateMachine = this;
-                        _data.OnInit();
+                        CurrentData = Activator.CreateInstance(type) as FSMDataBase;
+                        CurrentData.StateMachine = this;
                     }
                     else
                     {
@@ -111,7 +97,6 @@ namespace HT.Framework
                         {
                             FiniteStateBase state = Activator.CreateInstance(type) as FiniteStateBase;
                             state.StateMachine = this;
-                            state.OnInit();
                             _stateInstances.Add(type, state);
                         }
                     }
@@ -126,7 +111,7 @@ namespace HT.Framework
                 }
             }
             //设置默认状态、最终状态
-            if (DefaultState == "" || FinalState == "" || _stateInstances.Count <= 0)
+            if (string.IsNullOrEmpty(DefaultState) || string.IsNullOrEmpty(FinalState) || _stateInstances.Count <= 0)
             {
                 throw new HTFrameworkException(HTFrameworkModule.FSM, "有限状态机 " + Name + " 的状态为空！或未指定默认状态、最终状态！");
             }
@@ -140,25 +125,31 @@ namespace HT.Framework
             {
                 throw new HTFrameworkException(HTFrameworkModule.FSM, "有限状态机 " + Name + " 丢失了最终状态 " + FinalState + "！");
             }
-        }
+            _isAutomate = CurrentData != null ? CurrentData.IsAutomate : false;
+            _isSupportedDataDriver = CurrentData != null ? CurrentData.IsSupportedDataDriver : false;
 
+            if (Args != null)
+            {
+                Args.StateMachine = this;
+            }
+
+            DoAutomaticTask();
+        }
         private void Start()
         {
-            //进入默认状态
+            if (CurrentData != null)
+            {
+                CurrentData.OnInit();
+            }
+            foreach(var state in _stateInstances)
+            {
+                state.Value.OnInit();
+            }
             if (_defaultState != null)
             {
-                if (_stateInstances.ContainsKey(_defaultState))
-                {
-                    _currentState = _stateInstances[_defaultState];
-                    _currentState.OnEnter(null);
-                }
-                else
-                {
-                    throw new HTFrameworkException(HTFrameworkModule.FSM, "切换状态失败：有限状态机 " + Name + " 不存在状态 " + _defaultState.Name + "！");
-                }
+                SwitchState(_defaultState);
             }
         }
-
         private void Update()
         {
             if (Main.Current.Pause)
@@ -166,24 +157,30 @@ namespace HT.Framework
                 return;
             }
             
-            if (_currentState != null)
+            if (CurrentState != null)
             {
-                _currentState.OnUpdate();
-                _currentState.OnReason();
+                CurrentState.OnUpdate();
+                CurrentState.OnReason();
             }
         }
-
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             foreach (var state in _stateInstances)
             {
                 state.Value.OnTermination();
             }
             _stateInstances.Clear();
 
-            if (_data != null)
+            if (CurrentData != null)
             {
-                _data.OnTermination();
+                CurrentData.OnTermination();
+            }
+
+            if (_isAutomate && _isSupportedDataDriver)
+            {
+                AutomaticTask.ClearDataBinding(CurrentData);
             }
 
             if (Main.m_FSM.IsExistFSM(Name))
@@ -195,21 +192,19 @@ namespace HT.Framework
         /// <summary>
         /// 当前状态
         /// </summary>
-        public FiniteStateBase CurrentState
-        {
-            get
-            {
-                return _currentState;
-            }
-        }
+        public FiniteStateBase CurrentState { get; private set; }
         /// <summary>
         /// 当前数据
         /// </summary>
-        public FSMDataBase CurrentData
+        public FSMDataBase CurrentData { get; private set; }
+        /// <summary>
+        /// 当前参数
+        /// </summary>
+        public FSMArgsBase CurrentArgs
         {
             get
             {
-                return _data;
+                return Args;
             }
         }
 
@@ -235,7 +230,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.FSM, "获取状态失败：有限状态机 " + Name + " 不存在状态 " + type.Name + "！");
+                return null;
             }
         }
 
@@ -274,25 +269,25 @@ namespace HT.Framework
         {
             if (_stateInstances.ContainsKey(type))
             {
-                if (_currentState == _stateInstances[type])
+                if (CurrentState == _stateInstances[type])
                 {
                     return;
                 }
 
-                FiniteStateBase lastState = _currentState;
+                FiniteStateBase lastState = CurrentState;
                 FiniteStateBase nextState = _stateInstances[type];
                 if (lastState != null)
                 {
                     lastState.OnLeave(nextState);
                 }
                 nextState.OnEnter(lastState);
-                _currentState = nextState;
+                CurrentState = nextState;
 
                 AnyStateSwitchEvent?.Invoke(lastState, nextState);
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.FSM, "切换状态失败：有限状态机 " + Name + " 不存在状态 " + type.Name + "！");
+                Log.Warning("切换状态失败：有限状态机 " + Name + " 不存在状态 " + type.Name + "！");
             }
         }
 
@@ -312,14 +307,16 @@ namespace HT.Framework
         {
             if (type == _defaultState || type == _finalState)
             {
-                throw new HTFrameworkException(HTFrameworkModule.FSM, "终止状态失败：有限状态机 " + Name + " 无法终止状态 " + type.Name + "！因为该状态为初始状态或最终状态！");
+                Log.Warning("终止状态失败：有限状态机 " + Name + " 无法终止状态 " + type.Name + "！因为该状态为初始状态或最终状态！");
+                return;
             }
 
             if (_stateInstances.ContainsKey(type))
             {
-                if (_currentState == _stateInstances[type])
+                if (CurrentState == _stateInstances[type])
                 {
-                    throw new HTFrameworkException(HTFrameworkModule.FSM, "终止状态失败：有限状态机 " + Name + " 无法终止状态 " + type.Name + "！因为当前正处于该状态！");
+                    Log.Warning("终止状态失败：有限状态机 " + Name + " 无法终止状态 " + type.Name + "！因为当前正处于该状态！");
+                    return;
                 }
 
                 _stateInstances[type].OnTermination();
@@ -327,7 +324,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.FSM, "终止状态失败：有限状态机 " + Name + " 不存在状态 " + type.Name + "！");
+                Log.Warning("终止状态失败：有限状态机 " + Name + " 不存在状态 " + type.Name + "！");
             }
         }
 
@@ -349,12 +346,13 @@ namespace HT.Framework
             {
                 FiniteStateBase state = Activator.CreateInstance(type) as FiniteStateBase;
                 state.StateMachine = this;
+                DoAutomaticTaskOfState(type, state);
                 state.OnInit();
                 _stateInstances.Add(type, state);
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.FSM, "附加状态失败：有限状态机 " + Name + " 已存在状态 " + type.Name + "！");
+                Log.Warning("附加状态失败：有限状态机 " + Name + " 已存在状态 " + type.Name + "！");
             }
         }
 
@@ -363,9 +361,9 @@ namespace HT.Framework
         /// </summary>
         public void Renewal()
         {
-            if (_data != null)
+            if (CurrentData != null)
             {
-                _data.OnRenewal();
+                CurrentData.OnRenewal();
             }
 
             SwitchState(_defaultState);
@@ -375,12 +373,81 @@ namespace HT.Framework
         /// </summary>
         public void Final()
         {
-            if (_data != null)
+            if (CurrentData != null)
             {
-                _data.OnFinal();
+                CurrentData.OnFinal();
             }
 
             SwitchState(_finalState);
+        }
+
+        /// <summary>
+        /// 进行自动化任务
+        /// </summary>
+        private void DoAutomaticTask()
+        {
+            if (_isAutomate)
+            {
+                DoAutomaticTaskOfData(CurrentData);
+
+                if (Args != null)
+                {
+                    DoAutomaticTaskOfArgs(Args);
+                }
+
+                foreach (var state in _stateInstances)
+                {
+                    DoAutomaticTaskOfState(state.Key, state.Value);
+                }
+            }
+        }
+        /// <summary>
+        /// 进行自动化任务（数据）
+        /// </summary>
+        private void DoAutomaticTaskOfData(FSMDataBase fsmData)
+        {
+            if (_isAutomate)
+            {
+                FieldInfo[] fieldInfos = AutomaticTask.GetAutomaticFields(fsmData.GetType());
+                AutomaticTask.ApplyObjectPath(fsmData, fieldInfos);
+
+                if (_isSupportedDataDriver)
+                {
+                    AutomaticTask.ApplyDataBinding(fsmData, fieldInfos);
+                }
+            }
+        }
+        /// <summary>
+        /// 进行自动化任务（参数）
+        /// </summary>
+        private void DoAutomaticTaskOfArgs(FSMArgsBase fsmArgs)
+        {
+            if (_isAutomate)
+            {
+                FieldInfo[] fieldInfos = AutomaticTask.GetAutomaticFields(fsmArgs.GetType());
+                AutomaticTask.ApplyObjectPath(fsmArgs, fieldInfos);
+
+                if (_isSupportedDataDriver)
+                {
+                    AutomaticTask.ApplyDataBinding(fsmArgs, fieldInfos);
+                }
+            }
+        }
+        /// <summary>
+        /// 进行自动化任务（状态）
+        /// </summary>
+        private void DoAutomaticTaskOfState(Type type, FiniteStateBase finiteState)
+        {
+            if (_isAutomate)
+            {
+                FieldInfo[] fieldInfos = AutomaticTask.GetAutomaticFields(type);
+                AutomaticTask.ApplyObjectPath(finiteState, fieldInfos);
+
+                if (_isSupportedDataDriver)
+                {
+                    AutomaticTask.ApplyDataBinding(finiteState, fieldInfos);
+                }
+            }
         }
     }
 }

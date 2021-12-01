@@ -12,7 +12,7 @@ namespace HT.Framework
         /// <summary>
         /// 网络管理器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 所有的通信管道
         /// </summary>
@@ -85,7 +85,7 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
 
         }
@@ -108,7 +108,7 @@ namespace HT.Framework
                     }
                     else
                     {
-                        throw new HTFrameworkException(HTFrameworkModule.Network, "加载通信协议通道失败：通信协议通道类 " + channelTypes[i] + " 必须实现接口：IProtocolChannel！");
+                        throw new HTFrameworkException(HTFrameworkModule.Network, "加载通信协议通道失败：通信协议通道类 " + channelTypes[i] + " 必须继承至基类：ProtocolChannelBase！");
                     }
                 }
                 else

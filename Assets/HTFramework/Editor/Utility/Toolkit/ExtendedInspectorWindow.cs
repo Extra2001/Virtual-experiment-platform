@@ -55,14 +55,13 @@ namespace HT.Framework
             _removeGC.image = EditorGUIUtility.IconContent("TreeEditor.Trash").image;
             _removeGC.tooltip = "Remove";
         }
-
         protected override void OnTitleGUI()
         {
             base.OnTitleGUI();
 
             GUILayout.Label("Targets " + _components.Count.ToString(), EditorStyles.toolbarButton);
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Fold All", EditorStyles.toolbarButton))
+            if (GUILayout.Button("Collapse All", EditorStyles.toolbarButton))
             {
                 for (int i = 0; i < _foldouts.Count; i++)
                 {
@@ -70,7 +69,6 @@ namespace HT.Framework
                 }
             }
         }
-
         protected override void OnBodyGUI()
         {
             base.OnBodyGUI();

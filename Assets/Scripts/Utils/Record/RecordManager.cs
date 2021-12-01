@@ -8,6 +8,7 @@ using HT.Framework;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
+using Common;
 
 public static class RecordManager
 {

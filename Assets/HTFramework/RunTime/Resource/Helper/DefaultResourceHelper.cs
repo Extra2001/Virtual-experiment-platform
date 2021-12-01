@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
 #endif
 
 namespace HT.Framework
@@ -16,9 +17,18 @@ namespace HT.Framework
     public sealed class DefaultResourceHelper : IResourceHelper
     {
         /// <summary>
+        /// 单线下载中
+        /// </summary>
+        private bool _isLoading = false;
+        /// <summary>
+        /// 单线下载等待
+        /// </summary>
+        private WaitUntil _loadWait;
+
+        /// <summary>
         /// 资源管理器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 当前的资源加载模式
         /// </summary>
@@ -47,15 +57,6 @@ namespace HT.Framework
         /// 所有AssetBundle的Hash128值【AB包名称、Hash128值】
         /// </summary>
         public Dictionary<string, Hash128> AssetBundleHashs { get; private set; } = new Dictionary<string, Hash128>();
-
-        /// <summary>
-        /// 单线下载中
-        /// </summary>
-        private bool _isLoading = false;
-        /// <summary>
-        /// 单线下载等待
-        /// </summary>
-        private WaitUntil _loadWait;
         
         /// <summary>
         /// 初始化助手
@@ -96,7 +97,7 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
 
         }
@@ -152,18 +153,21 @@ namespace HT.Framework
         /// <returns>加载协程迭代器</returns>
         public IEnumerator LoadAssetAsync<T>(ResourceInfoBase info, HTFAction<float> loadingAction, HTFAction<T> loadDoneAction, bool isPrefab, Transform parent, bool isUI) where T : UnityEngine.Object
         {
-            DateTime beginTime = DateTime.Now;
+            float beginTime = Time.realtimeSinceStartup;
 
+            //单线加载，如果其他地方在加载资源，则等待
             if (_isLoading)
             {
                 yield return _loadWait;
             }
 
+            //轮到本线路加载资源
             _isLoading = true;
 
+            //等待相关依赖资源的加载
             yield return LoadDependenciesAssetBundleAsync(info.AssetBundleName);
 
-            DateTime waitTime = DateTime.Now;
+            float waitTime = Time.realtimeSinceStartup;
 
             UnityEngine.Object asset = null;
 
@@ -250,14 +254,14 @@ namespace HT.Framework
 #endif
             }
 
-            DateTime endTime = DateTime.Now;
-            if(asset==null)
-            Log.Info(string.Format("异步加载资源{0}[{1}模式]：\r\n{2}\r\n等待耗时：{3}秒  加载耗时：{4}秒"
-                , asset ? "成功" : "失败"
-                , LoadMode.ToString()
-                , LoadMode == ResourceLoadMode.Resource ? info.GetResourceFullPath() : info.GetAssetBundleFullPath(AssetBundleRootPath)
-                , (waitTime - beginTime).TotalSeconds
-                , (endTime - waitTime).TotalSeconds));
+            float endTime = Time.realtimeSinceStartup;
+
+            //Log.Info(string.Format("异步加载资源{0}[{1}模式]：\r\n{2}\r\n等待耗时：{3}秒  加载耗时：{4}秒"
+            //    , asset ? "成功" : "失败"
+            //    , LoadMode.ToString()
+            //    , LoadMode == ResourceLoadMode.Resource ? info.GetResourceFullPath() : info.GetAssetBundleFullPath(AssetBundleRootPath)
+            //    , waitTime - beginTime
+            //    , endTime - waitTime));
 
             if (asset)
             {
@@ -269,8 +273,13 @@ namespace HT.Framework
 
                 loadDoneAction?.Invoke(asset as T);
             }
+            else
+            {
+                loadDoneAction?.Invoke(null);
+            }
             asset = null;
 
+            //本线路加载资源结束
             _isLoading = false;
         }
         /// <summary>
@@ -282,19 +291,22 @@ namespace HT.Framework
         /// <returns>加载协程迭代器</returns>
         public IEnumerator LoadSceneAsync(SceneInfo info, HTFAction<float> loadingAction, HTFAction loadDoneAction)
         {
-            DateTime beginTime = DateTime.Now;
+            float beginTime = Time.realtimeSinceStartup;
 
+            //单线加载，如果其他地方在加载资源，则等待
             if (_isLoading)
             {
                 yield return _loadWait;
             }
 
+            //轮到本线路加载资源
             _isLoading = true;
 
+            //等待相关依赖资源的加载
             yield return LoadDependenciesAssetBundleAsync(info.AssetBundleName);
 
-            DateTime waitTime = DateTime.Now;
-            
+            float waitTime = Time.realtimeSinceStartup;
+
             if (LoadMode == ResourceLoadMode.Resource)
             {
                 throw new HTFrameworkException(HTFrameworkModule.Resource, "加载场景失败：场景加载不允许使用Resource模式！");
@@ -304,31 +316,35 @@ namespace HT.Framework
 #if UNITY_EDITOR
                 if (IsEditorMode)
                 {
-                    throw new HTFrameworkException(HTFrameworkModule.Resource, "加载场景失败：场景加载不允许使用编辑器模式！");
+                    LoadSceneParameters parameters = new LoadSceneParameters()
+                    {
+                        loadSceneMode = LoadSceneMode.Additive,
+                        localPhysicsMode = LocalPhysicsMode.None
+                    };
+                    yield return EditorSceneManager.LoadSceneAsyncInPlayMode(info.AssetPath, parameters);
                 }
                 else
                 {
                     yield return LoadAssetBundleAsync(info.AssetBundleName, loadingAction);
-
-                    yield return SceneManager.LoadSceneAsync(info.AssetPath, LoadSceneMode.Additive);
+                    yield return SceneManager.LoadSceneAsync(info.ResourcePath, LoadSceneMode.Additive);
                 }
 #else
                 yield return LoadAssetBundleAsync(info.AssetBundleName, loadingAction);
-
-                yield return SceneManager.LoadSceneAsync(info.AssetPath, LoadSceneMode.Additive);
+                yield return SceneManager.LoadSceneAsync(info.ResourcePath, LoadSceneMode.Additive);
 #endif
             }
 
-            DateTime endTime = DateTime.Now;
+            float endTime = Time.realtimeSinceStartup;
 
             Log.Info(string.Format("异步加载场景完成[{0}模式]：{1}\r\n等待耗时：{2}秒  加载耗时：{3}秒"
                 , LoadMode.ToString()
-                , info.AssetPath
-                , (waitTime - beginTime).TotalSeconds
-                , (endTime - waitTime).TotalSeconds));
+                , info.ResourcePath
+                , waitTime - beginTime
+                , endTime - waitTime));
 
             loadDoneAction?.Invoke();
 
+            //本线路加载资源结束
             _isLoading = false;
         }
         /// <summary>
@@ -383,6 +399,7 @@ namespace HT.Framework
         {
             Resources.UnloadUnusedAssets();
             GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
         
         /// <summary>

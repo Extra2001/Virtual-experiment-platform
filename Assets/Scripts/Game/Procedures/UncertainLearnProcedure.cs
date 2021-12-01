@@ -22,7 +22,7 @@ public class UncertainLearnProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenResidentUI<UncertainLearnUILogic>();
+        Main.m_UI.OpenUI<UncertainLearnUILogic>();
         base.OnEnter(lastProcedure);
     }
 

@@ -30,6 +30,8 @@ public class GameLaunch : MonoBehaviour
         InitLoading.gameObject.SetActive(true);
         LoadingScreen.gameObject.SetActive(true);
 
+        WisdomTree.Common.Function.Communication.Init();
+
         ProcessManager.StartService();
 
         UIAPIInitializer.Current.Initialize();

@@ -27,7 +27,6 @@ namespace HT.Framework
         {
             if (json == null)
             {
-                Log.Error("Json数据为空！");
                 return null;
             }
             return json.ToJson();
@@ -45,7 +44,41 @@ namespace HT.Framework
             }
             else
             {
-                return JsonMapper.ToObject(value);
+                JsonData jsonData = null;
+                try
+                {
+                    jsonData = JsonMapper.ToObject(value);
+                }
+                catch
+                {
+                    jsonData = null;
+                }
+                return jsonData;
+            }
+        }
+        /// <summary>
+        /// 字符串转换为Json对象
+        /// </summary>
+        /// <param name="value">字符串</param>
+        /// <returns>Json对象</returns>
+        public static T StringToJson<T>(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return default;
+            }
+            else
+            {
+                T jsonData = default;
+                try
+                {
+                    jsonData = JsonMapper.ToObject<T>(value);
+                }
+                catch
+                {
+                    jsonData = default;
+                }
+                return jsonData;
             }
         }
         /// <summary>
@@ -55,11 +88,18 @@ namespace HT.Framework
         /// <param name="key">键</param>
         /// <param name="defaultValue">缺省值</param>
         /// <returns>获取到的键对应的值</returns>
-        public static string GetValueInSafe(this JsonData json, string key, string defaultValue)
+        public static string GetValueInSafe(this JsonData json, string key, string defaultValue = null)
         {
             if (json.Keys.Contains(key))
             {
-                return json[key].ToString();
+                if (json[key] != null)
+                {
+                    return json[key].ToString();
+                }
+                else
+                {
+                    return defaultValue;
+                }
             }
             else
             {
@@ -318,7 +358,7 @@ namespace HT.Framework
             }
             else
             {
-                GameObject[] rootObjs = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+                GameObject[] rootObjs = SceneManager.GetActiveScene().GetRootGameObjects();
                 foreach (GameObject rootObj in rootObjs)
                 {
                     if (rootObj.name == name)
@@ -346,7 +386,7 @@ namespace HT.Framework
             }
             else
             {
-                GameObject[] rootObjs = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+                GameObject[] rootObjs = SceneManager.GetActiveScene().GetRootGameObjects();
                 foreach (GameObject rootObj in rootObjs)
                 {
                     if (rootObj.name == name)
@@ -374,7 +414,7 @@ namespace HT.Framework
             }
             else
             {
-                GameObject[] rootObjs = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+                GameObject[] rootObjs = SceneManager.GetActiveScene().GetRootGameObjects();
                 foreach (GameObject rootObj in rootObjs)
                 {
                     if (rootObj.name == name)
@@ -542,22 +582,6 @@ namespace HT.Framework
             }
         }
         /// <summary>
-        /// 生成一个长度为length的数组，数组中每个数据均为此值
-        /// </summary>
-        /// <typeparam name="T">数组类型</typeparam>
-        /// <param name="value">数组值</param>
-        /// <param name="length">数组长度</param>
-        /// <returns>数组</returns>
-        public static T[] GenerateArray<T>(this T value, int length)
-        {
-            T[] array = new T[length];
-            for (int i = 0; i < array.Length; i++)
-            {
-                array[i] = value;
-            }
-            return array;
-        }
-        /// <summary>
         /// 判断数组中是否存在某元素
         /// </summary>
         /// <param name="array">数组</param>
@@ -607,6 +631,25 @@ namespace HT.Framework
             for (int i = 0; i < array.Count; i++)
             {
                 convertArray.Add(array[i] as TOutput);
+            }
+            return convertArray;
+        }
+        /// <summary>
+        /// 强制转换数组的类型（使用as强转）
+        /// </summary>
+        /// <typeparam name="TOutput">目标类型</typeparam>
+        /// <typeparam name="TInput">原类型</typeparam>
+        public static TOutput[] ConvertAllAS<TOutput, TInput>(this TInput[] array) where TOutput : class where TInput : class
+        {
+            if (array == null)
+            {
+                return null;
+            }
+
+            TOutput[] convertArray = new TOutput[array.Length];
+            for (int i = 0; i < array.Length; i++)
+            {
+                convertArray[i] = array[i] as TOutput;
             }
             return convertArray;
         }
@@ -836,49 +879,6 @@ namespace HT.Framework
             }
         }
         /// <summary>
-        /// 世界坐标转换为UGUI坐标（只针对框架UI模块下的UI控件）
-        /// </summary>
-        /// <param name="position">世界坐标</param>
-        /// <param name="reference">参照物（要赋值的UGUI控件的根物体）</param>
-        /// <param name="uIType">UI类型</param>
-        /// <returns>基于参照物的局部UGUI坐标</returns>
-        public static Vector2 WorldToUGUIPosition(this Vector3 position, RectTransform reference = null, UIType uIType = UIType.Overlay)
-        {
-            Vector3 screenPos;
-            Vector2 anchoredPos = Vector2.zero;
-            switch (uIType)
-            {
-                case UIType.Overlay:
-                    screenPos = Main.m_Controller.MainCamera.WorldToScreenPoint(position);
-                    if (screenPos.z < 0)
-                    {
-                        anchoredPos.Set(-100000, -100000);
-                    }
-                    else
-                    {
-                        screenPos.z = 0;
-                        RectTransformUtility.ScreenPointToLocalPointInRectangle(reference != null ? reference : Main.m_UI.OverlayUIRoot, screenPos, null, out anchoredPos);
-                    }
-                    break;
-                case UIType.Camera:
-                    screenPos = Main.m_UI.UICamera.WorldToScreenPoint(position);
-                    if (screenPos.z < 0)
-                    {
-                        anchoredPos.Set(-100000, -100000);
-                    }
-                    else
-                    {
-                        screenPos.z = 0;
-                        RectTransformUtility.ScreenPointToLocalPointInRectangle(reference != null ? reference : Main.m_UI.CameraUIRoot, screenPos, Main.m_UI.UICamera, out anchoredPos);
-                    }
-                    break;
-                case UIType.World:
-                    anchoredPos = position;
-                    break;
-            }
-            return anchoredPos;
-        }
-        /// <summary>
         /// 屏幕坐标转换为UGUI坐标（只针对框架UI模块下的UI控件）
         /// </summary>
         /// <param name="position">屏幕坐标</param>
@@ -888,33 +888,25 @@ namespace HT.Framework
         public static Vector2 ScreenToUGUIPosition(this Vector3 position, RectTransform reference = null, UIType uIType = UIType.Overlay)
         {
             Vector2 anchoredPos = Vector2.zero;
-            switch (uIType)
+            if (position.z < 0)
             {
-                case UIType.Overlay:
-                    if (position.z < 0)
-                    {
-                        anchoredPos.Set(-100000, -100000);
-                    }
-                    else
-                    {
-                        position.z = 0;
+                anchoredPos.Set(-100000, -100000);
+            }
+            else
+            {
+                position.z = 0;
+                switch (uIType)
+                {
+                    case UIType.Overlay:
                         RectTransformUtility.ScreenPointToLocalPointInRectangle(reference != null ? reference : Main.m_UI.OverlayUIRoot, position, null, out anchoredPos);
-                    }
-                    break;
-                case UIType.Camera:
-                    if (position.z < 0)
-                    {
-                        anchoredPos.Set(-100000, -100000);
-                    }
-                    else
-                    {
-                        position.z = 0;
+                        break;
+                    case UIType.Camera:
                         RectTransformUtility.ScreenPointToLocalPointInRectangle(reference != null ? reference : Main.m_UI.CameraUIRoot, position, Main.m_UI.UICamera, out anchoredPos);
-                    }
-                    break;
-                case UIType.World:
-                    anchoredPos = position;
-                    break;
+                        break;
+                    case UIType.World:
+                        RectTransformUtility.ScreenPointToLocalPointInRectangle(reference, position, Main.m_Controller.MainCamera, out anchoredPos);
+                        break;
+                }
             }
             return anchoredPos;
         }
@@ -979,12 +971,15 @@ namespace HT.Framework
             byte[] buffer = new byte[stream.Length];
             stream.Read(buffer, 0, (int)stream.Length);
 
-            Texture2D tex = new Texture2D(80, 80);
-            tex.LoadImage(buffer);
+            Texture2D texture = new Texture2D(80, 80);
+            texture.LoadImage(buffer);
 
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
+
+            Main.Kill(texture);
             stream.Close();
 
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0, 0));
+            return sprite;
         }
         #endregion
 
@@ -992,34 +987,26 @@ namespace HT.Framework
         /// <summary>
         /// 获取本机Mac地址
         /// </summary>
+        /// <param name="name">网卡的名称</param>
         /// <returns>Mac地址</returns>
-        public static string GetMacAddress()
+        public static string GetMacAddress(string name = "本地连接")
         {
             try
             {
                 NetworkInterface[] nis = NetworkInterface.GetAllNetworkInterfaces();
                 for (int i = 0; i < nis.Length; i++)
                 {
-                    if (nis[i].Name == "本地连接")
+                    if (nis[i].Name == name)
                     {
                         return nis[i].GetPhysicalAddress().ToString();
                     }
                 }
-                return "null";
+                return null;
             }
             catch
             {
-                return "null";
+                return null;
             }
-        }
-        /// <summary>
-        /// 获取与Assets同级的目录
-        /// </summary>
-        /// <param name="directory">目录名（例如：/Library，获取项目的Library目录）</param>
-        /// <returns>目录</returns>
-        public static string GetDirectorySameLevelOfAssets(string directory)
-        {
-            return Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("/")) + directory;
         }
         /// <summary>
         /// 转换为颜色RGB参数的十六进制字符串
@@ -1028,10 +1015,11 @@ namespace HT.Framework
         /// <returns>十六进制字符串</returns>
         public static string ToHexSystemString(this Color color)
         {
-            return "#" + ((int)(color.r * 255)).ToString("x2") +
-                ((int)(color.g * 255)).ToString("x2") +
-                ((int)(color.b * 255)).ToString("x2") +
-                ((int)(color.a * 255)).ToString("x2");
+            return string.Format("#{0}{1}{2}{3}"
+                , ((int)(color.r * 255)).ToString("x2")
+                , ((int)(color.g * 255)).ToString("x2")
+                , ((int)(color.b * 255)).ToString("x2")
+                , ((int)(color.a * 255)).ToString("x2"));
         }
         #endregion
 

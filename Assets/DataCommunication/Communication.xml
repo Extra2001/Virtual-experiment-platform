@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Communication</name>
+    </assembly>
+    <members>
+        <member name="T:WisdomTree.Common.Function.Communication">
+            <summary>
+            数据通信
+            </summary>
+        </member>
+        <member name="M:WisdomTree.Common.Function.Communication.Init(System.Action)">
+            <summary>
+            初始化
+            </summary>
+        </member>
+        <member name="M:WisdomTree.Common.Function.Communication.GetTime(System.Action{System.String})">
+            <summary>
+            获取时间（服务器获取失败则取本地时间）
+            </summary>
+            <param name="responseAction">当前时间</param>
+        </member>
+        <member name="M:WisdomTree.Common.Function.Communication.UploadImage(UnityEngine.Texture2D,System.Action{System.String})">
+            <summary>
+            上传图片
+            </summary>
+            <param name="texture">图片</param>
+            <param name="tryTime">上传尝试次数</param>
+            <param name="responseAction">响应事件</param>
+        </member>
+        <member name="M:WisdomTree.Common.Function.Communication.UploadReport(WisdomTree.Common.Function.ExperimentReport,System.Action{System.String})">
+            <summary>
+            最基本的上传
+            </summary>
+            <param name="experimentReport">实验报告</param>
+            <param name="responseAction">响应事件</param>
+        </member>
+        <member name="M:WisdomTree.Common.Function.Communication.UploadReport(System.String,System.Int32,System.Int32,System.String,System.String,System.Int32,System.String,WisdomTree.Common.Function.ExperimentReportModelBuilder[],System.Action{System.String})">
+            <summary>
+            花式上传的基本方法
+            </summary>
+            <param name="uuid">用户ID</param>
+            <param name="experimentId">实验ID</param>
+            <param name="courseId">课程ID</param>
+            <param name="startTime">实验开始时间</param>
+            <param name="endTime">实验结束时间</param>
+            <param name="score">分数</param>
+            <param name="ReportSummary">实验报告总结</param>
+            <param name="reportModels">模块</param>
+            <param name="responseAction">响应事件</param>
+        </member>
+        <member name="M:WisdomTree.Common.Function.Communication.UploadReport(System.Int32,System.Int32,System.Int32,System.Action{System.String})">
+            <summary>
+            最简上传
+            </summary>
+            <param name="experimentId">实验ID</param>
+            <param name="courseId">课程ID</param>
+            <param name="score">分数</param>
+            <param name="responseAction">响应事件</param>
+        </member>
+        <member name="M:WisdomTree.Common.Function.Communication.UploadReport(System.Int32,System.Int32,System.Int32,System.String,System.Action{System.String},WisdomTree.Common.Function.ExperimentReportModelBuilder[])">
+            <summary>
+            花式上传
+            </summary>F
+            <param name="experimentId">实验ID</param>
+            <param name="courseId">课程ID</param>
+            <param name="score">分数</param>
+            <param name="ReportSummary">实验报告总结</param>
+            <param name="responseAction">响应事件</param>
+            <param name="reportModels">模块</param>
+        </member>
+        <member name="M:WisdomTree.Common.Function.Communication.Receive(System.String,System.String)">
+            <summary>
+            接收js消息
+            </summary>
+            <param name="identifier">标识符</param>
+            <param name="data">数据</param>
+        </member>
+        <member name="T:WisdomTree.Common.Function.ExperimentReport">
+            <summary>
+            实验报告
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReport.uuid">
+            <summary>
+            登陆验证的时候会获取到
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReport.experimentId">
+            <summary>
+            实验ID
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReport.courseId">
+            <summary>
+            课程ID
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReport.startTime">
+            <summary>
+            实验开始时间，格式为"yyyy/MM/dd HH:mm:ss"
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReport.endTime">
+            <summary>
+            实验结束时间，格式同上
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReport.score">
+            <summary>
+            分数
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReport.ReportSummary">
+            <summary>
+            实验报告总结
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReport.reportModels">
+            <summary>
+            实验报告模块
+            </summary>
+        </member>
+        <member name="T:WisdomTree.Common.Function.ExperimentReportModel">
+            <summary>
+            一个实验报告的一模块内容
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportModel.name">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportModel.reportContents">
+            <summary>
+            实验报告内容
+            </summary>
+        </member>
+        <member name="T:WisdomTree.Common.Function.ExperimentReportContent">
+            <summary>
+            实验报告内容
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContent.name">
+            <summary>
+            图表名称
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContent.images">
+            <summary>
+            图片url（解析imagesForUser自动添加，不需要传参）
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContent.imageType">
+            <summary>
+            图片类型(static 静态图, dynamic 动态图（多张轮播）, none 无图)
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContent.type">
+            <summary>
+            报告类型，为"inputs"或"script"，其中"inputs"和"script"只有一个有内容另一个传空字符串
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContent.inputs">
+            <summary>
+            填写参数
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContent.script">
+            <summary>
+            自主编程脚本，需要把脚本字符串中的"都改为'，双引号都改为单引号    （无脚本需求时，默认为文本内容）
+            </summary>
+        </member>
+        <member name="T:WisdomTree.Common.Function.ExperimentReportContentBuilder">
+            <summary>
+            实验报告内容
+            </summary>
+        </member>
+        <member name="T:WisdomTree.Common.Function.ExperimentReportContentBuilder.ImageType">
+            <summary>
+            图片类型
+            </summary>
+        </member>
+        <member name="T:WisdomTree.Common.Function.ExperimentReportContentBuilder.Type">
+            <summary>
+            报告类型
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContentBuilder.name">
+            <summary>
+            图表名称
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContentBuilder.images">
+            <summary>
+            图片url（解析imagesForUser自动添加，不需要传参）
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContentBuilder.imageType">
+            <summary>
+            图片类型(static 静态图, dynamic 动态图（多张轮播）, none 无图)
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContentBuilder.type">
+            <summary>
+            报告类型，为"inputs"或"script"，其中"inputs"和"script"只有一个有内容另一个传空字符串
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContentBuilder.inputs">
+            <summary>
+            填写参数
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.ExperimentReportContentBuilder.script">
+            <summary>
+            自主编程脚本，需要把脚本字符串中的"都改为'，双引号都改为单引号    （无脚本需求时，默认为文本内容）
+            </summary>
+        </member>
+        <member name="T:WisdomTree.Common.Function.Files">
+            <summary>
+            文件类（用于音频、视频、文本、可预览文件等的上传）
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.Files.fileName">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.Files.url">
+            <summary>
+            文件链接
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.Files.type">
+            <summary>
+            文件类型
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.Files.fileID">
+            <summary>
+            文件ID
+            </summary>
+        </member>
+        <member name="F:WisdomTree.Common.Function.Files.fileOrder">
+            <summary>
+            文件序号
+            </summary>
+        </member>
+    </members>
+</doc>

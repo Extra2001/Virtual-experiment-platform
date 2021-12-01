@@ -8,7 +8,7 @@ namespace HT.Framework
     [DisallowMultipleComponent]
     public abstract class SingletonBehaviourBase<T> : HTBehaviour where T : class
     {
-        private static T _current = null;
+        private static T _current;
         /// <summary>
         /// 当前实例
         /// </summary>
@@ -33,8 +33,10 @@ namespace HT.Framework
                 throw new HTFrameworkException(HTFrameworkModule.Utility, "单例类 " + typeof(T).FullName + " 发现两个或以上实例，这是不被允许的！");
             }
         }
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             _current = null;
         }
     }

@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Diagnostics;
 using System.IO;
-
 public static class ProcessManager
 {
     public static string FileName => Path.Combine(Application.streamingAssetsPath, "NodeJSServer", "app.exe");
@@ -12,6 +11,9 @@ public static class ProcessManager
 
     public static void StartService()
     {
+#if !UNITY_EDITOR && UNITY_WEBGL
+        return;
+#endif
         int port = GetPort();
         var startInfo = new ProcessStartInfo()
         {
@@ -24,7 +26,7 @@ public static class ProcessManager
         process = Process.Start(startInfo);
         process.EnableRaisingEvents = true;
         process.Exited += Process_Exited;
-        
+
         Port = port;
         //Port = 5000;
         //UnityEngine.Debug.Log($"服务已运行在 http://localhost:{port}/");

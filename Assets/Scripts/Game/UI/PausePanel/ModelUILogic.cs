@@ -90,7 +90,7 @@ public class ModelUILogic : WithSingleModeUILogic, IDataDriver<ModelDialogModel>
             CancelButton.gameObject.SetActive(false);
         }
 
-        Main.m_UI.OpenTemporaryUI<ModelUILogic>();
+        Main.m_UI.OpenUI<ModelUILogic>();
     }
 
     /// <summary>

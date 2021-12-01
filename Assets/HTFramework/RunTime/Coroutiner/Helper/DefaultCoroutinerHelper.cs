@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using static HT.Framework.Coroutiner;
+using static HT.Framework.CoroutinerManager;
 
 namespace HT.Framework
 {
@@ -12,7 +12,7 @@ namespace HT.Framework
         /// <summary>
         /// 协程调度器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 所有协程迭代器
         /// </summary>
@@ -60,7 +60,7 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
            
         }
@@ -118,7 +118,8 @@ namespace HT.Framework
         {
             if (!CoroutineEnumerators.ContainsKey(id))
             {
-                throw new HTFrameworkException(HTFrameworkModule.Coroutiner, "重启协程失败：不存在ID为 " + id + " 的协程！");
+                Log.Warning("重启协程失败：不存在ID为 " + id + " 的协程！");
+                return;
             }
             CoroutineEnumerators[id].Rerun();
         }
@@ -130,7 +131,8 @@ namespace HT.Framework
         {
             if (!CoroutineEnumerators.ContainsKey(id))
             {
-                throw new HTFrameworkException(HTFrameworkModule.Coroutiner, "终止协程失败：不存在ID为 " + id + " 的协程！");
+                Log.Warning("终止协程失败：不存在ID为 " + id + " 的协程！");
+                return;
             }
             CoroutineEnumerators[id].Stop();
         }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace HT.Framework
@@ -11,7 +12,7 @@ namespace HT.Framework
         /// <summary>
         /// 控制模式
         /// </summary>
-        ControlMode TheControlMode { get; set; }
+        ControlMode Mode { get; set; }
         /// <summary>
         /// 主摄像机
         /// </summary>
@@ -49,10 +50,6 @@ namespace HT.Framework
         /// </summary>
         MouseRayTargetBase RayTarget { get; }
         /// <summary>
-        /// 当前射线击中的目标
-        /// </summary>
-        GameObject RayTargetObj { get; }
-        /// <summary>
         /// 当前射线击中的点
         /// </summary>
         Vector3 RayHitPoint { get; }
@@ -68,6 +65,10 @@ namespace HT.Framework
         /// 是否启用鼠标射线击中提示框
         /// </summary>
         bool EnableMouseRayHitPrompt { get; set; }
+        /// <summary>
+        /// 高亮组件是否自动销毁
+        /// </summary>
+        bool HighlightAutoDie { get; set; }
         /// <summary>
         /// 射线投射事件(MouseRayTargetBase：当前射中的目标，Vector3：当前射中的点，Vector2：当前鼠标位置转换后的UGUI坐标)
         /// </summary>
@@ -102,6 +103,18 @@ namespace HT.Framework
         /// <param name="m">滚轮缩放速度</param>
         void SetRotateSpeed(float x, float y, float m);
         /// <summary>
+        /// 自由控制：设置摄像机旋转时视角Y轴的限制
+        /// </summary>
+        /// <param name="min">最小值</param>
+        /// <param name="max">最大值</param>
+        void SetAngleLimit(float min, float max);
+        /// <summary>
+        /// 自由控制：设置摄像机注视距离的最小值和最大值
+        /// </summary>
+        /// <param name="min">最小值</param>
+        /// <param name="max">最大值</param>
+        void SetMinMaxDistance(float min, float max);
+        /// <summary>
         /// 自由控制：进入保持追踪模式
         /// </summary>
         /// <param name="target">追踪目标</param>
@@ -123,15 +136,17 @@ namespace HT.Framework
         /// </summary>
         /// <param name="target">目标</param>
         /// <param name="callback">点击事件回调</param>
-        void AddClickListener(GameObject target, HTFAction callback);
+        void AddClickListener(GameObject target, UnityAction callback);
         /// <summary>
         /// 为挂载 MouseRayTargetBase 的目标移除鼠标左键点击事件
         /// </summary>
         /// <param name="target">目标</param>
-        void RemoveClickListener(GameObject target);
+        /// <param name="callback">点击事件回调</param>
+        void RemoveClickListener(GameObject target, UnityAction callback);
         /// <summary>
-        /// 清空所有点击事件
+        /// 为挂载 MouseRayTargetBase 的目标移除所有的鼠标左键点击事件
         /// </summary>
-        void ClearClickListener();
+        /// <param name="target">目标</param>
+        void RemoveAllClickListener(GameObject target);
     }
 }

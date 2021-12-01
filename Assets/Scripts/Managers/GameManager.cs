@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using Common;
 public class GameManager : SingletonBehaviorManager<GameManager>
 {
     #region 属性访问器

@@ -73,7 +73,7 @@ public class PauseUILogic : UILogicTemporary
                 SaveRecordButton = item;
                 item.onClick.AddListener(() =>
                 {
-                    Main.m_UI.OpenTemporaryUI<SaveRecordUILogic>();
+                    Main.m_UI.OpenUI<SaveRecordUILogic>();
                 });
 
             }
@@ -82,7 +82,7 @@ public class PauseUILogic : UILogicTemporary
                 ReadRecordButton = item;
                 item.onClick.AddListener(() =>
                 {
-                    Main.m_UI.OpenTemporaryUI<SettingsLogicTemporary>();
+                    Main.m_UI.OpenUI<SettingsLogicTemporary>();
                 });
             }
         }
@@ -98,7 +98,7 @@ public class PauseUILogic : UILogicTemporary
             if ((e as PauseEventHandler).Paused)
             {
                 if ((e as PauseEventHandler).NeedOpenPauseMenu)
-                    Main.m_UI.OpenTemporaryUI<PauseUILogic>();
+                    Main.m_UI.OpenUI<PauseUILogic>();
             }
             else if ((e as PauseEventHandler).NeedOpenPauseMenu)
             {

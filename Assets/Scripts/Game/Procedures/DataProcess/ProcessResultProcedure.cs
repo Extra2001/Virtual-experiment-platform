@@ -13,7 +13,7 @@ public class ProcessResultProcedure : ProcedureBase
     /// </summary>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Main.m_UI.OpenResidentUI<ProcessResult>();
+        Main.m_UI.OpenUI<ProcessResult>();
         base.OnEnter(lastProcedure);
     }
 

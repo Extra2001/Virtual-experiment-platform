@@ -16,7 +16,7 @@ namespace HT.Framework
         /// <summary>
         /// 热更新管理器
         /// </summary>
-        public InternalModuleBase Module { get; set; }
+        public IModuleManager Module { get; set; }
         /// <summary>
         /// 热更新DLL
         /// </summary>
@@ -98,7 +98,7 @@ namespace HT.Framework
         /// <summary>
         /// 恢复助手
         /// </summary>
-        public void OnUnPause()
+        public void OnResume()
         {
 
         }
@@ -230,7 +230,7 @@ namespace HT.Framework
 
             SearchHotfixMethod();
 
-            Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<EventHotfixReady>());
+            Main.m_Event.Throw<EventHotfixReady>();
         }
         private void SearchHotfixMethod()
         {

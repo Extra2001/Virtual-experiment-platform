@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UObject = UnityEngine.Object;
 using UReorderableList = UnityEditorInternal.ReorderableList;
@@ -15,14 +14,19 @@ namespace HT.Framework
     /// </summary>
     [CanEditMultipleObjects]
     [CustomEditor(typeof(UObject), true)]
-    public sealed class ObjectInspector : Editor
+    internal sealed class ObjectInspector : HTFEditor<UObject>
     {
         private List<FieldInspector> _fields = new List<FieldInspector>();
+        private List<PropertyInspector> _properties = new List<PropertyInspector>();
         private List<EventInspector> _events = new List<EventInspector>();
         private List<MethodInspector> _methods = new List<MethodInspector>();
 
-        private void OnEnable()
+        protected override bool IsEnableRuntimeData => false;
+
+        protected override void OnDefaultEnable()
         {
+            base.OnDefaultEnable();
+
             try
             {
                 using (SerializedProperty iterator = serializedObject.GetIterator())
@@ -36,7 +40,16 @@ namespace HT.Framework
                         }
                     }
                 }
-                
+
+                List<PropertyInfo> properties = target.GetType().GetProperties((property) =>
+                {
+                    return property.IsDefined(typeof(PropertyDisplayAttribute), true);
+                });
+                for (int i = 0; i < properties.Count; i++)
+                {
+                    _properties.Add(new PropertyInspector(properties[i]));
+                }
+
                 List<FieldInfo> events = target.GetType().GetFields((field) =>
                 {
                     return field.FieldType.IsSubclassOf(typeof(MulticastDelegate)) && field.IsDefined(typeof(EventAttribute), true);
@@ -58,15 +71,14 @@ namespace HT.Framework
             }
             catch { }
         }
-        public override void OnInspectorGUI()
+        protected override void OnInspectorDefaultGUI()
         {
-            serializedObject.Update();
-
+            base.OnInspectorDefaultGUI();
+            
             FieldGUI();
+            PropertyGUI();
             EventGUI();
             MethodGUI();
-
-            serializedObject.ApplyModifiedProperties();
         }
         private void OnSceneGUI()
         {
@@ -77,29 +89,52 @@ namespace HT.Framework
         /// </summary>
         private void FieldGUI()
         {
-            bool drawerValue = true;
+            bool drawer = true;
+            int indent = 0;
             for (int i = 0; i < _fields.Count; i++)
             {
                 if (_fields[i].Drawer != null)
                 {
-                    if (string.IsNullOrEmpty(_fields[i].Drawer.Style))
+                    if (_fields[i].IsDisplayDrawer)
                     {
-                        GUILayout.BeginHorizontal();
+                        EditorGUI.indentLevel = 0;
+                        indent = 1;
+
+                        if (string.IsNullOrEmpty(_fields[i].Drawer.Style))
+                        {
+                            GUILayout.BeginHorizontal();
+                        }
+                        else
+                        {
+                            GUILayout.BeginHorizontal(_fields[i].Drawer.Style);
+                            GUILayout.Space(10);
+                        }
+                        _fields[i].DrawerValue = EditorGUILayout.Foldout(_fields[i].DrawerValue, _fields[i].Drawer.Name, _fields[i].Drawer.ToggleOnLabelClick);
+                        drawer = _fields[i].DrawerValue;
+                        GUILayout.EndHorizontal();
                     }
                     else
                     {
-                        GUILayout.BeginHorizontal(_fields[i].Drawer.Style);
-                        GUILayout.Space(10);
+                        drawer = false;
                     }
-                    _fields[i].DrawerValue = EditorGUILayout.Foldout(_fields[i].DrawerValue, _fields[i].Drawer.Name, _fields[i].Drawer.ToggleOnLabelClick);
-                    drawerValue = _fields[i].DrawerValue;
-                    GUILayout.EndHorizontal();
                 }
 
-                if (drawerValue)
+                if (drawer)
                 {
+                    EditorGUI.indentLevel = indent;
+
                     _fields[i].Painting(this);
                 }
+            }
+        }
+        /// <summary>
+        /// 绘制属性
+        /// </summary>
+        private void PropertyGUI()
+        {
+            for (int i = 0; i < _properties.Count; i++)
+            {
+                _properties[i].Painting(this);
             }
         }
         /// <summary>
@@ -127,36 +162,22 @@ namespace HT.Framework
         /// </summary>
         private void FieldSceneHandle()
         {
-            bool drawerValue = true;
+            bool drawer = true;
             for (int i = 0; i < _fields.Count; i++)
             {
                 if (_fields[i].Drawer != null)
                 {
-                    drawerValue = _fields[i].DrawerValue;
+                    if (_fields[i].IsDisplayDrawer) drawer = _fields[i].DrawerValue;
+                    else drawer = false;
                 }
 
-                if (drawerValue)
+                if (drawer)
                 {
                     _fields[i].SceneHandle(this);
                 }
             }
         }
-        /// <summary>
-        /// 标记目标已改变
-        /// </summary>
-        private void HasChanged()
-        {
-            if (!EditorApplication.isPlaying)
-            {
-                EditorUtility.SetDirty(target);
-                Component component = target as Component;
-                if (component != null && component.gameObject.scene != null)
-                {
-                    EditorSceneManager.MarkSceneDirty(component.gameObject.scene);
-                }
-            }
-        }
-
+        
         #region Field
         /// <summary>
         /// 字段检视器
@@ -173,8 +194,14 @@ namespace HT.Framework
             public Color UseColor = Color.white;
             public bool IsReadOnly = false;
             public DrawerAttribute Drawer;
+            public MethodInfo DrawerCondition;
             public bool DrawerValue = true;
+            public bool HasPreview = false;
+            public float PreviewSize = 0;
 
+            /// <summary>
+            /// 是否激活
+            /// </summary>
             public bool IsEnable
             {
                 get
@@ -194,6 +221,9 @@ namespace HT.Framework
                     return !IsReadOnly && condition;
                 }
             }
+            /// <summary>
+            /// 是否显示
+            /// </summary>
             public bool IsDisplay
             {
                 get
@@ -208,6 +238,28 @@ namespace HT.Framework
                         else
                         {
                             condition = (bool)DisplayCondition.Invoke(Property.serializedObject.targetObject, null);
+                        }
+                    }
+                    return condition;
+                }
+            }
+            /// <summary>
+            /// 是否显示整个抽屉组
+            /// </summary>
+            public bool IsDisplayDrawer
+            {
+                get
+                {
+                    bool condition = true;
+                    if (DrawerCondition != null)
+                    {
+                        if (DrawerCondition.IsStatic)
+                        {
+                            condition = (bool)DrawerCondition.Invoke(null, null);
+                        }
+                        else
+                        {
+                            condition = (bool)DrawerCondition.Invoke(Property.serializedObject.targetObject, null);
                         }
                     }
                     return condition;
@@ -283,9 +335,26 @@ namespace HT.Framework
                         {
                             IsReadOnly = true;
                         }
+                        else if (iattributes[i] is PreviewAttribute)
+                        {
+                            HasPreview = true;
+                            PreviewSize = iattributes[i].Cast<PreviewAttribute>().Size;
+                        }
+                        else if (iattributes[i] is GenericMenuAttribute)
+                        {
+                            Painters.Add(new GenericMenuPainter(iattributes[i]));
+                        }
                         else if (iattributes[i] is DrawerAttribute)
                         {
                             Drawer = iattributes[i] as DrawerAttribute;
+                            if (!string.IsNullOrEmpty(Drawer.Condition))
+                            {
+                                DrawerCondition = property.serializedObject.targetObject.GetType().GetMethod(Drawer.Condition, flags);
+                                if (DrawerCondition != null && DrawerCondition.ReturnType != typeof(bool))
+                                {
+                                    DrawerCondition = null;
+                                }
+                            }
                             DrawerValue = Drawer.DefaultOpened;
                         }
                     }
@@ -316,13 +385,13 @@ namespace HT.Framework
                     }
                 }
             }
-
+            
             public void Painting(ObjectInspector inspector)
             {
                 if (IsDisplay)
                 {
                     GUI.color = UseColor;
-                    if (Painters.Count > 0)
+                    if (Painters.Count > 0 && inspector.targets.Length == 1)
                     {
                         GUI.enabled = IsEnable;
                         for (int i = 0; i < Painters.Count; i++)
@@ -336,17 +405,32 @@ namespace HT.Framework
                         if (Property.name == "m_Script")
                         {
                             GUI.enabled = false;
+                            GUILayout.BeginHorizontal();
                             EditorGUILayout.PropertyField(Property);
+                            GUILayout.EndHorizontal();
                             GUI.enabled = true;
                         }
                         else
                         {
                             GUI.enabled = IsEnable;
+                            GUILayout.BeginHorizontal();
                             EditorGUILayout.PropertyField(Property, new GUIContent(Label), true);
+                            inspector.DrawCopyPaste(Property);
+                            GUILayout.EndHorizontal();
                             GUI.enabled = true;
                         }
                     }
                     GUI.color = Color.white;
+
+                    if (HasPreview)
+                    {
+                        GUILayout.BeginHorizontal();
+                        GUILayout.Space(EditorGUIUtility.labelWidth);
+                        Texture2D preview = Property.propertyType == SerializedPropertyType.ObjectReference ? AssetPreview.GetAssetPreview(Property.objectReferenceValue) : null;
+                        GUIContent gc = preview != null ? new GUIContent(preview) : new GUIContent("No Preview");
+                        EditorGUILayout.LabelField(gc, EditorStyles.helpBox, GUILayout.Width(PreviewSize), GUILayout.Height(PreviewSize));
+                        GUILayout.EndHorizontal();
+                    }
                 }
             }
 
@@ -396,7 +480,12 @@ namespace HT.Framework
                 {
                     object value = fieldInspector.Field.GetValue(inspector.target);
                     int selectIndex = Array.IndexOf(DAttribute.Values, value);
-                    if (selectIndex < 0) selectIndex = 0;
+                    if (selectIndex < 0)
+                    {
+                        selectIndex = 0;
+                        fieldInspector.Field.SetValue(inspector.target, DAttribute.Values[selectIndex]);
+                        inspector.HasChanged();
+                    }
                     
                     GUILayout.BeginHorizontal();
                     EditorGUI.BeginChangeCheck();
@@ -725,6 +814,126 @@ namespace HT.Framework
             }
         }
         /// <summary>
+        /// 字段绘制器 - 通用菜单
+        /// </summary>
+        private sealed class GenericMenuPainter : FieldPainter
+        {
+            public GenericMenuAttribute GAttribute;
+            public MethodInfo GenerateMenu;
+            public MethodInfo ChooseMenu;
+            public bool IsReady = false;
+
+            public GenericMenuPainter(InspectorAttribute attribute) : base(attribute)
+            {
+                GAttribute = attribute as GenericMenuAttribute;
+            }
+
+            public override void Painting(ObjectInspector inspector, FieldInspector fieldInspector)
+            {
+                if (fieldInspector.Field.FieldType == typeof(string))
+                {
+                    if (!IsReady)
+                    {
+                        Ready(fieldInspector);
+                    }
+
+                    string value = (string)fieldInspector.Field.GetValue(inspector.target);
+
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(fieldInspector.Label, GUILayout.Width(EditorGUIUtility.labelWidth - 5));
+                    if (GUILayout.Button(value, EditorStyles.popup))
+                    {
+                        if (GenerateMenu != null)
+                        {
+                            string[] menus = CallGenerateMenu(fieldInspector);
+                            if (menus != null && menus.Length > 0)
+                            {
+                                GenericMenu gm = new GenericMenu();
+                                for (int i = 0; i < menus.Length; i++)
+                                {
+                                    int j = i;
+                                    gm.AddItem(new GUIContent(menus[j]), value == menus[j], () =>
+                                    {
+                                        Undo.RecordObject(inspector.target, "GenericMenu");
+                                        value = menus[j];
+                                        fieldInspector.Field.SetValue(inspector.target, value);
+                                        inspector.HasChanged();
+
+                                        if (ChooseMenu != null)
+                                        {
+                                            CallChooseMenu(fieldInspector, value);
+                                        }
+                                    });
+                                }
+                                gm.ShowAsContext();
+                            }
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+                }
+                else
+                {
+                    GUILayout.BeginHorizontal();
+                    EditorGUILayout.HelpBox("[" + fieldInspector.Field.Name + "] can't used GenericMenu! because the types don't match!", MessageType.Error);
+                    GUILayout.EndHorizontal();
+                }
+            }
+
+            public void Ready(FieldInspector fieldInspector)
+            {
+                IsReady = true;
+                BindingFlags flags = BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+                if (!string.IsNullOrEmpty(GAttribute.GenerateMenu))
+                {
+                    GenerateMenu = fieldInspector.Property.serializedObject.targetObject.GetType().GetMethod(GAttribute.GenerateMenu, flags);
+                    if (GenerateMenu != null && GenerateMenu.ReturnType != typeof(string[]))
+                    {
+                        GenerateMenu = null;
+                    }
+                }
+                if (!string.IsNullOrEmpty(GAttribute.ChooseMenu))
+                {
+                    ChooseMenu = fieldInspector.Property.serializedObject.targetObject.GetType().GetMethod(GAttribute.ChooseMenu, flags);
+                    if (ChooseMenu != null)
+                    {
+                        ParameterInfo[] parameters = ChooseMenu.GetParameters();
+                        if (parameters.Length != 1)
+                        {
+                            GenerateMenu = null;
+                        }
+                        else if (parameters[0].ParameterType != typeof(string))
+                        {
+                            GenerateMenu = null;
+                        }
+                    }
+                }
+            }
+
+            public string[] CallGenerateMenu(FieldInspector fieldInspector)
+            {
+                if (GenerateMenu.IsStatic)
+                {
+                    return GenerateMenu.Invoke(null, null) as string[];
+                }
+                else
+                {
+                    return GenerateMenu.Invoke(fieldInspector.Property.serializedObject.targetObject, null) as string[];
+                }
+            }
+
+            public void CallChooseMenu(FieldInspector fieldInspector, string value)
+            {
+                if (ChooseMenu.IsStatic)
+                {
+                    ChooseMenu.Invoke(null, new object[] { value });
+                }
+                else
+                {
+                    ChooseMenu.Invoke(fieldInspector.Property.serializedObject.targetObject, new object[] { value });
+                }
+            }
+        }
+        /// <summary>
         /// 字段场景处理器
         /// </summary>
         private abstract class FieldSceneHandler
@@ -764,7 +973,7 @@ namespace HT.Framework
                         {
                             Undo.RecordObject(inspector.target, "Move Handler");
                             fieldInspector.Field.SetValue(inspector.target, newValue);
-                            inspector.HasChanged();
+                            inspector.HasChanged(true);
                         }
                         if (MAttribute.Display != null)
                         {
@@ -784,7 +993,7 @@ namespace HT.Framework
                         {
                             Undo.RecordObject(inspector.target, "Move Handler");
                             fieldInspector.Field.SetValue(inspector.target, newValue);
-                            inspector.HasChanged();
+                            inspector.HasChanged(true);
                         }
                         if (MAttribute.Display != null)
                         {
@@ -822,7 +1031,7 @@ namespace HT.Framework
                         {
                             Undo.RecordObject(inspector.target, "Radius Handler");
                             fieldInspector.Field.SetValue(inspector.target, newValue);
-                            inspector.HasChanged();
+                            inspector.HasChanged(true);
                         }
                         if (RAttribute.Display != null)
                         {
@@ -844,7 +1053,7 @@ namespace HT.Framework
                         {
                             Undo.RecordObject(inspector.target, "Radius Handler");
                             fieldInspector.Field.SetValue(inspector.target, newValue);
-                            inspector.HasChanged();
+                            inspector.HasChanged(true);
                         }
                         if (RAttribute.Display != null)
                         {
@@ -886,7 +1095,7 @@ namespace HT.Framework
                             value.center = BoundsHandle.center;
                             value.size = BoundsHandle.size;
                             fieldInspector.Field.SetValue(inspector.target, value);
-                            inspector.HasChanged();
+                            inspector.HasChanged(true);
                         }
                         if (BAttribute.Display != null)
                         {
@@ -1095,6 +1304,163 @@ namespace HT.Framework
         }
         #endregion
 
+        #region Property
+        /// <summary>
+        /// 属性检视器
+        /// </summary>
+        private sealed class PropertyInspector
+        {
+            public PropertyInfo Property;
+            public PropertyDisplayAttribute Attribute;
+            public string Name;
+
+            public PropertyInspector(PropertyInfo property)
+            {
+                Property = property;
+                Attribute = property.GetCustomAttribute<PropertyDisplayAttribute>(true);
+                Name = string.IsNullOrEmpty(Attribute.Text) ? property.Name : Attribute.Text;
+            }
+
+            public void Painting(ObjectInspector inspector)
+            {
+                if (inspector.targets.Length > 1)
+                    return;
+
+                if (!Property.CanRead)
+                    return;
+
+                if (Attribute.DisplayOnlyRuntime && !EditorApplication.isPlaying)
+                    return;
+
+                if (Property.CanWrite)
+                {
+                    CanWritePainting(inspector);
+                }
+                else
+                {
+                    ReadOnlyPainting(inspector);
+                }
+            }
+
+            private void CanWritePainting(ObjectInspector inspector)
+            {
+                GUILayout.BeginHorizontal();
+                EditorGUI.BeginChangeCheck();
+                object value = Property.GetValue(inspector.target);
+                object newValue = value;
+                if (Property.PropertyType.IsEnum)
+                {
+                    Enum realValue = EditorGUILayout.EnumPopup(Name, (Enum)value);
+                    if (EditorGUI.EndChangeCheck()) newValue = realValue;
+                }
+                else if (Property.PropertyType == typeof(string))
+                {
+                    string realValue = EditorGUILayout.TextField(Name, (string)value);
+                    if (EditorGUI.EndChangeCheck()) newValue = realValue;
+                }
+                else if (Property.PropertyType == typeof(int))
+                {
+                    int realValue = EditorGUILayout.IntField(Name, (int)value);
+                    if (EditorGUI.EndChangeCheck()) newValue = realValue;
+                }
+                else if (Property.PropertyType == typeof(float))
+                {
+                    float realValue = EditorGUILayout.FloatField(Name, (float)value);
+                    if (EditorGUI.EndChangeCheck()) newValue = realValue;
+                }
+                else if (Property.PropertyType == typeof(bool))
+                {
+                    bool realValue = EditorGUILayout.Toggle(Name, (bool)value);
+                    if (EditorGUI.EndChangeCheck()) newValue = realValue;
+                }
+                else if (Property.PropertyType == typeof(Vector2))
+                {
+                    Vector2 realValue = EditorGUILayout.Vector2Field(Name, (Vector2)value);
+                    if (EditorGUI.EndChangeCheck()) newValue = realValue;
+                }
+                else if (Property.PropertyType == typeof(Vector3))
+                {
+                    Vector3 realValue = EditorGUILayout.Vector3Field(Name, (Vector3)value);
+                    if (EditorGUI.EndChangeCheck()) newValue = realValue;
+                }
+                else if (Property.PropertyType == typeof(Color))
+                {
+                    Color realValue = EditorGUILayout.ColorField(Name, (Color)value);
+                    if (EditorGUI.EndChangeCheck()) newValue = realValue;
+                }
+                else if (Property.PropertyType.IsSubclassOf(typeof(UObject)))
+                {
+                    UObject realValue = EditorGUILayout.ObjectField(Name, value as UObject, Property.PropertyType, true);
+                    if (EditorGUI.EndChangeCheck()) newValue = realValue;
+                }
+                else
+                {
+                    EditorGUILayout.TextField(Name, value != null ? value.ToString() : "null");
+                    EditorGUI.EndChangeCheck();
+                }
+                GUILayout.EndHorizontal();
+
+                if (value != newValue)
+                {
+                    Undo.RecordObject(inspector.target, "Property Changed");
+                    Property.SetValue(inspector.target, newValue);
+                    inspector.HasChanged();
+                }
+            }
+            
+            private void ReadOnlyPainting(ObjectInspector inspector)
+            {
+                GUI.enabled = false;
+
+                GUILayout.BeginHorizontal();
+                object value = Property.GetValue(inspector.target);
+                if (Property.PropertyType.IsEnum)
+                {
+                    EditorGUILayout.EnumPopup(Name, (Enum)value);
+                }
+                else if (Property.PropertyType == typeof(string))
+                {
+                    EditorGUILayout.TextField(Name, (string)value);
+                }
+                else if (Property.PropertyType == typeof(int))
+                {
+                    EditorGUILayout.IntField(Name, (int)value);
+                }
+                else if (Property.PropertyType == typeof(float))
+                {
+                    EditorGUILayout.FloatField(Name, (float)value);
+                }
+                else if (Property.PropertyType == typeof(bool))
+                {
+                    EditorGUILayout.Toggle(Name, (bool)value);
+                }
+                else if (Property.PropertyType == typeof(Vector2))
+                {
+                    EditorGUILayout.Vector2Field(Name, (Vector2)value);
+                }
+                else if (Property.PropertyType == typeof(Vector3))
+                {
+                    EditorGUILayout.Vector3Field(Name, (Vector3)value);
+                }
+                else if (Property.PropertyType == typeof(Color))
+                {
+                    EditorGUILayout.ColorField(Name, (Color)value);
+                }
+                else if (Property.PropertyType.IsSubclassOf(typeof(UObject)))
+                {
+                    EditorGUILayout.ObjectField(Name, value as UObject, Property.PropertyType, false);
+                }
+                else
+                {
+                    EditorGUILayout.TextField(Name, value != null ? value.ToString() : "null");
+                }
+                GUILayout.EndHorizontal();
+
+                GUI.enabled = true;
+            }
+        }
+        #endregion
+
         #region Event
         /// <summary>
         /// 事件检视器
@@ -1116,12 +1482,15 @@ namespace HT.Framework
 
             public void Painting(ObjectInspector inspector)
             {
+                if (inspector.targets.Length > 1)
+                    return;
+
                 MulticastDelegate multicast = Field.GetValue(inspector.target) as MulticastDelegate;
                 Delegate[] delegates = multicast != null ? multicast.GetInvocationList() : null;
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(10);
-                IsFoldout = EditorGUILayout.Foldout(IsFoldout, string.Format("{0} [{1}]", Name, delegates != null ? delegates.Length : 0));
+                IsFoldout = EditorGUILayout.Foldout(IsFoldout, string.Format("{0} [{1}]", Name, delegates != null ? delegates.Length : 0), true);
                 GUILayout.EndHorizontal();
 
                 if (IsFoldout && delegates != null)
@@ -1157,6 +1526,9 @@ namespace HT.Framework
 
             public void Painting(ObjectInspector inspector)
             {
+                if (inspector.targets.Length > 1)
+                    return;
+
                 GUI.enabled = Attribute.Mode == ButtonAttribute.EnableMode.Always
                 || (Attribute.Mode == ButtonAttribute.EnableMode.Editor && !EditorApplication.isPlaying)
                 || (Attribute.Mode == ButtonAttribute.EnableMode.Playmode && EditorApplication.isPlaying);

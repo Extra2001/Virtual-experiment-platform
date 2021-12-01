@@ -37,14 +37,12 @@ namespace HT.Framework
                 }
             }
         }
-
         protected override void OnTitleGUI()
         {
             base.OnTitleGUI();
 
             GUILayout.FlexibleSpace();
         }
-
         protected override void OnBodyGUI()
         {
             base.OnBodyGUI();
@@ -91,6 +89,7 @@ namespace HT.Framework
             GUI.enabled = _folder && _objectType != null && _selectionAddMethod != null;
 
             EditorGUILayout.BeginHorizontal();
+            GUI.backgroundColor = Color.green;
             if (GUILayout.Button("Collect"))
             {
                 Selection.activeObject = _folder;
@@ -102,6 +101,7 @@ namespace HT.Framework
                     CollectObject(objs[i]);
                 }
             }
+            GUI.backgroundColor = Color.white;
             EditorGUILayout.EndHorizontal();
 
             GUI.enabled = true;

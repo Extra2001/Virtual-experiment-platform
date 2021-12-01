@@ -67,12 +67,9 @@ public class ValidNumberPanel : HTBehaviour
     public void Render()
     {
         var text = _Expression.text;
-        Task.Run(() =>
+        LatexEquationRender.Render(CalcArgs.GetSymexpr(text).ToLaTeX(), x =>
         {
-            LatexEquationRender.Render(CalcArgs.GetSymexpr(text).ToLaTeX(), x =>
-            {
-                _Image.FitHeight(x);
-            });
+            _Image.FitHeight(x);
         });
     }
 

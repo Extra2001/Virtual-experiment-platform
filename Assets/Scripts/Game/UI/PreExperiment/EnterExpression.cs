@@ -49,14 +49,10 @@ public class EnterExpression : HTBehaviour
     public void Render()
     {
         var text = StringExpressionInput.text;
-
-        Task.Run(() =>
-        {
-            if (string.IsNullOrEmpty(text))
-                LatexEquationRender.Render("expr.", LoadSprite);
-            else
-                LatexEquationRender.Render(CalcArgs.GetSymexpr(text).ToLaTeX(), LoadSprite);
-        });
+        if (string.IsNullOrEmpty(text))
+            LatexEquationRender.Render("expr.", LoadSprite);
+        else
+            LatexEquationRender.Render(CalcArgs.GetSymexpr(text).ToLaTeX(), LoadSprite);
     }
     /// <summary>
     /// 异步校验表达式

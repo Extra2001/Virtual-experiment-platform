@@ -129,14 +129,19 @@ public class CreateObject : HTBehaviour
     private static void CreateObj()
     {
         var model = RecordManager.tempRecord.showedObject;
-        var objLoader = new OBJLoader();
-        Create(objLoader.Load(model.ResourcePath));
+        CommonTools.GetObject(model.ResourcePath, Create);
     }
     public static GameObject CreateSingleObj(string path)
     {
-        var objLoader = new OBJLoader();
-        var ret = objLoader.Load(path);
-
+        GameObject gameObject = null;
+        CommonTools.GetObject(path, x =>
+        {
+            gameObject = CreateSingleObj2(x);
+        });
+        return gameObject;
+    }
+    private static GameObject CreateSingleObj2(GameObject ret)
+    {
         Vector3 ClosestPoint = new Vector3();
         Vector3 FarthestPoint = new Vector3();
         foreach (Transform item in ret.transform)
@@ -181,7 +186,6 @@ public class CreateObject : HTBehaviour
         ret.transform.position = new Vector3(rec.objectStartPosition[0],
             rec.objectStartPosition[1] + BaseSize.y * scale / 2, rec.objectStartPosition[2]);
 
-        
         return ret;
     }
     private static void CreatePrefab()

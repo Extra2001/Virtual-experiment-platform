@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using HT.Framework;
 using System.Collections;
+using UnityEngine.Events;
 
 public static class CommonTools
 {
@@ -213,6 +214,24 @@ public static class CommonTools
         {
             if (func.Invoke()) break;
             yield return 1;
+        }
+    }
+
+    public static void GetObject(string path, UnityAction<GameObject> action)
+    {
+        var objLoader = new Dummiesman.OBJLoader();
+        if (path.StartsWith("http"))
+        {
+            var www = UnityEngine.Networking.UnityWebRequest.Get(path);
+            www.SendWebRequest().completed += x =>
+            {
+                using (MemoryStream ms = new MemoryStream(www.downloadHandler.data))
+                    action.Invoke(objLoader.Load(ms));
+            };
+        }
+        else
+        {
+            action?.Invoke(objLoader.Load(path));
         }
     }
 }

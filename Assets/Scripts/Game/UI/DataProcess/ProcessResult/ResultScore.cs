@@ -9,7 +9,7 @@ public class ResultScore
 
     public double CalcScore()
     {
-        double ans = 1;
+        double ans = 2;
         ans += f(MeasureQuantityError) + f(ComplexQuantityError) + f(DataRecordError);
 
         return ans;

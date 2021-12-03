@@ -63,8 +63,8 @@ public class Initializer
                 Name = "书本",
                 DetailMessage = "一本书，23页。若要加减一页请将步进间隔改为0.043。",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/book.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/book.obj"
+                PreviewImage = $"Objects/PreviewImages/book.png",
+                ResourcePath = $"Objects/Models/book.obj"
             },
             new ObjectsModel()
             {
@@ -72,8 +72,8 @@ public class Initializer
                 Name = "立方体",
                 DetailMessage = "纯正立方体",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cubic.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object1.obj"
+                PreviewImage = $"Objects/PreviewImages/cubic.png",
+                ResourcePath = $"Objects/Models/object1.obj"
             },
             new ObjectsModel()
             {

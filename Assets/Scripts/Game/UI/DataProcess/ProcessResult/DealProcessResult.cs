@@ -257,7 +257,7 @@ public class DealProcessResult : HTBehaviour
                 calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
                 calc_complex.Measure(item.Symbol, item.DifferencedData.data.ToDouble().ToArray());
             }
-            else
+            else if(item.processMethod == 3)
             {
                 double[] x = new double[item.MesuredData.data.Count];
                 double[] y = new double[item.MesuredData.data.Count];
@@ -269,8 +269,28 @@ public class DealProcessResult : HTBehaviour
 
                 calc_complex.AddRegression(item.Symbol, x, y);
             }
-            
-            if(item.processMethod == 4)
+            else
+            {
+                double[] x = new double[item.MesuredData.data.Count];
+                double[] y = new double[item.MesuredData.data.Count];
+                for (int i = 0; i < item.MesuredData.data.Count; i++)
+                {
+                    if (item.Yaxis == 0)
+                    {
+                        y[i] = double.Parse(item.MesuredData.data[i]);
+                        x[i] = double.Parse(item.IndependentData.data[i]);
+                    }
+                    else
+                    {
+                        x[i] = double.Parse(item.MesuredData.data[i]);
+                        y[i] = double.Parse(item.IndependentData.data[i]);
+                    }                   
+                }
+
+                calc_complex.AddRegression(item.Symbol, x, y);
+            }
+
+            if (item.processMethod == 4)
                 calc_complex.MeasureUserUnput(item.Symbol, 0, 0, 0);
             else calc_complex.MeasureUserUnput(item.Symbol, item.UaExpression.GetExpressionExecuted(), item.UbExpression.GetExpressionExecuted(), item.ComplexExpression.GetExpressionExecuted());
         }
@@ -447,7 +467,7 @@ public class DealProcessResult : HTBehaviour
             cell8.gameObject.SetActive(false);
             cell9.gameObject.SetActive(false);
             double score = RecordManager.tempRecord.score.CalcScore();
-            Title.text = "本次实验得分:" + string.Format("{0:F1}", score) + "/4.0";
+            Title.text = "本次实验得分:" + string.Format("{0:F1}", score) + "/5.0";
             if (score - 4 == 0)
             {
                 SuccessMessage.text = "你的实验已全部正确地完成！恭喜你掌握了本次误差理论的知识。";

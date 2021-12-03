@@ -9,8 +9,8 @@ public class ResultScore
 
     public double CalcScore()
     {
-        double ans = 2;
-        ans += f(MeasureQuantityError) + f(ComplexQuantityError) + f(DataRecordError);
+        double ans = 0;
+        ans += f(MeasureQuantityError) * 2 + f(ComplexQuantityError) * 2 + f(DataRecordError);
 
         return ans;
     }
@@ -21,12 +21,10 @@ public class ResultScore
         if (n == 0)
         {
             ans = 1;
-        }else if (n <= 2)
+        }
+        else if (n <= 10)
         {
-            ans = 1 - 0.15 * n;
-        }else if (n <= 5)
-        {
-            ans = 1 - 0.12 * n;
+            ans = 1 - 0.1 * n;
         }
         else
         {

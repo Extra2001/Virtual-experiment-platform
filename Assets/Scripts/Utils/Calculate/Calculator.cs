@@ -875,7 +875,7 @@ public class CalcArgs {//一次计算
             }
         }
         double val1 = valexpr.Evaluate(vals).RealValue;//对的val
-        if(!val1.AlmostEqual(argobj.userval)) {
+        if(!val1.AlmostEqual(argobj.userval, 0.05)) {
             flag = true;
             error.answer.right = false;
             error.answer.latex = valexpr.ToLaTeX();

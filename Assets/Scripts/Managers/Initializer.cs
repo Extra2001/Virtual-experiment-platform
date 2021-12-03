@@ -79,7 +79,7 @@ public class Initializer
             {
                 id = 2,
                 Name = "无盖盒",
-                DetailMessage = "具有内径和深度的盒子，可用于游标卡尺的内径及深度测量。",
+                DetailMessage = "具有内径和深度的盒子，可用于游标卡尺的内径测量。",
                 Integrated = true,
                 PreviewImage = $"Objects/PreviewImages/box",
                 ResourcePath = $"Objects/Models/Cube"
@@ -106,12 +106,12 @@ public class Initializer
             {
                 id = 5,
                 Name = "圆环",
-                DetailMessage = "圆环",
+                DetailMessage = "无法测量内径的圆环",
                 Integrated = true,
                 PreviewImage = $"Objects/PreviewImages/object4",
                 ResourcePath = $"Objects/Models/object4"
             },
-            new ObjectsModel()
+            /*new ObjectsModel()
             {
                 id = 6,
                 Name = "圆筒",
@@ -128,17 +128,17 @@ public class Initializer
                 Integrated = true,
                 PreviewImage = $"Objects/PreviewImages/object6",
                 ResourcePath = $"Objects/Models/object6"
-            },
+            },*/
             new ObjectsModel()
             {
-                id = 8,
+                id = 6,
                 Name = "杯子",
-                DetailMessage = "户外用杯子。可以用来测内径",
+                DetailMessage = "户外用杯子。不可用来测内径",
                 Integrated = true,
                 PreviewImage = $"Objects/PreviewImages/object7",
                 ResourcePath = $"Objects/Models/object7"
             },
-            new ObjectsModel()
+            /*new ObjectsModel()
             {
                 id = 9,
                 Name = "杯盖",
@@ -146,15 +146,15 @@ public class Initializer
                 Integrated = true,
                 PreviewImage = $"Objects/PreviewImages/object8",
                 ResourcePath = $"Objects/Models/object8"
-            },
+            },*/
             new ObjectsModel()
             {
-                id = 10,
+                id = 7,
                 Name = "细丝",
                 DetailMessage = "极细的丝线",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/st",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object12"
+                PreviewImage = $"Objects/PreviewImages/st",
+                ResourcePath = $"Objects/Models/object12"
             },
         });
 

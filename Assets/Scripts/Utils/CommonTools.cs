@@ -84,7 +84,10 @@ public static class CommonTools
             spritePool.Add(path, GetSprite(bytesPool[path]));
             return spritePool[path];
         }
-        Sprite ret = GetSprite(GetBytes(path));
+        Sprite ret;
+        if (path.EndsWith("png") || Path.HasExtension(path))
+            ret = GetSprite(GetBytes(path));
+        else ret = Resources.Load<Sprite>(path);
         spritePool.Add(path, ret);
         return ret;
     }

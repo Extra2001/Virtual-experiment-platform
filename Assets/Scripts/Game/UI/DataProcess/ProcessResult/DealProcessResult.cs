@@ -91,11 +91,11 @@ public class DealProcessResult : HTBehaviour
                 {
                     temp.Add(double.Parse(item.MesuredData.data[i]));
                 }
-                calc.data = new CalcVariable(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), temp.Count);
+                calc.data = new CalcVariable(double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3))), temp.Count);
                 calc.data.values = temp;
-                calc.data.userua = item.UaExpression.GetExpressionExecuted();
-                calc.data.userub = item.UbExpression.GetExpressionExecuted();
-                calc.data.userunc = item.ComplexExpression.GetExpressionExecuted();
+                calc.data.userua = double.Parse(StaticMethods.NumberFormat(item.UaExpression.GetExpressionExecuted()));
+                calc.data.userub = double.Parse(StaticMethods.NumberFormat(item.UbExpression.GetExpressionExecuted()));
+                calc.data.userunc = double.Parse(StaticMethods.NumberFormat(item.ComplexExpression.GetExpressionExecuted()));
                 CalcResult result = CalcResult.CheckTable(calc);
                 if (!result.err.right)
                 {
@@ -126,11 +126,11 @@ public class DealProcessResult : HTBehaviour
                 calc.name = item.Symbol;
                 calc.y_nplusi_minus_y_i = temp;
                 calc.x_nplusi_minus_x_i = double.Parse(item.stepLength);
-                calc.user_aver_b = item.AverageExpression.GetExpressionExecuted();
-                calc.correct_b_uncb = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3);
-                calc.user_b_unca = item.UaExpression.GetExpressionExecuted();
-                calc.user_b_uncb = item.UbExpression.GetExpressionExecuted();
-                calc.user_b_unc = item.ComplexExpression.GetExpressionExecuted();
+                calc.user_aver_b = double.Parse(StaticMethods.NumberFormat(item.AverageExpression.GetExpressionExecuted()));
+                calc.correct_b_uncb = double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3)));
+                calc.user_b_unca = double.Parse(StaticMethods.NumberFormat(item.UaExpression.GetExpressionExecuted()));
+                calc.user_b_uncb = double.Parse(StaticMethods.NumberFormat(item.UbExpression.GetExpressionExecuted()));
+                calc.user_b_unc = double.Parse(StaticMethods.NumberFormat(item.ComplexExpression.GetExpressionExecuted()));
                 CalcResult result = CalcResult.CheckSuccessiveDifference(calc);
                 if (!result.err.right)
                 {
@@ -170,13 +170,13 @@ public class DealProcessResult : HTBehaviour
                     temp[i] = double.Parse(item.MesuredData.data[i]);
                 }
                 calc.y = temp;
-                calc.a = item.AExpression.GetExpressionExecuted();
-                calc.b = item.BExpression.GetExpressionExecuted();
-                calc.r = item.RelationExpression.GetExpressionExecuted();
-                calc.correct_uncb = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3);
-                calc.f_unca = item.UaExpression.GetExpressionExecuted();
-                calc.f_uncb = item.UbExpression.GetExpressionExecuted();
-                calc.f_unc = item.ComplexExpression.GetExpressionExecuted();
+                calc.a = double.Parse(StaticMethods.NumberFormat(item.AExpression.GetExpressionExecuted()));
+                calc.b = double.Parse(StaticMethods.NumberFormat(item.BExpression.GetExpressionExecuted()));
+                calc.r = double.Parse(StaticMethods.NumberFormat(item.RelationExpression.GetExpressionExecuted()));
+                calc.correct_uncb = double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3)));
+                calc.f_unca = double.Parse(StaticMethods.NumberFormat(item.UaExpression.GetExpressionExecuted()));
+                calc.f_uncb = double.Parse(StaticMethods.NumberFormat(item.UbExpression.GetExpressionExecuted()));
+                calc.f_unc = double.Parse(StaticMethods.NumberFormat(item.ComplexExpression.GetExpressionExecuted()));
                 calc.ifa = (item.nextValue != 0);
                 CalcResult result = CalcResult.CheckRegression(calc);
                 if (!result.err.right)
@@ -263,8 +263,8 @@ public class DealProcessResult : HTBehaviour
                 double[] y = new double[item.MesuredData.data.Count];
                 for (int i = 0; i < item.MesuredData.data.Count; i++)
                 {
-                    x[i] = double.Parse(item.MesuredData.data[i]);
-                    y[i] = double.Parse(item.IndependentData.data[i]);
+                    y[i] = double.Parse(item.MesuredData.data[i]);
+                    x[i] = double.Parse(item.IndependentData.data[i]);
                 }
 
                 calc_complex.AddRegression(item.Symbol, x, y);

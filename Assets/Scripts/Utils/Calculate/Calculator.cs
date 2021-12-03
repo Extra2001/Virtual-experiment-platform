@@ -377,7 +377,16 @@ public static class StaticMethods {
     }
     public static string NumberFormat(double input) {//格式化输出float
         double t = Math.Abs(input);
-        return (t >= 1e5 || t <= 1e-5) ? input.ToString("G4") : input.ToString("F4");
+        string ans;
+        if(t >= 10000 || t <= 0.0001)
+        {
+            ans = input.ToString("E5");
+        }
+        else
+        {
+            ans = input.ToString("G5");
+        }
+        return ans;
     }
     public static bool CheckDifferenced(List<string> measure, List<string> userdifference) //检查逐差过程是否正确
     {
@@ -432,14 +441,14 @@ public static class StaticMethods {
             y2[i] = y[i] * y[i];
         }
         double xav = Average(x), yav = Average(y), xyav = Average(xy), x2av = Average(x2), y2av = Average(y2);
-        double b = (xav * yav - xyav) / (xav * xav - x2av), a = yav - b * xav, r = (xyav - xav * yav) / Math.Sqrt((y2av - yav * yav) * (x2av - xav * xav));
+        double b = double.Parse(StaticMethods.NumberFormat((xav * yav - xyav) / (xav * xav - x2av))), a = double.Parse(StaticMethods.NumberFormat(yav - b * xav)), r = double.Parse(StaticMethods.NumberFormat((xyav - xav * yav) / Math.Sqrt((y2av - yav * yav) * (x2av - xav * xav))));
         double sy0 = 0;
         for(int i = 0; i < x.Length; i++) {
             sy0 += (y[i] - (a + b * x[i])) * (y[i] - (a + b * x[i]));
         }
         sy0 = Math.Sqrt(sy0 / (x.Length - 2));
-        double b_unca = b * Math.Sqrt((1 / (r * r) - 1) / (x.Length - 2));
-        double a_unca = Math.Sqrt(x2av) * b_unca;
+        double b_unca = double.Parse(StaticMethods.NumberFormat(b * Math.Sqrt((1 / (r * r) - 1) / (x.Length - 2))));
+        double a_unca = double.Parse(StaticMethods.NumberFormat(Math.Sqrt(x2av) * b_unca));
         return (b, a, r, b_unca, a_unca);
     }
     public static (string[] x, string[] y) MakeLine(double[] x0, double[] y0) {
@@ -589,7 +598,7 @@ public class CalcVariable {//2021.8.20
         foreach(var item in values) {
             sum2 += (item - average) * (item - average) / (n * (n - 1));
         }
-        return (average, Math.Sqrt(sum2), Math.Sqrt(sum2 + ub * ub));
+        return (double.Parse(StaticMethods.NumberFormat(average)), double.Parse(StaticMethods.NumberFormat(Math.Sqrt(sum2))), double.Parse(StaticMethods.NumberFormat(Math.Sqrt(Math.Pow(double.Parse(StaticMethods.NumberFormat(Math.Sqrt(sum2))), 2) + ub * ub))));
     }
     //下面的是8月20号加的
     public (string UaError, string UbError, string UncError, string AverError, bool IfError) CheckInfo() {
@@ -947,7 +956,7 @@ public class CalcResult {
                 result.err.ua.message = "a类不确定度计算错误";
                 result.err.ua.latex = @"u_a(b)=b\sqrt{\frac{1}{n-2}(\frac{1}{r^2}-1)}";
             }
-            if(!input.f_unc.AlmostEqual(StaticMethods.CalcUncertain(b_unca, input.correct_uncb))) {
+            if(!input.f_unc.AlmostEqual(double.Parse(StaticMethods.NumberFormat(StaticMethods.CalcUncertain(b_unca, input.correct_uncb))))) {
                 flag = false;
                 result.err.unc.right = false;
                 result.err.unc.message = "合成不确定度计算错误";
@@ -972,7 +981,7 @@ public class CalcResult {
         for(int i = 0; i < bk.Length; i++) {
             uncb += ((bk[i] - b) * (bk[i] - b));
         }
-        uncb = Math.Sqrt(uncb / (bk.Length * (bk.Length - 1)));
+        uncb = double.Parse(StaticMethods.NumberFormat(Math.Sqrt(uncb / (bk.Length * (bk.Length - 1)))));
         if(!input.correct_b_uncb.AlmostEqual(input.user_b_uncb)) {
             flag = false;
             result.err.ub.right = false;
@@ -1004,7 +1013,7 @@ public class CalcResult {
             
             result.err.ua.latex = @"u_a(b)=s(\overline{b})=\sqrt{\frac{(b_i-\overline{b})^2}{n(n-1)}}";
         }
-        if(!input.user_aver_b.AlmostEqual(b)) {
+        if(!input.user_aver_b.AlmostEqual(double.Parse(StaticMethods.NumberFormat(b)))) {
             flag = false;
             result.err.average.right = false;
             result.err.average.message = "逐差法计算错误";

@@ -15,7 +15,7 @@ public class Initializer
         var list = GameManager.Instance.objectsModels;
         foreach (var item in list)
         {
-            yield return CommonTools.GetBytes(item.PreviewImage, false);
+            //yield return CommonTools.GetBytes(item.PreviewImage, false);
             yield return CommonTools.GetSprite(item.PreviewImage);
         }
     }
@@ -63,8 +63,8 @@ public class Initializer
                 Name = "书本",
                 DetailMessage = "一本书，23页。若要加减一页请将步进间隔改为0.043。",
                 Integrated = true,
-                PreviewImage = $"Objects/PreviewImages/book.png",
-                ResourcePath = $"Objects/Models/book.obj"
+                PreviewImage = $"Objects/PreviewImages/book",
+                ResourcePath = $"Objects/Models/book"
             },
             new ObjectsModel()
             {
@@ -72,8 +72,8 @@ public class Initializer
                 Name = "立方体",
                 DetailMessage = "纯正立方体",
                 Integrated = true,
-                PreviewImage = $"Objects/PreviewImages/cubic.png",
-                ResourcePath = $"Objects/Models/object1.obj"
+                PreviewImage = $"Objects/PreviewImages/cubic",
+                ResourcePath = $"Objects/Models/object1"
             },
             new ObjectsModel()
             {
@@ -81,8 +81,8 @@ public class Initializer
                 Name = "无盖盒",
                 DetailMessage = "具有内径和深度的盒子，可用于游标卡尺的内径及深度测量。",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/box.png",
-                ResourcePath = $"Objects/Cube"
+                PreviewImage = $"Objects/PreviewImages/box",
+                ResourcePath = $"Objects/Models/Cube"
             },
             new ObjectsModel()
             {
@@ -90,8 +90,8 @@ public class Initializer
                 Name = "圆柱",
                 DetailMessage = "较高的一个圆柱",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object2.obj"
+                PreviewImage = $"Objects/PreviewImages/cylinder",
+                ResourcePath = $"Objects/Models/object2"
             },
             new ObjectsModel()
             {
@@ -99,8 +99,8 @@ public class Initializer
                 Name = "圆柱",
                 DetailMessage = "较胖的一个圆柱",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/cylinder_low.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object3.obj"
+                PreviewImage = $"Objects/PreviewImages/cylinder_low",
+                ResourcePath = $"Objects/Models/object3"
             },
             new ObjectsModel()
             {
@@ -108,8 +108,8 @@ public class Initializer
                 Name = "圆环",
                 DetailMessage = "圆环",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object4.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object4.obj"
+                PreviewImage = $"Objects/PreviewImages/object4",
+                ResourcePath = $"Objects/Models/object4"
             },
             new ObjectsModel()
             {
@@ -117,8 +117,8 @@ public class Initializer
                 Name = "圆筒",
                 DetailMessage = "带底的一个圆筒",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object5.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object5.obj"
+                PreviewImage = $"Objects/PreviewImages/object5",
+                ResourcePath = $"Objects/Models/object5"
             },
             new ObjectsModel()
             {
@@ -126,8 +126,8 @@ public class Initializer
                 Name = "正四面体",
                 DetailMessage = "标准的正四面体",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object6.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object6.obj"
+                PreviewImage = $"Objects/PreviewImages/object6",
+                ResourcePath = $"Objects/Models/object6"
             },
             new ObjectsModel()
             {
@@ -135,8 +135,8 @@ public class Initializer
                 Name = "杯子",
                 DetailMessage = "户外用杯子。可以用来测内径",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object7.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object7.obj"
+                PreviewImage = $"Objects/PreviewImages/object7",
+                ResourcePath = $"Objects/Models/object7"
             },
             new ObjectsModel()
             {
@@ -144,8 +144,8 @@ public class Initializer
                 Name = "杯盖",
                 DetailMessage = "与杯子匹配的杯盖",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/object8.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object8.obj"
+                PreviewImage = $"Objects/PreviewImages/object8",
+                ResourcePath = $"Objects/Models/object8"
             },
             new ObjectsModel()
             {
@@ -153,8 +153,8 @@ public class Initializer
                 Name = "细丝",
                 DetailMessage = "极细的丝线",
                 Integrated = true,
-                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/st.png",
-                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object12.obj"
+                PreviewImage = $"{Application.streamingAssetsPath}/PreviewImages/st",
+                ResourcePath = $"{Application.streamingAssetsPath}/Objects/object12"
             },
         });
 

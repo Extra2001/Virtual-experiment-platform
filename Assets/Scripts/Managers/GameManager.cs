@@ -26,7 +26,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     public List<ObjectsModel> objectsModels
     {
         get => _objectsModels == null ?
-            _objectsModels = Storage.CommonStorage.GetStorage<List<ObjectsModel>>("objectsModels") :
+            _objectsModels = Storage.UnityStorage.GetStorage<List<ObjectsModel>>("objectsModels", null, null) :
             _objectsModels;
         set => _objectsModels = value;
     }
@@ -77,6 +77,7 @@ public class GameManager : SingletonBehaviorManager<GameManager>
             .GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         FPSable = false;
         Main.m_Event.Subscribe<BeforeClearTempRecordEventHandler>(ClearObjects);
+        InvokeRepeating(nameof(SaveRecord), 10, 30);
     }
 
     public void ClearAll()
@@ -90,10 +91,10 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     /// <summary>
     /// 存档读取保存与清理
     /// </summary>
-    public override void OnDestroy()
+    private void SaveRecord()
     {
         RecordManager.tempRecord.Save();
-        Storage.CommonStorage.SetStorage("objectsModels", _objectsModels);
+        Storage.UnityStorage.SetStorage("objectsModels", _objectsModels);
     }
     #endregion
 

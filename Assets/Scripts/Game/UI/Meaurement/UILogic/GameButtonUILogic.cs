@@ -18,8 +18,8 @@ public class GameButtonUILogic : UILogicResident
     private bool inGameShowTips = true;
     private bool showTips
     {
-        get => Storage.CommonStorage.GetStorage<ShowTips>("showTips").showTips;
-        set => Storage.CommonStorage.SetStorage("showTips", new ShowTips() { showTips = value });
+        get => Storage.UnityStorage.GetStorage<ShowTips>("showTips", null, null).showTips;
+        set => Storage.UnityStorage.SetStorage("showTips", new ShowTips() { showTips = value });
     }
 
     /// <summary>

@@ -30,8 +30,6 @@ public class GameLaunch : MonoBehaviour
         InitLoading.gameObject.SetActive(true);
         LoadingScreen.gameObject.SetActive(true);
 
-        WisdomTree.Common.Function.Communication.Init();
-
         ProcessManager.StartService();
 
         UIAPIInitializer.Current.Initialize();
@@ -54,12 +52,15 @@ public class GameLaunch : MonoBehaviour
         foreach (var item in CommonTools.GetSubClassNames(typeof(InstrumentBase))
             .Where(x => !x.IsAbstract).OrderBy(x => x.CreateInstrumentInstance().ID))
             Main.m_Entity.CreateEntity(item, entityName: item.Name, loadDoneAction: x => Main.m_Entity.HideEntity(x));
+        
     }
     /// <summary>
     /// 启动单例模式的MonoBeheavior管理器
     /// </summary>
     private void LaunchManagers()
     {
+        WisdomTree.Common.Function.Communication.Init(() => RecordManager.UpdateRecordInfos(null));
+
         MainThread.Enable();
 
         GameManager.Enable();

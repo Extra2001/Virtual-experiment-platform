@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--需要修改参数：
+	VersionLabel	版本号
+	experimentId	实验ID
+	courseId		课程ID
+	appId			老师提供的 账号，用来对接ilab
+	secret			老师提供的 AesKey，用来对接ilab
+-->
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="version" content=%BundleVersion%>
+    <meta name="experimentId" content=%experimentId%>
+    <meta name="courseId" content=%courseId%>
+    <meta name="appId" content=%appId%>
+    <meta name="secret" content=%secret%>
+    <title>虚拟实验 | %ProductName%</title>
+    <link rel="shortcut icon" href="https://assets.zhihuishu.com/icon/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="%UNITY_WEBGL_LOADER_URL%"></script>
+    <script src="Build/Common.js"></script>
+    <link rel="stylesheet" href="./css/katex.min.css" crossorigin="anonymous">
+    <script defer src="./js/katex.min.js" crossorigin="anonymous"></script>
+    <script src="./js/html2canvas.js"></script>
+    <script>
+        window.WebFontConfig = {
+            custom: {
+                families: ['KaTeX_AMS', 'KaTeX_Caligraphic:n4,n7', 'KaTeX_Fraktur:n4,n7',
+                    'KaTeX_Main:n4,n7,i4,i7', 'KaTeX_Math:i4,i7', 'KaTeX_Script',
+                    'KaTeX_SansSerif:n4,n7,i4', 'KaTeX_Size1', 'KaTeX_Size2', 'KaTeX_Size3',
+                    'KaTeX_Size4', 'KaTeX_Typewriter'
+                ],
+            },
+        };
+    </script>
+    <script defer src="./js/webfontloader.js" crossorigin="anonymous"></script>
+    <script>
+        var gameInstance = UnityLoader.instantiate("gameContainer", "%UNITY_WEBGL_BUILD_URL%", {
+            onProgress: UnityProgress
+        });
+    </script>
+    <style>
+        #test {
+            display: block;
+            position: absolute;
+        }
+        
+        .katex {
+            font-size: 10em !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="webgl-content">
+        <div id="gameContainer" style="width: 100vw; height: 102vh"></div>
+        <label id="version" style="position: relative; left: 90%; bottom: 50px; color: var(--visionColor); background-color:rgba(0,0,0,var(--visionBackgroundAlpha));">#VersionLabel#</label>
+        <label id="explanation" style="position: relative; left: 0%; bottom: 50px; color: var(--explanationColor);"></label>
+    </div>
+    <script>
+        SetExplanation(getComputedStyle(document.documentElement).getPropertyValue('--explanationContent'));
+
+        function SetExplanation(content) {
+            document.getElementById("explanation").innerHTML = content;
+        }
+
+        function getImageOfLatex(latex) {
+            const testDiv = document.getElementById('test');
+            return new Promise((resolve, reject) => {
+                testDiv.style.display = 'block';
+                let html;
+                try {
+                    html = katex.renderToString(latex, {
+                        throwOnError: false
+                    });
+                } catch (ex) {
+                    console.error(ex);
+                    reject("渲染错误1");
+                    return;
+                }
+                testDiv.innerHTML = html;
+                //解决根号显示不全的问题
+                var svgElements = testDiv.querySelectorAll('svg');
+                svgElements.forEach(function(item) {
+                    item.setAttribute("width", item.getBoundingClientRect().width);
+                    item.style.width = null;
+                });
+                //有的电脑上生成的canvas存在偏移，导致最终生成的图片不完整
+                let rect = testDiv.getBoundingClientRect();
+                return html2canvas(testDiv, {
+                    backgroundColor: null, //设置为无背景
+                    allowTaint: true,
+                    useCORS: true,
+                    scrollX: -window.scrollX, //解决页面滚动后canvas.toDataURL输出图片空白的问题
+                    scrollY: -window.scrollY
+                }).then(function(canvas) {
+                    testDiv.style.display = 'none';
+                    resolve({
+                        png: canvas.toDataURL()
+                    })
+                    console.log(latex)
+                }).catch(e => {
+                    reject('渲染错误');
+                })
+            });
+        }
+    </script>
+</body>
+
+</html>

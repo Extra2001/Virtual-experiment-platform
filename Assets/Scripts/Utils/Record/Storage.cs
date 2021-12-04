@@ -4,8 +4,11 @@
 *************************************************************************************/
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
+using WisdomTree.Common.Function;
 
 namespace Common
 {
@@ -14,49 +17,49 @@ namespace Common
     /// </summary>
     public class Storage
     {
-        public int id { get; }
-        private string name { get; }
-        private string directory = null;
+        readonly private string directory = null;
         /// <summary>
         /// 存储位置。0为PlayerPrefs，1为本地文件，2为上传到服务器
         /// </summary>
-        private int location;
+        readonly private int location;
         /// <summary>
         /// 创建一个Storage对象，对应指定ID的Storage
         /// </summary>
         /// <param name="id">Storage的ID</param>
-        public Storage(int id)
+        private Storage(int location)
         {
-            this.id = id;
-            directory = $"{Application.persistentDataPath}/LocalStorage/{id}/";
+            this.location = location;
+            directory = $"{Application.persistentDataPath}/LocalStorage/";
         }
-        private Storage(string name)
+        public static Storage LocalStorage
         {
-            id = -1;
-            this.name = name;
-            directory = $"{Application.persistentDataPath}/LocalStorage/{this.name}/";
+            get => new Storage(1);
         }
-        /// <summary>
-        /// 公共Storage
-        /// </summary>
-        public static Storage CommonStorage
+        public static Storage RemoteStorage
         {
-            get => new Storage("common");
+            get => new Storage(2);
         }
-        /// <summary>
-        /// 用指定的key访问存储的索引器
-        /// </summary>
-        public object this[string key, Type t]
+        public static Storage UnityStorage
         {
-            get => JsonConvert.DeserializeObject(FileIOHelper.ReadJSONFile(directory + key), t);
-            set => SetStorage(key, value);
+            get => new Storage(0);
         }
-        /// <summary>
-        /// 用指定的key访问存储的索引器
-        /// </summary>
-        public object this[string key]
+        public void GetAllKeys(Action<List<string>> responseAction)
         {
-            set => SetStorage(key, value);
+            if (location == 1)
+            {
+                responseAction?.Invoke(Directory.GetFiles(directory).ToList());
+            }
+            else if (location == 0)
+            {
+                responseAction(new List<string>());
+            }
+            else if (location == 2)
+            {
+                Communication.GetExperimentKeyUser(x =>
+                {
+                    responseAction?.Invoke(x);
+                });
+            }
         }
         /// <summary>
         /// 获取Storage存储的对象，并使用自定义错误处理程序
@@ -64,42 +67,111 @@ namespace Common
         /// <typeparam name="T">映射的对象类型</typeparam>
         /// <param name="key">键</param>
         /// <returns></returns>
-        public T GetStorage<T>(string key, Func<T> initializer = null) where T : new()
+        public T GetStorage<T>(string key, Action<T> responseAction, Action<string> error, Func<T> initializer = null) where T : new()
         {
-            string path = directory + key;
-            return SerializeHelper.DeSerialize(FileIOHelper.ReadJSONFile(path), initializer);
+            if (location == 1)
+            {
+                string path = directory + key;
+                var ret = SerializeHelper.DeSerialize(FileIOHelper.ReadJSONFile(path), initializer);
+                responseAction?.Invoke(ret);
+                return ret;
+            }
+            else if (location == 0)
+            {
+                var str = PlayerPrefs.GetString(key, "{}");
+                var ret = SerializeHelper.DeSerialize(str, initializer);
+                responseAction?.Invoke(ret);
+                return ret;
+            }
+            else if (location == 2)
+            {
+                Communication.DownloadText(key, x =>
+                {
+                    responseAction?.Invoke(SerializeHelper.DeSerialize(x, initializer));
+                }, y => error?.Invoke(y));
+            }
+            return default;
         }
         /// <summary>
         /// 将对象存储到Storage中，并使用自定义错误处理程序
         /// </summary>
         /// <param name="key">键</param>
         /// <param name="values">对象值，不可为自包含属性类型</param>
-        public void SetStorage(string key, object values, EventHandler<Newtonsoft.Json.Serialization.ErrorEventArgs> errorHandler = null)
+        public void SetStorage(string key, object values, Action<string> responseAction = null, Action<string> error = null, EventHandler<Newtonsoft.Json.Serialization.ErrorEventArgs> errorHandler = null)
         {
-            string path = directory + key;
-            FileIOHelper.SaveFile(path, SerializeHelper.Serialize(values, errorHandler));
+            if (location == 1)
+            {
+                string path = directory + key;
+                FileIOHelper.SaveFile(path, SerializeHelper.Serialize(values, errorHandler));
+                responseAction.Invoke("");
+            }
+            else if (location == 0)
+            {
+                var str = PlayerPrefs.GetString(key, "{}");
+                SerializeHelper.Serialize(values, errorHandler);
+                responseAction.Invoke("");
+            }
+            else if (location == 2)
+            {
+                Communication.UploadText(key, SerializeHelper.Serialize(values, errorHandler), x =>
+                {
+                    responseAction?.Invoke(x);
+                }, y => error?.Invoke(y));
+            }
         }
         /// <summary>
         /// 删除存储
         /// </summary>
-        public void DeleteStorage(string key)
+        public void DeleteStorage(string key, Action<bool> responseAction = null)
         {
-            string path = directory + key;
-            FileIOHelper.DeleteFile(path);
+            if (location == 1)
+            {
+                string path = directory + key;
+                FileIOHelper.DeleteFile(path);
+                responseAction.Invoke(true);
+            }
+            else if (location == 0)
+            {
+                PlayerPrefs.DeleteKey(key);
+                responseAction.Invoke(true);
+            }
+            else if (location == 2)
+            {
+                Communication.DeleteExperimentKeyUser(key, x => responseAction?.Invoke(x));
+            }
         }
         /// <summary>
-        /// 删除自己
+        /// 删除该存储方式下的所有内容
         /// </summary>
         public void DeleteSelf()
         {
-            Directory.Delete(directory, true);
+            if (location == 1)
+            {
+                Directory.Delete(directory, true);
+            }
+            else if (location == 0)
+            {
+                PlayerPrefs.DeleteAll();
+            }
+            else if (location == 2)
+            {
+                Communication.GetExperimentKeyUser(x =>
+                {
+                    foreach (var item in x)
+                    {
+                        Communication.DeleteExperimentKeyUser(item, null);
+                    }
+                });
+            }
         }
         /// <summary>
         /// 删除所有本地存储
         /// </summary>
         public static void DeleteAll()
         {
-            FileIOHelper.DeleteDirectory($"{Application.persistentDataPath}/LocalStorage");
+            try { LocalStorage.DeleteSelf(); } catch { }
+            try { RemoteStorage.DeleteSelf(); } catch { }
+            try { UnityStorage.DeleteSelf(); } catch { }
         }
         /// <summary>
         /// 序列化+加密器

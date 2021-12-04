@@ -9,23 +9,22 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using Common;
+using System.Linq;
 
 public static class RecordManager
 {
+    private static List<RecordInfo> _recordInfos = null;
     /// <summary>
     /// 存档信息列表
     /// </summary>
     public static List<RecordInfo> recordInfos
     {
-        get => GetRecordInfos();
-    }
-    /// <summary>
-    /// 存档索引器
-    /// </summary>
-    /// <param name="Id">存档ID</param>
-    public static RecordIndexor records
-    {
-        get => new RecordIndexor();
+        get
+        {
+            if (_recordInfos == null)
+                UpdateRecordInfos(null);
+            return _recordInfos ?? new List<RecordInfo>();
+        }
     }
     /// <summary>
     /// 工作存档
@@ -35,38 +34,32 @@ public static class RecordManager
         get
         {
             if (_tempRecord == null)
-                _tempRecord = GetRecord(-2);
+                _tempRecord = GetRecord(new RecordInfo() { id = -2 }, null);
             _tempRecord.info.id = -2;
             return _tempRecord;
         }
     }
 
-    private static Storage recordStorage = new Storage(0);
     private static Record _tempRecord = null;
 
     // 以下为存档的扩展方法
     /// <summary>
     /// 写入该存档到硬盘
     /// </summary>
-    public static void Save(this Record record)
+    public static void Save(this Record record, Action done = null, Action error = null)
     {
-        if (record.info.id.Equals(-2))
-        {
-            recordStorage.SetStorage($"Record{record.info.id}", record);
-            return;
-        }
-        SaveRecord(record);
+        SaveRecord(record, done, error);
     }
     /// <summary>
     /// 删除该存档
     /// </summary>
-    public static void Delete(this Record record)
+    public static void Delete(this Record record, Action done = null, Action error = null)
     {
         record = new Record()
         {
             info = record.info
         };
-        DeleteRecord(record.info.id);
+        DeleteRecord(record.info, done, error);
     }
     /// <summary>
     /// 加载该存档到工作存档并取消暂停状态
@@ -94,7 +87,7 @@ public static class RecordManager
     /// <summary>
     /// 加载该存档到工作存档
     /// </summary>
-    private static Record LoadToTempRecord(this Record record)
+    private static Record LoadToTempRecord(Record record)
     {
         Main.m_Event.Throw<BeforeClearTempRecordEventHandler>();
         Initializer.InitializeObjects();
@@ -116,18 +109,60 @@ public static class RecordManager
     /// <summary>
     /// 覆盖保存存档内容
     /// </summary>
-    public static void SaveRecord(Record record)
+    public static void SaveRecord(Record record, Action done = null, Action error = null)
     {
-        var list = Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
-        int index = list.FindIndex(x => record.info.id.Equals(x.id));
-        if (index == -1)
-            list.Add(record.info);
-        else
-            list[index] = record.info;
-
-        recordStorage.SetStorage($"Record{record.info.id}", record);
-        Storage.CommonStorage.SetStorage("RecordInfo", list);
-        Main.m_Event.Throw<RecordUpdateEventHandler>();
+        if (record.info.id.Equals(-2))
+        {
+            Storage.UnityStorage.SetStorage($"tempRecord", record);
+            done?.Invoke();
+            return;
+        }
+        Storage.RemoteStorage.SetStorage(RecordInfoToName(record.info), record, responseAction: x =>
+        {
+            UpdateRecordInfos(y =>
+            {
+                Main.m_Event.Throw<RecordUpdateEventHandler>();
+                done?.Invoke();
+            });
+        }, error: y => error?.Invoke());
+    }
+    /// <summary>
+    /// 获取存档
+    /// </summary>
+    /// <param name="Id">存档ID</param>
+    public static Record GetRecord(int id, Action<Record> done, Action<string> error = null)
+    {
+        return GetRecord(_recordInfos.Find(x => x.id == id), done, error);
+    }
+    public static Record GetRecord(RecordInfo info, Action<Record> done, Action<string> error = null)
+    {
+        if(info.id == -2)
+            return Storage.UnityStorage.GetStorage<Record>("tempRecord", null, null);
+        Storage.RemoteStorage.GetStorage(RecordInfoToName(info), done, error);
+        return null;
+    }
+    /// <summary>
+    /// 删除存档
+    /// </summary>
+    /// <param name="Id">存档ID</param>
+    public static void DeleteRecord(int id, Action done = null, Action error = null)
+    {
+        DeleteRecord(_recordInfos.Find(x => x.id == id), done, error);
+    }
+    public static void DeleteRecord(RecordInfo info, Action done = null, Action error = null)
+    {
+        Storage.RemoteStorage.DeleteStorage(RecordInfoToName(info), x =>
+        {
+            if (x)
+            {
+                UpdateRecordInfos(y =>
+                {
+                    Main.m_Event.Throw<RecordUpdateEventHandler>();
+                    done?.Invoke();
+                });
+            }
+            else error?.Invoke();
+        });
     }
     /// <summary>
     /// 深拷贝
@@ -163,7 +198,7 @@ public static class RecordManager
     /// <param name="Id">存档ID</param>
     public static bool RecordContains(int Id)
     {
-        var list = Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
+        var list = _recordInfos;
         int index = list.FindIndex(x => Id.Equals(x.id));
         if (index == -1)
             return false;
@@ -172,40 +207,26 @@ public static class RecordManager
     /// <summary>
     /// 获取存档信息列表
     /// </summary>
-    private static List<RecordInfo> GetRecordInfos()
+    public static void UpdateRecordInfos(Action<List<RecordInfo>> action)
     {
-        return Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
-    }
-    /// <summary>
-    /// 获取存档
-    /// </summary>
-    /// <param name="Id">存档ID</param>
-    private static Record GetRecord(int Id)
-    {
-        return recordStorage.GetStorage<Record>($"Record{Id}");
-    }
-    /// <summary>
-    /// 删除存档
-    /// </summary>
-    /// <param name="Id">存档ID</param>
-    private static void DeleteRecord(int Id)
-    {
-        var list = Storage.CommonStorage.GetStorage<List<RecordInfo>>("RecordInfo");
-        int index = list.FindIndex(x => Id.Equals(x.id));
-        if (index != -1)
-            list.RemoveAt(index);
-        Storage.CommonStorage.SetStorage("RecordInfo", list);
-        recordStorage.DeleteStorage($"Record{Id}");
-
-        Main.m_Event.Throw<RecordUpdateEventHandler>();
-    }
-    public class RecordIndexor
-    {
-        public Record this[int Id]
+        Storage.RemoteStorage.GetAllKeys(x =>
         {
-            get => GetRecord(Id);
-            set => SaveRecord(value);
-        }
+            _recordInfos = x.Select(y => NameToRecordInfo(y)).ToList();
+            action?.Invoke(_recordInfos);
+        });
+    }
+    private static RecordInfo NameToRecordInfo(string name)
+    {
+        var ret = new RecordInfo();
+        var split = name.Split('|');
+        ret.id = Convert.ToInt32(split[0]);
+        ret.time = DateTime.Parse(split[1]);
+        ret.title = split[2];
+        return ret;
+    }
+    private static string RecordInfoToName(RecordInfo recordInfo)
+    {
+        return string.Join("|", recordInfo.id, recordInfo.time.ToString(), recordInfo.title);
     }
 }
 

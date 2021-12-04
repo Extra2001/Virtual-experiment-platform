@@ -1,0 +1,48 @@
+:webgl-content {
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+:webgl-content body {
+  position: absolute;
+}
+body {
+  width: 100vw;
+  overflow: hidden;
+}
+
+#gameContainer{background-image: url('background.png')!important;background-size:cover!important;}
+
+.webgl-content * {border: 0; margin: 0; padding: 0}
+.webgl-content {position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
+
+.webgl-content .progress {position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
+.webgl-content .progress {height: 24px; width: 800px; margin-top: 300px;}
+.webgl-content .progress .empty {background: url('progressEmpty.Light.png') no-repeat right / cover; float: right; width: 100%; height: 100%; display: inline-block;}
+.webgl-content .progress .full {position:absolute;background: url('progressFull.Light.png') no-repeat left / cover; float: left; width: 0%; height: 100%; display: inline-block;}
+.webgl-content .progress .cover {position:absolute;background: url('cover.png') no-repeat left / cover; float: right; width: 10%; height: 100%; display: inline-block;}
+.webgl-content .progress .title {position:absolute;right:-40px;line-height:24px;color:var(--progressColor);}
+.webgl-content .progress .tip {text-align:center; margin-top: var(--tipDistance);color:var(--tipColor);}
+
+
+/*修改此处变量值*/
+:root {
+	/*进度文字颜色*/
+	--progressColor:#DEAF60;
+	
+	/*加载条提示内容*/
+	--tipContent:正在努力加载中···;	
+	/*加载条提示文字颜色*/
+	--tipColor:#FFFFFF;
+	/*加载条提示内容与进入条距离*/
+	--tipDistance:-30px;
+	
+	/*左下角说明内容*/
+	--explanationContent:左下角提示;	
+	/*左下角说明文字颜色*/
+	--explanationColor:#FFFFFF;
+	
+	/*版本号颜色*/
+	--visionColor:#FFFFFF;
+	/*版本号背景颜色*/
+	--visionBackgroundAlpha:0;
+}

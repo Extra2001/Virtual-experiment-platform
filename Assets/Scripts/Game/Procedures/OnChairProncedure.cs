@@ -32,7 +32,7 @@ public class OnChairProcedure : ProcedureBase
 
         Main.m_UI.OpenUI<BagControl>();
         (Main.m_UI.GetUI<BagControl>() as BagControl).Hide();
-        Debug.Log("已注册案件");
+        Debug.Log("已注册按键");
         //注册按键
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {

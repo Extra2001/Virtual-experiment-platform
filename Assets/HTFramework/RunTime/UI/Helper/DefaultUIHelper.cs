@@ -436,13 +436,13 @@ namespace HT.Framework
                             {
                                 if (IsLockTemporaryUI)
                                     return null;
-
+                                if (!_navigataBackUI)
+                                    _temporaryUIStack.Add(_currentOverlayTemporaryUI);
                                 CloseUIEntity(_currentOverlayTemporaryUI);
                                 _currentOverlayTemporaryUI = null;
                             }
                             _currentOverlayTemporaryUI = OverlayUIs[type] as UILogicTemporary;
-                            if (!_navigataBackUI)
-                                    _temporaryUIStack.Add(_currentOverlayTemporaryUI);
+                            
                             return CreateOpenUIEntity(attribute, type.FullName, OverlayUIs[type], _overlayTemporaryPanel, args);
                         }
                         else
@@ -664,6 +664,7 @@ namespace HT.Framework
                     case UIType.Overlay:
                         if (OverlayUIs.ContainsKey(type))
                         {
+                            _temporaryUIStack.Clear();
                             CloseUIEntity(OverlayUIs[type]);
                         }
                         break;

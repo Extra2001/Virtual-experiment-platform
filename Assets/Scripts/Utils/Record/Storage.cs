@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace Common
 {
-    
     /// <summary>
     /// 提供游戏本地存储
     /// </summary>
@@ -18,6 +17,10 @@ namespace Common
         public int id { get; }
         private string name { get; }
         private string directory = null;
+        /// <summary>
+        /// 存储位置。0为PlayerPrefs，1为本地文件，2为上传到服务器
+        /// </summary>
+        private int location;
         /// <summary>
         /// 创建一个Storage对象，对应指定ID的Storage
         /// </summary>

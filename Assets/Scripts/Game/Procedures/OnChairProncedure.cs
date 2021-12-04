@@ -16,7 +16,6 @@ public class OnChairProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
-        Debug.Log("已进入Onchair");
         RenderManager.Instance.Show();
         var Position = NearChair.Instance.transform.position;
         Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<SitdownEventHandler>().Fill(Position.x, Position.y, Position.z));
@@ -32,7 +31,6 @@ public class OnChairProcedure : ProcedureBase
 
         Main.m_UI.OpenUI<BagControl>();
         (Main.m_UI.GetUI<BagControl>() as BagControl).Hide();
-        Debug.Log("已注册案件");
         //注册按键
         KeyboardManager.Instance.Register(KeyCode.T, () =>
         {

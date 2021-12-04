@@ -20,10 +20,8 @@ public class LoadingScreenManager : MonoBehaviour
 
     public void HideLoadingScreen()
     {
-        Debug.Log("已隐藏2");
         // Call this function, if you want start hiding the loading screen
         _animatorComponent.SetTrigger("Hide");
-        Invoke(nameof(OnFinishedHide), 0.5f);
     }
 
     public void OnFinishedReveal()
@@ -34,7 +32,6 @@ public class LoadingScreenManager : MonoBehaviour
 
     public void OnFinishedHide()
     {
-        Debug.Log("已隐藏3");
         GetComponent<Canvas>().enabled = false;
         // TODO: remove it and call your functions 
         //transform.parent.GetComponent<DemoSceneManager>().OnLoadingScreenHided();

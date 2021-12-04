@@ -24,7 +24,6 @@ public class UIAPI : SingletonBehaviorManager<UIAPI>
 
     public void HideLoading()
     {
-        Debug.Log("ÒÑµ÷ÓÃÒþ²Ø");
         LoadingScreenManager.HideLoadingScreen();
     }
 

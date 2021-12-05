@@ -51,12 +51,14 @@
         };
         window.onload = () => {
             var canvas = document.querySelector("#unity-canvas");
+            canvas.height = canvas.width / 16 * 9;
             createUnityInstance(canvas, config, UnityProgress).then((unityInstance) => {
                 gameInstance = unityInstance;
             }).catch((message) => {
                 alert(message);
             });
         };
+        window.onresize = () => { var canvas = document.querySelector('#unity-canvas'); canvas.height = canvas.width / 16 * 9; }
     </script>
     <style>
         #test {
@@ -71,9 +73,10 @@
 </head>
 
 <body>
+    <div id="test"></div>
     <div class="webgl-content">
         <div id="gameContainer" style="width: 100vw; height: 102vh">
-            <canvas id="unity-canvas" style="width: 100%;margin-top: 2em;"></canvas>
+            <canvas id="unity-canvas" style="width: 100%;"></canvas>
         </div>
         <label id="version"
             style="position: relative; left: 90%; bottom: 50px; color: var(--visionColor); background-color:rgba(0,0,0,var(--visionBackgroundAlpha));">#VersionLabel#</label>

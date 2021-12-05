@@ -15,7 +15,6 @@ public class FPS : HTBehaviour
 
     void Start()
     {
-        Application.targetFrameRate = 160;
         _timeLeft = _updateInterval;
     }
 

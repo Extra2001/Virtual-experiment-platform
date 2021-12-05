@@ -23,10 +23,10 @@ public class StartUILogic : UILogicResident
         {
             GameManager.Instance.ChooseNewExp();
         });
-        UIEntity.FindChildren("ExitButton").GetComponent<Button>().onClick.AddListener(() =>
+        /*UIEntity.FindChildren("ExitButton").GetComponent<Button>().onClick.AddListener(() =>
         {
             Application.Quit();
-        });        
+        });*/        
         UIEntity.FindChildren("UncertainLearnButton").GetComponent<Button>().onClick.AddListener(() =>
         {
             GameManager.Instance.StartValidNumber();
@@ -39,6 +39,10 @@ public class StartUILogic : UILogicResident
         UIEntity.FindChildren("ImportRecordButton").GetComponent<Button>().onClick.AddListener(() =>
         {
             SaveOpenRecord.ImportRecord();
+        });
+        UIEntity.FindChildren("CommitButton").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            Debug.Log("上传存档");
         });
     }
 

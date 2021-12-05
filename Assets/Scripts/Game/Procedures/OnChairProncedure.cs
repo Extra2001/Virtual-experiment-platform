@@ -16,7 +16,9 @@ public class OnChairProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
         RenderManager._SetTips("鼠标中键调整视角。左键物体选定后，按Q和E切换平移、旋转。右键物体可扶正。");
+#endif
         RenderManager.Instance.Show();
         var Position = NearChair.Instance.transform.position;
         Main.m_Event.Throw(this, Main.m_ReferencePool.Spawn<SitdownEventHandler>().Fill(Position.x, Position.y, Position.z));

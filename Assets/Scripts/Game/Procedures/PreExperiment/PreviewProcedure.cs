@@ -14,7 +14,9 @@ public class PreviewProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
         RenderManager._SetTips("进入实验室后，仍可点击左上角的选项，更改实验目标。");
+#endif
         Main.m_UI.OpenUI<PreviewUILogic>();
         base.OnEnter(lastProcedure);
     }

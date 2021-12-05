@@ -25,7 +25,7 @@ public class EnterExpression : HTBehaviour
         StringExpressionInput.onValueChanged.AddListener(_ =>
         {
             RecordManager.tempRecord.stringExpression = ExpressionToCalc(StringExpressionInput.text);
-            Render();
+            try { Render(); } catch { }
         });
     }
 

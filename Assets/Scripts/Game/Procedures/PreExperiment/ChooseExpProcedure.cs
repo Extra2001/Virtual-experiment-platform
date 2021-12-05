@@ -14,7 +14,9 @@ public class ChooseExpProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
         RenderManager._SetTips("您可以自定义实验，或者选择我们的预制实验。");
+#endif
         Main.m_UI.OpenUI<ChooseExpUILogic>();
         base.OnEnter(lastProcedure);
     }

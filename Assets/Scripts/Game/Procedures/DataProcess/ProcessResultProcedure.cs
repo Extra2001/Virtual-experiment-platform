@@ -13,7 +13,9 @@ public class ProcessResultProcedure : ProcedureBase
     /// </summary>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
         RenderManager._SetTips("您可以返回并改正您的错误（如有）。");
+#endif
         Main.m_UI.OpenUI<ProcessResult>();
         base.OnEnter(lastProcedure);
     }

@@ -15,13 +15,11 @@ public class LoadImgFromFileTest : MonoBehaviour
         loadBtn.onClick.AddListener(OnUploadCustomImgBtnClick);
     }
 
- 
+
     private void OnUploadCustomImgBtnClick()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-               //  UpLoadImgFormFileInWeb.GetImgFromFile(this.name, "RecivePng");
-                 ToolHelper.UITool.TextureTool.Texture2DGetterFormFile_Webgl.GetTexture2DFormFile_Webgl(this.gameObject, RecivePng);              
-                // ToolHelper.UITool.TextureTool.Texture2DGetterFormFile_Webgl.GetTexture2DFormFile_Webgl(this.name, "RecivePng");              
+        ToolHelper.UITool.TextureTool.Texture2DGetterFormFile_Webgl.GetTexture2DFormFile_Webgl(this.gameObject, RecivePng);                
 #endif
         ToolHelper.UITool.TextureTool.Texture2DGetterFormFile_WinPC.UpLodImage(GetUpLoadTexture2D);
     }

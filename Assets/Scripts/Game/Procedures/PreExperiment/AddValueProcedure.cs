@@ -14,7 +14,9 @@ public class AddValueProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
         RenderManager._SetTips("请添加至少一个直接测量的物理量。");
+#endif
         Main.m_UI.OpenUI<AddValueUILogic>();
         base.OnEnter(lastProcedure);
     }

@@ -14,7 +14,9 @@ public class ProcessExplainProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
         RenderManager._SetTips("");
+#endif
         base.OnEnter(lastProcedure);
         Main.m_UI.OpenUI<ProcessExplain>();
     }

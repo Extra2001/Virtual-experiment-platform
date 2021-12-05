@@ -60,17 +60,43 @@ public class LoadImgFromFile : HTBehaviour
         Debug.Log(b);
         */
 
-        /*Action<string> action = delegate (string s)
+        Action<string> action = delegate (string s)
         {
-            Debug.Log(s);
-            control.GetComponent<show_return_message>().message = "上传成功";
-            control.GetComponent<show_return_message>().can_show = true;
+            UIAPI.Instance.ShowModel(new SimpleModel()
+            {
+                ShowCancel = false,
+                Title = "提示",
+                Message = "实验数据上传成功"
+            });
         };
-        
-        Communication.UploadReport(uuid, experimentId, courseId, 0, 60, "", action,
-            new ExperimentReportModelBuilder("report", new ExperimentReportContentBuilder("report", new Files("report", url, 1, 1, 1))));*/
 
+        Record record = RecordManager.GetRecord(GetComponent<RecordCell>().recordId, x => 
+        {
+            /*
+            需要填充的的数据：1.定义的每个物理量及其的名称、符号、测量工具、数据处理方法
+            2.合成公式的字符串表达式
+            3.Record.score的三种错误数量
+            4.获取实验分数使用Record.score。CalcScore
+            */
+
+            //似乎可以使用注释掉的内容进行通讯，但要想办法把uuid传进来
+            if (url != null)
+            {
+                //Communication.UploadReport(uuid, experimentId, courseId, 0, 60, "", action, new ExperimentReportModelBuilder("report", new ExperimentReportContentBuilder("report", new Files("report", url, 1, 1, 1))));
+            }
+            else
+            {
+                //Communication.UploadReport(uuid, experimentId, courseId, 0, 60, "", action, new ExperimentReportModelBuilder("report", new ExperimentReportContentBuilder("report", new Files("report", url, 1, 1, 1))));
+            }
+
+            
+        });
+
+        
     }
+
+
+
     public static Sprite TextureToSprite(Texture2D t)
     {
         if (t == null)

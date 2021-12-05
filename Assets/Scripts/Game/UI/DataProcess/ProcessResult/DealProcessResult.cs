@@ -319,14 +319,12 @@ public class DealProcessResult : HTBehaviour
                 complexresult.err.answerunc.userformula = RecordManager.tempRecord.complexQuantityModel.UncertainExpression;
             }
             quantityErrors.Add(complexresult.err);
-            if (RecordManager.tempRecord.score.ComplexQuantityError < 3)
+
+            if (quantityErrors.Count > 0)
             {
-                RecordManager.tempRecord.score.ComplexQuantityError += 1;
+                RecordManager.tempRecord.score.ComplexQuantityError += quantityErrors.Count;
             }
-            else
-            {
-                RecordManager.tempRecord.score.ComplexQuantityError = 4;
-            }
+
             
         }
         //}
@@ -490,7 +488,8 @@ public class DealProcessResult : HTBehaviour
                 SuccessMessage.text += "请牢记错误原因，以免下次再犯";
             }
 
-            SuccessMessage.text += "\n\n你可以保存此次实验，以便将来回顾。\n\n保存后，你可以选择分享此存档给同学。";
+            RecordManager.tempRecord.experimentFinish = true;
+            SuccessMessage.text += "\n\n请保存此次实验，返回开始界面后提交实验数据";
             SuccessMessage.gameObject.SetActive(true);
             ErrorTitle.gameObject.SetActive(false);
             BackButton.GetComponentInChildren<Text>().text = "返回";

@@ -34,6 +34,10 @@ public class Record
     /// </summary>
     public RecordInfo info { get; set; } = new RecordInfo();
     /// <summary>
+    /// 记录实验是否完成
+    /// </summary>
+    public bool experimentFinish { get; set; } = false;
+    /// <summary>
     /// 实验流程栈，保存用户已经进行过的流程
     /// </summary>
     public List<Type> procedureStack { get; set; } = new List<Type>();

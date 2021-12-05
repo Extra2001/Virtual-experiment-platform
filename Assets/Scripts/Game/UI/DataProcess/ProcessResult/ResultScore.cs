@@ -3,9 +3,9 @@ using System;
 [Serializable]
 public class ResultScore
 {
-    public int MeasureQuantityError { get; set; } = 0;
-    public int ComplexQuantityError { get; set; } = 0;
-    public int DataRecordError { get; set; } = 0;
+    public int MeasureQuantityError { get; set; } = 0;//处理直接测量量犯下的错误数
+    public int ComplexQuantityError { get; set; } = 0;//处理最终合成量犯下的错误数
+    public int DataRecordError { get; set; } = 0; //记录数据过程犯下的错误数
 
     public double CalcScore()
     {

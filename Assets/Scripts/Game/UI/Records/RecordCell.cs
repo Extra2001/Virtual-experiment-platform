@@ -12,6 +12,7 @@ public class RecordCell : HTBehaviour
     public Button _LoadButton;
     public Button _DeleteButton;
     public Button _ShareButton;
+    public Button _UploadButton;
     public LoadRecord _LoadRecord;
     public int recordId { get; set; }
     public string title
@@ -77,6 +78,51 @@ public class RecordCell : HTBehaviour
                 {
                     GameLaunch.Instance.HideGeneralLoadingScreen();
                     SaveOpenRecord.ExportRecord(x);
+                }, x =>
+                {
+                    GameLaunch.Instance.HideGeneralLoadingScreen();
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        ShowCancel = false,
+                        Title = "错误",
+                        Message = x
+                    });
+                });
+            });
+        }
+        if (_UploadButton != null)
+        {
+            _UploadButton.onClick.AddListener(() =>
+            {
+                RecordManager.GetRecord(recordId, x =>
+                {                                        
+                    if (!x.experimentFinish)
+                    {
+                        UIAPI.Instance.ShowModel(new SimpleModel()
+                        {
+                            ShowCancel = false,
+                            Title = "警告",
+                            Message = "该存档实验未完成"
+                        });
+                    }
+                    else
+                    {
+                        UIAPI.Instance.ShowModel(new SimpleModel()
+                        {
+                            Title = "提示",
+                            Message = "是否要上传pdf",
+                            ConfirmAction = () => 
+                            {
+                                GetComponent<LoadImgFromFile>().OnUploadCustomImgBtnClick();
+                            },
+                            CancelAction = () =>
+                            {
+                                GetComponent<LoadImgFromFile>().RecivePng(null);
+                            }
+                        });
+                        
+                    }
+                    GameLaunch.Instance.HideGeneralLoadingScreen();
                 }, x =>
                 {
                     GameLaunch.Instance.HideGeneralLoadingScreen();

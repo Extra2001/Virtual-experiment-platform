@@ -51,19 +51,41 @@
         };
         window.onload = () => {
             var canvas = document.querySelector("#unity-canvas");
-            canvas.height = canvas.width / 16 * 9;
+            window.onresize();
             createUnityInstance(canvas, config, UnityProgress).then((unityInstance) => {
                 gameInstance = unityInstance;
             }).catch((message) => {
                 alert(message);
             });
         };
-        window.onresize = () => { var canvas = document.querySelector('#unity-canvas'); canvas.height = canvas.width / 16 * 9; }
+        window.onresize = () => {
+            var canvas = document.querySelector('#unity-canvas');
+            var container = document.querySelector('#gameContainer');
+            if (container.clientHeight / 9 * 16 >= container.clientWidth) {
+                canvas.height = container.clientWidth / 16 * 9;
+                canvas.width = container.clientWidth;
+            }
+            else {
+                canvas.height = container.clientHeight;
+                canvas.width = container.clientHeight / 9 * 16;
+            }
+        }
     </script>
     <style>
         #test {
             display: block;
             position: absolute;
+        }
+
+        #unity-canvas {
+            margin-left: auto;
+            margin-top: auto;
+            margin: auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
         }
 
         .katex {
@@ -76,7 +98,7 @@
     <div id="test"></div>
     <div class="webgl-content">
         <div id="gameContainer" style="width: 100vw; height: 102vh">
-            <canvas id="unity-canvas" style="width: 100%;"></canvas>
+            <canvas id="unity-canvas"></canvas>
         </div>
         <label id="version"
             style="position: relative; left: 90%; bottom: 50px; color: var(--visionColor); background-color:rgba(0,0,0,var(--visionBackgroundAlpha));">#VersionLabel#</label>
@@ -85,7 +107,7 @@
     </div>
     <script>
         SetExplanation(getComputedStyle(document.documentElement).getPropertyValue('--explanationContent'));
-
+        SetExplanation("使用鼠标中键移动视角。");
         function SetExplanation(content) {
             document.getElementById("explanation").innerHTML = content;
         }

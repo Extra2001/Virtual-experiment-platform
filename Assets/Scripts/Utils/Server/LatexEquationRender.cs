@@ -30,7 +30,6 @@ public class LatexEquationRender : MonoBehaviour
     {
         if (callback == 2)
         {
-            Debug.Log(base64);
             if (base64.Contains("´íÎó"))
                 stack[0].errorHandler.Invoke();
             else
@@ -47,7 +46,6 @@ public class LatexEquationRender : MonoBehaviour
     public void Callback(string base64)
     {
         callback = 2;
-        Debug.Log(base64);
         this.base64 = base64.Replace("data:image/png;base64,", "");
     }
     public static void Render(string tex, UnityAction<Sprite> action = null, UnityAction errorHandler = null)

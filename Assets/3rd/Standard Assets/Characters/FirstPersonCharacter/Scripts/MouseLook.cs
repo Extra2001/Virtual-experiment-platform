@@ -45,10 +45,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public void LookRotation(Transform character, Transform camera)
         {
             if (!Enabled) return;
-            Vector3 v1 = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            if (!((v1.y >= 1 - mouseOffset) || (v1.y <= mouseOffset) || (v1.x <= mouseOffset) || (v1.x >= 1 - mouseOffset) || Input.GetMouseButton(2)))
+            //Vector3 v1 = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+            //if (!((v1.y >= 1 - mouseOffset) || (v1.y <= mouseOffset) || (v1.x <= mouseOffset) || (v1.x >= 1 - mouseOffset) || Input.GetMouseButton(2)))
+            //    return;
+            if (!Input.GetMouseButton(2))
                 return;
-
             float yRot = CrossPlatformInputManager.GetAxis("Mouse X") * XSensitivity;
             float xRot = CrossPlatformInputManager.GetAxis("Mouse Y") * YSensitivity;
 

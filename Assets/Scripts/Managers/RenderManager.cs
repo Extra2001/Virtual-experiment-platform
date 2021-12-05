@@ -2,10 +2,13 @@
     作者：荆煦添
     描述：节省显示计算资源，动态开关灯光和内饰渲染。
 *************************************************************************************/
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class RenderManager : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    public static extern void _SetTips(string tips);
     public static RenderManager Instance;
     public GameObject BuiltIn;
     public GameObject Light;

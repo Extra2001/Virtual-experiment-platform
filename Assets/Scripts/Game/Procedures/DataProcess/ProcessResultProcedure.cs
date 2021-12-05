@@ -13,6 +13,7 @@ public class ProcessResultProcedure : ProcedureBase
     /// </summary>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        RenderManager._SetTips("您可以返回并改正您的错误（如有）。");
         Main.m_UI.OpenUI<ProcessResult>();
         base.OnEnter(lastProcedure);
     }

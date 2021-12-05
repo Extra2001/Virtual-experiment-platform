@@ -22,6 +22,7 @@ public class UncertainLearnProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        RenderManager._SetTips("输入要计算的表达式，再输入您自己的计算结果。");
         Main.m_UI.OpenUI<UncertainLearnUILogic>();
         base.OnEnter(lastProcedure);
     }

@@ -19,6 +19,7 @@ public class MeasuredDataProcessProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        RenderManager._SetTips("");
         GameManager.Instance._currentQuantityIndex = 0;
         GameManager.Instance.ShowUncertainty();
         base.OnEnter(lastProcedure);

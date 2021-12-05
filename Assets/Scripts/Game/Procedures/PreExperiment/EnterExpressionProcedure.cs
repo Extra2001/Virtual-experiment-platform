@@ -14,6 +14,7 @@ public class EnterExpressionProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        RenderManager._SetTips("请输入您测量目标的合成表达式。点击左侧可插入符号。");
         Main.m_UI.OpenUI<EnterExpressionUILogic>();
         base.OnEnter(lastProcedure);
     }

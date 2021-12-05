@@ -14,6 +14,7 @@ public class StartProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        RenderManager._SetTips("点击新实验，开始一个实验。");
         Main.m_UI.OpenUI<StartUILogic>();
         base.OnEnter(lastProcedure);
     }

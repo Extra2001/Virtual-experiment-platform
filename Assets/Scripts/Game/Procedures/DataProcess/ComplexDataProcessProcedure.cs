@@ -18,6 +18,7 @@ public class ComplexDataProcessProcedure : ProcedureBase
     /// <param name="lastProcedure">上一个离开的流程</param>
     public override void OnEnter(ProcedureBase lastProcedure)
     {
+        RenderManager._SetTips("合成量传递数据处理部分。");
         Main.m_UI.OpenUI<ComplexDataUILogic>();
         base.OnEnter(lastProcedure);
     }

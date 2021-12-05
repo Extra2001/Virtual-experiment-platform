@@ -278,9 +278,9 @@ namespace WisdomTree.Common.Function
         /// 获取用户的所有Key
         /// </summary>
         /// <param name="responseAction">响应事件 </param>
-        public static void GetExperimentKeyUser(Action<List<string>> responseAction)
+        public static void GetExperimentKeyUser(Action<List<string>> responseAction, Action error = null)
         {
-            GetExperimentKeyUser(_UUID, responseAction);
+            GetExperimentKeyUser(_UUID, responseAction, error);
         }
 
         /// <summary>
@@ -288,9 +288,9 @@ namespace WisdomTree.Common.Function
         /// </summary>
         /// <param name="uuid">用户ID</param>
         /// <param name="responseAction">响应事件 </param>
-        public static void GetExperimentKeyUser(string uuid, Action<List<string>> responseAction)
+        public static void GetExperimentKeyUser(string uuid, Action<List<string>> responseAction, Action error = null)
         {
-            GetExperimentKeyUser(experimentId, uuid, responseAction);
+            GetExperimentKeyUser(experimentId, uuid, responseAction, error);
         }
 
         /// <summary>
@@ -298,9 +298,9 @@ namespace WisdomTree.Common.Function
         /// </summary>
         /// <param name="experimentId">实验ID</param>
         /// <param name="responseAction">响应事件 </param>
-        public static void GetExperimentKeyUser(int experimentId, Action<List<string>> responseAction)
+        public static void GetExperimentKeyUser(int experimentId, Action<List<string>> responseAction, Action error = null)
         {
-            GetExperimentKeyUser(experimentId, _UUID, responseAction);
+            GetExperimentKeyUser(experimentId, _UUID, responseAction, error);
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace WisdomTree.Common.Function
         /// <param name="experimentId">实验ID</param>
         /// <param name="uuid">用户ID</param>
         /// <param name="responseAction">响应事件 </param>
-        public static void GetExperimentKeyUser(int experimentId, string uuid, Action<List<string>> responseAction)
+        public static void GetExperimentKeyUser(int experimentId, string uuid, Action<List<string>> responseAction, Action error = null)
         {
             WWWForm form = new WWWForm();
             form.AddField("experimentId", experimentId);
@@ -326,6 +326,7 @@ namespace WisdomTree.Common.Function
                     if (www.isNetworkError || www.isHttpError)
                     {
                         Debug.Log(www.error);
+                        error?.Invoke();
                     }
                     else
                     {
@@ -339,6 +340,7 @@ namespace WisdomTree.Common.Function
                         else
                         {
                             Debug.Log("error:" + www.downloadHandler.text);
+                            error?.Invoke();
                         }
                     }
                 }

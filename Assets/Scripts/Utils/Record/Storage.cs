@@ -58,7 +58,7 @@ namespace Common
                 Communication.GetExperimentKeyUser(x =>
                 {
                     responseAction?.Invoke(x);
-                });
+                }, error: () => responseAction?.Invoke(new List<string>()));
             }
         }
         /// <summary>
@@ -87,7 +87,10 @@ namespace Common
             {
                 Communication.DownloadText(key, x =>
                 {
-                    responseAction?.Invoke(SerializeHelper.DeSerialize(x, initializer));
+                    var down = JsonConvert.DeserializeObject<Model>(x);
+                    Debug.Log($"下载文本：{x}");
+                    Debug.Log($"解析文本：{SerializeHelper.DeSerialize(down.data, initializer)}");
+                    responseAction?.Invoke(SerializeHelper.DeSerialize(down.data, initializer));
                 }, y => error?.Invoke(y));
             }
             return default;
@@ -103,13 +106,12 @@ namespace Common
             {
                 string path = directory + key;
                 FileIOHelper.SaveFile(path, SerializeHelper.Serialize(values, errorHandler));
-                responseAction.Invoke("");
+                responseAction?.Invoke("");
             }
             else if (location == 0)
             {
-                var str = PlayerPrefs.GetString(key, "{}");
-                SerializeHelper.Serialize(values, errorHandler);
-                responseAction.Invoke("");
+                PlayerPrefs.SetString(key, SerializeHelper.Serialize(values, errorHandler));
+                responseAction?.Invoke("");
             }
             else if (location == 2)
             {
@@ -215,6 +217,13 @@ namespace Common
                     return whenError;
                 }
             }
+        }
+
+        public class Model
+        {
+            public int code { get; set; }
+            public string data { get; set; }
+            public string message { get; set; }
         }
         /// <summary>
         /// 文件IO

@@ -31,14 +31,14 @@ public class RecordCell : HTBehaviour
             _LoadButton.onClick.AddListener(() =>
             {
                 Main.m_UI.NavigateBackTemporaryUI();
-                UIAPI.Instance.ShowLoading();
+                GameLaunch.Instance.ShowGeneralLoadingScreen();
                 RecordManager.GetRecord(recordId, x =>
                 {
                     x.Load();
-                    UIAPI.Instance.HideLoading();
+                    GameLaunch.Instance.HideGeneralLoadingScreen();
                 }, x =>
                 {
-                    UIAPI.Instance.HideLoading();
+                    GameLaunch.Instance.HideGeneralLoadingScreen();
                     UIAPI.Instance.ShowModel(new SimpleModel()
                     {
                         ShowCancel = false,
@@ -55,10 +55,10 @@ public class RecordCell : HTBehaviour
                     Message = "确实要删除该存档吗？",
                     ConfirmAction = () =>
                     {
-                        UIAPI.Instance.ShowLoading();
-                        RecordManager.DeleteRecord(recordId, () => UIAPI.Instance.HideLoading(), () =>
+                        GameLaunch.Instance.ShowGeneralLoadingScreen();
+                        RecordManager.DeleteRecord(recordId, () => GameLaunch.Instance.HideGeneralLoadingScreen(), () =>
                         {
-                            UIAPI.Instance.HideLoading();
+                            GameLaunch.Instance.HideGeneralLoadingScreen();
                             UIAPI.Instance.ShowModel(new SimpleModel()
                             {
                                 ShowCancel = false,
@@ -75,11 +75,11 @@ public class RecordCell : HTBehaviour
             {
                 RecordManager.GetRecord(recordId, x =>
                 {
-                    UIAPI.Instance.HideLoading();
+                    GameLaunch.Instance.HideGeneralLoadingScreen();
                     SaveOpenRecord.ExportRecord(x);
                 }, x =>
                 {
-                    UIAPI.Instance.HideLoading();
+                    GameLaunch.Instance.HideGeneralLoadingScreen();
                     UIAPI.Instance.ShowModel(new SimpleModel()
                     {
                         ShowCancel = false,

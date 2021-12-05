@@ -142,7 +142,8 @@ public class GameManager : SingletonBehaviorManager<GameManager>
 
     public void ContinueExp()
     {
-        Main.m_Procedure.SwitchProcedure(ProcedureStack.Last());
+        if (ProcedureStack.Count > 0)
+            Main.m_Procedure.SwitchProcedure(ProcedureStack.Last());
     }
 
     public void ChooseNewExp()

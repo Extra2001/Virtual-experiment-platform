@@ -11,16 +11,16 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="version" content=%BundleVersion%>
-    <meta name="experimentId" content=%experimentId%>
-    <meta name="courseId" content=%courseId%>
+    <meta name="version" content=1.0.0>
+    <meta name="experimentId" content=371>
+    <meta name="courseId" content=2000074157>
     <meta name="appId" content=%appId%>
     <meta name="secret" content=%secret%>
-    <title>虚拟实验 | %ProductName%</title>
+    <title>虚拟实验 | {{{ PRODUCT_NAME }}}</title>
     <link rel="shortcut icon" href="https://assets.zhihuishu.com/icon/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
     <script src="TemplateData/UnityProgress.js"></script>
-    <script src="%UNITY_WEBGL_LOADER_URL%"></script>
+    <script src="Build/{{{ LOADER_FILENAME }}}"></script>
     <script src="Build/Common.js"></script>
     <link rel="stylesheet" href="./css/katex.min.css" crossorigin="anonymous">
     <script defer src="./js/katex.min.js" crossorigin="anonymous"></script>
@@ -38,16 +38,32 @@
     </script>
     <script defer src="./js/webfontloader.js" crossorigin="anonymous"></script>
     <script>
-        var gameInstance = UnityLoader.instantiate("gameContainer", "%UNITY_WEBGL_BUILD_URL%", {
-            onProgress: UnityProgress
-        });
+        var gameInstance;
+        var buildUrl = "Build";
+        var config = {
+            dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+            frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+            codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "{{{ COMPANY_NAME }}}",
+            productName: "{{{ PRODUCT_NAME }}}",
+            productVersion: "{{{ PRODUCT_VERSION }}}"
+        };
+        window.onload = () => {
+            var canvas = document.querySelector("#unity-canvas");
+            createUnityInstance(canvas, config, UnityProgress).then((unityInstance) => {
+                gameInstance = unityInstance;
+            }).catch((message) => {
+                alert(message);
+            });
+        };
     </script>
     <style>
         #test {
             display: block;
             position: absolute;
         }
-        
+
         .katex {
             font-size: 10em !important;
         }
@@ -56,9 +72,13 @@
 
 <body>
     <div class="webgl-content">
-        <div id="gameContainer" style="width: 100vw; height: 102vh"></div>
-        <label id="version" style="position: relative; left: 90%; bottom: 50px; color: var(--visionColor); background-color:rgba(0,0,0,var(--visionBackgroundAlpha));">#VersionLabel#</label>
-        <label id="explanation" style="position: relative; left: 0%; bottom: 50px; color: var(--explanationColor);"></label>
+        <div id="gameContainer" style="width: 100vw; height: 102vh">
+            <canvas id="unity-canvas" style="width: 100%;margin-top: 2em;"></canvas>
+        </div>
+        <label id="version"
+            style="position: relative; left: 90%; bottom: 50px; color: var(--visionColor); background-color:rgba(0,0,0,var(--visionBackgroundAlpha));">#VersionLabel#</label>
+        <label id="explanation"
+            style="position: relative; left: 0%; bottom: 50px; color: var(--explanationColor);"></label>
     </div>
     <script>
         SetExplanation(getComputedStyle(document.documentElement).getPropertyValue('--explanationContent'));
@@ -84,7 +104,7 @@
                 testDiv.innerHTML = html;
                 //解决根号显示不全的问题
                 var svgElements = testDiv.querySelectorAll('svg');
-                svgElements.forEach(function(item) {
+                svgElements.forEach(function (item) {
                     item.setAttribute("width", item.getBoundingClientRect().width);
                     item.style.width = null;
                 });
@@ -96,7 +116,7 @@
                     useCORS: true,
                     scrollX: -window.scrollX, //解决页面滚动后canvas.toDataURL输出图片空白的问题
                     scrollY: -window.scrollY
-                }).then(function(canvas) {
+                }).then(function (canvas) {
                     testDiv.style.display = 'none';
                     resolve({
                         png: canvas.toDataURL()

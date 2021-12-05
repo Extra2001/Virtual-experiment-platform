@@ -22,7 +22,8 @@ function UnityGetDataFromWeb(identifier)
 
 		if(identifier == 'getCookie')
 		{
-			WebSetDataToUnity('getCookie', data + '=' + getUUID())
+            WebSetDataToUnity('getCookie', data + '=Vj1KNxJG')
+			//WebSetDataToUnity('getCookie', data + '=' + getUUID())
 		}
 		
 		if (identifier == 'getToken')
@@ -98,7 +99,15 @@ function UnityGetDataFromWeb(identifier)
 	}
 	function WebSetDataToUnity(identifier, data) 
 	{
-		gameInstance.SendMessage('_Communication', 'Receive', identifier + '_' + data);
+		if (gameInstance == null) {
+            var inter = setInterval(() => {
+                if (gameInstance != null) {
+                    clearInterval(inter);
+                    gameInstance.SendMessage('_Communication', 'Receive', identifier + '_' + data);
+                }
+            }, 300);
+        }
+        else gameInstance.SendMessage('_Communication', 'Receive', identifier + '_' + data);
 	}
 	function GetMeta(metaName)
 	{

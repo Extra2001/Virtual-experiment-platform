@@ -121,7 +121,6 @@ public static class RecordManager
         {
             UpdateRecordInfos(y =>
             {
-                Main.m_Event.Throw<RecordUpdateEventHandler>();
                 done?.Invoke();
             });
         }, error: y => error?.Invoke());
@@ -157,7 +156,6 @@ public static class RecordManager
             {
                 UpdateRecordInfos(y =>
                 {
-                    Main.m_Event.Throw<RecordUpdateEventHandler>();
                     done?.Invoke();
                 });
             }
@@ -212,21 +210,23 @@ public static class RecordManager
         Storage.RemoteStorage.GetAllKeys(x =>
         {
             _recordInfos = x.Select(y => NameToRecordInfo(y)).ToList();
+            Main.m_Event.Throw<RecordUpdateEventHandler>();
             action?.Invoke(_recordInfos);
         });
     }
     private static RecordInfo NameToRecordInfo(string name)
     {
+
         var ret = new RecordInfo();
         var split = name.Split('|');
-        ret.id = Convert.ToInt32(split[0]);
-        ret.time = DateTime.Parse(split[1]);
-        ret.title = split[2];
+        try { ret.id = Convert.ToInt32(split[0]); } catch { ret.id = GetFirstNone(); }
+        try { ret.time = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(split[1])); } catch { ret.time = DateTimeOffset.Now; }
+        try { ret.title = split[2]; } catch { ret.title = $"存档{ret.id}"; }
         return ret;
     }
     private static string RecordInfoToName(RecordInfo recordInfo)
     {
-        return string.Join("|", recordInfo.id, recordInfo.time.ToString(), recordInfo.title);
+        return string.Join("|", recordInfo.id, recordInfo.time.ToUnixTimeSeconds(), recordInfo.title);
     }
 }
 
@@ -239,6 +239,6 @@ public class RecordInfo
 {
     public int id { get; set; }
     public string title { get; set; }
-    public DateTime time { get; set; } = DateTime.Now;
+    public DateTimeOffset time { get; set; } = DateTimeOffset.Now;
     public string timeString { get => time.ToLocalTime().ToString("F"); }
 }

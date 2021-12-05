@@ -15,8 +15,6 @@ using System.Collections.Generic;
 using System;
 //using UniRx.Async;
 using UnityEngine.Networking;
-using Common;
-using System.IO;
 
 namespace WisdomTree.Xuxiaohao.Function
 {
@@ -99,6 +97,7 @@ namespace WisdomTree.Xuxiaohao.Function
                     public static void UpLodImage(Action<Texture2D> load)
                     {
 #if UNITY_EDITOR
+                        Debug.Log("UpLodImage begin");
                         #region UniRx
                         //FileWindow.OpenProject("请选择贴图", new FileFilter[] { new FileFilter("图片", "png", "jpg") }, Application.dataPath, async p =>
                         //{
@@ -109,32 +108,17 @@ namespace WisdomTree.Xuxiaohao.Function
                         //    }
                         //});
                         #endregion
-                        OpenFileDlg pth = new OpenFileDlg();
-                        pth.structSize = System.Runtime.InteropServices.Marshal.SizeOf(pth);
-                        pth.filter = "图片 (*.png)\0*.png\0图片 (*.jpg)\0*.jpg\0\0";
-                        pth.file = new string(new char[256]);
-                        pth.maxFile = pth.file.Length;
-                        pth.fileTitle = new string(new char[64]);
-                        pth.maxFileTitle = pth.fileTitle.Length;
-                        pth.initialDir = Application.dataPath;
-                        pth.title = "选择要导入的模型";
-                        pth.defExt = "obj";
-                        pth.flags = 0x00080000 | 0x00001000 | 0x00000800 | 0x00000008;
-                        if (OpenFileDialog.GetOpenFileName(pth))
+                        /*
+                        FileWindow.OpenProject("请选择贴图", new FileFilter[] { new FileFilter("图片", "png", "jpg") }, Application.dataPath, p =>
                         {
-                            string filepath = pth.file;
                             GameObject gameObject = new GameObject();
                             LoadMono loadMono = gameObject.AddComponent<LoadMono>();
-                            loadMono.StartCoroutine(loadMono.Load(filepath, load));
-                        }
-                        //FileWindow.OpenProject("请选择贴图", new FileFilter[] { new FileFilter("图片", "png", "jpg") }, Application.dataPath, p =>
-                        //{
-                        //    GameObject gameObject = new GameObject();
-                        //    LoadMono loadMono = gameObject.AddComponent<LoadMono>();
-                        //    loadMono.StartCoroutine(loadMono.Load(p, load));
-                        //});
+                            loadMono.StartCoroutine(loadMono.Load(p, load));
+                        });
+                        */
 #else
 #endif
+                        Debug.Log("UpLodImage end");
                     }
                     #region UniRx
                     //public static async UniTask Set(string path, Action<Texture2D> loadAction)

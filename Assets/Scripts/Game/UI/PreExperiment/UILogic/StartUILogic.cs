@@ -42,7 +42,7 @@ public class StartUILogic : UILogicResident
         });
         UIEntity.FindChildren("CommitButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            Debug.Log("上传存档");
+            UIEntity.FindChildren("CommitButton").GetComponent<LoadImgFromFile>().OnUploadCustomImgBtnClick();
         });
     }
 

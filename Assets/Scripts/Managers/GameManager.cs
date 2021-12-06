@@ -66,13 +66,14 @@ public class GameManager : SingletonBehaviorManager<GameManager>
     }
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController firstPersonController = null;
     #endregion
-
+    public DateTime startTime;
     #region Unity生命周期函数
     /// <summary>
     /// 初始化
     /// </summary>
     private void Start()
     {
+        startTime = DateTime.Now;
         firstPersonController = GameObject.Find("FPSController")
             .GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         FPSable = false;

@@ -1011,7 +1011,7 @@ public class CalcResult {
                 result.err.ua.message = "a类不确定度计算错误";
             }
             
-            result.err.ua.latex = @"u_a({input.n})=s(\overline{b})=\sqrt{\frac{(b_i-\overline{b})^2}{n(n-1)}}";
+            result.err.ua.latex = @"u_a({b})=s(\overline{b})=\sqrt{\frac{(b_i-\overline{b})^2}{n(n-1)}}";
         }
         if(!input.user_aver_b.AlmostEqual(double.Parse(StaticMethods.NumberFormat(b)))) {
             flag = false;

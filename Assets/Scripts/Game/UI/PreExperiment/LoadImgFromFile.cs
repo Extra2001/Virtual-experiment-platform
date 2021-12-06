@@ -86,8 +86,9 @@ public class LoadImgFromFile : HTBehaviour
             List<ExperimentReportContentBuilder> contents = new List<ExperimentReportContentBuilder>();
             var hh = new string[] { "直接计算", "逐差法", "一元线性回归", "图示法" };
             contents.Add(new ExperimentReportContentBuilder("实验设计", $"实验共测量{x.quantities.Count}个物理量，分别有{string.Join("、", x.quantities.Select(x => x.Name + "(" + x.Symbol + ")" + "，使用" + x.InstrumentType.CreateInstrumentInstance().Name + "测量，并使用" + hh[x.processMethod] + "进行数据处理；"))}"));
+            contents.Add(new ExperimentReportContentBuilder("数据处理", string.Join("\n", x.quantities.Select(y =>
+            $"物理量：{y.Name}，代号：{y.Symbol}，处理方法：{hh[y.processMethod]}。处理结果：平均值：{?}"))));
             contents.Add(new ExperimentReportContentBuilder("附加材料", new List<Files>().ToArray())); /*这里换成已打开的文件*/
-
             models.Add(new ExperimentReportModelBuilder("实验报告", contents.ToArray()));
             Communication.UploadReport(GameManager.Instance.startTime, DateTime.Now, x.score, $"本次实验共有{x.}次xxx错误，{x.}次xxx错误。。。", models.ToArray(), new Step[0]);//这里也可以添加很多实验步骤。
             if (url != null)

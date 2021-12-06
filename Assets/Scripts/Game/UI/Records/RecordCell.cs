@@ -92,6 +92,17 @@ public class RecordCell : HTBehaviour
         }
         if (_UploadButton != null)
         {
+            RecordManager.GetRecord(recordId, x => 
+            {
+                if (x.experimentFinish)
+                {
+                    _UploadButton.FindChildren("Text").GetComponent<Text>().text = "上传（已上传）";
+                }
+                else
+                {
+                    _UploadButton.FindChildren("Text").GetComponent<Text>().text = "上传";
+                }
+            });
             _UploadButton.onClick.AddListener(() =>
             {
                 RecordManager.GetRecord(recordId, x =>

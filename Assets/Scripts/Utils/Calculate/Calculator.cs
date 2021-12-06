@@ -1011,19 +1011,19 @@ public class CalcResult {
                 result.err.ua.message = "a类不确定度计算错误";
             }
             
-            result.err.ua.latex = @"u_a({b})=s(\overline{b})=\sqrt{\frac{(b_i-\overline{b})^2}{n(n-1)}}";
+            result.err.ua.latex = $@"u_a({{{input.name}}})=s(\overline{{{input.name}}})=\sqrt{{\frac{{({{{input.name}}}_i-\overline{{{input.name}}})}}{{n(n-1)}}}}";
         }
         if(!input.user_aver_b.AlmostEqual(double.Parse(StaticMethods.NumberFormat(b)))) {
             flag = false;
             result.err.average.right = false;
             result.err.average.message = "逐差法计算错误";
-            result.err.average.latex = StaticMethods.GetAverageLatex(@"\Delta b");
+            result.err.average.latex = StaticMethods.GetAverageLatex($@"\Delta {input.name}");
         }
         if(!input.user_b_unc.AlmostEqual(StaticMethods.CalcUncertain(uncb, input.correct_b_uncb))) {
             flag = false;
             result.err.unc.right = false;
             result.err.unc.message = "合成不确定度计算错误";
-            result.err.unc.latex = StaticMethods.GetUncLatex("b");
+            result.err.unc.latex = StaticMethods.GetUncLatex(input.name);
         }
         result.err.right = flag;
         result.status = flag ? "正确" : "错误";

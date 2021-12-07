@@ -1011,7 +1011,7 @@ public class CalcResult {
                 result.err.ua.message = "a类不确定度计算错误";
             }
             
-            result.err.ua.latex = $@"u_a({{\Delta {input.name}}})=\sqrt{{\frac{{\Sigma{{(\Delta {input.name}_i-\overline{{\Delta {input.name}}})^2}}}}{{k(k-1)}}}}";
+            result.err.ua.latex = $@"u_a({{\Delta {input.name}}})=\sqrt{{\frac{{\Sigma{{(\Delta {input.name}_i-\overline{{\Delta {input.name}}})^2}}}}{{n(n-1)}}}}";
         }
         if(!input.user_aver_b.AlmostEqual(double.Parse(StaticMethods.NumberFormat(b)))) {
             flag = false;

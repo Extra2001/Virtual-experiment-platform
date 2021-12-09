@@ -50,9 +50,12 @@
             productVersion: "{{{ PRODUCT_VERSION }}}"
         };
         window.onload = () => {
+            var progressBar = {
+                container: document.querySelector('#gameContainer')
+            };
             var canvas = document.querySelector("#unity-canvas");
             window.onresize();
-            createUnityInstance(canvas, config, UnityProgress).then((unityInstance) => {
+            createUnityInstance(canvas, config, p => UnityProgress(progressBar, p)).then((unityInstance) => {
                 gameInstance = unityInstance;
             }).catch((message) => {
                 alert(message);

@@ -47,16 +47,21 @@ public class MeasuredRegression1 : HTBehaviour
                 });
             return false;
         }
-        if (quantity.IndependentData.data.Where(x => string.IsNullOrEmpty(x)).Count() > 0)
+
+        if (StaticMethods.CheckIfExistNullOrEmpty(quantity.MesuredData.data) && StaticMethods.CheckIfExistNullOrEmpty(quantity.IndependentData.data))
         {
             if (!silent)
+            {
                 UIAPI.Instance.ShowModel(new SimpleModel()
                 {
                     ShowCancel = false,
-                    Message = "自变量数据有空值"
+                    Message = "数据填写未完成"
                 });
+            }
+
             return false;
         }
+
         return true;
     }
 

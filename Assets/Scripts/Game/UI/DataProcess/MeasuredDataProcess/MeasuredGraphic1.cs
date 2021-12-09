@@ -65,6 +65,22 @@ public class MeasuredGraphic1 : HTBehaviour
 
             return false;
         }
+
+        if(StaticMethods.CheckIfExistNullOrEmpty(quantity.MesuredData.data) && StaticMethods.CheckIfExistNullOrEmpty(quantity.IndependentData.data))
+        {
+            if (!silent)
+            {
+                UIAPI.Instance.ShowModel(new SimpleModel()
+                {
+                    ShowCancel = false,
+                    Message = "数据填写未完成"
+                });
+            }
+
+            return false;
+        }
+
+
         if (string.IsNullOrEmpty(quantity.selfSymbol))
         {
             if (!silent)

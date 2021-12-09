@@ -388,11 +388,39 @@ public static class StaticMethods {
         }
         return ans;
     }
+    public static bool CheckIfExistNullOrEmpty(List<string> _data)
+    {
+        foreach (var item in _data)
+        {
+            if (string.IsNullOrEmpty(item))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static bool CheckDifferenced(List<string> measure, List<string> userdifference) //检查逐差过程是否正确
     {
         List<double> answerdifference = new List<double>();
         int n;
-        if(measure.Count % 2 == 0) {
+        foreach (var item in measure)
+        {
+            if (string.IsNullOrEmpty(item))
+            {
+                return false;
+            }
+        }
+        foreach (var item in userdifference)
+        {
+            if (string.IsNullOrEmpty(item))
+            {
+                return false;
+            }
+        }
+
+        if (measure.Count % 2 == 0) {
             n = measure.Count / 2;
             for(int i = 0; i < n; i++) {
                 answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])) - double.Parse(userdifference[i]));

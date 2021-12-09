@@ -182,17 +182,23 @@ namespace HT.Framework
                 {
                     return;
                 }
-
-                ProcedureBase lastProcedure = CurrentProcedure;
-                ProcedureBase nextProcedure = Procedures[type];
-                if (lastProcedure != null)
+                try
                 {
-                    lastProcedure.OnLeave(nextProcedure);
-                }
-                nextProcedure.OnEnter(lastProcedure);
-                CurrentProcedure = nextProcedure;
+                    ProcedureBase lastProcedure = CurrentProcedure;
+                    ProcedureBase nextProcedure = Procedures[type];
+                    if (lastProcedure != null)
+                    {
+                        lastProcedure.OnLeave(nextProcedure);
+                    }
+                    nextProcedure.OnEnter(lastProcedure);
+                    CurrentProcedure = nextProcedure;
 
-                AnyProcedureSwitchEvent?.Invoke(lastProcedure, nextProcedure);
+                    AnyProcedureSwitchEvent?.Invoke(lastProcedure, nextProcedure);
+                }
+                catch(Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
             }
             else
             {

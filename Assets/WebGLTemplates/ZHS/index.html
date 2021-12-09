@@ -62,12 +62,12 @@
             var canvas = document.querySelector('#unity-canvas');
             var container = document.querySelector('#gameContainer');
             if (container.clientHeight / 9 * 16 >= container.clientWidth) {
-                canvas.height = container.clientWidth / 16 * 9;
-                canvas.width = container.clientWidth;
+                canvas.style.height = container.clientWidth / 16 * 9 + 'px';
+                canvas.style.width = container.clientWidth + 'px';
             }
             else {
-                canvas.height = container.clientHeight;
-                canvas.width = container.clientHeight / 9 * 16;
+                canvas.style.height = container.clientHeight + 'px';
+                canvas.style.width = container.clientHeight / 9 * 16 + 'px';
             }
         }
     </script>
@@ -97,7 +97,7 @@
 <body>
     <div id="test"></div>
     <div class="webgl-content">
-        <div id="gameContainer" style="width: 100vw; height: 102vh">
+        <div id="gameContainer" style="width: 100vw; height: 100vh">
             <canvas id="unity-canvas"></canvas>
         </div>
         <label id="version"

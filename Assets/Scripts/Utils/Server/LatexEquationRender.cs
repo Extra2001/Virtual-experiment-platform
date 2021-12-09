@@ -6,9 +6,9 @@ using UnityEngine;
 using System;
 using UnityEngine.Events;
 using System.IO;
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR
-using System.Drawing.Imaging;
-#endif
+//#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+//using System.Drawing.Imaging;
+//#endif
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -71,29 +71,29 @@ public class LatexEquationRender : MonoBehaviour
           {
               if (www.responseCode == 200)
               {
-                  byte[] buffers = null;
-                  try
-                  {
-                      using (var ms = new MemoryStream())
-                      {
-                          var buffer = Encoding.Default.GetBytes(www.downloadHandler.text);
-                          using (var rms = new MemoryStream(buffer))
-                          {
-                              var svg = Svg.SvgDocument.Open<Svg.SvgDocument>(rms);
-                              var bitmap = svg.Draw(1000, (int)Math.Round((double)svg.Height / svg.Width * 1000));
-                              bitmap.Save(ms, ImageFormat.Png);
-                              buffers = ms.GetBuffer();
-                          }
-                      }
-                  }
-                  catch { errorHandler?.Invoke(); }
-                  if (buffers != null)
-                      action?.Invoke(CommonTools.GetSprite(buffers));
-                  else errorHandler?.Invoke();
+                  //byte[] buffers = null;
+                  //try
+                  //{
+                  //    using (var ms = new MemoryStream())
+                  //    {
+                  //        var buffer = Encoding.Default.GetBytes(www.downloadHandler.text);
+                  //        using (var rms = new MemoryStream(buffer))
+                  //        {
+                  //            var svg = Svg.SvgDocument.Open<Svg.SvgDocument>(rms);
+                  //            var bitmap = svg.Draw(1000, (int)Math.Round((double)svg.Height / svg.Width * 1000));
+                  //            bitmap.Save(ms, ImageFormat.Png);
+                  //            buffers = ms.GetBuffer();
+                  //        }
+                  //    }
+                  //}
+                  //catch { errorHandler?.Invoke(); }
+                  //if (buffers != null)
+                  //    action?.Invoke(CommonTools.GetSprite(buffers));
+                  //else errorHandler?.Invoke();
               }
               else
               {
-                  errorHandler?.Invoke();
+                  //errorHandler?.Invoke();
               }
           };
 #endif

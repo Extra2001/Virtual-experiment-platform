@@ -31,9 +31,11 @@ public class DealComplexDataInput : HTBehaviour
     protected Button currentButton = null;
     protected Text currentValue = null;
 
+    ComplexQuantityModel model = null;
+
     void Start()
     {
-        ComplexQuantityModel model = RecordManager.tempRecord.complexQuantityModel;
+        model = RecordManager.tempRecord.complexQuantityModel;
         CallButton1.onClick.AddListener(() => ShowFormulaEditor(CallButton1, Value1, model.AverageExpression == null ?
              model.AverageExpression = new List<FormulaNode>() : model.AverageExpression));
         CallButton2.onClick.AddListener(() => ShowFormulaEditor(CallButton2, Value2, model.UncertainExpression == null ?
@@ -48,7 +50,7 @@ public class DealComplexDataInput : HTBehaviour
         RenderFormula();
         formulaController.Initialize();
         formulaController.gameObject.SetActive(false);
-        ComplexQuantityModel model = RecordManager.tempRecord.complexQuantityModel;
+        model = RecordManager.tempRecord.complexQuantityModel;
 
         if (RecordManager.tempRecord.quantities.Where(x => x.processMethod == 4).Any())
             HidePanel.SetActive(false);

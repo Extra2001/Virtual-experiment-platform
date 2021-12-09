@@ -378,7 +378,11 @@ public static class StaticMethods {
     public static string NumberFormat(double input) {//格式化输出float
         double t = Math.Abs(input);
         string ans;
-        if(t >= 10000 || t <= 0.0001)
+        if (t - 0 == 0)
+        {
+            ans = "0";
+        }
+        else if(t >= 10000 || t <= 0.0001)
         {
             ans = input.ToString("E5");
         }

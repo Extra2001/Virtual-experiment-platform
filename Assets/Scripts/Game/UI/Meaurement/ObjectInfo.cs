@@ -80,21 +80,21 @@ public class ObjectInfo : HTBehaviour
                 objectValue.LineScaleZ = objectValue.Scale;
                 objectValue.LineScaleY = objectValue.Scale;
                 objectValue.LineScaleX = objectValue.LineScaleX + objectValue.Scale * (float)step;
-                _StepCount.text = ((objectValue.LineScaleX - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString();
+                _StepCount.text = ((objectValue.LineScaleX - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString("F0");
             }
             if (axis == 1)
             {
                 objectValue.LineScaleZ = objectValue.Scale;
                 objectValue.LineScaleX = objectValue.Scale;
                 objectValue.LineScaleY = objectValue.LineScaleY + objectValue.Scale * (float)step;
-                _StepCount.text = ((objectValue.LineScaleY - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString();
+                _StepCount.text = ((objectValue.LineScaleY - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString("F0");
             }
             if (axis == 2)
             {
                 objectValue.LineScaleX = objectValue.Scale;
                 objectValue.LineScaleY = objectValue.Scale;
                 objectValue.LineScaleZ = objectValue.LineScaleZ + objectValue.Scale * (float)step;
-                _StepCount.text = ((objectValue.LineScaleZ - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString();
+                _StepCount.text = ((objectValue.LineScaleZ - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString("F0");
             }
             Debug.Log("Lx=" + objectValue.LineScaleX);
             Debug.Log("Ly=" + objectValue.LineScaleY);

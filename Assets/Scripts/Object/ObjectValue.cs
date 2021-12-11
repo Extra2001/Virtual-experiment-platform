@@ -52,24 +52,27 @@ public class ObjectValue : HTBehaviour
     {
         get => ObjectModel.linescaleX; set
         {
-            gameObject.transform.localScale = new Vector3(ObjectModel.linescaleX, ObjectModel.linescaleY, ObjectModel.linescaleZ);
             ObjectModel.linescaleX = value;
+            float _x = ObjectModel.linescaleX;
+            float _y = ObjectModel.linescaleY;
+            float _z = ObjectModel.linescaleZ;
+            gameObject.transform.localScale = new Vector3(_x, _y, _z);           
         }
     }
     public float LineScaleY
     {
         get => ObjectModel.linescaleY; set
         {
-            gameObject.transform.localScale = new Vector3(ObjectModel.linescaleX, ObjectModel.linescaleY, ObjectModel.linescaleZ);
             ObjectModel.linescaleY = value;
+            gameObject.transform.localScale = new Vector3(ObjectModel.linescaleX, ObjectModel.linescaleY, ObjectModel.linescaleZ);           
         }
     }
     public float LineScaleZ
     {
         get => ObjectModel.linescaleZ; set
         {
-            gameObject.transform.localScale = new Vector3(ObjectModel.linescaleX, ObjectModel.linescaleY, ObjectModel.linescaleZ);
             ObjectModel.linescaleZ = value;
+            gameObject.transform.localScale = new Vector3(ObjectModel.linescaleX, ObjectModel.linescaleY, ObjectModel.linescaleZ);           
         }
     }
     public float Mass { get => ObjectModel.mass; set => ObjectModel.mass = value; }

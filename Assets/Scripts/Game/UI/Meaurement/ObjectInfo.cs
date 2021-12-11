@@ -112,22 +112,22 @@ public class ObjectInfo : HTBehaviour
             {
                 objectValue.LineScaleZ = objectValue.Scale;
                 objectValue.LineScaleY = objectValue.Scale;
-                objectValue.LineScaleX = Math.Max(0, objectValue.LineScaleX - objectValue.Scale * (float)step);
-                _StepCount.text = ((objectValue.LineScaleX - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString();
+                objectValue.LineScaleX = Math.Max(1, objectValue.LineScaleX - objectValue.Scale * (float)step);
+                _StepCount.text = ((objectValue.LineScaleX - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString("F0");
             }
             if (axis == 1)
             {
                 objectValue.LineScaleZ = objectValue.Scale;
                 objectValue.LineScaleX = objectValue.Scale;
-                objectValue.LineScaleY = Math.Max(0, objectValue.LineScaleY - objectValue.Scale * (float)step);
-                _StepCount.text = ((objectValue.LineScaleY - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString();
+                objectValue.LineScaleY = Math.Max(1, objectValue.LineScaleY - objectValue.Scale * (float)step);
+                _StepCount.text = ((objectValue.LineScaleY - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString("F0");
             }
             if (axis == 2)
             {
                 objectValue.LineScaleX = objectValue.Scale;
                 objectValue.LineScaleY = objectValue.Scale;
-                objectValue.LineScaleZ = Math.Max(0, objectValue.LineScaleZ - objectValue.Scale * (float)step);
-                _StepCount.text = ((objectValue.LineScaleZ - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString();
+                objectValue.LineScaleZ = Math.Max(1, objectValue.LineScaleZ - objectValue.Scale * (float)step);
+                _StepCount.text = ((objectValue.LineScaleZ - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString("F0");
             }
         });
         _ResetStep.onClick.AddListener(() => { objectValue.Scale = objectValue.Scale; _StepCount.text = "0"; });

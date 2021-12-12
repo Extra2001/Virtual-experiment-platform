@@ -90,7 +90,7 @@ public class LoadImgFromFile : HTBehaviour
                 contents.Add(new ExperimentReportContentBuilder("附加材料", new Files("附加材料", url, 1, 1, 1))); /*这里换成已打开的文件*/
             }           
             models.Add(new ExperimentReportModelBuilder("实验报告", contents.ToArray()));
-            Communication.UploadReport(GameManager.Instance.startTime, DateTime.Now, x.score.CalcScore(), $"本次实验记录数据发生{x.score.DataRecordError}次错误，处理直接测量量发生{x.score.MeasureQuantityError}次错误，处理最终合成量发生{x.score.ComplexQuantityError}次错误。", models.ToArray(), new Step[0], action);//这里也可以添加很多实验步骤。
+            Communication.UploadReport(GameManager.Instance.startTime, DateTime.Now, 20 * x.score.CalcScore(), $"本次实验记录数据发生{x.score.DataRecordError}次错误，处理直接测量量发生{x.score.MeasureQuantityError}次错误，处理最终合成量发生{x.score.ComplexQuantityError}次错误。", models.ToArray(), new Step[0], action);//这里也可以添加很多实验步骤。
 
 
         });

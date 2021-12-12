@@ -466,7 +466,7 @@ public class DealProcessResult : HTBehaviour
             cell9.gameObject.SetActive(false);
             double score = RecordManager.tempRecord.score.CalcScore();
             Title.text = "本次实验得分:" + string.Format("{0:F1}", score) + "/5.0";
-            if (score - 4 == 0)
+            if (score - 5.0 == 0)
             {
                 SuccessMessage.text = "你的实验已全部正确地完成！恭喜你掌握了本次误差理论的知识。";
             }

@@ -94,7 +94,7 @@ public class RecordCell : HTBehaviour
         {
             RecordManager.GetRecord(recordId, x => 
             {
-                if (x.experimentFinish)
+                if (x.uploadFinish)
                 {
                     _UploadButton.FindChildren("Text").GetComponent<Text>().text = "上传（已上传）";
                 }

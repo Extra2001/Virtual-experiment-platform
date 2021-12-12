@@ -69,7 +69,7 @@ public class LoadImgFromFile : HTBehaviour
 
             Action<string> action = delegate (string s)
             {
-                x.experimentFinish = true;
+                x.uploadFinish = true;
                 GetComponent<RecordCell>()._UploadButton.FindChildren("Text").GetComponent<Text>().text = "上传（已上传）";
                 UIAPI.Instance.ShowModel(new SimpleModel()
                 {

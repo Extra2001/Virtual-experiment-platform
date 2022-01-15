@@ -8,14 +8,11 @@ using UnityEngine.UI;
 public class DealUncertainLearnUI : HTBehaviour
 {
     public Button BackButton;
-    public Button SureButton;
-    public Text AnswerText;
-    public InputField UserInput;
-    public GameObject Field;
+    public Button[] ChoiceButtons;
 
-    public GameObject Reason;
-    public GameObject yes;
-    public GameObject no;
+
+
+    private int CurrentIndex = -1;
 
     //启用自动化
     protected override bool IsAutomate => true;
@@ -24,89 +21,59 @@ public class DealUncertainLearnUI : HTBehaviour
     void Start()
     {
         BackButton.onClick.AddListener(ClickBackButton);
-        SureButton.onClick.AddListener(ClickSureButton);
+        ChoiceButtons[0].onClick.AddListener(ClickAddAndSubtractButton);
+        ChoiceButtons[1].onClick.AddListener(ClickMultiplyAndDivideButton);
+        ChoiceButtons[2].onClick.AddListener(ClickFunctionCalcButton);
+        ChoiceButtons[3].onClick.AddListener(ClickMixedCalcButton);
     }
 
-    private void ClickSureButton()
+    
+    private void SwitchZone(int index)
     {
-        string input;
-        string answer;
-        string reason;
-
-        input = UserInput.text;        
-        if(Field.GetComponent<FormulaController>().Serialize().Count == 0)
+        for (int i = 0; i < ChoiceButtons.Length; i++)
         {
-            UIAPI.Instance.ShowModel(new SimpleModel()
+            if (i == index)
             {
-                ShowCancel = false,
-                Title = "警告",
-                Message = "请输入公式"
-            });
-        }
-        else if (input == "")
-        {
-            UIAPI.Instance.ShowModel(new SimpleModel()
-            {
-                ShowCancel = false,
-                Title = "警告",
-                Message = "请输入你认为的有效数字位数"
-            });
-        }
-        else
-        {
-            answer = Field.GetComponent<FormulaController>().GetCheckFloat().TrueValue.ToString();
-            reason = Field.GetComponent<FormulaController>().CheckError(input);
-            try
-            {
-
-                answer = Field.GetComponent<FormulaController>().GetCheckFloat().TrueValue.ToString();
-                reason = Field.GetComponent<FormulaController>().CheckError(input);
-                if (reason != "")
-                {
-                    Reason.SetActive(true);
-                    Reason.GetComponent<Text>().text = reason;
-                }
-                else
-                {
-                    Reason.SetActive(false);
-                }
-
-                if (input == answer)
-                {
-
-                    AnswerText.text = answer;
-                    yes.transform.localScale = new Vector3(1, 1, 1);
-                    yes.SetActive(true);
-                    no.SetActive(false);
-                    yes.transform.DOScale(new Vector3(4, 4, 4), 1.5f).OnComplete(() => {
-                        yes.SetActive(false);
-                    });
-                }
-                else
-                {
-                    AnswerText.text = answer;
-                    no.transform.localScale = new Vector3(1, 1, 1);
-                    yes.SetActive(false);
-                    no.SetActive(true);
-                    no.transform.DOScale(new Vector3(4, 4, 4), 1.5f).OnComplete(() => {
-                        no.SetActive(false);
-                    });
-                }
-
+                var tempcolor = ChoiceButtons[i].colors;
+                tempcolor.normalColor = new Color(0, 101 / 255f, 195 / 255f, 255 / 255f);
+                ChoiceButtons[i].colors = tempcolor;
             }
-            catch
+            else
             {
-                //弹出报错提示框
-                UIAPI.Instance.ShowModel(new SimpleModel()
-                {
-                    ShowCancel = false,
-                    Title = "错误",
-                    Message = "输入表达式不合法，请仔细检查"
-                });
+                var tempcolor = ChoiceButtons[i].colors;
+                tempcolor.normalColor = new Color(255 / 255f, 255 / 255f, 255 / 255f, 255 / 255f);
+                ChoiceButtons[i].colors = tempcolor;
             }
         }
     }
 
+    /// <summary>
+    /// 选择加减、乘除、函数、混合运算按钮
+    /// </summary>
+    private void ClickAddAndSubtractButton()
+    {
+        CurrentIndex = 0;
+        SwitchZone(CurrentIndex);
+
+    }
+    private void ClickMultiplyAndDivideButton()
+    {
+        CurrentIndex = 1;
+        SwitchZone(CurrentIndex);
+    }
+    private void ClickFunctionCalcButton()
+    {
+        CurrentIndex = 2;
+        SwitchZone(CurrentIndex);
+    }
+    private void ClickMixedCalcButton()
+    {
+        CurrentIndex = 3;
+        SwitchZone(CurrentIndex);
+    }
+    /// <summary>
+    /// 点击“返回”按钮
+    /// </summary>
     private void ClickBackButton()
     {
         UIAPI.Instance.ShowModel(new SimpleModel()

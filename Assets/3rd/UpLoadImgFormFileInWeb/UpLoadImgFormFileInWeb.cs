@@ -32,8 +32,5 @@ namespace WisdomTree.Xuxiaohao.Function
 
       //  public static void GetImgFromFile(string ReceiveMsgGameObjectName, string ReceiveMsgMethodName) { }
 #endif
-#if UNITY_EDITOR
-        public static void GetImgFromFile(string ReceiveMsgGameObjectName, string ReceiveMsgMethodName) { }
-#endif
     }
 }

@@ -6,7 +6,7 @@ using DG.Tweening;
 /// <summary>
 /// 新建UI逻辑类
 /// </summary>
-[UIResource("", "", "UI/PreExperiment/UncertainLearn")]
+[UIResource("", "", "UI/ValidNumberLearn/UncertainLearn")]
 public class UncertainLearnUILogic : UILogicResident
 {
 	/// <summary>

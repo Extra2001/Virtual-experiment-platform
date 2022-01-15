@@ -9,8 +9,8 @@ public class DealUncertainLearnUI : HTBehaviour
 {
     public Button BackButton;
     public Button[] ChoiceButtons;
-
-
+    public GameObject HintText;
+    public GameObject CalcZone;
 
     private int CurrentIndex = -1;
 
@@ -25,24 +25,25 @@ public class DealUncertainLearnUI : HTBehaviour
         ChoiceButtons[1].onClick.AddListener(ClickMultiplyAndDivideButton);
         ChoiceButtons[2].onClick.AddListener(ClickFunctionCalcButton);
         ChoiceButtons[3].onClick.AddListener(ClickMixedCalcButton);
+
+        HintText.SetActive(true);
+        CalcZone.SetActive(false);
     }
 
     
     private void SwitchZone(int index)
     {
+        HintText.SetActive(false);
+        CalcZone.SetActive(true);
         for (int i = 0; i < ChoiceButtons.Length; i++)
         {
             if (i == index)
             {
-                var tempcolor = ChoiceButtons[i].colors;
-                tempcolor.normalColor = new Color(0, 101 / 255f, 195 / 255f, 255 / 255f);
-                ChoiceButtons[i].colors = tempcolor;
+                ChoiceButtons[i].image.color = new Color(0, 101 / 255f, 195 / 255f, 255 / 255f);
             }
             else
             {
-                var tempcolor = ChoiceButtons[i].colors;
-                tempcolor.normalColor = new Color(255 / 255f, 255 / 255f, 255 / 255f, 255 / 255f);
-                ChoiceButtons[i].colors = tempcolor;
+                ChoiceButtons[i].image.color = new Color(255 / 255f, 255 / 255f, 255 / 255f, 255 / 255f);
             }
         }
     }
@@ -54,7 +55,6 @@ public class DealUncertainLearnUI : HTBehaviour
     {
         CurrentIndex = 0;
         SwitchZone(CurrentIndex);
-
     }
     private void ClickMultiplyAndDivideButton()
     {

@@ -37,7 +37,7 @@ public class MultiplayAndDivideCell : HTBehaviour
             }
             else
             {
-                Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
+                Root.GetComponent<DealCalc2>().CellValue[id].Value = value;
             }
         });
         Digit.onEndEdit.AddListener(value =>
@@ -52,7 +52,7 @@ public class MultiplayAndDivideCell : HTBehaviour
             }
             else
             {
-                Root.GetComponent<DealCalc1>().CellValue[id].Digit = value;
+                Root.GetComponent<DealCalc2>().CellValue[id].Digit = value;
             }
         });
         Value2.onEndEdit.AddListener(value =>
@@ -68,7 +68,8 @@ public class MultiplayAndDivideCell : HTBehaviour
             else
             {
                 //将正常数转换为科学计数法存储
-                //Root.GetComponent<DealCalc1>().CellValue[id].Value = decimal.Parse(value);
+                Root.GetComponent<DealCalc2>().CellValue[id].Value = value;
+                Root.GetComponent<DealCalc2>().CellValue[id].Digit = "0";
             }
         });
 

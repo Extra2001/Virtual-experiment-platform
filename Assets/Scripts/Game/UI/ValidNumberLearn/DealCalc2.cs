@@ -29,6 +29,7 @@ public class DealCalc2 : HTBehaviour
     public InputField UserDigit;
     public Button UserSwitchButton;
     public Button AnsSwitchButton;
+    public Text Reason;
     private string _uservalue;
     private string _userdigit;
     private int _userstate;
@@ -39,6 +40,7 @@ public class DealCalc2 : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Reason.text = "";
         //加法前两个先初始化
         Cells[0].GetComponent<MultiplayAndDivideCell>().id = 0;
         Cells[0].GetComponent<MultiplayAndDivideCell>().Root = this.gameObject;
@@ -89,6 +91,10 @@ public class DealCalc2 : HTBehaviour
                     {
                         finish = false;
                     }
+                    if (double.Parse(CellValue[temp.id].Value) - 1 < 0 || double.Parse(CellValue[temp.id].Value) - 10 >= 0)
+                    {
+                        finish = false;
+                    }
                 }
                 else
                 {
@@ -98,8 +104,21 @@ public class DealCalc2 : HTBehaviour
                     }
                 }
             }
-
             //检查答案输入
+            if (_userstate == 0)
+            {
+                if (UserValue2.text == "0")
+                {
+                    finish = false;
+                }
+            }
+            else
+            {
+                if (UserValue.text == "0" || UserDigit.text == "0")
+                {
+                    finish = false;
+                }
+            }
 
             if (!finish)
             {
@@ -111,20 +130,37 @@ public class DealCalc2 : HTBehaviour
             }
             else
             {
-                IList<(string rawnumstr, int isadd)> input;
+                List<(string rawnumstr, int isadd)> input = new List<(string rawnumstr, int isadd)>();
+                (string rawnumstr, int isadd) temp;
                 for (int i = 0; i < CellValue.Count; i++)
                 {
-
+                    temp.isadd = CellValue[i].Sign;
+                    temp.rawnumstr = StaticMethods.SciToExp(CellValue[i].Value + "*10^(" + CellValue[i].Digit + ")");
+                    input.Add(temp);
                 }
+                string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
+                (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupMul(input, userresult);
 
+                if (!correct)
+                {
+                    Reason.text = message;
+                }
+                else
+                {
+                    Reason.text = "计算正确";
+                }
+                Ans.text = correctvalue.ToString();
                 _ansstate = 1;
-                Debug.Log("开始计算");
             }
         });
 
         UserValue.onValueChanged.AddListener(value =>
         {
             if (string.IsNullOrEmpty(value))
+            {
+                UserValue.text = "0";
+            }
+            else if (value != "0" && double.Parse(value) - 0 == 0)
             {
                 UserValue.text = "0";
             }
@@ -139,6 +175,10 @@ public class DealCalc2 : HTBehaviour
             {
                 UserDigit.text = "0";
             }
+            else if (value != "0" && int.Parse(value) - 0 == 0)
+            {
+                UserDigit.text = "0";
+            }
             else
             {
                 _userdigit = value;
@@ -150,10 +190,15 @@ public class DealCalc2 : HTBehaviour
             {
                 UserValue2.text = "0";
             }
+            else if (value != "0" && double.Parse(value) - 0 == 0)
+            {
+                UserValue2.text = "0";
+            }
             else
             {
                 //将正常数转换为科学计数法存储
-                //Root.GetComponent<DealCalc1>().CellValue[id].Value = decimal.Parse(value);
+                _uservalue = value;
+                _userdigit = "0";
             }
         });
         UserSwitchButton.onClick.AddListener(() =>

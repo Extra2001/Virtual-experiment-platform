@@ -102,8 +102,7 @@ public class DealCalc1 : HTBehaviour
                     {
                         finish = false;
                     }
-                }
-                
+                }                
             }
             //检查答案输入
             if (_userstate == 0)
@@ -150,6 +149,13 @@ public class DealCalc1 : HTBehaviour
                 {
                     Reason.text = "计算正确";
                 }
+
+                if (Cells[0].GetComponent<AddAndSubtractCell>().state == 0)
+                {
+                    _ansstate = 0;
+                    
+                }
+                Ans.text = correctvalue.ToString();
                 Ans.text = correctvalue.ToString();
                 _ansstate = 1;
             }
@@ -226,6 +232,7 @@ public class DealCalc1 : HTBehaviour
             {
                 _ansstate = 1 - _ansstate;
                 //将ans格式转换
+
             }
         });
 

@@ -182,12 +182,12 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
             HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
             LoDigit = HiDigit - EffectiveDigit + 1;
             if(HiDigit > 0) {
-                for(int i = 0; i < HiDigit; i++) {
+                for(int i = 0;i < HiDigit;i++) {
                     Value /= 10;
                 }
             }
             else if(HiDigit < 0) {
-                for(int i = 0; i < -HiDigit; i++) {
+                for(int i = 0;i < -HiDigit;i++) {
                     Value *= 10;
                 }
             }
@@ -227,14 +227,14 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
     public static double KeepTo(double truevalue, int n) {//保留到第n位有效数字
         int p = 1;
         if(n > 0) {
-            for(int i = 0; i < n; i++) {
+            for(int i = 0;i < n;i++) {
                 p *= 10;
             }
             double x = truevalue / p;
             return Math.Round(x, MidpointRounding.ToEven) * p;
         }
         else if(n < 0) {
-            for(int i = 0; i < -n; i++) {
+            for(int i = 0;i < -n;i++) {
                 p *= 10;
             }
             double x = truevalue * p;
@@ -355,88 +355,68 @@ public struct CheckFloat : IEquatable<CheckFloat> {//带有效数字的小数
 
 
 
-public struct CheckFloat2
-{
+public struct CheckFloat2 {
     public decimal Value { get; private set; }
     public decimal TrueValue => Value * Convert.ToDecimal(Math.Pow(10, HiDigit));
     public string Original { get; }
     public int HiDigit { get; private set; }//最高位
     public int LoDigit { get; private set; }//最低位
     public int EffectiveDigit { get; private set; }//有效数字个数
-    public static int Effectiveness(string num)
-    {//计算一个字符串表示的小数有多少位有效数字
+    public static int Effectiveness(string num) {//计算一个字符串表示的小数有多少位有效数字
         int digits = 0; bool lead0 = true;
-        foreach (var item in num)
-        {
-            if (item == 'E' || item == 'e')
-            {
+        foreach(var item in num) {
+            if(item == 'E' || item == 'e') {
                 break;
             }
             int i = item - '0';
-            if (i >= 0 && i <= 9)
-            {
-                if (i > 0 || (i == 0 && !lead0))
-                {
+            if(i >= 0 && i <= 9) {
+                if(i > 0 || (i == 0 && !lead0)) {
                     digits++; lead0 = false;
                 }
             }
         }
         return Math.Max(digits, 1);
     }
-    public CheckFloat2(string value, bool checkmaxlen = true)
-    {
+    public CheckFloat2(string value, bool checkmaxlen = true) {
         Original = value;
         EffectiveDigit = Effectiveness(value);
-        if (checkmaxlen && EffectiveDigit > 8)
-        {
+        if(checkmaxlen && EffectiveDigit > 8) {
             throw new Exception("输入太精确了");
         }
-        if (double.TryParse(value, out double tmp2))
-        {
+        if(double.TryParse(value, out double tmp2)) {
             Value = Convert.ToDecimal(tmp2);
         }
         else throw new NotSupportedException();
-        if (Value != 0)
-        {
+        if(Value != 0) {
             HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
             LoDigit = HiDigit - EffectiveDigit + 1;
-            if (HiDigit > 0)
-            {
-                for (int i = 0; i < HiDigit; i++)
-                {
+            if(HiDigit > 0) {
+                for(int i = 0;i < HiDigit;i++) {
                     Value /= 10;
                 }
             }
-            else if (HiDigit < 0)
-            {
-                for (int i = 0; i < -HiDigit; i++)
-                {
+            else if(HiDigit < 0) {
+                for(int i = 0;i < -HiDigit;i++) {
                     Value *= 10;
                 }
             }
         }
-        else
-        {
+        else {
             LoDigit = 0; HiDigit = 0;
         }
     }
-    public static CheckFloat2 GroupAdd(IList<(CheckFloat2 val, bool isadd)> inputs)
-    {
+    public static CheckFloat2 GroupAdd(IList<(CheckFloat2 val, bool isadd)> inputs) {
         //输入数组:二元组 第一个是有效数字 第二个若为加是正数 否则为负数
         decimal value0 = decimal.Zero;
         int maxlodigit = -1000;
-        foreach (var item in inputs)
-        {
-            if (item.val.LoDigit > maxlodigit)
-            {
+        foreach(var item in inputs) {
+            if(item.val.LoDigit > maxlodigit) {
                 maxlodigit = item.val.LoDigit;
             }
-            if (item.isadd)
-            {
+            if(item.isadd) {
                 value0 += item.val.TrueValue;
             }
-            else
-            {
+            else {
                 value0 -= item.val.TrueValue;
             }
         }
@@ -444,22 +424,17 @@ public struct CheckFloat2
         CheckFloat2 res = new CheckFloat2(tmp.ToString(), false);
         return res;
     }
-    public static CheckFloat2 GroupMul(IList<(CheckFloat2 val, bool ismul)> inputs)
-    {
+    public static CheckFloat2 GroupMul(IList<(CheckFloat2 val, bool ismul)> inputs) {
         decimal value0 = decimal.One;
         int mineffective = 1000;
-        foreach (var item in inputs)
-        {
-            if (item.val.EffectiveDigit < mineffective)
-            {
+        foreach(var item in inputs) {
+            if(item.val.EffectiveDigit < mineffective) {
                 mineffective = item.val.EffectiveDigit;
             }
-            if (item.ismul)
-            {
+            if(item.ismul) {
                 value0 *= item.val.TrueValue;
             }
-            else
-            {
+            else {
                 value0 /= item.val.TrueValue;
             }
         }
@@ -467,123 +442,153 @@ public struct CheckFloat2
         CheckFloat2 res = new CheckFloat2(tmp.ToString(), false);
         return res;
     }
-    public static decimal KeepEffective(decimal d, int n)
-    {//保留n位有效数字
-        if (d == decimal.Zero) return 0;
-        if (d > 1 || d < -1)
+    public static decimal KeepEffective(decimal d, int n) {//保留n位有效数字
+        if(d == decimal.Zero) return 0;
+        if(d > 1 || d < -1)
             n = n - (int)Math.Log10(Math.Abs(Convert.ToDouble(d))) - 1;
         else
             n = n + (int)Math.Log10(1.0 / Math.Abs(Convert.ToDouble(d)));
-        if (n < 0)
-        {
+        if(n < 0) {
             d = Convert.ToDecimal((int)((double)d / Math.Pow(10, 0 - n)) * (double)Math.Pow(10, 0 - n));
             n = 0;
         }
         return Math.Round(d, n, MidpointRounding.ToEven);
     }
-    public static decimal KeepTo(decimal truevalue, int n)
-    {//保留到第n位有效数字
+    public static decimal KeepTo(decimal truevalue, int n) {//保留到第n位有效数字
         int p = 1;
-        if (n > 0)
-        {
-            for (int i = 0; i < n; i++)
-            {
+        if(n > 0) {
+            for(int i = 0;i < n;i++) {
                 p *= 10;
             }
             decimal x = truevalue / p;
             return Math.Round(x, MidpointRounding.ToEven) * p;
         }
-        else if (n < 0)
-        {
-            for (int i = 0; i < -n; i++)
-            {
+        else if(n < 0) {
+            for(int i = 0;i < -n;i++) {
                 p *= 10;
             }
             decimal x = truevalue * p;
             return Math.Round(x, MidpointRounding.ToEven) / p;
         }
-        else
-        {
+        else {
             return Math.Round(truevalue, MidpointRounding.ToEven);
         }
         //return Math.Round((truevalue * Math.Pow(10, n) + 0.5) , MidpointRounding.ToEven) / Math.Pow(10, n);
     }
-    public override string ToString()
-    {
+    public override string ToString() {
         return TrueValue.ToString($"E{EffectiveDigit - 1}");
     }
-    public static CheckFloat2 FunctionX(CheckFloat2 x, double dx, Func<double, double> fn, Func<double, double> derivative)
-    {
+    public static (bool correct, string message) CheckGroupAdd(IList<(string rawnumstr, int isadd)> input, string userresult) {
+        (CheckFloat2 input, bool isadd)[] arr = new (CheckFloat2, bool)[input.Count];
+        int maxlodigit = -1000, maxindex = 0;
+        for(int i = 0;i < input.Count;i++) {
+            arr[i] = (new CheckFloat2(input[i].rawnumstr), input[i].isadd == 0);
+            if(arr[i].input.LoDigit > maxlodigit) {
+                maxlodigit = arr[i].input.LoDigit;
+                maxindex = i;
+            }
+        }
+        CheckFloat2 result = GroupAdd(arr), user = new CheckFloat2(userresult);
+        if(result.TrueValue == user.TrueValue && user.HiDigit == result.HiDigit && result.LoDigit == user.LoDigit) {
+            return (true, "计算正确");
+        }
+        else {
+            if(result.TrueValue != user.TrueValue) {
+                return (false, $"计算错误,请与最低位最大的第{maxindex + 1}个输入对齐");
+            }
+            else {
+                return (false, $"有效数字保留错误,请与最低位最大的第{maxindex + 1}个输入对齐");
+            }
+        }
+    }
+    public static (bool correct, string message) CheckGroupMul(IList<(string rawnumstr, int isadd)> input, string userresult) {
+        (CheckFloat2 input, bool ismul)[] arr = new (CheckFloat2, bool)[input.Count];
+        int maxlodigit = 1000, maxindex = 0;
+        for(int i = 0;i < input.Count;i++) {
+            arr[i] = (new CheckFloat2(input[i].rawnumstr), input[i].isadd == 0);
+            if(arr[i].input.EffectiveDigit < maxlodigit) {
+                maxlodigit = arr[i].input.LoDigit;
+                maxindex = i;
+            }
+        }
+        CheckFloat2 result = GroupMul(arr), user = new CheckFloat2(userresult);
+        if(result.TrueValue == user.TrueValue && user.HiDigit == result.HiDigit && result.LoDigit == user.LoDigit) {
+            return (true, "计算正确");
+        }
+        else {
+            if(result.TrueValue != user.TrueValue) {
+                return (false, $"计算错误,请与有效数字最少的第{maxindex + 1}个输入对齐");
+            }
+            else {
+                return (false, $"有效数字保留错误,请与有效数字最少的第{maxindex + 1}个输入对齐");
+            }
+
+        }
+    }
+    public static CheckFloat2 FunctionX(CheckFloat2 x, double dx, Func<double, double> fn, Func<double, double> derivative) {
         double rv = (double)x.TrueValue;
         double v = fn(rv);
         double dy = derivative(rv) * dx;
         CheckFloat2 tmp = new CheckFloat2(dy.ToString(), false);
         return new CheckFloat2(KeepTo(Convert.ToDecimal(v), tmp.HiDigit).ToString(), false);
     }
-    public static CheckFloat2 Sin(CheckFloat2 x, double dx)
-    {
+    public static CheckFloat2 Sin(CheckFloat2 x, double dx) {
         return FunctionX(x, dx, Math.Sin, Math.Cos);
     }
-    public static CheckFloat2 Sin(CheckFloat2 x)
-    {
+    public static CheckFloat2 Sin(CheckFloat2 x) {
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Sin, Math.Cos);
     }
-    public static CheckFloat2 Cos(CheckFloat2 x, double dx)
-    {
+    public static CheckFloat2 Cos(CheckFloat2 x, double dx) {
         return FunctionX(x, dx, Math.Cos, (X) => -Math.Sin(X));
     }
-    public static CheckFloat2 Cos(CheckFloat2 x)
-    {
+    public static CheckFloat2 Cos(CheckFloat2 x) {
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Cos, (X) => -Math.Sin(X));
     }
-    public static CheckFloat2 Tan(CheckFloat2 x, double dx)
-    {
+    public static CheckFloat2 Tan(CheckFloat2 x, double dx) {
         return FunctionX(x, dx, Math.Tan, (X) => 1 / (Math.Cos(X) * Math.Cos(X)));
     }
-    public static CheckFloat2 Tan(CheckFloat2 x)
-    {
+    public static CheckFloat2 Tan(CheckFloat2 x) {
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Tan, (X) => 1 / (Math.Cos(X) * Math.Cos(X)));
     }
-    public static CheckFloat2 Pow(CheckFloat2 x, double n)
-    {
-        if (n == 1.0) return x;
+    public static CheckFloat2 Pow(CheckFloat2 x, double n) {
+        if(n == 1.0) return x;
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, (X) => Math.Pow(X, n), (X) => Math.Pow(X, n - 1) * n);
     }
-    public static CheckFloat2 Exp(double a, CheckFloat2 x)
-    {
+    public static CheckFloat2 Exp(double a, CheckFloat2 x) {
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, (X) => Math.Pow(a, X), (X) => Math.Pow(a, X) * Math.Log(a));
     }
-    public static CheckFloat2 Log(double a, CheckFloat2 x)
-    {//log_{a}(x)
+    public static CheckFloat2 Log(double a, CheckFloat2 x) {//log_{a}(x)
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, (X) => Math.Log(X, a), (X) => 1.0 / (X * Math.Log(a)));
     }
-    public static CheckFloat2 Atan(CheckFloat2 x)
-    {
+    public static CheckFloat2 Atan(CheckFloat2 x) {
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Atan, (X) => 1.0 / (X * X + 1.0));
     }
-    public static CheckFloat2 Asin(CheckFloat2 x)
-    {
+    public static CheckFloat2 Asin(CheckFloat2 x) {
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Asin, (X) => 1.0 / Math.Sqrt(X * X + 1.0));
     }
-    public static CheckFloat2 Acos(CheckFloat2 x)
-    {
+    public static CheckFloat2 Acos(CheckFloat2 x) {
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Acos, (X) => -1.0 / Math.Sqrt(X * X + 1.0));
     }
-    public static CheckFloat2 Pow(CheckFloat2 x, CheckFloat2 n)
-    {
+    public static CheckFloat2 Pow(CheckFloat2 x, CheckFloat2 n) {
         return Pow(x, (double)n.TrueValue);
     }
 }
 public static class StaticMethods {
+    public static string SciToExp(string sci) {
+        sci = sci.Replace("(", "");
+        sci = sci.Replace(")", "");
+        sci = sci.Replace("*10^", "e");
+        return sci;
+    }
     public static readonly HashSet<string> keywords = new HashSet<string>(){//符号计算的关键字
             "pi","e","abs","acos","asin","atan","sin","cos","tan","cot","sec","csc","j","sqrt","pow","sinh","cosh","tanh","exp","ln","lg"
         };
@@ -610,26 +615,20 @@ public static class StaticMethods {
     public static string NumberFormat(double input) {//格式化输出float
         double t = Math.Abs(input);
         string ans;
-        if (t - 0 == 0)
-        {
+        if(t - 0 == 0) {
             ans = "0";
         }
-        else if(t >= 10000 || t <= 0.0001)
-        {
+        else if(t >= 10000 || t <= 0.0001) {
             ans = input.ToString("E5");
         }
-        else
-        {
+        else {
             ans = input.ToString("G5");
         }
         return ans;
     }
-    public static bool CheckIfExistNullOrEmpty(List<string> _data)
-    {
-        foreach (var item in _data)
-        {
-            if (string.IsNullOrEmpty(item))
-            {
+    public static bool CheckIfExistNullOrEmpty(List<string> _data) {
+        foreach(var item in _data) {
+            if(string.IsNullOrEmpty(item)) {
                 return true;
             }
         }
@@ -641,30 +640,26 @@ public static class StaticMethods {
     {
         List<double> answerdifference = new List<double>();
         int n;
-        foreach (var item in measure)
-        {
-            if (string.IsNullOrEmpty(item))
-            {
+        foreach(var item in measure) {
+            if(string.IsNullOrEmpty(item)) {
                 return false;
             }
         }
-        foreach (var item in userdifference)
-        {
-            if (string.IsNullOrEmpty(item))
-            {
+        foreach(var item in userdifference) {
+            if(string.IsNullOrEmpty(item)) {
                 return false;
             }
         }
 
-        if (measure.Count % 2 == 0) {
+        if(measure.Count % 2 == 0) {
             n = measure.Count / 2;
-            for(int i = 0; i < n; i++) {
+            for(int i = 0;i < n;i++) {
                 answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])) - double.Parse(userdifference[i]));
             }
         }
         else {
             n = (measure.Count + 1) / 2;
-            for(int i = 0; i < n - 1; i++) {
+            for(int i = 0;i < n - 1;i++) {
                 answerdifference.Add((double.Parse(measure[i + n]) - double.Parse(measure[i])) - double.Parse(userdifference[i]));
             }
         }
@@ -682,7 +677,7 @@ public static class StaticMethods {
         Span<double> y1 = y.AsSpan(0, n / 2), y2 = y.AsSpan(n % 2 == 0 ? n / 2 : n / 2 + 1, n / 2);
         Span<double> bk = k >= 1024 ? new double[k] : stackalloc double[k];
         double b = 0, xx = 0, yy = 0;
-        for(int i = 0; i < k; i++) {
+        for(int i = 0;i < k;i++) {
             bk[i] = (y2[i] - y1[i]) / (x2[i] - x1[i]);
             b += bk[i];
             xx += x1[i]; xx += x2[i]; yy += y1[i]; yy += y2[i];
@@ -690,7 +685,7 @@ public static class StaticMethods {
         b /= k;
         double a = (yy - b * xx) / (2 * k);
         double uncb = 0.0;
-        for(int i = 0; i < k; i++) {
+        for(int i = 0;i < k;i++) {
             uncb += (bk[i] - b) * (bk[i] - b);
         }
         uncb = Math.Sqrt(uncb / (k * (k - 1)));
@@ -699,7 +694,7 @@ public static class StaticMethods {
     public static (double b, double a, double r, double b_unca, double a_unca) LinearRegression(double[] x, double[] y) {
         //y=bx+a
         double[] xy = new double[x.Length], x2 = new double[x.Length], y2 = new double[x.Length];
-        for(int i = 0; i < x.Length; i++) {
+        for(int i = 0;i < x.Length;i++) {
             xy[i] = x[i] * y[i];
             x2[i] = x[i] * x[i];
             y2[i] = y[i] * y[i];
@@ -707,7 +702,7 @@ public static class StaticMethods {
         double xav = Average(x), yav = Average(y), xyav = Average(xy), x2av = Average(x2), y2av = Average(y2);
         double b = double.Parse(StaticMethods.NumberFormat((xav * yav - xyav) / (xav * xav - x2av))), a = double.Parse(StaticMethods.NumberFormat(yav - b * xav)), r = double.Parse(StaticMethods.NumberFormat((xyav - xav * yav) / Math.Sqrt((y2av - yav * yav) * (x2av - xav * xav))));
         double sy0 = 0;
-        for(int i = 0; i < x.Length; i++) {
+        for(int i = 0;i < x.Length;i++) {
             sy0 += (y[i] - (a + b * x[i])) * (y[i] - (a + b * x[i]));
         }
         sy0 = Math.Sqrt(sy0 / (x.Length - 2));
@@ -721,7 +716,7 @@ public static class StaticMethods {
         double[] x = Generate.LinearSpaced(8 * x0.Length, xmin, xmax);
         double[] y = Generate.Map(x, (double k) => res.a + k * res.b);
         string[] xx = new string[x.Length], yy = new string[y.Length];
-        for(int i = 0; i < x.Length; i++) {
+        for(int i = 0;i < x.Length;i++) {
             xx[i] = NumberFormat(x[i]);
             yy[i] = NumberFormat(y[i]);
         }
@@ -911,7 +906,7 @@ public class CalcVariable {//2021.8.20
 
             return (null, null, ub.AlmostEqual(userunc) ? null : "不确定度计算错误", useraver.AlmostEqual(val) ? null : "计算值错误", flag);
         }
-        
+
 
         /*if(flag) {
             sb.Append("A类不确定度，B类不确定度及合成不确定度的正确答案如下");
@@ -967,9 +962,9 @@ public class CalcArgs {//一次计算
             return false;
         }
     }
-    public bool AddRegression(string varname, double[] x,double[] y) {
+    public bool AddRegression(string varname, double[] x, double[] y) {
         var regres = StaticMethods.LinearRegression(x, y);
-        
+
         if(ValidVarname(varname)) {
             vars[varname] = new CalcVariable(regres.b_unca, 1, 1);
             vars[varname].val = regres.b;
@@ -1020,7 +1015,7 @@ public class CalcArgs {//一次计算
 
         foreach(var item in argobj.vars) {
             if(item.Value.vartype != 0) {
-                
+
                 continue;
             }
             else {
@@ -1055,7 +1050,7 @@ public class CalcArgs {//一次计算
                 else {
                     temp.right = true;
                 }
-            }            
+            }
             errors.Add(temp);
         }
 
@@ -1085,7 +1080,7 @@ public class CalcArgs {//一次计算
                 vals[item.Key] = u.average;
                 vals[$"u_{item.Key}"] = u.unc;
             }
-            
+
         }
         double val1 = valexpr.Evaluate(vals).RealValue;//对的val
         double unc1 = uncexpr.Evaluate(vals).RealValue;//对的unc
@@ -1238,43 +1233,39 @@ public class CalcResult {
         bool flag = true;
         CalcResult result = new CalcResult();
         result.err = new QuantityError();
-        for(int i = 0; i < bk.Length; i++) {
+        for(int i = 0;i < bk.Length;i++) {
             bk[i] = input.y_nplusi_minus_y_i[i] / input.x_nplusi_minus_x_i;
         }
         b = StaticMethods.Average(bk);
-        for(int i = 0; i < bk.Length; i++) {
+        for(int i = 0;i < bk.Length;i++) {
             uncb += ((bk[i] - b) * (bk[i] - b));
         }
         uncb = double.Parse(StaticMethods.NumberFormat(Math.Sqrt(uncb / (bk.Length * (bk.Length - 1)))));
         if(!input.correct_b_uncb.AlmostEqual(input.user_b_uncb)) {
             flag = false;
             result.err.ub.right = false;
-            if (input.correct_b_uncb.AlmostEqual(input.user_b_uncb / Math.Sqrt(3)))
-            {
+            if(input.correct_b_uncb.AlmostEqual(input.user_b_uncb / Math.Sqrt(3))) {
                 result.err.ub.message = "是否忘除以根号3";
             }
-            else
-            {
+            else {
                 result.err.ub.message = "b类不确定度计算错误";
             }
-            
+
             result.err.ub.latex = StaticMethods.GetUbExprLatex($@"\Delta {input.name}");
         }
         if(!input.user_b_unca.AlmostEqual(uncb)) {
             flag = false;
             result.err.ua.right = false;
             double k = input.y_nplusi_minus_y_i.Length;
-            if (input.y_nplusi_minus_y_i.Length % 2 == 0)
+            if(input.y_nplusi_minus_y_i.Length % 2 == 0)
 
-            if (input.user_b_unca.AlmostEqual(uncb * Math.Sqrt(k / (k - 1))))
-            {
-                result.err.ua.message = "是否将n除成了n-1，请注意样本方差的含义";
-            }
-            else
-            {
-                result.err.ua.message = "a类不确定度计算错误";
-            }
-            
+                if(input.user_b_unca.AlmostEqual(uncb * Math.Sqrt(k / (k - 1)))) {
+                    result.err.ua.message = "是否将n除成了n-1，请注意样本方差的含义";
+                }
+                else {
+                    result.err.ua.message = "a类不确定度计算错误";
+                }
+
             result.err.ua.latex = $@"u_a({{\Delta {input.name}}})=\sqrt{{\frac{{\Sigma{{(\Delta {input.name}_i-\overline{{\Delta {input.name}}})^2}}}}{{n(n-1)}}}}";
         }
         if(!input.user_aver_b.AlmostEqual(double.Parse(StaticMethods.NumberFormat(b)))) {

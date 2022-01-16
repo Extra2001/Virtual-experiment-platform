@@ -478,7 +478,7 @@ public struct CheckFloat2 {
     public override string ToString() {
         return TrueValue.ToString($"E{EffectiveDigit - 1}");
     }
-    public static (bool correct, string message) CheckGroupAdd(IList<(string rawnumstr, int isadd)> input, string userresult) {
+    public static (bool correct, string message,CheckFloat2 correct) CheckGroupAdd(IList<(string rawnumstr, int isadd)> input, string userresult) {
         (CheckFloat2 input, bool isadd)[] arr = new (CheckFloat2, bool)[input.Count];
         int maxlodigit = -1000, maxindex = 0;
         for(int i = 0;i < input.Count;i++) {
@@ -490,18 +490,18 @@ public struct CheckFloat2 {
         }
         CheckFloat2 result = GroupAdd(arr), user = new CheckFloat2(userresult);
         if(result.TrueValue == user.TrueValue && user.HiDigit == result.HiDigit && result.LoDigit == user.LoDigit) {
-            return (true, "计算正确");
+            return (true, null,result);
         }
         else {
             if(result.TrueValue != user.TrueValue) {
-                return (false, $"计算错误,请与最低位最大的第{maxindex + 1}个输入对齐");
+                return (false, $"计算错误,请与最低位最大的第{maxindex + 1}个输入对齐",result);
             }
             else {
-                return (false, $"有效数字保留错误,请与最低位最大的第{maxindex + 1}个输入对齐");
+                return (false, $"有效数字保留错误,请与最低位最大的第{maxindex + 1}个输入对齐",result);
             }
         }
     }
-    public static (bool correct, string message) CheckGroupMul(IList<(string rawnumstr, int isadd)> input, string userresult) {
+    public static (bool correct, string message,CheckFloat2 correct) CheckGroupMul(IList<(string rawnumstr, int isadd)> input, string userresult) {
         (CheckFloat2 input, bool ismul)[] arr = new (CheckFloat2, bool)[input.Count];
         int maxlodigit = 1000, maxindex = 0;
         for(int i = 0;i < input.Count;i++) {
@@ -513,14 +513,14 @@ public struct CheckFloat2 {
         }
         CheckFloat2 result = GroupMul(arr), user = new CheckFloat2(userresult);
         if(result.TrueValue == user.TrueValue && user.HiDigit == result.HiDigit && result.LoDigit == user.LoDigit) {
-            return (true, "计算正确");
+            return (true,null,result);
         }
         else {
             if(result.TrueValue != user.TrueValue) {
-                return (false, $"计算错误,请与有效数字最少的第{maxindex + 1}个输入对齐");
+                return (false, $"计算错误,请与有效数字最少的第{maxindex + 1}个输入对齐",result);
             }
             else {
-                return (false, $"有效数字保留错误,请与有效数字最少的第{maxindex + 1}个输入对齐");
+                return (false, $"有效数字保留错误,请与有效数字最少的第{maxindex + 1}个输入对齐",result);
             }
 
         }

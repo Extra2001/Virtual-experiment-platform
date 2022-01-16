@@ -22,7 +22,17 @@ public class DealCalc1 : HTBehaviour
 
     public List<GameObject> Cells;
     public List<AddAndSubstractFormat> CellValue = new List<AddAndSubstractFormat>();
-    
+
+
+    public InputField UserValue;
+    public InputField UserValue2;
+    public InputField UserDigit;
+    public Button UserSwitchButton;
+    public Button AnsSwitchButton;
+    private decimal _uservalue;
+    private int _userdigit;
+    private int _userstate;
+    private int _ansstate = -1;
     //启用自动化
     protected override bool IsAutomate => true;
     
@@ -65,10 +75,11 @@ public class DealCalc1 : HTBehaviour
         CalcButton.onClick.AddListener(() =>
         {
             bool finish = true;
+            //检查算式
             foreach (var item in Cells)
             {
                 var temp = item.GetComponent<AddAndSubtractCell>();
-                if (temp.state == 0)
+                if (temp.state == 1)
                 {
                     if (temp.Value.text == "0" || temp.Digit.text == "0")
                     {
@@ -83,20 +94,89 @@ public class DealCalc1 : HTBehaviour
                     }
                 }
             }
+
+            //检查答案输入
+
             if (!finish)
             {
-
+                Debug.Log("未开始计算");
             }
             else
             {
+
+
+                _ansstate = 1;
                 Debug.Log("开始计算");
             }
         });
+
+        UserValue.onValueChanged.AddListener(value =>
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                UserValue.text = "0";
+            }
+            else
+            {
+                _uservalue = decimal.Parse(value);
+            }
+        });
+        UserDigit.onValueChanged.AddListener(value =>
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                UserDigit.text = "0";
+            }
+            else
+            {
+                _userdigit = int.Parse(value);
+            }
+        });
+        UserValue2.onValueChanged.AddListener(value =>
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                UserValue2.text = "0";
+            }
+            else
+            {
+                //将正常数转换为科学计数法存储
+                //Root.GetComponent<DealCalc1>().CellValue[id].Value = decimal.Parse(value);
+            }
+        });
+        UserSwitchButton.onClick.AddListener(() =>
+        {
+            UserValue.text = "0";
+            UserDigit.text = "0";
+            UserValue2.text = "0";
+
+            _userstate = 1 - _userstate;
+            if (_userstate == 0)
+            {
+                UserSwitchButton.FindChildren("Text").GetComponent<Text>().text = @"a <=> a*10^(b)";
+                UserValue2.gameObject.SetActive(true);
+            }
+            else
+            {
+                UserSwitchButton.FindChildren("Text").GetComponent<Text>().text = @"a*10^(b) <=> a";
+                UserValue2.gameObject.SetActive(false);
+            }
+        });
+        AnsSwitchButton.onClick.AddListener(() =>
+        {
+            if (_ansstate != -1)
+            {
+                _ansstate = 1 - _ansstate;
+                //将ans格式转换
+            }
+        });
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Cells.Count);
+
     }
 }

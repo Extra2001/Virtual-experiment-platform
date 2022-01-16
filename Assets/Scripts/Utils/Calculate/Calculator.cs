@@ -478,7 +478,7 @@ public struct CheckFloat2 {
     public override string ToString() {
         return TrueValue.ToString($"E{EffectiveDigit - 1}");
     }
-    public static (bool correct, string message,CheckFloat2 correct) CheckGroupAdd(IList<(string rawnumstr, int isadd)> input, string userresult) {
+    public static (bool correct, string message,CheckFloat2 correctvalue) CheckGroupAdd(IList<(string rawnumstr, int isadd)> input, string userresult) {
         (CheckFloat2 input, bool isadd)[] arr = new (CheckFloat2, bool)[input.Count];
         int maxlodigit = -1000, maxindex = 0;
         for(int i = 0;i < input.Count;i++) {
@@ -501,7 +501,7 @@ public struct CheckFloat2 {
             }
         }
     }
-    public static (bool correct, string message,CheckFloat2 correct) CheckGroupMul(IList<(string rawnumstr, int isadd)> input, string userresult) {
+    public static (bool correct, string message,CheckFloat2 correctvalue) CheckGroupMul(IList<(string rawnumstr, int isadd)> input, string userresult) {
         (CheckFloat2 input, bool ismul)[] arr = new (CheckFloat2, bool)[input.Count];
         int maxlodigit = 1000, maxindex = 0;
         for(int i = 0;i < input.Count;i++) {
@@ -590,7 +590,7 @@ public static class StaticMethods {
         return sci;
     }
     public static string ExpToSci(string exp) {
-
+        return "xxxxxxxx";
     }
     public static readonly HashSet<string> keywords = new HashSet<string>(){//符号计算的关键字
             "pi","e","abs","acos","asin","atan","sin","cos","tan","cot","sec","csc","j","sqrt","pow","sinh","cosh","tanh","exp","ln","lg"

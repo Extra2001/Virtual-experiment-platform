@@ -589,6 +589,9 @@ public static class StaticMethods {
         sci = sci.Replace("*10^", "e");
         return sci;
     }
+    public static string ExpToSci(string exp) {
+
+    }
     public static readonly HashSet<string> keywords = new HashSet<string>(){//符号计算的关键字
             "pi","e","abs","acos","asin","atan","sin","cos","tan","cot","sec","csc","j","sqrt","pow","sinh","cosh","tanh","exp","ln","lg"
         };

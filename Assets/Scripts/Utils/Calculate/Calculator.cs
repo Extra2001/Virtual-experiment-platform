@@ -476,7 +476,7 @@ public struct CheckFloat2 {
         //return Math.Round((truevalue * Math.Pow(10, n) + 0.5) , MidpointRounding.ToEven) / Math.Pow(10, n);
     }
     public override string ToString() {
-        return TrueValue.ToString(LoDigit <= 0 ? $"F{-LoDigit}" : $"E{EffectiveDigit - 1}"));
+        return TrueValue.ToString(LoDigit <= 0 ? $"F{-LoDigit}" : $"E{EffectiveDigit - 1}");
     }
     public static (bool correct, string message,CheckFloat2 correctvalue) CheckGroupAdd(IList<(string rawnumstr, int isadd)> input, string userresult) {
         (CheckFloat2 input, bool isadd)[] arr = new (CheckFloat2, bool)[input.Count];

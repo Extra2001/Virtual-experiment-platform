@@ -25,9 +25,13 @@ public class AddAndSubtractCell : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Value.onValueChanged.AddListener(value =>
+        Value.onEndEdit.AddListener(value =>
         {
             if (string.IsNullOrEmpty(value))
+            {
+                Value.text = "0";
+            }
+            else if (value != "0" && double.Parse(value) - 0 == 0)
             {
                 Value.text = "0";
             }
@@ -36,27 +40,36 @@ public class AddAndSubtractCell : HTBehaviour
                 Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
             }            
         });
-        Digit.onValueChanged.AddListener(value =>
+        Digit.onEndEdit.AddListener(value =>
         {
             if (string.IsNullOrEmpty(value))
             {
                 Digit.text = "0";
             }
+            else if (value != "0" && int.Parse(value) - 0 == 0)
+            {
+                Digit.text = "0";
+            }
             else
             {
-                Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
+                Root.GetComponent<DealCalc1>().CellValue[id].Digit = value;
             }            
         });
-        Value2.onValueChanged.AddListener(value =>
+        Value2.onEndEdit.AddListener(value =>
         {
             if (string.IsNullOrEmpty(value))
+            {
+                Value2.text = "0";
+            }
+            else if (value != "0" && double.Parse(value) - 0 == 0)
             {
                 Value2.text = "0";
             }
             else
             {
                 //将正常数转换为科学计数法存储
-                //Root.GetComponent<DealCalc1>().CellValue[id].Value = decimal.Parse(value);
+                Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
+                Root.GetComponent<DealCalc1>().CellValue[id].Digit = "0";
             }
         });
 

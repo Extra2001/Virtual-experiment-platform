@@ -91,6 +91,10 @@ public class DealCalc1 : HTBehaviour
                     {
                         finish = false;
                     }
+                    if (double.Parse(CellValue[temp.id].Value) - 1 < 0 || double.Parse(CellValue[temp.id].Value) - 10 >= 0)
+                    {
+                        finish = false;
+                    }
                 }
                 else
                 {
@@ -99,6 +103,7 @@ public class DealCalc1 : HTBehaviour
                         finish = false;
                     }
                 }
+                
             }
             //检查答案输入
             if (_userstate == 0)
@@ -110,7 +115,7 @@ public class DealCalc1 : HTBehaviour
             }
             else
             {
-                if (UserValue.text == "0" || UserDigit.text == "0") ;
+                if (UserValue.text == "0" || UserDigit.text == "0")
                 {
                     finish = false;
                 }
@@ -134,18 +139,29 @@ public class DealCalc1 : HTBehaviour
                     temp.rawnumstr = StaticMethods.SciToExp(CellValue[i].Value + "*10^(" + CellValue[i].Digit + ")");
                     input.Add(temp);
                 }
-                string userresult = _uservalue + "*10^(" + _userdigit + ")";
+                string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
                 (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupAdd(input, userresult);
 
-
+                if (!correct)
+                {
+                    Reason.text = message;
+                }
+                else
+                {
+                    Reason.text = "计算正确";
+                }
+                Ans.text = correctvalue.ToString();
                 _ansstate = 1;
-                Debug.Log(correctvalue.Value);
             }
         });
 
         UserValue.onValueChanged.AddListener(value =>
         {
             if (string.IsNullOrEmpty(value))
+            {
+                UserValue.text = "0";
+            }
+            else if (value != "0" && double.Parse(value) - 0 == 0)
             {
                 UserValue.text = "0";
             }
@@ -160,6 +176,10 @@ public class DealCalc1 : HTBehaviour
             {
                 UserDigit.text = "0";
             }
+            else if (value != "0" && int.Parse(value) - 0 == 0)
+            {
+                UserDigit.text = "0";
+            }
             else
             {
                 _userdigit = value;
@@ -171,10 +191,15 @@ public class DealCalc1 : HTBehaviour
             {
                 UserValue2.text = "0";
             }
+            else if (value != "0" && double.Parse(value) - 0 == 0)
+            {
+                UserValue2.text = "0";
+            }
             else
             {
                 //将正常数转换为科学计数法存储
-                //Root.GetComponent<DealCalc1>().CellValue[id].Value = decimal.Parse(value);
+                _uservalue = value;
+                _userdigit = "0";
             }
         });
         UserSwitchButton.onClick.AddListener(() =>
@@ -207,5 +232,8 @@ public class DealCalc1 : HTBehaviour
 
     }
 
-
+    void Update()
+    {
+        
+    }
 }

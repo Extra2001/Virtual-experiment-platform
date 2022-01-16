@@ -19,11 +19,9 @@ public class DealCalc1 : HTBehaviour
     public GameObject Cell;
     public Transform CellFather;
     public Text Ans;
-    public Sprite AddImage;
-    public Sprite SubtractImage;
 
     public List<GameObject> Cells;
-    private List<AddAndSubstractFormat> CellValue = new List<AddAndSubstractFormat>();
+    public List<AddAndSubstractFormat> CellValue = new List<AddAndSubstractFormat>();
     
     //启用自动化
     protected override bool IsAutomate => true;
@@ -32,78 +30,73 @@ public class DealCalc1 : HTBehaviour
     void Start()
     {
         //加法前两个先初始化
+        Cells[0].GetComponent<AddAndSubtractCell>().id = 0;
+        Cells[0].GetComponent<AddAndSubtractCell>().Root = this.gameObject;
         CellValue.Add(new AddAndSubstractFormat());
-        Cells[0].transform.FindChildren("Value").GetComponent<InputField>().onValueChanged.AddListener(value =>
-        {
-            int i = 0;
-            CellValue[i].Value = decimal.Parse(value);
-        });
-        Cells[0].transform.FindChildren("Digit").GetComponent<InputField>().onValueChanged.AddListener(value =>
-        {
-            int i = 0;
-            CellValue[i].Value = int.Parse(value);
-        });
+        Cells[1].GetComponent<AddAndSubtractCell>().id = 1;
+        Cells[1].GetComponent<AddAndSubtractCell>().Root = this.gameObject;
         CellValue.Add(new AddAndSubstractFormat());
-        Cells[1].transform.FindChildren("Value").GetComponent<InputField>().onValueChanged.AddListener(value =>
-        {
-            int i = 1;
-            CellValue[i].Value = decimal.Parse(value);
-        });
-        Cells[1].transform.FindChildren("Digit").GetComponent<InputField>().onValueChanged.AddListener(value =>
-        {
-            int i = 1;
-            CellValue[i].Value = int.Parse(value);
-        });
-        Cells[1].transform.FindChildren("Button").GetComponent<Button>().onClick.AddListener(() =>
-        {
-            int i = 1;
-            CellValue[i].Sign = 1 - CellValue[i].Sign;
-            if (CellValue[i].Sign == 0)
-            {
-                Cells[i].transform.FindChildren("Button").GetComponent<Button>().image.sprite = AddImage;
-            }
-            else
-            {
-                Cells[i].transform.FindChildren("Button").GetComponent<Button>().image.sprite = SubtractImage;
-            }
-        });
+
         //后面代码添加的块初始化
         AddButton.onClick.AddListener(() =>
         {
             var temp = GameObject.Instantiate(Cell);
             temp.transform.parent = CellFather;
             Cells.Add(temp);
-            CellValue.Add(new AddAndSubstractFormat());
-            temp.transform.FindChildren("Value").GetComponent<InputField>().onValueChanged.AddListener(value =>
+            temp.GetComponent<AddAndSubtractCell>().id = Cells.Count - 1;
+            temp.GetComponent<AddAndSubtractCell>().Root = this.gameObject;
+            CellValue.Add(new AddAndSubstractFormat());            
+        });
+
+        SubstractButton.onClick.AddListener(() =>
+        {
+            if (Cells.Count > 2)
             {
-                int i = Cells.Count - 1;
-                CellValue[i].Value = decimal.Parse(value);
-            });
-            temp.transform.FindChildren("Digit").GetComponent<InputField>().onValueChanged.AddListener(value =>
+                var temp = Cells[Cells.Count - 1];
+                Cells.RemoveAt(Cells.Count - 1);
+                CellValue.RemoveAt(CellValue.Count - 1);
+                DestroyImmediate(temp);
+            }
+            else
             {
-                int i = Cells.Count - 1;
-                CellValue[i].Value = int.Parse(value);
-            });
-            temp.transform.FindChildren("Button").GetComponent<Button>().onClick.AddListener(() =>
+                //弹出报错框
+            }            
+        });
+        CalcButton.onClick.AddListener(() =>
+        {
+            bool finish = true;
+            foreach (var item in Cells)
             {
-                int i = Cells.Count - 1;
-                CellValue[i].Sign = 1 - CellValue[i].Sign;
-                if (CellValue[i].Sign == 0)
+                var temp = item.GetComponent<AddAndSubtractCell>();
+                if (temp.state == 0)
                 {
-                    Cells[i].transform.FindChildren("Button").GetComponent<Button>().image.sprite = AddImage;
+                    if (temp.Value.text == "0" || temp.Digit.text == "0")
+                    {
+                        finish = false;
+                    }
                 }
                 else
                 {
-                    Cells[i].transform.FindChildren("Button").GetComponent<Button>().image.sprite = SubtractImage;
-                }                
-            });
+                    if (temp.Value2.text == "0")
+                    {
+                        finish = false;
+                    }
+                }
+            }
+            if (!finish)
+            {
 
+            }
+            else
+            {
+                Debug.Log("开始计算");
+            }
         });
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(Cells.Count);
     }
 }

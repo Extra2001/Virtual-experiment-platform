@@ -578,6 +578,13 @@ public struct CheckFloat2 {
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Acos, (X) => -1.0 / Math.Sqrt(X * X + 1.0));
     }
+    public static CheckFloat2 MyTrig(double val, double unc, Func<double, double> fn, Func<double, double> fderiv) {
+        double fv = fn(val);
+        double fd = fderiv(val) * unc;
+        //Console.WriteLine($"{fv:F6}\r\n{fd:F6}\r\n");
+        CheckFloat2 tmp = new CheckFloat2(fd.ToString(), false);
+        return new CheckFloat2(CheckFloat2.KeepTo(Convert.ToDecimal(fv), tmp.HiDigit).ToString(), false);
+    }
     public static CheckFloat2 Pow(CheckFloat2 x, CheckFloat2 n) {
         return Pow(x, (double)n.TrueValue);
     }

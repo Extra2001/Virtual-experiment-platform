@@ -581,8 +581,26 @@ public struct CheckFloat2 {
     public static CheckFloat2 Pow(CheckFloat2 x, CheckFloat2 n) {
         return Pow(x, (double)n.TrueValue);
     }
+    public static CheckFloat2 MySin(double val, double unc) {
+        return MyTrig(val, unc, (double x) => Math.Sin(x), (double x) => Math.Cos(x));
+    }
+    public static CheckFloat2 MyCos(double val, double unc) {
+        return MyTrig(val, unc, (double x) => Math.Cos(x), (double x) => -Math.Sin(x));
+    }
+    public static CheckFloat2 MyTan(double val, double unc) {
+        return MyTrig(val, unc, (double x) => Math.Tan(x), (double x) => 1 / (Math.Cos(x) * Math.Cos(x)));
+    }
 }
 public static class StaticMethods {
+    public static (double val, double unc) MakeRadian(int deg) {
+        return ((double)deg * Math.PI / 180.0, Math.PI / 180.0);
+    }
+    public static (double val, double unc) MakeRadian(int deg, int min) {
+        return ((deg + (double)min / 60.0) * Math.PI / 180.0, Math.PI / (180.0 * 60.0));
+    }
+    public static (double val, double unc) MakeRadian(int deg, int min, int sec) {
+        return ((deg + (double)min / 60.0 + (double)sec / 3600.0) * Math.PI / 180.0, Math.PI / (180.0 * 3600.0));
+    }
     public static string SciToExp(string sci) {
         sci = sci.Replace("(", "");
         sci = sci.Replace(")", "");

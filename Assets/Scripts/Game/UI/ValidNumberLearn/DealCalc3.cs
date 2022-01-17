@@ -5,24 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AddAndSubstractFormat
-{
-    public int Sign = 0;//0代表加法，1代表减法
-    public string Value = "0";
-    public string Digit = "0";//科学计数法10的几次方
-}
-public class DealCalc1 : HTBehaviour
+
+public class DealCalc3 : HTBehaviour
 {
     public Button CalcButton;
-    public Button AddButton;
-    public Button SubstractButton;
-    public GameObject Cell;
-    public Transform CellFather;
     public Text Ans;
-
-    public List<GameObject> Cells;
-    public List<AddAndSubstractFormat> CellValue = new List<AddAndSubstractFormat>();
-
 
     public InputField UserValue;
     public InputField UserValue2;
@@ -36,55 +23,19 @@ public class DealCalc1 : HTBehaviour
     private int _ansstate = -1;
     //启用自动化
     protected override bool IsAutomate => true;
-    
+
     // Start is called before the first frame update
     void Start()
     {
         Reason.text = "";
-        //加法前两个先初始化
-        Cells[0].GetComponent<AddAndSubtractCell>().id = 0;
-        Cells[0].GetComponent<AddAndSubtractCell>().Root = this.gameObject;
-        CellValue.Add(new AddAndSubstractFormat());
-        Cells[1].GetComponent<AddAndSubtractCell>().id = 1;
-        Cells[1].GetComponent<AddAndSubtractCell>().Root = this.gameObject;
-        CellValue.Add(new AddAndSubstractFormat());
-
-        //后面代码添加的块初始化
-        AddButton.onClick.AddListener(() =>
-        {
-            var temp = GameObject.Instantiate(Cell);
-            temp.transform.parent = CellFather;
-            Cells.Add(temp);
-            temp.GetComponent<AddAndSubtractCell>().id = Cells.Count - 1;
-            temp.GetComponent<AddAndSubtractCell>().Root = this.gameObject;
-            CellValue.Add(new AddAndSubstractFormat());            
-        });
-
-        SubstractButton.onClick.AddListener(() =>
-        {
-            if (Cells.Count > 2)
-            {
-                var temp = Cells[Cells.Count - 1];
-                Cells.RemoveAt(Cells.Count - 1);
-                CellValue.RemoveAt(CellValue.Count - 1);
-                DestroyImmediate(temp);
-            }
-            else
-            {
-                UIAPI.Instance.ShowModel(new SimpleModel()
-                {
-                    Message = "加减运算至少应当有两个元素",
-                    ShowCancel = false
-                });
-            }            
-        });
-        CalcButton.onClick.AddListener(() =>
+        
+        /*CalcButton.onClick.AddListener(() =>
         {
             bool finish = true;
             //检查算式
             foreach (var item in Cells)
             {
-                var temp = item.GetComponent<AddAndSubtractCell>();
+                var temp = item.GetComponent<MultiplayAndDivideCell>();
                 if (temp.state == 1)
                 {
                     if (temp.Value.text == "0" || temp.Digit.text == "0")
@@ -102,7 +53,7 @@ public class DealCalc1 : HTBehaviour
                     {
                         finish = false;
                     }
-                }                
+                }
             }
             //检查答案输入
             if (_userstate == 0)
@@ -139,7 +90,7 @@ public class DealCalc1 : HTBehaviour
                     input.Add(temp);
                 }
                 string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
-                (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupAdd(input, userresult);
+                (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupMul(input, userresult);
 
                 if (!correct)
                 {
@@ -149,17 +100,10 @@ public class DealCalc1 : HTBehaviour
                 {
                     Reason.text = "计算正确";
                 }
-
-                if (Cells[0].GetComponent<AddAndSubtractCell>().state == 0)
-                {
-                    _ansstate = 0;
-                    
-                }
-                Ans.text = correctvalue.ToString();
                 Ans.text = correctvalue.ToString();
                 _ansstate = 1;
             }
-        });
+        });*/
 
         UserValue.onValueChanged.AddListener(value =>
         {
@@ -232,15 +176,11 @@ public class DealCalc1 : HTBehaviour
             {
                 _ansstate = 1 - _ansstate;
                 //将ans格式转换
-
             }
         });
 
 
     }
 
-    void Update()
-    {
-        
-    }
+
 }

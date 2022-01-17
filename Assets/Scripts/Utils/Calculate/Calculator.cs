@@ -476,7 +476,7 @@ public struct CheckFloat2 {
         //return Math.Round((truevalue * Math.Pow(10, n) + 0.5) , MidpointRounding.ToEven) / Math.Pow(10, n);
     }
     public override string ToString() {
-        return TrueValue.ToString(LoDigit <= 0 ? $"F{-LoDigit}" : $"E{EffectiveDigit - 1}"));
+        return TrueValue.ToString(LoDigit <= 0 ? $"F{-LoDigit}" : $"E{EffectiveDigit - 1}");
     }
     public static (bool correct, string message,CheckFloat2 correctvalue) CheckGroupAdd(IList<(string rawnumstr, int isadd)> input, string userresult) {
         (CheckFloat2 input, bool isadd)[] arr = new (CheckFloat2, bool)[input.Count];
@@ -589,8 +589,19 @@ public static class StaticMethods {
         sci = sci.Replace("*10^", "e");
         return sci;
     }
-    public static string ExpToSci(string exp) {
-        return "xxxxxxxx";
+    public static string ExpToSci(string exp)
+    {
+        string[] arr;
+        if (exp.Contains('E'))
+        {
+            arr = exp.Split('E');
+        }
+        else
+        {
+            arr = exp.Split('e');
+        }
+        int n = int.Parse(arr[1]);
+        return string.Concat(arr[0], "*10^(", n.ToString(), ")");
     }
     public static readonly HashSet<string> keywords = new HashSet<string>(){//符号计算的关键字
             "pi","e","abs","acos","asin","atan","sin","cos","tan","cot","sec","csc","j","sqrt","pow","sinh","cosh","tanh","exp","ln","lg"

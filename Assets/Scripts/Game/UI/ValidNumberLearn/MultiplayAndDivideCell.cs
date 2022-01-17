@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AddAndSubtractCell : HTBehaviour
+public class MultiplayAndDivideCell : HTBehaviour
 {
     public int id;//对应id
     public GameObject Root;//父节点
@@ -15,13 +15,13 @@ public class AddAndSubtractCell : HTBehaviour
     public InputField Value;
     public InputField Value2;
     public InputField Digit;
-    public Sprite AddImage;
-    public Sprite SubtractImage;
+    public Sprite MultiplayImage;
+    public Sprite DivideImage;
 
     public int state = 0;//0代表正常数，1代表科学计数法
     //启用自动化
     protected override bool IsAutomate => true;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,8 +37,8 @@ public class AddAndSubtractCell : HTBehaviour
             }
             else
             {
-                Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
-            }            
+                Root.GetComponent<DealCalc2>().CellValue[id].Value = value;
+            }
         });
         Digit.onEndEdit.AddListener(value =>
         {
@@ -52,8 +52,8 @@ public class AddAndSubtractCell : HTBehaviour
             }
             else
             {
-                Root.GetComponent<DealCalc1>().CellValue[id].Digit = value;
-            }            
+                Root.GetComponent<DealCalc2>().CellValue[id].Digit = value;
+            }
         });
         Value2.onEndEdit.AddListener(value =>
         {
@@ -68,22 +68,22 @@ public class AddAndSubtractCell : HTBehaviour
             else
             {
                 //将正常数转换为科学计数法存储
-                Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
-                Root.GetComponent<DealCalc1>().CellValue[id].Digit = "0";
+                Root.GetComponent<DealCalc2>().CellValue[id].Value = value;
+                Root.GetComponent<DealCalc2>().CellValue[id].Digit = "0";
             }
         });
 
         Sign.onClick.AddListener(() =>
         {
-            int temp = 1 - Root.GetComponent<DealCalc1>().CellValue[id].Sign;
-            Root.GetComponent<DealCalc1>().CellValue[id].Sign = temp;
+            int temp = 1 - Root.GetComponent<DealCalc2>().CellValue[id].Sign;
+            Root.GetComponent<DealCalc2>().CellValue[id].Sign = temp;
             if (temp == 0)
             {
-                Sign.image.sprite = AddImage;
+                Sign.image.sprite = MultiplayImage;
             }
             else
             {
-                Sign.image.sprite = SubtractImage;
+                Sign.image.sprite = DivideImage;
             }
         });
         SwitchButton.onClick.AddListener(() =>

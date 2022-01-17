@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AddAndSubstractFormat
+public class MultiPlayAndDivideFormat
 {
-    public int Sign = 0;//0代表加法，1代表减法
+    public int Sign = 0;//0代表乘法，1代表除法
     public string Value = "0";
     public string Digit = "0";//科学计数法10的几次方
 }
-public class DealCalc1 : HTBehaviour
+public class DealCalc2 : HTBehaviour
 {
     public Button CalcButton;
     public Button AddButton;
@@ -21,7 +21,7 @@ public class DealCalc1 : HTBehaviour
     public Text Ans;
 
     public List<GameObject> Cells;
-    public List<AddAndSubstractFormat> CellValue = new List<AddAndSubstractFormat>();
+    public List<MultiPlayAndDivideFormat> CellValue = new List<MultiPlayAndDivideFormat>();
 
 
     public InputField UserValue;
@@ -36,18 +36,18 @@ public class DealCalc1 : HTBehaviour
     private int _ansstate = -1;
     //启用自动化
     protected override bool IsAutomate => true;
-    
+
     // Start is called before the first frame update
     void Start()
     {
         Reason.text = "";
         //加法前两个先初始化
-        Cells[0].GetComponent<AddAndSubtractCell>().id = 0;
-        Cells[0].GetComponent<AddAndSubtractCell>().Root = this.gameObject;
-        CellValue.Add(new AddAndSubstractFormat());
-        Cells[1].GetComponent<AddAndSubtractCell>().id = 1;
-        Cells[1].GetComponent<AddAndSubtractCell>().Root = this.gameObject;
-        CellValue.Add(new AddAndSubstractFormat());
+        Cells[0].GetComponent<MultiplayAndDivideCell>().id = 0;
+        Cells[0].GetComponent<MultiplayAndDivideCell>().Root = this.gameObject;
+        CellValue.Add(new MultiPlayAndDivideFormat());
+        Cells[1].GetComponent<MultiplayAndDivideCell>().id = 1;
+        Cells[1].GetComponent<MultiplayAndDivideCell>().Root = this.gameObject;
+        CellValue.Add(new MultiPlayAndDivideFormat());
 
         //后面代码添加的块初始化
         AddButton.onClick.AddListener(() =>
@@ -55,9 +55,9 @@ public class DealCalc1 : HTBehaviour
             var temp = GameObject.Instantiate(Cell);
             temp.transform.parent = CellFather;
             Cells.Add(temp);
-            temp.GetComponent<AddAndSubtractCell>().id = Cells.Count - 1;
-            temp.GetComponent<AddAndSubtractCell>().Root = this.gameObject;
-            CellValue.Add(new AddAndSubstractFormat());            
+            temp.GetComponent<MultiplayAndDivideCell>().id = Cells.Count - 1;
+            temp.GetComponent<MultiplayAndDivideCell>().Root = this.gameObject;
+            CellValue.Add(new MultiPlayAndDivideFormat());
         });
 
         SubstractButton.onClick.AddListener(() =>
@@ -73,10 +73,10 @@ public class DealCalc1 : HTBehaviour
             {
                 UIAPI.Instance.ShowModel(new SimpleModel()
                 {
-                    Message = "加减运算至少应当有两个元素",
+                    Message = "乘除运算至少应当有两个元素",
                     ShowCancel = false
                 });
-            }            
+            }
         });
         CalcButton.onClick.AddListener(() =>
         {
@@ -84,7 +84,7 @@ public class DealCalc1 : HTBehaviour
             //检查算式
             foreach (var item in Cells)
             {
-                var temp = item.GetComponent<AddAndSubtractCell>();
+                var temp = item.GetComponent<MultiplayAndDivideCell>();
                 if (temp.state == 1)
                 {
                     if (temp.Value.text == "0" || temp.Digit.text == "0")
@@ -102,7 +102,7 @@ public class DealCalc1 : HTBehaviour
                     {
                         finish = false;
                     }
-                }                
+                }
             }
             //检查答案输入
             if (_userstate == 0)
@@ -139,7 +139,7 @@ public class DealCalc1 : HTBehaviour
                     input.Add(temp);
                 }
                 string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
-                (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupAdd(input, userresult);
+                (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupMul(input, userresult);
 
                 if (!correct)
                 {
@@ -149,13 +149,6 @@ public class DealCalc1 : HTBehaviour
                 {
                     Reason.text = "计算正确";
                 }
-
-                if (Cells[0].GetComponent<AddAndSubtractCell>().state == 0)
-                {
-                    _ansstate = 0;
-                    
-                }
-                Ans.text = correctvalue.ToString();
                 Ans.text = correctvalue.ToString();
                 _ansstate = 1;
             }
@@ -232,15 +225,11 @@ public class DealCalc1 : HTBehaviour
             {
                 _ansstate = 1 - _ansstate;
                 //将ans格式转换
-
             }
         });
 
 
     }
 
-    void Update()
-    {
-        
-    }
+
 }

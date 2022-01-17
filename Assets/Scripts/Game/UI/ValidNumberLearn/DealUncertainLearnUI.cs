@@ -11,6 +11,7 @@ public class DealUncertainLearnUI : HTBehaviour
     public Button[] ChoiceButtons;
     public GameObject HintText;
     public GameObject CalcZone;
+    public GameObject[] Zones;
 
     private int CurrentIndex = -1;
 
@@ -35,6 +36,28 @@ public class DealUncertainLearnUI : HTBehaviour
     {
         HintText.SetActive(false);
         CalcZone.SetActive(true);
+        if (index == 3)
+        {
+            for (int i = 0; i < Zones.Length; i++)
+            {
+                Zones[i].SetActive(true);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < Zones.Length; i++)
+            {
+                if (i == index)
+                {
+                    Zones[i].SetActive(true);
+                }
+                else
+                {
+                    Zones[i].SetActive(false);
+                }
+            }
+        }
+
         for (int i = 0; i < ChoiceButtons.Length; i++)
         {
             if (i == index)

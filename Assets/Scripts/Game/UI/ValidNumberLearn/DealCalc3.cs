@@ -5,11 +5,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+public class FunctionCalcFormat
+{
+    public string Value = "0";
+    public string Digit = "0";//科学计数法10的几次方
+}
 public class DealCalc3 : HTBehaviour
 {
     public Button CalcButton;
     public Text Ans;
+
+    public List<GameObject> Cells;
+    public List<FunctionCalcFormat> CellValue = new List<FunctionCalcFormat>();
+    public List<Toggle> toggles;
+    private int CurrentFunctionIndex = -1;
 
     public InputField UserValue;
     public InputField UserValue2;
@@ -28,90 +37,48 @@ public class DealCalc3 : HTBehaviour
     void Start()
     {
         Reason.text = "";
-        
-        /*CalcButton.onClick.AddListener(() =>
+
+        //toggle初始化
+        for (int i = 0; i < toggles.Count; i++)
         {
-            bool finish = true;
-            //检查算式
-            foreach (var item in Cells)
+            int index = i;
+            toggles[i].isOn = false;
+            toggles[i].onValueChanged.AddListener(IfOn =>
             {
-                var temp = item.GetComponent<MultiplayAndDivideCell>();
-                if (temp.state == 1)
+                if (IfOn)
                 {
-                    if (temp.Value.text == "0" || temp.Digit.text == "0")
+                    CurrentFunctionIndex = index;
+                    for (int j = 0; j < toggles.Count; j++)
                     {
-                        finish = false;
-                    }
-                    if (double.Parse(CellValue[temp.id].Value) - 1 < 0 || double.Parse(CellValue[temp.id].Value) - 10 >= 0)
-                    {
-                        finish = false;
+                        if (j != index)
+                        {
+                            toggles[j].isOn = false;
+                        }
                     }
                 }
                 else
                 {
-                    if (temp.Value2.text == "0")
+                    bool flag = false;
+                    for (int j = 0; j < toggles.Count; j++)
                     {
-                        finish = false;
+                        if (toggles[j].isOn)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag)
+                    {
+                        CurrentFunctionIndex = -1;
                     }
                 }
-            }
-            //检查答案输入
-            if (_userstate == 0)
-            {
-                if (UserValue2.text == "0")
-                {
-                    finish = false;
-                }
-            }
-            else
-            {
-                if (UserValue.text == "0" || UserDigit.text == "0")
-                {
-                    finish = false;
-                }
-            }
+            });
+        }
 
-            if (!finish)
-            {
-                UIAPI.Instance.ShowModel(new SimpleModel()
-                {
-                    Message = "请检查输入的算式是否完整正确无冗余",
-                    ShowCancel = false
-                });
-            }
-            else
-            {
-                List<(string rawnumstr, int isadd)> input = new List<(string rawnumstr, int isadd)>();
-                (string rawnumstr, int isadd) temp;
-                for (int i = 0; i < CellValue.Count; i++)
-                {
-                    temp.isadd = CellValue[i].Sign;
-                    temp.rawnumstr = StaticMethods.SciToExp(CellValue[i].Value + "*10^(" + CellValue[i].Digit + ")");
-                    input.Add(temp);
-                }
-                string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
-                (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupMul(input, userresult);
-
-                if (!correct)
-                {
-                    Reason.text = message;
-                }
-                else
-                {
-                    Reason.text = "计算正确";
-                }
-                Ans.text = correctvalue.ToString();
-                _ansstate = 1;
-            }
-        });*/
-
+        //用户答案输入初始化
         UserValue.onValueChanged.AddListener(value =>
         {
             if (string.IsNullOrEmpty(value))
-            {
-                UserValue.text = "0";
-            }
-            else if (value != "0" && double.Parse(value) - 0 == 0)
             {
                 UserValue.text = "0";
             }
@@ -138,10 +105,6 @@ public class DealCalc3 : HTBehaviour
         UserValue2.onValueChanged.AddListener(value =>
         {
             if (string.IsNullOrEmpty(value))
-            {
-                UserValue2.text = "0";
-            }
-            else if (value != "0" && double.Parse(value) - 0 == 0)
             {
                 UserValue2.text = "0";
             }

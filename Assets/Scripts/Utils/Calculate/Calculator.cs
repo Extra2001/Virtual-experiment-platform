@@ -439,7 +439,7 @@ public struct CheckFloat2 {
             }
         }
         string tmp = KeepEffective(value0, mineffective);
-        CheckFloat2 res = new CheckFloat2(tmp), false);
+        CheckFloat2 res = new CheckFloat2((tmp), false);
         return res;
     }
     public static string KeepEffective(decimal d, int n) {//保留n位有效数字
@@ -583,6 +583,16 @@ public struct CheckFloat2 {
     }
 }
 public static class StaticMethods {
+    public static string NormToExp(string norm)
+    {
+        CheckFloat2 ck = new CheckFloat2(norm);
+        return ck.TrueValue.ToString($"E{ck.EffectiveDigit - 1}");
+    }
+    public static string ExpToNorm(string exp)
+    {
+        CheckFloat2 ck = new CheckFloat2(exp);
+        return ck.LoDigit > 0 ? string.Empty : ck.TrueValue.ToString($"F{-ck.LoDigit}");
+    }
     public static string SciToExp(string sci) {
         sci = sci.Replace("(", "");
         sci = sci.Replace(")", "");

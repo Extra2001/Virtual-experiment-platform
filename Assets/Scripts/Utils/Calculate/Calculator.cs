@@ -439,7 +439,7 @@ public struct CheckFloat2 {
             }
         }
         string tmp = KeepEffective(value0, mineffective);
-        CheckFloat2 res = new CheckFloat2((tmp), false);
+        CheckFloat2 res = new CheckFloat2(tmp), false);
         return res;
     }
     public static string KeepEffective(decimal d, int n) {//保留n位有效数字
@@ -578,20 +578,35 @@ public struct CheckFloat2 {
         double dx = Math.Pow(10, x.LoDigit);
         return FunctionX(x, dx, Math.Acos, (X) => -1.0 / Math.Sqrt(X * X + 1.0));
     }
+    public static CheckFloat2 MyTrig(double val, double unc, Func<double, double> fn, Func<double, double> fderiv) {
+        double fv = fn(val);
+        double fd = fderiv(val) * unc;
+        //Console.WriteLine($"{fv:F6}\r\n{fd:F6}\r\n");
+        CheckFloat2 tmp = new CheckFloat2(fd.ToString(), false);
+        return new CheckFloat2(CheckFloat2.KeepTo(Convert.ToDecimal(fv), tmp.HiDigit).ToString(), false);
+    }
     public static CheckFloat2 Pow(CheckFloat2 x, CheckFloat2 n) {
         return Pow(x, (double)n.TrueValue);
     }
+    public static CheckFloat2 MySin(double val, double unc) {
+        return MyTrig(val, unc, (double x) => Math.Sin(x), (double x) => Math.Cos(x));
+    }
+    public static CheckFloat2 MyCos(double val, double unc) {
+        return MyTrig(val, unc, (double x) => Math.Cos(x), (double x) => -Math.Sin(x));
+    }
+    public static CheckFloat2 MyTan(double val, double unc) {
+        return MyTrig(val, unc, (double x) => Math.Tan(x), (double x) => 1 / (Math.Cos(x) * Math.Cos(x)));
+    }
 }
 public static class StaticMethods {
-    public static string NormToExp(string norm)
-    {
-        CheckFloat2 ck = new CheckFloat2(norm);
-        return ck.TrueValue.ToString($"E{ck.EffectiveDigit - 1}");
+    public static (double val, double unc) MakeRadian(int deg) {
+        return ((double)deg * Math.PI / 180.0, Math.PI / 180.0);
     }
-    public static string ExpToNorm(string exp)
-    {
-        CheckFloat2 ck = new CheckFloat2(exp);
-        return ck.LoDigit > 0 ? string.Empty : ck.TrueValue.ToString($"F{-ck.LoDigit}");
+    public static (double val, double unc) MakeRadian(int deg, int min) {
+        return ((deg + (double)min / 60.0) * Math.PI / 180.0, Math.PI / (180.0 * 60.0));
+    }
+    public static (double val, double unc) MakeRadian(int deg, int min, int sec) {
+        return ((deg + (double)min / 60.0 + (double)sec / 3600.0) * Math.PI / 180.0, Math.PI / (180.0 * 3600.0));
     }
     public static string SciToExp(string sci) {
         sci = sci.Replace("(", "");

@@ -438,21 +438,21 @@ public struct CheckFloat2 {
                 value0 /= item.val.TrueValue;
             }
         }
-        decimal tmp = KeepEffective(value0, mineffective);
-        CheckFloat2 res = new CheckFloat2(tmp.ToString(), false);
+        string tmp = KeepEffective(value0, mineffective);
+        CheckFloat2 res = new CheckFloat2(tmp), false);
         return res;
     }
-    public static decimal KeepEffective(decimal d, int n) {//保留n位有效数字
-        if(d == decimal.Zero) return 0;
+    public static string KeepEffective(decimal d, int n) {//保留n位有效数字
+        if(d == decimal.Zero) return "0";
         if(d > 1 || d < -1)
             n = n - (int)Math.Log10(Math.Abs(Convert.ToDouble(d))) - 1;
         else
             n = n + (int)Math.Log10(1.0 / Math.Abs(Convert.ToDouble(d)));
         if(n < 0) {
-            d = Convert.ToDecimal((int)((double)d / Math.Pow(10, 0 - n)) * (double)Math.Pow(10, 0 - n));
-            n = 0;
+            d = Convert.ToDecimal((int)((double)d / Math.Pow(10, -n)));
+            return $"{d}e{-n}";
         }
-        return Math.Round(d, n, MidpointRounding.ToEven);
+        return Math.Round(d, n, MidpointRounding.ToEven).ToString();
     }
     public static decimal KeepTo(decimal truevalue, int n) {//保留到第n位有效数字
         int p = 1;

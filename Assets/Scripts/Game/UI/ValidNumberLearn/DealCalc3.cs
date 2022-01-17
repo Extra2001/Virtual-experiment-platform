@@ -9,6 +9,9 @@ public class FunctionCalcFormat
 {
     public string Value = "0";
     public string Digit = "0";//科学计数法10的几次方
+    public string A = "1";//指数或幂数的a
+    public string[] Angle = new string[3] { "0", "0", "0" };//度、分、秒
+    public bool[] AngleKind = new bool[3] { true, true, true };
 }
 public class DealCalc3 : HTBehaviour
 {
@@ -37,6 +40,27 @@ public class DealCalc3 : HTBehaviour
     void Start()
     {
         Reason.text = "";
+
+        //calcvalue初始化
+        for (int i = 0; i < Cells.Count; i++)
+        {
+            if (i < 2)
+            {
+                Cells[i].GetComponent<FunctionCalcCell1>().id = i;
+                Cells[i].GetComponent<FunctionCalcCell1>().root = this.gameObject;
+            }
+            else if (i < 5)
+            {
+                Cells[i].GetComponent<FunctionCalcCell2>().id = i;
+                Cells[i].GetComponent<FunctionCalcCell2>().root = this.gameObject;
+            }
+            else
+            {
+                Cells[i].GetComponent<FunctionCalcCell3>().id = i;
+                Cells[i].GetComponent<FunctionCalcCell3>().root = this.gameObject;
+            }
+            CellValue.Add(new FunctionCalcFormat());
+        }
 
         //toggle初始化
         for (int i = 0; i < toggles.Count; i++)

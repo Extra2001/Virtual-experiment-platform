@@ -53,7 +53,7 @@ public class DataInput : HTBehaviour
 
     public void CheckInput(string input)
     {
-        if (string.IsNullOrEmpty(input)) return;
+        if (string.IsNullOrEmpty(input) || (!double.TryParse(input, out double t))) return;
         if (ReadOnly) return;
         dataColumnModel.data[Index] = input;
         if (dataColumnModel.type == DataColumnType.Mesured || dataColumnModel.type == DataColumnType.Differenced)

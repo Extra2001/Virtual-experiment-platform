@@ -669,6 +669,73 @@ public struct CheckFloat2 {
         CheckFloat2 res = MyTan(val, unc);
         return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
     }
+    //原始数据的
+        public static decimal GroupAddRaw(IList<(CheckFloat2 val, bool isadd)> inputs) {
+            decimal s = 0;
+            foreach(var item in inputs) {
+                if(item.isadd) s += item.val.TrueValue;
+                else s -= item.val.TrueValue;
+            }
+            return s;
+        }
+        public static decimal GroupMulRaw(IList<(CheckFloat2 val, bool isadd)> inputs) {
+            decimal s = 1;
+            foreach(var item in inputs) {
+                if(item.isadd) s *= item.val.TrueValue;
+                else s /= item.val.TrueValue;
+            }
+            return s;
+        }
+        public static double MyTrigRaw(int deg, Func<double, double> trigfunc) {
+            return trigfunc(MakeRadian(deg).val);
+        }
+        public static double MyTrigRaw(int deg, int min, Func<double, double> trigfunc) {
+            return trigfunc(MakeRadian(deg, min).val);
+        }
+        public static double MyTrigRaw(int deg, int min, int sec, Func<double, double> trigfunc) {
+            return trigfunc(MakeRadian(deg, min, sec).val);
+        }
+        public static double MySinRaw(int deg) {
+            return MyTrigRaw(deg, Math.Sin);
+        }
+        public static double MyCosRaw(int deg) {
+            return MyTrigRaw(deg, Math.Cos);
+        }
+        public static double MyTanRaw(int deg) {
+            return MyTrigRaw(deg, Math.Tan);
+        }
+
+        public static double MySinRaw(int deg, int min) {
+            return MyTrigRaw(deg, min, Math.Sin);
+        }
+        public static double MyCosRaw(int deg, int min) {
+            return MyTrigRaw(deg, min, Math.Cos);
+        }
+        public static double MyTanRaw(int deg, int min) {
+            return MyTrigRaw(deg, min, Math.Tan);
+        }
+        public static double MySinRaw(int deg, int min, int sec) {
+            return MyTrigRaw(deg, min, sec, Math.Sin);
+        }
+        public static double MyCosRaw(int deg, int min, int sec) {
+            return MyTrigRaw(deg, min, sec, Math.Cos);
+        }
+        public static double MyTanRaw(int deg, int min, int sec) {
+            return MyTrigRaw(deg, min, sec, Math.Tan);
+        }
+
+        public static double LogRaw(double a, CheckFloat2 x) {
+            return Math.Log((double)x.TrueValue, a);
+        }
+        public static double ExpRaw(double a, CheckFloat2 x) {
+            return Math.Pow(a,(double)x.TrueValue);
+        }
+        public static double PowRaw(CheckFloat2 x,double n) {
+            return Math.Pow((double)x.TrueValue, n);
+        }
+
+
+
 }
 public static class StaticMethods {
     public static string NormToExp(string norm)

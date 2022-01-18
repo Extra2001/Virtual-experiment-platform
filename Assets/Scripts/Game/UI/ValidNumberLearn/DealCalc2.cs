@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class MultiPlayAndDivideFormat
 {
@@ -84,37 +85,20 @@ public class DealCalc2 : HTBehaviour
             //检查算式
             foreach (var item in Cells)
             {
-                var temp = item.GetComponent<MultiplayAndDivideCell>();
-                if (temp.state == 1)
-                {
-                    if (temp.Value.text == "0" || temp.Digit.text == "0")
-                    {
-                        finish = false;
-                    }
-                    if (double.Parse(CellValue[temp.id].Value) - 1 < 0 || double.Parse(CellValue[temp.id].Value) - 10 >= 0)
-                    {
-                        finish = false;
-                    }
-                }
-                else
-                {
-                    if (temp.Value2.text == "0")
-                    {
-                        finish = false;
-                    }
-                }
+                var temp = item.GetComponent <MultiplayAndDivideCell>();
+                finish = finish && temp.IfFinish();
             }
             //检查答案输入
             if (_userstate == 0)
             {
-                if (UserValue2.text == "0")
+                if (string.IsNullOrEmpty(UserValue2.text))
                 {
                     finish = false;
                 }
             }
             else
             {
-                if (UserValue.text == "0" || UserDigit.text == "0")
+                if (string.IsNullOrEmpty(UserValue.text) || string.IsNullOrEmpty(UserDigit.text))
                 {
                     finish = false;
                 }
@@ -122,11 +106,7 @@ public class DealCalc2 : HTBehaviour
 
             if (!finish)
             {
-                UIAPI.Instance.ShowModel(new SimpleModel()
-                {
-                    Message = "请检查输入的算式是否完整正确无冗余",
-                    ShowCancel = false
-                });
+                WarningInput();
             }
             else
             {
@@ -141,71 +121,82 @@ public class DealCalc2 : HTBehaviour
                 string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
                 (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupMul(input, userresult);
 
-                if (!correct)
+                if (correctvalue.ToString().Contains("E") || correctvalue.ToString().Contains("e"))
                 {
-                    Reason.text = message;
+                    _ansstate = 1;
+                    Ans.text = StaticMethods.ExpToSci(correctvalue.ToString());
                 }
                 else
                 {
+                    _ansstate = 0;
+                    Ans.text = correctvalue.ToString();
+                }
+                if (correct)
+                {
                     Reason.text = "计算正确";
                 }
-                Ans.text = correctvalue.ToString();
-                _ansstate = 1;
+                else
+                {
+                    Reason.text = message;
+                }
             }
         });
 
+        //用户答案输入初始化
         UserValue.onValueChanged.AddListener(value =>
         {
-            if (string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value))
             {
-                UserValue.text = "0";
-            }
-            else if (value != "0" && double.Parse(value) - 0 == 0)
-            {
-                UserValue.text = "0";
-            }
-            else
-            {
-                _uservalue = value;
+                if ((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
+                {
+                    _uservalue = value;
+                }
+                else
+                {
+                    UserValue.text = string.Empty;
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "请输入合法的数字",
+                        ShowCancel = false
+                    });
+                }
             }
         });
         UserDigit.onValueChanged.AddListener(value =>
         {
-            if (string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                UserDigit.text = "0";
-            }
-            else if (value != "0" && int.Parse(value) - 0 == 0)
-            {
-                UserDigit.text = "0";
-            }
-            else
-            {
-                _userdigit = value;
+                if (int.Parse(value) != 0)
+                {
+                    _userdigit = value;
+                    return;
+                }
+                else
+                {
+                    UserDigit.text = string.Empty;
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "请输入合法的数字",
+                        ShowCancel = false
+                    });
+                }
             }
         });
         UserValue2.onValueChanged.AddListener(value =>
         {
-            if (string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                UserValue2.text = "0";
-            }
-            else if (value != "0" && double.Parse(value) - 0 == 0)
-            {
-                UserValue2.text = "0";
-            }
-            else
-            {
-                //将正常数转换为科学计数法存储
                 _uservalue = value;
                 _userdigit = "0";
             }
         });
         UserSwitchButton.onClick.AddListener(() =>
         {
-            UserValue.text = "0";
-            UserDigit.text = "0";
-            UserValue2.text = "0";
+            UserValue.text = string.Empty;
+            UserDigit.text = string.Empty;
+            UserValue2.text = string.Empty;
 
             _userstate = 1 - _userstate;
             if (_userstate == 0)
@@ -223,13 +214,60 @@ public class DealCalc2 : HTBehaviour
         {
             if (_ansstate != -1)
             {
-                _ansstate = 1 - _ansstate;
-                //将ans格式转换
+                if (_ansstate == 0)
+                {
+                    if (string.IsNullOrEmpty(StaticMethods.NormToExp(Ans.text)))
+                    {
+                        UIAPI.Instance.ShowModel(new SimpleModel()
+                        {
+                            Title = "警告",
+                            Message = "答案不能用科学计数法表示",
+                            ShowCancel = false
+                        });
+                        _ansstate = 0;
+                    }
+                    else
+                    {
+                        Ans.text = StaticMethods.ExpToSci(StaticMethods.NormToExp(Ans.text));
+                        _ansstate = 1;
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(StaticMethods.ExpToNorm(StaticMethods.SciToExp(Ans.text))))
+                    {
+                        UIAPI.Instance.ShowModel(new SimpleModel()
+                        {
+                            Title = "警告",
+                            Message = "答案只能用科学计数法表示",
+                            ShowCancel = false
+                        });
+                        _ansstate = 1;
+                    }
+                    else
+                    {
+                        Ans.text = StaticMethods.ExpToNorm(StaticMethods.SciToExp(Ans.text));
+                        _ansstate = 0;
+                    }
+                }
             }
         });
 
 
+
     }
 
+    void Update()
+    {
 
+    }
+    private void WarningInput()
+    {
+        UIAPI.Instance.ShowModel(new SimpleModel()
+        {
+            Title = "警告",
+            Message = "请检查算式及结果是否输入完成",
+            ShowCancel = false
+        });
+    }
 }

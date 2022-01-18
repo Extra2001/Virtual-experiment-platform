@@ -35,7 +35,7 @@ public class FunctionCalcCell3 : HTBehaviour
 
         Angle[0].onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 root.GetComponent<DealCalc3>().CellValue[id].Angle[0] = value;
                 FinishSituation[0] = true;
@@ -45,7 +45,7 @@ public class FunctionCalcCell3 : HTBehaviour
         });
         Angle[1].onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if((int.Parse(value)>=0)&& (int.Parse(value) < 60))
                 {
@@ -64,7 +64,7 @@ public class FunctionCalcCell3 : HTBehaviour
         });
         Angle[2].onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if ((int.Parse(value) >= 0) && (int.Parse(value) < 60))
                 {

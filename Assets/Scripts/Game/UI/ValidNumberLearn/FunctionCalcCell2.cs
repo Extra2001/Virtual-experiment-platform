@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class FunctionCalcCell2 : HTBehaviour
 {
@@ -25,17 +26,25 @@ public class FunctionCalcCell2 : HTBehaviour
     {
         Value.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                root.GetComponent<DealCalc3>().CellValue[id].Value = value;
-                FinishSituation[1] = true;
-                return;
+                if((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
+                {
+                    root.GetComponent<DealCalc3>().CellValue[id].Value = value;
+                    FinishSituation[1] = true;
+                    return;
+                }
+                else
+                {
+                    Value.text = string.Empty;
+                    WarningInput();
+                }                
             }
             FinishSituation[1] = false;
         });
         Digit.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if (int.Parse(value) != 0)
                 {
@@ -53,10 +62,10 @@ public class FunctionCalcCell2 : HTBehaviour
         });
         Value2.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 root.GetComponent<DealCalc3>().CellValue[id].Value = value;
-                root.GetComponent<DealCalc3>().CellValue[id].Digit = value;
+                root.GetComponent<DealCalc3>().CellValue[id].Digit = "0";
                 FinishSituation[0] = true;
                 return;
             }
@@ -64,11 +73,18 @@ public class FunctionCalcCell2 : HTBehaviour
         });
         A.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if (int.Parse(value) != 0)//底数不为0
                 {
-                    root.GetComponent<DealCalc3>().CellValue[id].A = value;
+                    if (id == 4)
+                    {
+                        root.GetComponent<DealCalc3>().CellValue[id].A = (1.0 / double.Parse(value)).ToString();
+                    }
+                    else
+                    {
+                        root.GetComponent<DealCalc3>().CellValue[id].A = value;
+                    }                    
                     FinishSituation[3] = true;
                     return;
                 }

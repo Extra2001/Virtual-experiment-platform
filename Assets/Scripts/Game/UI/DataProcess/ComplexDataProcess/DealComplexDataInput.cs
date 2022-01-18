@@ -40,8 +40,29 @@ public class DealComplexDataInput : HTBehaviour
              model.AverageExpression = new List<FormulaNode>() : model.AverageExpression));
         CallButton2.onClick.AddListener(() => ShowFormulaEditor(CallButton2, Value2, model.UncertainExpression == null ?
             model.UncertainExpression = new List<FormulaNode>() : model.UncertainExpression));
-        MainValue.onValueChanged.AddListener(x => RecordManager.tempRecord.complexQuantityModel.AnswerAverage = x);
-        Uncertain.onValueChanged.AddListener(x => RecordManager.tempRecord.complexQuantityModel.AnswerUncertain = x);
+        MainValue.onEndEdit.AddListener(x => 
+        {
+            if ((!string.IsNullOrEmpty(x)) && double.TryParse(x, out double t))
+            {
+                RecordManager.tempRecord.complexQuantityModel.AnswerAverage = x;
+            }
+            else
+            {
+                RecordManager.tempRecord.complexQuantityModel.AnswerAverage = string.Empty;
+            }            
+        });
+        Uncertain.onValueChanged.AddListener(x =>
+        {
+            if ((!string.IsNullOrEmpty(x)) && double.TryParse(x, out double t))
+            {
+                RecordManager.tempRecord.complexQuantityModel.AnswerUncertain = x;
+            }
+            else
+            {
+                RecordManager.tempRecord.complexQuantityModel.AnswerUncertain = string.Empty;
+            }
+                
+        });
         formulaController.onSelectCell += FormulaController_onSelectCell;
     }
     

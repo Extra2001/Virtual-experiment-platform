@@ -29,7 +29,7 @@ public class AddAndSubtractCell : HTBehaviour
     {
         Value.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if ((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
                 {
@@ -47,7 +47,7 @@ public class AddAndSubtractCell : HTBehaviour
         });
         Digit.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if (int.Parse(value) != 0)
                 {
@@ -65,7 +65,7 @@ public class AddAndSubtractCell : HTBehaviour
         });
         Value2.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
                 Root.GetComponent<DealCalc1>().CellValue[id].Digit = "0";

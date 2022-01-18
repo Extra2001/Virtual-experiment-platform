@@ -24,7 +24,7 @@ public class FunctionCalcCell1 : HTBehaviour
     {
         Value.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if ((double.Parse(value) - 1 >= 0) && (double.Parse(value) - 10 < 0))//对数特殊要求
                 {
@@ -42,7 +42,7 @@ public class FunctionCalcCell1 : HTBehaviour
         });
         Digit.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if (int.Parse(value) != 0)
                 {
@@ -60,7 +60,7 @@ public class FunctionCalcCell1 : HTBehaviour
         });
         Value2.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if ((double.Parse(value) - 0) > 0)//对数特殊要求
                 {

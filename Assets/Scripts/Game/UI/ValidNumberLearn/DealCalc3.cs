@@ -103,7 +103,7 @@ public class DealCalc3 : HTBehaviour
         //用户答案输入初始化
         UserValue.onValueChanged.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if ((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
                 {
@@ -123,7 +123,7 @@ public class DealCalc3 : HTBehaviour
         });
         UserDigit.onValueChanged.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if (int.Parse(value) != 0)
                 {
@@ -144,7 +144,7 @@ public class DealCalc3 : HTBehaviour
         });
         UserValue2.onValueChanged.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 _uservalue = value;
                 _userdigit = "0";

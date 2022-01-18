@@ -26,7 +26,7 @@ public class FunctionCalcCell2 : HTBehaviour
     {
         Value.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
                 {
@@ -44,7 +44,7 @@ public class FunctionCalcCell2 : HTBehaviour
         });
         Digit.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if (int.Parse(value) != 0)
                 {
@@ -62,7 +62,7 @@ public class FunctionCalcCell2 : HTBehaviour
         });
         Value2.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 root.GetComponent<DealCalc3>().CellValue[id].Value = value;
                 root.GetComponent<DealCalc3>().CellValue[id].Digit = "0";
@@ -73,7 +73,7 @@ public class FunctionCalcCell2 : HTBehaviour
         });
         A.onEndEdit.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if (int.Parse(value) != 0)//底数不为0
                 {

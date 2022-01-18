@@ -165,7 +165,7 @@ public class DealCalc2 : HTBehaviour
         });
         UserDigit.onValueChanged.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 if (int.Parse(value) != 0)
                 {
@@ -186,7 +186,7 @@ public class DealCalc2 : HTBehaviour
         });
         UserValue2.onValueChanged.AddListener(value =>
         {
-            if (!string.IsNullOrEmpty(value))
+            if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
                 _uservalue = value;
                 _userdigit = "0";

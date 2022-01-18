@@ -454,27 +454,27 @@ public struct CheckFloat2 {
         }
         return Math.Round(d, n, MidpointRounding.ToEven).ToString();
     }
-    public static decimal KeepTo(decimal truevalue, int n) {//保留到第n位有效数字
-        int p = 1;
-        if(n > 0) {
-            for(int i = 0;i < n;i++) {
-                p *= 10;
+            public static string KeepTo(decimal truevalue, int n) {//保留到第n位有效数字
+            int p = 1;
+            if(n > 0) {
+                for(int i = 0;i < n;i++) {
+                    p *= 10;
+                }
+                decimal x = truevalue / p;
+                return $"{Math.Round(x, MidpointRounding.ToEven)}e{n}";
             }
-            decimal x = truevalue / p;
-            return Math.Round(x, MidpointRounding.ToEven) * p;
-        }
-        else if(n < 0) {
-            for(int i = 0;i < -n;i++) {
-                p *= 10;
+            else if(n < 0) {
+                for(int i = 0;i < -n;i++) {
+                    p *= 10;
+                }
+                decimal x = truevalue * p;
+                return $"{Math.Round(x / p, MidpointRounding.ToEven)}";
             }
-            decimal x = truevalue * p;
-            return Math.Round(x, MidpointRounding.ToEven) / p;
+            else {
+                return Math.Round(truevalue, MidpointRounding.ToEven).ToString();
+            }
+            //return Math.Round((truevalue * Math.Pow(10, n) + 0.5) , MidpointRounding.ToEven) / Math.Pow(10, n);
         }
-        else {
-            return Math.Round(truevalue, MidpointRounding.ToEven);
-        }
-        //return Math.Round((truevalue * Math.Pow(10, n) + 0.5) , MidpointRounding.ToEven) / Math.Pow(10, n);
-    }
     public override string ToString() {
         return TrueValue.ToString(LoDigit <= 0 ? $"F{-LoDigit}" : $"E{EffectiveDigit - 1}");
     }

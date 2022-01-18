@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class FunctionCalcFormat
 {
@@ -102,39 +103,36 @@ public class DealCalc3 : HTBehaviour
         //用户答案输入初始化
         UserValue.onValueChanged.AddListener(value =>
         {
-            if (string.IsNullOrEmpty(value))
-            {
-                UserValue.text = "0";
-            }
-            else
+            if (!string.IsNullOrEmpty(value))
             {
                 _uservalue = value;
             }
         });
         UserDigit.onValueChanged.AddListener(value =>
         {
-            if (string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value))
             {
-                UserDigit.text = "0";
-            }
-            else if (value != "0" && int.Parse(value) - 0 == 0)
-            {
-                UserDigit.text = "0";
-            }
-            else
-            {
-                _userdigit = value;
+                if (int.Parse(value) != 0)
+                {
+                    _userdigit = value;
+                    return;
+                }
+                else
+                {
+                    UserDigit.text = string.Empty;
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "请输入合法的数字",
+                        ShowCancel = false
+                    });
+                }
             }
         });
         UserValue2.onValueChanged.AddListener(value =>
         {
-            if (string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value))
             {
-                UserValue2.text = "0";
-            }
-            else
-            {
-                //将正常数转换为科学计数法存储
                 _uservalue = value;
                 _userdigit = "0";
             }
@@ -166,8 +164,217 @@ public class DealCalc3 : HTBehaviour
             }
         });
 
+        //CalcButton绑定
+        CalcButton.onClick.AddListener(() =>
+        {
+            //检查算式输完没有
+            if (CurrentFunctionIndex == -1)
+            {
+                UIAPI.Instance.ShowModel(new SimpleModel()
+                {
+                    Message = "请在您想使用的对应函数前打勾",
+                    ShowCancel = false
+                });
+                return;
+            }else if (CurrentFunctionIndex < 2)
+            {
+                if (!Cells[CurrentFunctionIndex].GetComponent<FunctionCalcCell1>().IfFinish())
+                {
+                    WarningInput();
+                    return;
+                }
+            }
+            else if (CurrentFunctionIndex < 5)
+            {
+                if (!Cells[CurrentFunctionIndex].GetComponent<FunctionCalcCell2>().IfFinish())
+                {
+                    WarningInput();
+                    return;
+                }
+            }
+            else
+            {
+                if (!Cells[CurrentFunctionIndex].GetComponent<FunctionCalcCell3>().IfFinish())
+                {
+                    WarningInput();
+                    return;
+                }
+            }
+            //检查答案输完没有
+            if (_userstate == 0)
+            {
+                if (string.IsNullOrEmpty(UserValue2.text))
+                {
+                    WarningInput();
+                    return;
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(UserValue.text) || string.IsNullOrEmpty(UserDigit.text))
+                {
+                    WarningInput();
+                    return;
+                }
+            }
 
+            //计算
+            CheckFloat2 result = new CheckFloat2();
+            bool correct = false;
+            switch (CurrentFunctionIndex)
+            {
+                case 0:
+                    (result, correct) = CheckFloat2.CheckUserLog(Math.E, StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    break;
+                case 1:
+                    (result, correct) = CheckFloat2.CheckUserLog(10.0, StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    break;
+                case 2:
+                    (result, correct) = CheckFloat2.CheckUserExp(double.Parse(CellValue[CurrentFunctionIndex].A), StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    break;
+                case 3:
+                    (result, correct) = CheckFloat2.CheckUserPow(double.Parse(CellValue[CurrentFunctionIndex].A), StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    break;
+                case 4:
+                    (result, correct) = CheckFloat2.CheckUserPow(double.Parse(CellValue[CurrentFunctionIndex].A), StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    break;
+                case 5:
+                    if (CellValue[CurrentFunctionIndex].AngleKind[2])
+                    {
+                        int[] angle = new int[3];
+                        for (int i = 0; i < 3; i++)
+                        {
+                            if (string.IsNullOrEmpty(CellValue[CurrentFunctionIndex].Angle[i]))
+                            {
+                                angle[i] = 0;
+                            }
+                            else
+                            {
+                                angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
+                            }
+                        }
+                        (result, correct) = CheckFloat2.CheckUserSin(angle[0], angle[1], angle[2], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else if (CellValue[CurrentFunctionIndex].AngleKind[1])
+                    {
+                        int[] angle = new int[2];
+                        for (int i = 0; i < 2; i++)
+                        {
+                            if (string.IsNullOrEmpty(CellValue[CurrentFunctionIndex].Angle[i]))
+                            {
+                                angle[i] = 0;
+                            }
+                            else
+                            {
+                                angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
+                            }
+                        }
+                        (result, correct) = CheckFloat2.CheckUserSin(angle[0], angle[1], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else
+                    {
+                        (result, correct) = CheckFloat2.CheckUserSin(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    break;
+                case 6:
+                    if (CellValue[CurrentFunctionIndex].AngleKind[2])
+                    {
+                        int[] angle = new int[3];
+                        for (int i = 0; i < 3; i++)
+                        {
+                            if (string.IsNullOrEmpty(CellValue[CurrentFunctionIndex].Angle[i]))
+                            {
+                                angle[i] = 0;
+                            }
+                            else
+                            {
+                                angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
+                            }
+                        }
+                        (result, correct) = CheckFloat2.CheckUserCos(angle[0], angle[1], angle[2], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else if (CellValue[CurrentFunctionIndex].AngleKind[1])
+                    {
+                        int[] angle = new int[2];
+                        for (int i = 0; i < 2; i++)
+                        {
+                            if (string.IsNullOrEmpty(CellValue[CurrentFunctionIndex].Angle[i]))
+                            {
+                                angle[i] = 0;
+                            }
+                            else
+                            {
+                                angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
+                            }
+                        }
+                        (result, correct) = CheckFloat2.CheckUserCos(angle[0], angle[1], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else
+                    {
+                        (result, correct) = CheckFloat2.CheckUserCos(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    break;
+                case 7:
+                    if (CellValue[CurrentFunctionIndex].AngleKind[2])
+                    {
+                        int[] angle = new int[3];
+                        for (int i = 0; i < 3; i++)
+                        {
+                            if (string.IsNullOrEmpty(CellValue[CurrentFunctionIndex].Angle[i]))
+                            {
+                                angle[i] = 0;
+                            }
+                            else
+                            {
+                                angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
+                            }
+                        }
+                        (result, correct) = CheckFloat2.CheckUserTan(angle[0], angle[1], angle[2], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else if (CellValue[CurrentFunctionIndex].AngleKind[1])
+                    {
+                        int[] angle = new int[2];
+                        for (int i = 0; i < 2; i++)
+                        {
+                            if (string.IsNullOrEmpty(CellValue[CurrentFunctionIndex].Angle[i]))
+                            {
+                                angle[i] = 0;
+                            }
+                            else
+                            {
+                                angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
+                            }
+                        }
+                        (result, correct) = CheckFloat2.CheckUserTan(angle[0], angle[1], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else
+                    {
+                        (result, correct) = CheckFloat2.CheckUserTan(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    break;
+                default:
+                    break;
+            }
+            Ans.text = result.ToString();
+            if (correct)
+            {
+                Reason.text = "计算正确";
+            }
+            else
+            {
+                Reason.text = "计算错误";
+            }
+        });
+        
     }
 
-
+    private void WarningInput()
+    {
+        UIAPI.Instance.ShowModel(new SimpleModel()
+        {
+            Title = "警告",
+            Message = "请检查算式及结果是否输入完成",
+            ShowCancel = false
+        });
+    }
 }

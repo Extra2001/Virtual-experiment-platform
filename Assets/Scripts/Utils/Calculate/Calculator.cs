@@ -597,6 +597,63 @@ public struct CheckFloat2 {
     public static CheckFloat2 MyTan(double val, double unc) {
         return MyTrig(val, unc, (double x) => Math.Tan(x), (double x) => 1 / (Math.Cos(x) * Math.Cos(x)));
     }
+    public static (CheckFloat2 result, bool correct) CheckUserExp(double a, CheckFloat2 x, CheckFloat2 userin) {
+        var res = Exp(a, x);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserLog(double a, CheckFloat2 x, CheckFloat2 userin) {
+        var res = Log(a, x);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserPow(double n, CheckFloat2 x, CheckFloat2 userin) {
+        var res = Pow(x, n);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserSin(int deg, CheckFloat2 userin) {
+        (double val, double unc) = MakeRadian(deg);
+        CheckFloat2 res = MySin(val, unc);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserSin(int deg, int min, CheckFloat2 userin) {
+        (double val, double unc) = MakeRadian(deg, min);
+        CheckFloat2 res = MySin(val, unc);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserSin(int deg, int min, int sec, CheckFloat2 userin) {
+        (double val, double unc) = MakeRadian(deg, min, sec);
+        CheckFloat2 res = MySin(val, unc);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserCos(int deg, CheckFloat2 userin) {
+        (double val, double unc) = MakeRadian(deg);
+        CheckFloat2 res = MyCos(val, unc);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserCos(int deg, int min, CheckFloat2 userin) {
+        (double val, double unc) = MakeRadian(deg, min);
+        CheckFloat2 res = MyCos(val, unc);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserCos(int deg, int min, int sec, CheckFloat2 userin) {
+        (double val, double unc) = MakeRadian(deg, min, sec);
+        CheckFloat2 res = MyCos(val, unc);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserTan(int deg, CheckFloat2 userin) {
+        (double val, double unc) = MakeRadian(deg);
+        CheckFloat2 res = MyTan(val, unc);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserTan(int deg, int min, CheckFloat2 userin) {
+        (double val, double unc) = MakeRadian(deg, min);
+        CheckFloat2 res = MyTan(val, unc);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
+    public static (CheckFloat2 result, bool correct) CheckUserTan(int deg, int min, int sec, CheckFloat2 userin) {
+        (double val, double unc) = MakeRadian(deg, min, sec);
+        CheckFloat2 res = MyTan(val, unc);
+        return (res, res.TrueValue == userin.TrueValue && userin.HiDigit == res.HiDigit && userin.LoDigit == res.LoDigit);
+    }
 }
 public static class StaticMethods {
     public static string NormToExp(string norm)

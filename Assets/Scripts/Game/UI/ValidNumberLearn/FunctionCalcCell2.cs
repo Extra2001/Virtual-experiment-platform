@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class FunctionCalcCell2 : HTBehaviour
 {
@@ -27,9 +28,17 @@ public class FunctionCalcCell2 : HTBehaviour
         {
             if (!string.IsNullOrEmpty(value))
             {
-                root.GetComponent<DealCalc3>().CellValue[id].Value = value;
-                FinishSituation[1] = true;
-                return;
+                if((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
+                {
+                    root.GetComponent<DealCalc3>().CellValue[id].Value = value;
+                    FinishSituation[1] = true;
+                    return;
+                }
+                else
+                {
+                    Value.text = string.Empty;
+                    WarningInput();
+                }                
             }
             FinishSituation[1] = false;
         });

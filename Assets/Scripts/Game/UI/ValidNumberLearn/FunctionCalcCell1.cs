@@ -26,7 +26,7 @@ public class FunctionCalcCell1 : HTBehaviour
         {
             if (!string.IsNullOrEmpty(value))
             {
-                if ((double.Parse(value) - 0) > 0)//对数特殊要求
+                if ((double.Parse(value) - 1 >= 0) && (double.Parse(value) - 10 < 0))//对数特殊要求
                 {
                     root.GetComponent<DealCalc3>().CellValue[id].Value = value;
                     FinishSituation[1] = true;
@@ -65,7 +65,7 @@ public class FunctionCalcCell1 : HTBehaviour
                 if ((double.Parse(value) - 0) > 0)//对数特殊要求
                 {
                     root.GetComponent<DealCalc3>().CellValue[id].Value = value;
-                    root.GetComponent<DealCalc3>().CellValue[id].Digit = value;
+                    root.GetComponent<DealCalc3>().CellValue[id].Digit = "0";
                     FinishSituation[0] = true;
                     return;
                 }

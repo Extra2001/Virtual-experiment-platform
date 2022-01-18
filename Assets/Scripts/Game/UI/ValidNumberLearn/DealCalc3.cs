@@ -105,7 +105,20 @@ public class DealCalc3 : HTBehaviour
         {
             if (!string.IsNullOrEmpty(value))
             {
-                _uservalue = value;
+                if ((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
+                {
+                    _uservalue = value;
+                }
+                else
+                {
+                    UserValue.text = string.Empty;
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "请输入合法的数字",
+                        ShowCancel = false
+                    });
+                }
             }
         });
         UserDigit.onValueChanged.AddListener(value =>
@@ -139,9 +152,9 @@ public class DealCalc3 : HTBehaviour
         });
         UserSwitchButton.onClick.AddListener(() =>
         {
-            UserValue.text = "0";
-            UserDigit.text = "0";
-            UserValue2.text = "0";
+            UserValue.text = string.Empty;
+            UserDigit.text = string.Empty;
+            UserValue2.text = string.Empty;
 
             _userstate = 1 - _userstate;
             if (_userstate == 0)
@@ -159,8 +172,44 @@ public class DealCalc3 : HTBehaviour
         {
             if (_ansstate != -1)
             {
-                _ansstate = 1 - _ansstate;
-                //将ans格式转换
+                if (_ansstate == 0)
+                {
+                    if (string.IsNullOrEmpty(StaticMethods.NormToExp(Ans.text)))
+                    {
+                        UIAPI.Instance.ShowModel(new SimpleModel()
+                        {
+                            Title = "警告",
+                            Message = "答案不能用科学计数法表示",
+                            ShowCancel = false
+                        });
+                        _ansstate = 0;
+                    }
+                    else
+                    {
+                        Ans.text = StaticMethods.ExpToSci(StaticMethods.NormToExp(Ans.text));
+                        _ansstate = 1;
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(StaticMethods.ExpToNorm(StaticMethods.SciToExp(Ans.text))))
+                    {
+                        UIAPI.Instance.ShowModel(new SimpleModel()
+                        {
+                            Title = "警告",
+                            Message = "答案只能用科学计数法表示",
+                            ShowCancel = false
+                        });
+                        _ansstate = 1;
+                    }
+                    else
+                    {
+                        Ans.text = StaticMethods.ExpToNorm(StaticMethods.SciToExp(Ans.text));
+                        _ansstate = 0;
+                    }
+                }
+                
+
             }
         });
 
@@ -355,7 +404,16 @@ public class DealCalc3 : HTBehaviour
                 default:
                     break;
             }
-            Ans.text = result.ToString();
+            if (result.ToString().Contains("E") || result.ToString().Contains("e"))
+            {
+                _ansstate = 1;
+                Ans.text = StaticMethods.ExpToSci(result.ToString());
+            }
+            else
+            {
+                _ansstate = 0;
+                Ans.text = result.ToString();
+            }
             if (correct)
             {
                 Reason.text = "计算正确";
@@ -364,6 +422,7 @@ public class DealCalc3 : HTBehaviour
             {
                 Reason.text = "计算错误";
             }
+            
         });
         
     }

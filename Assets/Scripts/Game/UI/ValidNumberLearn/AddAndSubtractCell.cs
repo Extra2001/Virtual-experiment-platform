@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class AddAndSubtractCell : HTBehaviour
 {
@@ -19,6 +20,7 @@ public class AddAndSubtractCell : HTBehaviour
     public Sprite SubtractImage;
 
     public int state = 0;//0代表正常数，1代表科学计数法
+    public bool[] FinishSituation = new bool[3] { false, false, false }; //0代表正常数，1和2代表科学计数法
     //启用自动化
     protected override bool IsAutomate => true;
     
@@ -27,50 +29,50 @@ public class AddAndSubtractCell : HTBehaviour
     {
         Value.onEndEdit.AddListener(value =>
         {
-            if (string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value))
             {
-                Value.text = "0";
+                if ((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
+                {
+                    Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
+                    FinishSituation[1] = true;
+                    return;
+                }
+                else
+                {
+                    Value.text = string.Empty;
+                    WarningInput();
+                }
             }
-            else if (value != "0" && double.Parse(value) - 0 == 0)
-            {
-                Value.text = "0";
-            }
-            else
-            {
-                Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
-            }            
+            FinishSituation[1] = false;
         });
         Digit.onEndEdit.AddListener(value =>
         {
-            if (string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value))
             {
-                Digit.text = "0";
+                if (int.Parse(value) != 0)
+                {
+                    Root.GetComponent<DealCalc1>().CellValue[id].Digit = value;
+                    FinishSituation[2] = true;
+                    return;
+                }
+                else
+                {
+                    Digit.text = string.Empty;
+                    WarningInput();
+                }
             }
-            else if (value != "0" && int.Parse(value) - 0 == 0)
-            {
-                Digit.text = "0";
-            }
-            else
-            {
-                Root.GetComponent<DealCalc1>().CellValue[id].Digit = value;
-            }            
+            FinishSituation[2] = false;
         });
         Value2.onEndEdit.AddListener(value =>
         {
-            if (string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value))
             {
-                Value2.text = "0";
-            }
-            else if (value != "0" && double.Parse(value) - 0 == 0)
-            {
-                Value2.text = "0";
-            }
-            else
-            {
-                //将正常数转换为科学计数法存储
                 Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
                 Root.GetComponent<DealCalc1>().CellValue[id].Digit = "0";
+                FinishSituation[0] = true;
+                return;
             }
+            FinishSituation[0] = false;
         });
 
         Sign.onClick.AddListener(() =>
@@ -88,9 +90,9 @@ public class AddAndSubtractCell : HTBehaviour
         });
         SwitchButton.onClick.AddListener(() =>
         {
-            Value.text = "0";
-            Digit.text = "0";
-            Value2.text = "0";
+            Value.text = string.Empty;
+            Digit.text = string.Empty;
+            Value2.text = string.Empty;
 
             state = 1 - state;
             if (state == 0)
@@ -106,5 +108,26 @@ public class AddAndSubtractCell : HTBehaviour
         });
     }
 
-
+    private void WarningInput()
+    {
+        UIAPI.Instance.ShowModel(new SimpleModel()
+        {
+            Title = "警告",
+            Message = "请输入合法的数字",
+            ShowCancel = false
+        });
+    }
+    public bool IfFinish()
+    {
+        bool ans = true;
+        if (state == 0)
+        {
+            ans = ans && FinishSituation[0];
+        }
+        else
+        {
+            ans = ans && FinishSituation[1] && FinishSituation[2];
+        }
+        return ans;
+    }
 }

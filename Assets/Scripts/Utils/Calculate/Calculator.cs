@@ -420,7 +420,7 @@ public struct CheckFloat2 {
                 value0 -= item.val.TrueValue;
             }
         }
-        decimal tmp = KeepTo(value0, maxlodigit);
+        decimal tmp = decimal.Parse(KeepTo(value0, maxlodigit));
         CheckFloat2 res = new CheckFloat2(tmp.ToString(), false);
         return res;
     }
@@ -687,13 +687,13 @@ public struct CheckFloat2 {
             return s;
         }
         public static double MyTrigRaw(int deg, Func<double, double> trigfunc) {
-            return trigfunc(MakeRadian(deg).val);
+            return trigfunc(StaticMethods.MakeRadian(deg).val);
         }
         public static double MyTrigRaw(int deg, int min, Func<double, double> trigfunc) {
-            return trigfunc(MakeRadian(deg, min).val);
+            return trigfunc(StaticMethods.MakeRadian(deg, min).val);
         }
         public static double MyTrigRaw(int deg, int min, int sec, Func<double, double> trigfunc) {
-            return trigfunc(MakeRadian(deg, min, sec).val);
+            return trigfunc(StaticMethods.MakeRadian(deg, min, sec).val);
         }
         public static double MySinRaw(int deg) {
             return MyTrigRaw(deg, Math.Sin);

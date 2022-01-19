@@ -421,7 +421,7 @@ public struct CheckFloat2 {
             }
         }
         string tmp = KeepTo(value0, maxlodigit);
-        CheckFloat2 res = new CheckFloat2(tmp, false);
+        CheckFloat2 res = new CheckFloat2(tmp.ToString(), false);
         return res;
     }
     public static CheckFloat2 GroupMul(IList<(CheckFloat2 val, bool ismul)> inputs) {
@@ -468,7 +468,7 @@ public struct CheckFloat2 {
                     p *= 10;
                 }
                 decimal x = truevalue * p;
-                return $"{Math.Round(x / p, MidpointRounding.ToEven)}";
+                return $"{Math.Round(x / p, MidpointRounding.ToEven)}e{n}";
             }
             else {
                 return Math.Round(truevalue, MidpointRounding.ToEven).ToString();
@@ -530,7 +530,8 @@ public struct CheckFloat2 {
         double v = fn(rv);
         double dy = derivative(rv) * dx;
         CheckFloat2 tmp = new CheckFloat2(dy.ToString(), false);
-        return new CheckFloat2(KeepTo(Convert.ToDecimal(v), tmp.HiDigit).ToString(), false);
+        var w = KeepTo(Convert.ToDecimal(v), tmp.HiDigit);
+        return new CheckFloat2(w, false);
     }
     public static CheckFloat2 Sin(CheckFloat2 x, double dx) {
         return FunctionX(x, dx, Math.Sin, Math.Cos);

@@ -34,6 +34,9 @@ public class DealCalc3 : HTBehaviour
     private string _userdigit;
     private int _userstate;
     private int _ansstate = -1;
+
+    public bool IfMix;
+    public GameObject MixControlObject;
     //启用自动化
     protected override bool IsAutomate => true;
 

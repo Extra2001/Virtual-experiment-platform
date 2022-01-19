@@ -40,7 +40,14 @@ public class DealUncertainLearnUI : HTBehaviour
         {
             for (int i = 0; i < Zones.Length; i++)
             {
-                Zones[i].SetActive(true);
+                if (i < 3)
+                {
+                    Zones[i].SetActive(false);
+                }
+                else
+                {
+                    Zones[i].SetActive(true);
+                }                
             }
         }
         else

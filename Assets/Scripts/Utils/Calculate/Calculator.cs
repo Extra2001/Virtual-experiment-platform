@@ -420,8 +420,8 @@ public struct CheckFloat2 {
                 value0 -= item.val.TrueValue;
             }
         }
-        decimal tmp = decimal.Parse(KeepTo(value0, maxlodigit));
-        CheckFloat2 res = new CheckFloat2(tmp.ToString(), false);
+        string tmp = KeepTo(value0, maxlodigit);
+        CheckFloat2 res = new CheckFloat2(tmp, false);
         return res;
     }
     public static CheckFloat2 GroupMul(IList<(CheckFloat2 val, bool ismul)> inputs) {

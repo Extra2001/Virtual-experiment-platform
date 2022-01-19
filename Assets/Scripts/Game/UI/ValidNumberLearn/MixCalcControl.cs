@@ -17,17 +17,66 @@ public class MixCalcControl : HTBehaviour
     public InputField UserDigit;
     public Button UserSwitchButton;
     public Button AnsSwitchButton;
-    //public Text Reason;
+    public Text Reason;
     private string _uservalue;
     private string _userdigit;
     private int _userstate;
     private int _ansstate = -1;
+
+    public int NumRealLength = 0;//记录正确的有效数字有多少位
+    public string LastValue;//混合计算的上一个值
+
     //启用自动化
     protected override bool IsAutomate => true;
     
     // Start is called before the first frame update
     void Start()
     {
+        StartButton.onClick.AddListener(() =>
+        {
+            NumRealLength = 0;
+            LastValue = string.Empty;
+        });
+        CalcButton.onClick.AddListener(() =>
+        {
+            if (NumRealLength == 0)
+            {
+                UIAPI.Instance.ShowModel(new SimpleModel()
+                {
+                    Title = "警告",
+                    Message = "混合运算至少应当进行一次运算",
+                    ShowCancel = false
+                });
+            }
+            else
+            {
+                string ShowValue = CheckFloat2.KeepTo(decimal.Parse(LastValue), NumRealLength);
+                if (ShowValue.Contains("E") || ShowValue.Contains("e"))
+                {
+                    _ansstate = 1;
+                    Ans.text = StaticMethods.ExpToSci(ShowValue);
+                }
+                else
+                {
+                    _ansstate = 0;
+                    Ans.text = ShowValue;
+                }
+                CheckFloat2 _ans = new CheckFloat2(ShowValue);
+                string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
+                CheckFloat2 _user = new CheckFloat2(userresult);
+                bool correct = (_ans.EffectiveDigit == _user.EffectiveDigit) && (_ans.Value - _user.Value == 0);
+
+                if (correct)
+                {
+                    Reason.text = "计算正确";
+                }
+                else
+                {
+                    Reason.text = "计算错误，混合运算最终结果遵照计算法则即可，不必再多保留有效数字";
+                }
+            }
+        });
+
         //用户答案输入初始化
         UserValue.onValueChanged.AddListener(value =>
         {

@@ -32,6 +32,7 @@ public class MixCalcControl : HTBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Reason.text = "";
         StartButton.onClick.AddListener(() =>
         {
             NumRealLength = 0;
@@ -50,7 +51,27 @@ public class MixCalcControl : HTBehaviour
             }
             else
             {
-                string ShowValue = CheckFloat2.KeepTo(decimal.Parse(LastValue), NumRealLength);
+                bool finish = true;
+                //检查答案输入
+                if (_userstate == 0)
+                {
+                    if (string.IsNullOrEmpty(UserValue2.text))
+                    {
+                        finish = false;
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(UserValue.text) || string.IsNullOrEmpty(UserDigit.text))
+                    {
+                        finish = false;
+                    }
+                }
+                if (!finish)
+                {
+                    return;
+                }
+                string ShowValue = CheckFloat2.KeepEffective(decimal.Parse(LastValue), NumRealLength);
                 if (ShowValue.Contains("E") || ShowValue.Contains("e"))
                 {
                     _ansstate = 1;

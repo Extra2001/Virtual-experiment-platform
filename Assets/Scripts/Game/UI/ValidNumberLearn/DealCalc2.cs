@@ -111,7 +111,7 @@ public class DealCalc2 : HTBehaviour
             {
                 WarningInput();
             }
-            else
+            else if(!IfMix)
             {
                 List<(string rawnumstr, int isadd)> input = new List<(string rawnumstr, int isadd)>();
                 (string rawnumstr, int isadd) temp;
@@ -143,6 +143,63 @@ public class DealCalc2 : HTBehaviour
                     Reason.text = message;
                 }
             }
+            else if (IfMix)//混合运算
+            {
+                List<(CheckFloat2 rawnumstr, bool isadd)> input = new List<(CheckFloat2 rawnumstr, bool isadd)>();
+                (CheckFloat2 rawnumstr, bool isadd) temp;
+                for (int i = 0; i < CellValue.Count; i++)
+                {
+                    if (CellValue[i].Sign == 0)
+                    {
+                        temp.isadd = true;
+                    }
+                    else
+                    {
+                        temp.isadd = false;
+                    }
+                    string temp1 = StaticMethods.SciToExp(CellValue[i].Value + "*10^(" + CellValue[i].Digit + ")");
+                    temp.rawnumstr = new CheckFloat2(temp1);
+                    input.Add(temp);
+                }
+                string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
+                CheckFloat2 CorrectValue;//正确保留后的值
+                decimal RealValue;//未保留的值
+                string ShowValue;//此处显示的值
+                CorrectValue = CheckFloat2.GroupMul(input);
+                RealValue = CheckFloat2.GroupMulRaw(input);
+                int temp2 = MixControlObject.GetComponent<MixCalcControl>().NumRealLength;
+                if (temp2 > CorrectValue.EffectiveDigit || temp2 == 0)
+                {
+                    temp2 = CorrectValue.EffectiveDigit;
+                    MixControlObject.GetComponent<MixCalcControl>().NumRealLength = temp2;
+                }
+                temp2 = CorrectValue.EffectiveDigit + 1;//显示值比真实结果多保留一位
+                ShowValue = CheckFloat2.KeepEffective(RealValue, temp2);
+                MixControlObject.GetComponent<MixCalcControl>().LastValue = ShowValue;
+                if (ShowValue.Contains("E") || ShowValue.Contains("e"))
+                {
+                    _ansstate = 1;
+                    Ans.text = StaticMethods.ExpToSci(ShowValue);
+                }
+                else
+                {
+                    _ansstate = 0;
+                    Ans.text = ShowValue;
+                }
+                CheckFloat2 _ans = new CheckFloat2(ShowValue);
+                CheckFloat2 _user = new CheckFloat2(userresult);
+                bool correct = (_ans.EffectiveDigit == _user.EffectiveDigit) && (_ans.Value - _user.Value == 0);
+
+                if (correct)
+                {
+                    Reason.text = "计算正确";
+                }
+                else
+                {
+                    Reason.text = "计算错误";
+                }
+            }
+
         });
 
         //用户答案输入初始化

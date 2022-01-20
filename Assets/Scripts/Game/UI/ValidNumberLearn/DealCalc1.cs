@@ -173,11 +173,8 @@ public class DealCalc1 : HTBehaviour
                     temp2 = CorrectValue.EffectiveDigit;
                     MixControlObject.GetComponent<MixCalcControl>().NumRealLength = temp2;
                 }
-                /*
-                此处考虑xx求出ShowValue的有效位数
-
-                */
-                ShowValue = CheckFloat2.KeepTo(RealValue, temp2);
+                temp2 = CorrectValue.EffectiveDigit + 1;//显示值比真实结果多保留一位
+                ShowValue = CheckFloat2.KeepEffective(RealValue, temp2);
                 MixControlObject.GetComponent<MixCalcControl>().LastValue = ShowValue;
                 if (ShowValue.Contains("E") || ShowValue.Contains("e"))
                 {

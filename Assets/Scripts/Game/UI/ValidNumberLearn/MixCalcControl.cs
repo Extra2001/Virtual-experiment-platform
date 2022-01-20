@@ -25,6 +25,7 @@ public class MixCalcControl : HTBehaviour
 
     public int NumRealLength = 0;//记录正确的有效数字有多少位
     public string LastValue;//混合计算的上一个值
+    public List<CheckFloat2> HistoryResult = new List<CheckFloat2>();
 
     //启用自动化
     protected override bool IsAutomate => true;
@@ -37,6 +38,7 @@ public class MixCalcControl : HTBehaviour
         {
             NumRealLength = 0;
             LastValue = string.Empty;
+            HistoryResult = new List<CheckFloat2>();
         });
         CalcButton.onClick.AddListener(() =>
         {
@@ -69,6 +71,12 @@ public class MixCalcControl : HTBehaviour
                 }
                 if (!finish)
                 {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "请输入你认为的答案",
+                        ShowCancel = false
+                    });
                     return;
                 }
                 string ShowValue = new CheckFloat2(CheckFloat2.KeepEffective(decimal.Parse(LastValue), NumRealLength)).ToString();

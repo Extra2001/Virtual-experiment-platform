@@ -853,6 +853,22 @@ public struct CheckFloat2
     }
 }
 public static class StaticMethods {
+    public static CheckFloat2 CheckSimilar(CheckFloat2 input, List<CheckFloat2> HistoryResult)
+    {
+        CheckFloat2 ans = input;
+        decimal a, b;
+        //检查混合运算输入值是否是之前结果
+        foreach (var item in HistoryResult)
+        {
+            a = decimal.Parse(item.ToString());
+            b = decimal.Parse(new CheckFloat2(CheckFloat2.KeepEffective(decimal.Parse(input.ToString()), item.EffectiveDigit)).ToString());
+            if ((a-b) == decimal.Zero)
+            {
+                ans = item;
+            }
+        }
+        return ans;
+    }
     public static string NormToExp(string norm)
     {
         CheckFloat2 ck = new CheckFloat2(norm);

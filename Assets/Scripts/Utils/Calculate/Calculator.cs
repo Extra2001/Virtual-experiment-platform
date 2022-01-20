@@ -387,7 +387,7 @@ public struct CheckFloat2
     {
         Original = value;
         EffectiveDigit = Effectiveness(value);
-        if (checkmaxlen && EffectiveDigit > 8)
+        if (checkmaxlen && EffectiveDigit > 11)
         {
             throw new Exception("输入太精确了");
         }

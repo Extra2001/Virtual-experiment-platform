@@ -26,6 +26,17 @@ public class FunctionCalcCell1 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Value.text = string.Empty;
+                    return;
+                }
                 if ((double.Parse(value) - 1 >= 0) && (double.Parse(value) - 10 < 0))//对数特殊要求
                 {
                     root.GetComponent<DealCalc3>().CellValue[id].Value = value;
@@ -44,6 +55,17 @@ public class FunctionCalcCell1 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (Mathf.Abs(int.Parse(value)) > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Digit.text = string.Empty;
+                    return;
+                }
                 if (int.Parse(value) != 0)
                 {
                     root.GetComponent<DealCalc3>().CellValue[id].Digit = value;
@@ -62,6 +84,17 @@ public class FunctionCalcCell1 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Value2.text = string.Empty;
+                    return;
+                }
                 if ((double.Parse(value) - 0) > 0)//对数特殊要求
                 {
                     root.GetComponent<DealCalc3>().CellValue[id].Value = value;

@@ -28,7 +28,18 @@ public class FunctionCalcCell2 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                if((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
+                if (value.Length > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Value.text = string.Empty;
+                    return;
+                }
+                if ((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
                 {
                     root.GetComponent<DealCalc3>().CellValue[id].Value = value;
                     FinishSituation[1] = true;
@@ -46,6 +57,17 @@ public class FunctionCalcCell2 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (Mathf.Abs(int.Parse(value)) > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Digit.text = string.Empty;
+                    return;
+                }
                 if (int.Parse(value) != 0)
                 {
                     root.GetComponent<DealCalc3>().CellValue[id].Digit = value;
@@ -61,9 +83,20 @@ public class FunctionCalcCell2 : HTBehaviour
             FinishSituation[2] = false;
         });
         Value2.onEndEdit.AddListener(value =>
-        {
+        {            
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Value2.text = string.Empty;
+                    return;
+                }
                 root.GetComponent<DealCalc3>().CellValue[id].Value = value;
                 root.GetComponent<DealCalc3>().CellValue[id].Digit = "0";
                 FinishSituation[0] = true;

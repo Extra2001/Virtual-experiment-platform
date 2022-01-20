@@ -31,6 +31,17 @@ public class AddAndSubtractCell : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Value.text = string.Empty;
+                    return;
+                }
                 if ((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
                 {
                     Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
@@ -49,6 +60,17 @@ public class AddAndSubtractCell : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (Mathf.Abs(int.Parse(value)) > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Digit.text = string.Empty;
+                    return;
+                }
                 if (int.Parse(value) != 0)
                 {
                     Root.GetComponent<DealCalc1>().CellValue[id].Digit = value;
@@ -67,6 +89,17 @@ public class AddAndSubtractCell : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Value2.text = string.Empty;
+                    return;
+                }
                 Root.GetComponent<DealCalc1>().CellValue[id].Value = value;
                 Root.GetComponent<DealCalc1>().CellValue[id].Digit = "0";
                 FinishSituation[0] = true;

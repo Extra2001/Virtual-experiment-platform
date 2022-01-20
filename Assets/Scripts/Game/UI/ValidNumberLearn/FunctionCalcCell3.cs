@@ -37,6 +37,17 @@ public class FunctionCalcCell3 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    Angle[0].text = string.Empty;
+                    return;
+                }
                 root.GetComponent<DealCalc3>().CellValue[id].Angle[0] = value;
                 FinishSituation[0] = true;
                 return;
@@ -47,7 +58,7 @@ public class FunctionCalcCell3 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                if((int.Parse(value)>=0)&& (int.Parse(value) < 60))
+                if((int.Parse(value) >= 0)&& (int.Parse(value) < 60))
                 {
                     root.GetComponent<DealCalc3>().CellValue[id].Angle[1] = value;
                     FinishSituation[1] = true;

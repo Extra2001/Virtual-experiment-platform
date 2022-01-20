@@ -199,7 +199,7 @@ public class DealCalc1 : HTBehaviour
                 }
                 else
                 {
-                    Reason.text = "计算错误，混合运算中间结果应当多保留1位有效数字";
+                    Reason.text = "计算错误";
                 }
             }
         });
@@ -209,6 +209,17 @@ public class DealCalc1 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    UserValue.text = string.Empty;
+                    return;
+                }
                 if ((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
                 {
                     _uservalue = value;
@@ -229,6 +240,17 @@ public class DealCalc1 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (Mathf.Abs(int.Parse(value)) > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    UserDigit.text = string.Empty;
+                    return;
+                }
                 if (int.Parse(value) != 0)
                 {
                     _userdigit = value;
@@ -250,6 +272,17 @@ public class DealCalc1 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 10)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    UserValue2.text = string.Empty;
+                    return;
+                }
                 _uservalue = value;
                 _userdigit = "0";
             }
@@ -291,6 +324,7 @@ public class DealCalc1 : HTBehaviour
                     else
                     {
                         Ans.text = StaticMethods.ExpToSci(StaticMethods.NormToExp(Ans.text));
+                        AnsSwitchButton.FindChildren("Text").GetComponent<Text>().text = @"a*10^(b) <=> a";
                         _ansstate = 1;
                     }
                 }
@@ -309,6 +343,7 @@ public class DealCalc1 : HTBehaviour
                     else
                     {
                         Ans.text = StaticMethods.ExpToNorm(StaticMethods.SciToExp(Ans.text));
+                        AnsSwitchButton.FindChildren("Text").GetComponent<Text>().text = @"a <=> a*10^(b)";
                         _ansstate = 0;
                     }
                 }

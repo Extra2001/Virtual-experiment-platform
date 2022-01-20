@@ -101,7 +101,7 @@ public class MixCalcControl : HTBehaviour
                 }
                 else
                 {
-                    Reason.text = "计算错误，混合运算最终结果遵照计算法则即可，不必再多保留有效数字";
+                    Reason.text = "计算错误，混合运算中间结果需多保留1-2位，最终结果才进行截断";
                 }
             }
         });

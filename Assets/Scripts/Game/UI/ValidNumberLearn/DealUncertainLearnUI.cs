@@ -85,21 +85,41 @@ public class DealUncertainLearnUI : HTBehaviour
     {
         CurrentIndex = 0;
         SwitchZone(CurrentIndex);
+        UIAPI.Instance.ShowModel(new SimpleModel()
+        {
+            Message = "加减运算不能分步进行，结果与绝对不确定度最大者的最后一位对齐",
+            ShowCancel = false
+        });
     }
     private void ClickMultiplyAndDivideButton()
     {
         CurrentIndex = 1;
         SwitchZone(CurrentIndex);
+        UIAPI.Instance.ShowModel(new SimpleModel()
+        {
+            Message = "乘除运算不能分步进行，以有效数字最少的输入量为准",
+            ShowCancel = false
+        });
     }
     private void ClickFunctionCalcButton()
     {
         CurrentIndex = 2;
         SwitchZone(CurrentIndex);
+        UIAPI.Instance.ShowModel(new SimpleModel()
+        {
+            Message = "函数运算利用微分法则确定有效数字位数",
+            ShowCancel = false
+        });
     }
     private void ClickMixedCalcButton()
     {
         CurrentIndex = 3;
         SwitchZone(CurrentIndex);
+        UIAPI.Instance.ShowModel(new SimpleModel()
+        {
+            Message = "混合运算分步进行，中间过程多保留1-2位有效数字，在最终结果处截断",
+            ShowCancel = false
+        });
     }
     /// <summary>
     /// 点击“返回”按钮

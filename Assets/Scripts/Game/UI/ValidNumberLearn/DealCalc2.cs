@@ -58,6 +58,7 @@ public class DealCalc2 : HTBehaviour
         {
             var temp = GameObject.Instantiate(Cell);
             temp.transform.parent = CellFather;
+            temp.rectTransform().localScale = new Vector3(1, 1, 1);
             Cells.Add(temp);
             temp.GetComponent<MultiplayAndDivideCell>().id = Cells.Count - 1;
             temp.GetComponent<MultiplayAndDivideCell>().Root = this.gameObject;

@@ -288,28 +288,31 @@ public class DealCalc3 : HTBehaviour
                 }
             }
             //检查答案输完没有
-            if (_userstate == 0)
+            if (!IfMix)
             {
-                if (string.IsNullOrEmpty(UserValue2.text))
+                if (_userstate == 0)
                 {
-                    WarningInput();
-                    return;
+                    if (string.IsNullOrEmpty(UserValue2.text))
+                    {
+                        WarningInput();
+                        return;
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(UserValue.text) || string.IsNullOrEmpty(UserDigit.text))
+                    {
+                        WarningInput();
+                        return;
+                    }
                 }
             }
-            else
-            {
-                if (string.IsNullOrEmpty(UserValue.text) || string.IsNullOrEmpty(UserDigit.text))
-                {
-                    WarningInput();
-                    return;
-                }
-            }
-
+            
             //计算
             CheckFloat2 result = new CheckFloat2();
             bool correct = false;
             string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
-            CheckFloat2 CorrectValue = new CheckFloat2();//正确保留后的值
+            CheckFloat2 HiddenValue = new CheckFloat2();//用于传递有效位数的值
             double RealValue = 0;//未保留的值
             string ShowValue;//此处显示的值
             switch (CurrentFunctionIndex)
@@ -322,8 +325,10 @@ public class DealCalc3 : HTBehaviour
                     else
                     {
                         string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
-                        CorrectValue = CheckFloat2.Log(Math.E, new CheckFloat2(input));
-                        RealValue = CheckFloat2.LogRaw(Math.E, new CheckFloat2(input));
+                        CheckFloat2 temp = new CheckFloat2(input);
+                        RealValue = CheckFloat2.LogRaw(Math.E, temp);                        
+                        temp = StaticMethods.CheckSimilar(temp, MixControlObject.GetComponent<MixCalcControl>().HistoryResult);
+                        HiddenValue = CheckFloat2.Log(Math.E, temp);
                     }                    
                     break;
                 case 1:
@@ -334,9 +339,10 @@ public class DealCalc3 : HTBehaviour
                     else
                     {
                         string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
-                        CorrectValue = CheckFloat2.Log(10.0, new CheckFloat2(input));
-                        RealValue = CheckFloat2.LogRaw(10.0, new CheckFloat2(input));
-                        
+                        CheckFloat2 temp = new CheckFloat2(input);
+                        RealValue = CheckFloat2.LogRaw(10.0, temp);
+                        temp = StaticMethods.CheckSimilar(temp, MixControlObject.GetComponent<MixCalcControl>().HistoryResult);
+                        HiddenValue = CheckFloat2.Log(10.0, temp);
                     }
                     break;
                 case 2:
@@ -347,8 +353,10 @@ public class DealCalc3 : HTBehaviour
                     else
                     {
                         string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
-                        CorrectValue = CheckFloat2.Exp(double.Parse(CellValue[CurrentFunctionIndex].A), new CheckFloat2(input));
-                        RealValue = CheckFloat2.ExpRaw(double.Parse(CellValue[CurrentFunctionIndex].A), new CheckFloat2(input));
+                        CheckFloat2 temp = new CheckFloat2(input);
+                        RealValue = CheckFloat2.ExpRaw(double.Parse(CellValue[CurrentFunctionIndex].A), temp);
+                        temp = StaticMethods.CheckSimilar(temp, MixControlObject.GetComponent<MixCalcControl>().HistoryResult);
+                        HiddenValue = CheckFloat2.Exp(double.Parse(CellValue[CurrentFunctionIndex].A), temp);
                     }                    
                     break;
                 case 3:
@@ -359,8 +367,10 @@ public class DealCalc3 : HTBehaviour
                     else
                     {
                         string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
-                        CorrectValue = CheckFloat2.Pow(new CheckFloat2(input), double.Parse(CellValue[CurrentFunctionIndex].A));
-                        RealValue = CheckFloat2.PowRaw(new CheckFloat2(input), double.Parse(CellValue[CurrentFunctionIndex].A));
+                        CheckFloat2 temp = new CheckFloat2(input);
+                        RealValue = CheckFloat2.PowRaw(temp, double.Parse(CellValue[CurrentFunctionIndex].A));
+                        temp = StaticMethods.CheckSimilar(temp, MixControlObject.GetComponent<MixCalcControl>().HistoryResult);
+                        HiddenValue = CheckFloat2.Pow(temp, double.Parse(CellValue[CurrentFunctionIndex].A));
                     }                    
                     break;
                 case 4:
@@ -371,8 +381,10 @@ public class DealCalc3 : HTBehaviour
                     else
                     {
                         string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
-                        CorrectValue = CheckFloat2.Pow(new CheckFloat2(input), double.Parse(CellValue[CurrentFunctionIndex].A));
-                        RealValue = CheckFloat2.PowRaw(new CheckFloat2(input), double.Parse(CellValue[CurrentFunctionIndex].A));
+                        CheckFloat2 temp = new CheckFloat2(input);
+                        RealValue = CheckFloat2.PowRaw(temp, double.Parse(CellValue[CurrentFunctionIndex].A));
+                        temp = StaticMethods.CheckSimilar(temp, MixControlObject.GetComponent<MixCalcControl>().HistoryResult);
+                        HiddenValue = CheckFloat2.Pow(temp, double.Parse(CellValue[CurrentFunctionIndex].A));
                     }
                     break;
                 case 5:
@@ -399,7 +411,7 @@ public class DealCalc3 : HTBehaviour
                             double val;
                             double unc;
                             (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1], angle[2]);
-                            CorrectValue = CheckFloat2.MySin(val, unc);
+                            HiddenValue = CheckFloat2.MySin(val, unc);
                             RealValue = CheckFloat2.MySinRaw(angle[0], angle[1], angle[2]);
                         }                       
                     }
@@ -426,7 +438,7 @@ public class DealCalc3 : HTBehaviour
                             double val;
                             double unc;
                             (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1]);
-                            CorrectValue = CheckFloat2.MySin(val, unc);
+                            HiddenValue = CheckFloat2.MySin(val, unc);
                             RealValue = CheckFloat2.MySinRaw(angle[0], angle[1]);
                         }
                     }
@@ -441,7 +453,7 @@ public class DealCalc3 : HTBehaviour
                             double val;
                             double unc;
                             (val, unc) = CheckFloat2.MakeRadian(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
-                            CorrectValue = CheckFloat2.MySin(val, unc);
+                            HiddenValue = CheckFloat2.MySin(val, unc);
                             RealValue = CheckFloat2.MySinRaw(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
                         }
                     }
@@ -470,7 +482,7 @@ public class DealCalc3 : HTBehaviour
                             double val;
                             double unc;
                             (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1], angle[2]);
-                            CorrectValue = CheckFloat2.MyCos(val, unc);
+                            HiddenValue = CheckFloat2.MyCos(val, unc);
                             RealValue = CheckFloat2.MyCosRaw(angle[0], angle[1], angle[2]);
                         }
                     }
@@ -497,7 +509,7 @@ public class DealCalc3 : HTBehaviour
                             double val;
                             double unc;
                             (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1]);
-                            CorrectValue = CheckFloat2.MyCos(val, unc);
+                            HiddenValue = CheckFloat2.MyCos(val, unc);
                             RealValue = CheckFloat2.MyCosRaw(angle[0], angle[1]);
                         }
                     }
@@ -512,7 +524,7 @@ public class DealCalc3 : HTBehaviour
                             double val;
                             double unc;
                             (val, unc) = CheckFloat2.MakeRadian(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
-                            CorrectValue = CheckFloat2.MyCos(val, unc);
+                            HiddenValue = CheckFloat2.MyCos(val, unc);
                             RealValue = CheckFloat2.MyCosRaw(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
                         }
                     }
@@ -541,7 +553,7 @@ public class DealCalc3 : HTBehaviour
                             double val;
                             double unc;
                             (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1], angle[2]);
-                            CorrectValue = CheckFloat2.MyTan(val, unc);
+                            HiddenValue = CheckFloat2.MyTan(val, unc);
                             RealValue = CheckFloat2.MyTanRaw(angle[0], angle[1], angle[2]);
                         }
                     }
@@ -568,7 +580,7 @@ public class DealCalc3 : HTBehaviour
                             double val;
                             double unc;
                             (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1]);
-                            CorrectValue = CheckFloat2.MyTan(val, unc);
+                            HiddenValue = CheckFloat2.MyTan(val, unc);
                             RealValue = CheckFloat2.MyTanRaw(angle[0], angle[1]);
                         }
                     }
@@ -583,7 +595,7 @@ public class DealCalc3 : HTBehaviour
                             double val;
                             double unc;
                             (val, unc) = CheckFloat2.MakeRadian(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
-                            CorrectValue = CheckFloat2.MyTan(val, unc);
+                            HiddenValue = CheckFloat2.MyTan(val, unc);
                             RealValue = CheckFloat2.MyTanRaw(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
                         }
                     }
@@ -594,19 +606,11 @@ public class DealCalc3 : HTBehaviour
 
             if (IfMix)
             {
-                int temp2 = MixControlObject.GetComponent<MixCalcControl>().NumRealLength;
-                if (temp2 > CorrectValue.EffectiveDigit || temp2 == 0)
-                {
-                    temp2 = CorrectValue.EffectiveDigit;
-                    MixControlObject.GetComponent<MixCalcControl>().NumRealLength = temp2;
-                }
-                temp2 = CorrectValue.EffectiveDigit + 1;//显示值比真实结果多保留一位
-                ShowValue = new CheckFloat2(CheckFloat2.KeepEffective((decimal)RealValue, temp2)).ToString();
+                ShowValue = new CheckFloat2(CheckFloat2.KeepEffective((decimal)RealValue, 9)).ToString();
+                MixControlObject.GetComponent<MixCalcControl>().HistoryResult.Add(HiddenValue);
+                MixControlObject.GetComponent<MixCalcControl>().NumRealLength = HiddenValue.EffectiveDigit;
                 MixControlObject.GetComponent<MixCalcControl>().LastValue = ShowValue;
-                CheckFloat2 _ans = new CheckFloat2(ShowValue);
-                CheckFloat2 _user = new CheckFloat2(userresult);
-                correct = (_ans.EffectiveDigit == _user.EffectiveDigit) && (_ans.Value - _user.Value == 0);
-                result = _ans;
+                result = new CheckFloat2(ShowValue);
             }
             if (result.ToString().Contains("E") || result.ToString().Contains("e"))
             {
@@ -618,15 +622,18 @@ public class DealCalc3 : HTBehaviour
                 _ansstate = 0;
                 Ans.text = result.ToString();
             }
-            if (correct)
+            if (!IfMix)
             {
-                Reason.text = "计算正确";
+                if (correct)
+                {
+                    Reason.text = "计算正确";
+                }
+                else
+                {
+                    Reason.text = "计算错误";
+                }
             }
-            else
-            {
-                Reason.text = "计算错误";
-            }
-            
+                       
         });
         
     }

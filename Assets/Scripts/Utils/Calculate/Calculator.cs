@@ -860,9 +860,9 @@ public static class StaticMethods {
         //检查混合运算输入值是否是之前结果
         foreach (var item in HistoryResult)
         {
-            a = decimal.Parse(item.ToString());
-            b = decimal.Parse(new CheckFloat2(CheckFloat2.KeepEffective(decimal.Parse(input.ToString()), item.EffectiveDigit)).ToString());
-            if ((a-b) == decimal.Zero)
+            a = (decimal)double.Parse(item.ToString());
+            b = (decimal)double.Parse(CheckFloat2.KeepEffective(decimal.Parse(input.ToString()), item.EffectiveDigit));
+            if (Math.Abs(a-b) < 0.000000010m)
             {
                 ans = item;
             }

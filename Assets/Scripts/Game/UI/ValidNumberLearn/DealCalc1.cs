@@ -58,6 +58,7 @@ public class DealCalc1 : HTBehaviour
         {
             var temp = GameObject.Instantiate(Cell);
             temp.transform.parent = CellFather;
+            temp.rectTransform().localScale = new Vector3(1, 1, 1);
             Cells.Add(temp);
             temp.GetComponent<AddAndSubtractCell>().id = Cells.Count - 1;
             temp.GetComponent<AddAndSubtractCell>().Root = this.gameObject;

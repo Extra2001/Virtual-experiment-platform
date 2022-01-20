@@ -308,22 +308,72 @@ public class DealCalc3 : HTBehaviour
             //计算
             CheckFloat2 result = new CheckFloat2();
             bool correct = false;
+            string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
+            CheckFloat2 CorrectValue = new CheckFloat2();//正确保留后的值
+            double RealValue = 0;//未保留的值
+            string ShowValue;//此处显示的值
             switch (CurrentFunctionIndex)
             {
                 case 0:
-                    (result, correct) = CheckFloat2.CheckUserLog(Math.E, StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    if (!IfMix)
+                    {
+                        (result, correct) = CheckFloat2.CheckUserLog(Math.E, StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else
+                    {
+                        string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
+                        CorrectValue = CheckFloat2.Log(Math.E, new CheckFloat2(input));
+                        RealValue = CheckFloat2.LogRaw(Math.E, new CheckFloat2(input));
+                    }                    
                     break;
                 case 1:
-                    (result, correct) = CheckFloat2.CheckUserLog(10.0, StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    if (!IfMix)
+                    {
+                        (result, correct) = CheckFloat2.CheckUserLog(10.0, StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else
+                    {
+                        string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
+                        CorrectValue = CheckFloat2.Log(10.0, new CheckFloat2(input));
+                        RealValue = CheckFloat2.LogRaw(10.0, new CheckFloat2(input));
+                        
+                    }
                     break;
                 case 2:
-                    (result, correct) = CheckFloat2.CheckUserExp(double.Parse(CellValue[CurrentFunctionIndex].A), StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    if (!IfMix)
+                    {
+                        (result, correct) = CheckFloat2.CheckUserExp(double.Parse(CellValue[CurrentFunctionIndex].A), StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else
+                    {
+                        string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
+                        CorrectValue = CheckFloat2.Exp(double.Parse(CellValue[CurrentFunctionIndex].A), new CheckFloat2(input));
+                        RealValue = CheckFloat2.ExpRaw(double.Parse(CellValue[CurrentFunctionIndex].A), new CheckFloat2(input));
+                    }                    
                     break;
                 case 3:
-                    (result, correct) = CheckFloat2.CheckUserPow(double.Parse(CellValue[CurrentFunctionIndex].A), StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    if (!IfMix)
+                    {
+                        (result, correct) = CheckFloat2.CheckUserPow(double.Parse(CellValue[CurrentFunctionIndex].A), StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else
+                    {
+                        string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
+                        CorrectValue = CheckFloat2.Pow(new CheckFloat2(input), double.Parse(CellValue[CurrentFunctionIndex].A));
+                        RealValue = CheckFloat2.PowRaw(new CheckFloat2(input), double.Parse(CellValue[CurrentFunctionIndex].A));
+                    }                    
                     break;
                 case 4:
-                    (result, correct) = CheckFloat2.CheckUserPow(double.Parse(CellValue[CurrentFunctionIndex].A), StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    if (!IfMix)
+                    {
+                        (result, correct) = CheckFloat2.CheckUserPow(double.Parse(CellValue[CurrentFunctionIndex].A), StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")"), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                    }
+                    else
+                    {
+                        string input = StaticMethods.SciToExp(CellValue[CurrentFunctionIndex].Value + "*10^(" + CellValue[CurrentFunctionIndex].Digit + ")");
+                        CorrectValue = CheckFloat2.Pow(new CheckFloat2(input), double.Parse(CellValue[CurrentFunctionIndex].A));
+                        RealValue = CheckFloat2.PowRaw(new CheckFloat2(input), double.Parse(CellValue[CurrentFunctionIndex].A));
+                    }
                     break;
                 case 5:
                     if (CellValue[CurrentFunctionIndex].AngleKind[2])
@@ -340,7 +390,18 @@ public class DealCalc3 : HTBehaviour
                                 angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
                             }
                         }
-                        (result, correct) = CheckFloat2.CheckUserSin(angle[0], angle[1], angle[2], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        if (!IfMix)
+                        {
+                            (result, correct) = CheckFloat2.CheckUserSin(angle[0], angle[1], angle[2], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        }
+                        else
+                        {
+                            double val;
+                            double unc;
+                            (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1], angle[2]);
+                            CorrectValue = CheckFloat2.MySin(val, unc);
+                            RealValue = CheckFloat2.MySinRaw(angle[0], angle[1], angle[2]);
+                        }                       
                     }
                     else if (CellValue[CurrentFunctionIndex].AngleKind[1])
                     {
@@ -356,11 +417,33 @@ public class DealCalc3 : HTBehaviour
                                 angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
                             }
                         }
-                        (result, correct) = CheckFloat2.CheckUserSin(angle[0], angle[1], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        if (!IfMix)
+                        {
+                            (result, correct) = CheckFloat2.CheckUserSin(angle[0], angle[1], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        }
+                        else
+                        {
+                            double val;
+                            double unc;
+                            (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1]);
+                            CorrectValue = CheckFloat2.MySin(val, unc);
+                            RealValue = CheckFloat2.MySinRaw(angle[0], angle[1]);
+                        }
                     }
                     else
                     {
-                        (result, correct) = CheckFloat2.CheckUserSin(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        if (!IfMix)
+                        {
+                            (result, correct) = CheckFloat2.CheckUserSin(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        }
+                        else
+                        {
+                            double val;
+                            double unc;
+                            (val, unc) = CheckFloat2.MakeRadian(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
+                            CorrectValue = CheckFloat2.MySin(val, unc);
+                            RealValue = CheckFloat2.MySinRaw(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
+                        }
                     }
                     break;
                 case 6:
@@ -378,7 +461,18 @@ public class DealCalc3 : HTBehaviour
                                 angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
                             }
                         }
-                        (result, correct) = CheckFloat2.CheckUserCos(angle[0], angle[1], angle[2], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        if (!IfMix)
+                        {
+                            (result, correct) = CheckFloat2.CheckUserCos(angle[0], angle[1], angle[2], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        }
+                        else
+                        {
+                            double val;
+                            double unc;
+                            (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1], angle[2]);
+                            CorrectValue = CheckFloat2.MyCos(val, unc);
+                            RealValue = CheckFloat2.MyCosRaw(angle[0], angle[1], angle[2]);
+                        }
                     }
                     else if (CellValue[CurrentFunctionIndex].AngleKind[1])
                     {
@@ -394,11 +488,33 @@ public class DealCalc3 : HTBehaviour
                                 angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
                             }
                         }
-                        (result, correct) = CheckFloat2.CheckUserCos(angle[0], angle[1], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        if (!IfMix)
+                        {
+                            (result, correct) = CheckFloat2.CheckUserCos(angle[0], angle[1], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        }
+                        else
+                        {
+                            double val;
+                            double unc;
+                            (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1]);
+                            CorrectValue = CheckFloat2.MyCos(val, unc);
+                            RealValue = CheckFloat2.MyCosRaw(angle[0], angle[1]);
+                        }
                     }
                     else
                     {
-                        (result, correct) = CheckFloat2.CheckUserCos(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        if (!IfMix)
+                        {
+                            (result, correct) = CheckFloat2.CheckUserCos(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        }
+                        else
+                        {
+                            double val;
+                            double unc;
+                            (val, unc) = CheckFloat2.MakeRadian(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
+                            CorrectValue = CheckFloat2.MyCos(val, unc);
+                            RealValue = CheckFloat2.MyCosRaw(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
+                        }
                     }
                     break;
                 case 7:
@@ -416,7 +532,18 @@ public class DealCalc3 : HTBehaviour
                                 angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
                             }
                         }
-                        (result, correct) = CheckFloat2.CheckUserTan(angle[0], angle[1], angle[2], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        if (!IfMix)
+                        {
+                            (result, correct) = CheckFloat2.CheckUserTan(angle[0], angle[1], angle[2], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        }
+                        else
+                        {
+                            double val;
+                            double unc;
+                            (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1], angle[2]);
+                            CorrectValue = CheckFloat2.MyTan(val, unc);
+                            RealValue = CheckFloat2.MyTanRaw(angle[0], angle[1], angle[2]);
+                        }
                     }
                     else if (CellValue[CurrentFunctionIndex].AngleKind[1])
                     {
@@ -432,15 +559,54 @@ public class DealCalc3 : HTBehaviour
                                 angle[i] = int.Parse(CellValue[CurrentFunctionIndex].Angle[i]);
                             }
                         }
-                        (result, correct) = CheckFloat2.CheckUserTan(angle[0], angle[1], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        if (!IfMix)
+                        {
+                            (result, correct) = CheckFloat2.CheckUserTan(angle[0], angle[1], StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        }
+                        else
+                        {
+                            double val;
+                            double unc;
+                            (val, unc) = CheckFloat2.MakeRadian(angle[0], angle[1]);
+                            CorrectValue = CheckFloat2.MyTan(val, unc);
+                            RealValue = CheckFloat2.MyTanRaw(angle[0], angle[1]);
+                        }
                     }
                     else
                     {
-                        (result, correct) = CheckFloat2.CheckUserTan(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        if (!IfMix)
+                        {
+                            (result, correct) = CheckFloat2.CheckUserTan(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]), StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")"));
+                        }
+                        else
+                        {
+                            double val;
+                            double unc;
+                            (val, unc) = CheckFloat2.MakeRadian(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
+                            CorrectValue = CheckFloat2.MyTan(val, unc);
+                            RealValue = CheckFloat2.MyTanRaw(int.Parse(CellValue[CurrentFunctionIndex].Angle[0]));
+                        }
                     }
                     break;
                 default:
                     break;
+            }
+
+            if (IfMix)
+            {
+                int temp2 = MixControlObject.GetComponent<MixCalcControl>().NumRealLength;
+                if (temp2 > CorrectValue.EffectiveDigit || temp2 == 0)
+                {
+                    temp2 = CorrectValue.EffectiveDigit;
+                    MixControlObject.GetComponent<MixCalcControl>().NumRealLength = temp2;
+                }
+                temp2 = CorrectValue.EffectiveDigit + 1;//显示值比真实结果多保留一位
+                ShowValue = new CheckFloat2(CheckFloat2.KeepEffective((decimal)RealValue, temp2)).ToString();
+                MixControlObject.GetComponent<MixCalcControl>().LastValue = ShowValue;
+                CheckFloat2 _ans = new CheckFloat2(ShowValue);
+                CheckFloat2 _user = new CheckFloat2(userresult);
+                correct = (_ans.EffectiveDigit == _user.EffectiveDigit) && (_ans.Value - _user.Value == 0);
+                result = _ans;
             }
             if (result.ToString().Contains("E") || result.ToString().Contains("e"))
             {

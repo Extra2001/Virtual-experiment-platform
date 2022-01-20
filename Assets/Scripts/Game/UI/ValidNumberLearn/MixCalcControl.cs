@@ -71,7 +71,7 @@ public class MixCalcControl : HTBehaviour
                 {
                     return;
                 }
-                string ShowValue = CheckFloat2.KeepEffective(decimal.Parse(LastValue), NumRealLength);
+                string ShowValue = new CheckFloat2(CheckFloat2.KeepEffective(decimal.Parse(LastValue), NumRealLength)).ToString();
                 if (ShowValue.Contains("E") || ShowValue.Contains("e"))
                 {
                     _ansstate = 1;

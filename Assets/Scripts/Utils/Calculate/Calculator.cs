@@ -476,10 +476,16 @@ public struct CheckFloat2
             n = n + (int)Math.Log10(1.0 / Math.Abs(Convert.ToDouble(d)));
         if (n < 0)
         {
-            d = Convert.ToDecimal((int)((double)d / Math.Pow(10, -n)));
+            //d = Convert.ToDecimal((int)((double)d / Math.Pow(10, -n)));
+            d = Convert.ToDecimal((int)Math.Round((double)d / Math.Pow(10, -n), MidpointRounding.ToEven));
             return $"{d}e{-n}";
         }
-        return Math.Round(d, n, MidpointRounding.ToEven).ToString();
+        else
+        {
+            //d = Convert.ToDecimal((int)((double)d * Math.Pow(10, n)));
+            d = Convert.ToDecimal((int)Math.Round((double)d * Math.Pow(10, n), MidpointRounding.ToEven));
+            return $"{d}e{-n}";
+        }
     }
 
     public static string KeepTo(decimal truevalue, int n)

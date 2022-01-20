@@ -92,20 +92,24 @@ public class DealCalc1 : HTBehaviour
                 finish = finish && temp.IfFinish();           
             }
             //检查答案输入
-            if (_userstate == 0)
+            if (!IfMix)
             {
-                if (string.IsNullOrEmpty(UserValue2.text))
+                if (_userstate == 0)
                 {
-                    finish = false;
+                    if (string.IsNullOrEmpty(UserValue2.text))
+                    {
+                        finish = false;
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(UserValue.text) || string.IsNullOrEmpty(UserDigit.text))
+                    {
+                        finish = false;
+                    }
                 }
             }
-            else
-            {
-                if (string.IsNullOrEmpty(UserValue.text) || string.IsNullOrEmpty(UserDigit.text))
-                {
-                    finish = false;
-                }
-            }
+            
 
             if (!finish)
             {
@@ -174,7 +178,7 @@ public class DealCalc1 : HTBehaviour
                     MixControlObject.GetComponent<MixCalcControl>().NumRealLength = temp2;
                 }
                 temp2 = CorrectValue.EffectiveDigit + 1;//显示值比真实结果多保留一位
-                ShowValue = CheckFloat2.KeepEffective(RealValue, temp2);
+                ShowValue = new CheckFloat2(CheckFloat2.KeepEffective(RealValue, temp2)).ToString();
                 MixControlObject.GetComponent<MixCalcControl>().LastValue = ShowValue;
                 if (ShowValue.Contains("E") || ShowValue.Contains("e"))
                 {

@@ -174,7 +174,7 @@ public class DealCalc2 : HTBehaviour
                     MixControlObject.GetComponent<MixCalcControl>().NumRealLength = temp2;
                 }
                 temp2 = CorrectValue.EffectiveDigit + 1;//显示值比真实结果多保留一位
-                ShowValue = CheckFloat2.KeepEffective(RealValue, temp2);
+                ShowValue = new CheckFloat2(CheckFloat2.KeepEffective(RealValue, temp2)).ToString();
                 MixControlObject.GetComponent<MixCalcControl>().LastValue = ShowValue;
                 if (ShowValue.Contains("E") || ShowValue.Contains("e"))
                 {

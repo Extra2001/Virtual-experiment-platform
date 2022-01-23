@@ -60,7 +60,7 @@ public class AddAndSubtractCell : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                if (Mathf.Abs(int.Parse(value)) > 10)
+                if (Mathf.Abs(int.Parse(value)) > 9)
                 {
                     UIAPI.Instance.ShowModel(new SimpleModel()
                     {

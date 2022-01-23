@@ -398,7 +398,7 @@ public struct CheckFloat2
         else throw new NotSupportedException();
         if (Value != 0)
         {
-            HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)));
+            HiDigit = (int)Math.Floor(Math.Log10((double)Math.Abs(Value)) + 1e-10);
             LoDigit = HiDigit - EffectiveDigit + 1;
             if (HiDigit > 0)
             {
@@ -438,7 +438,7 @@ public struct CheckFloat2
             else
             {
                 value0 -= item.val.TrueValue;
-            }
+            }           
         }
         string tmp = KeepTo(value0, maxlodigit);
         CheckFloat2 res = new CheckFloat2(tmp, false);
@@ -603,7 +603,7 @@ public struct CheckFloat2
                 maxindex = i;
             }
         }
-        CheckFloat2 result = GroupAdd(arr), user = new CheckFloat2(userresult);
+        CheckFloat2 result = GroupAdd(arr), user = new CheckFloat2(userresult);        
         if (result.TrueValue == user.TrueValue && user.HiDigit == result.HiDigit && result.LoDigit == user.LoDigit)
         {
             return (true, "计算正确", result);

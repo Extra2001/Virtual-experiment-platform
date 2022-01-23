@@ -101,7 +101,7 @@ public class MixCalcControl : HTBehaviour
                 CheckFloat2 _ans = new CheckFloat2(ShowValue);
                 string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
                 CheckFloat2 _user = new CheckFloat2(userresult);
-                bool correct = (_ans.EffectiveDigit == _user.EffectiveDigit) && (_ans.Value - _user.Value == 0);
+                bool correct = (_ans.HiDigit == _user.HiDigit) && (_ans.LoDigit == _user.LoDigit) && (_ans.Value - _user.Value == 0);
 
                 if (correct)
                 {
@@ -119,6 +119,17 @@ public class MixCalcControl : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 9)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    UserValue.text = string.Empty;
+                    return;
+                }
                 if ((Math.Abs(double.Parse(value)) - 1 >= 0) && (Math.Abs(double.Parse(value)) - 10 < 0))
                 {
                     _uservalue = value;
@@ -139,6 +150,17 @@ public class MixCalcControl : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (Mathf.Abs(int.Parse(value)) > 9)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    UserDigit.text = string.Empty;
+                    return;
+                }
                 if (int.Parse(value) != 0)
                 {
                     _userdigit = value;
@@ -160,6 +182,17 @@ public class MixCalcControl : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
+                if (value.Length > 9)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    UserValue2.text = string.Empty;
+                    return;
+                }
                 _uservalue = value;
                 _userdigit = "0";
             }

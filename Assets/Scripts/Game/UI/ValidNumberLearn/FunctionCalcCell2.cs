@@ -57,7 +57,7 @@ public class FunctionCalcCell2 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                if (Mathf.Abs(int.Parse(value)) > 10)
+                if (Mathf.Abs(int.Parse(value)) > 9)
                 {
                     UIAPI.Instance.ShowModel(new SimpleModel()
                     {
@@ -108,7 +108,17 @@ public class FunctionCalcCell2 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                if (int.Parse(value) != 0)//底数不为0
+                if (Mathf.Abs(int.Parse(value)) > 9)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "输入的数字太精确了，本模块无法计算",
+                        ShowCancel = false
+                    });
+                    A.text = string.Empty;
+                }
+                else if (int.Parse(value) != 0)//底数不为0
                 {
                     if (id == 4)
                     {

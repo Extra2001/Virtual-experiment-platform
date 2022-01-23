@@ -100,6 +100,17 @@ public class MultiplayAndDivideCell : HTBehaviour
                     Value2.text = string.Empty;
                     return;
                 }
+                else if ((double.Parse(value) - 0) == 0)//乘除法专属
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        Title = "警告",
+                        Message = "乘除法不允许出现0",
+                        ShowCancel = false
+                    });
+                    Value2.text = string.Empty;
+                    return;
+                }
                 Root.GetComponent<DealCalc2>().CellValue[id].Value = value;
                 Root.GetComponent<DealCalc2>().CellValue[id].Digit = "0";
                 FinishSituation[0] = true;

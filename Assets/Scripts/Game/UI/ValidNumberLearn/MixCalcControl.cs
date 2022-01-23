@@ -18,6 +18,8 @@ public class MixCalcControl : HTBehaviour
     public Button UserSwitchButton;
     public Button AnsSwitchButton;
     public Text Reason;
+    public Text RecordText;
+    public int RecordNum = 0;
     private string _uservalue;
     private string _userdigit;
     private int _userstate;
@@ -39,6 +41,12 @@ public class MixCalcControl : HTBehaviour
             NumRealLength = 0;
             LastValue = string.Empty;
             HistoryResult = new List<CheckFloat2>();
+            RecordNum = 0;
+            UIAPI.Instance.ShowModel(new SimpleModel()
+            {
+                Message = "已删除历史计算结果",
+                ShowCancel = false
+            });
         });
         CalcButton.onClick.AddListener(() =>
         {
@@ -223,6 +231,6 @@ public class MixCalcControl : HTBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        RecordText.text = "已计算中间过程次数：" + RecordNum;
     }
 }

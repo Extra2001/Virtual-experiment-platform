@@ -85,112 +85,126 @@ public class DealCalc2 : HTBehaviour
         });
         CalcButton.onClick.AddListener(() =>
         {
-            bool finish = true;
-            //检查算式
-            foreach (var item in Cells)
+            try
             {
-                var temp = item.GetComponent <MultiplayAndDivideCell>();
-                finish = finish && temp.IfFinish();
-            }
-            //检查答案输入
-            if (!IfMix)
-            {
-                if (_userstate == 0)
+                bool finish = true;
+                //检查算式
+                foreach (var item in Cells)
                 {
-                    if (string.IsNullOrEmpty(UserValue2.text))
+                    var temp = item.GetComponent<MultiplayAndDivideCell>();
+                    finish = finish && temp.IfFinish();
+                }
+                //检查答案输入
+                if (!IfMix)
+                {
+                    if (_userstate == 0)
                     {
-                        finish = false;
-                    }
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(UserValue.text) || string.IsNullOrEmpty(UserDigit.text))
-                    {
-                        finish = false;
-                    }
-                }
-            }
-
-            if (!finish)
-            {
-                WarningInput();
-            }
-            else if(!IfMix)
-            {
-                List<(string rawnumstr, int isadd)> input = new List<(string rawnumstr, int isadd)>();
-                (string rawnumstr, int isadd) temp;
-                for (int i = 0; i < CellValue.Count; i++)
-                {
-                    temp.isadd = CellValue[i].Sign;
-                    temp.rawnumstr = StaticMethods.SciToExp(CellValue[i].Value + "*10^(" + CellValue[i].Digit + ")");
-                    input.Add(temp);
-                }
-                string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
-                (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupMul(input, userresult);
-
-                if (correctvalue.ToString().Contains("E") || correctvalue.ToString().Contains("e"))
-                {
-                    _ansstate = 1;
-                    Ans.text = StaticMethods.ExpToSci(correctvalue.ToString());
-                }
-                else
-                {
-                    _ansstate = 0;
-                    Ans.text = correctvalue.ToString();
-                }
-                if (correct)
-                {
-                    Reason.text = "计算正确";
-                }
-                else
-                {
-                    Reason.text = message;
-                }
-            }
-            else if (IfMix)//混合运算
-            {
-                List<(CheckFloat2 rawnumstr, bool isadd)> input = new List<(CheckFloat2 rawnumstr, bool isadd)>();
-                (CheckFloat2 rawnumstr, bool isadd) temp;
-                for (int i = 0; i < CellValue.Count; i++)
-                {
-                    if (CellValue[i].Sign == 0)
-                    {
-                        temp.isadd = true;
+                        if (string.IsNullOrEmpty(UserValue2.text))
+                        {
+                            finish = false;
+                        }
                     }
                     else
                     {
-                        temp.isadd = false;
+                        if (string.IsNullOrEmpty(UserValue.text) || string.IsNullOrEmpty(UserDigit.text))
+                        {
+                            finish = false;
+                        }
                     }
-                    string temp1 = StaticMethods.SciToExp(CellValue[i].Value + "*10^(" + CellValue[i].Digit + ")");
-                    temp.rawnumstr = new CheckFloat2(temp1);
-                    input.Add(temp);
                 }
-                CheckFloat2 HiddenValue;//用于传递有效位数的值
-                decimal RealValue;//未保留的值
-                string ShowValue;//此处显示的值
-                RealValue = CheckFloat2.GroupMulRaw(input);
-                ShowValue = new CheckFloat2(CheckFloat2.KeepEffective(RealValue, 9)).ToString();
-                for (int i = 0; i < input.Count; i++)
+
+                if (!finish)
                 {
-                    CheckFloat2 temp2 = input[i].rawnumstr;
-                    temp2 = StaticMethods.CheckSimilar(input[i].rawnumstr, MixControlObject.GetComponent<MixCalcControl>().HistoryResult);
-                    input[i] = (temp2, input[i].isadd);
+                    WarningInput();
+                    Ans.text = "?";
                 }
-                HiddenValue = CheckFloat2.GroupMul(input);
-                MixControlObject.GetComponent<MixCalcControl>().HistoryResult.Add(HiddenValue);
-                MixControlObject.GetComponent<MixCalcControl>().NumRealLength = HiddenValue.EffectiveDigit;
-                MixControlObject.GetComponent<MixCalcControl>().LastValue = ShowValue;
-                if (ShowValue.Contains("E") || ShowValue.Contains("e"))
+                else if (!IfMix)
                 {
-                    _ansstate = 1;
-                    Ans.text = StaticMethods.ExpToSci(ShowValue);
+                    List<(string rawnumstr, int isadd)> input = new List<(string rawnumstr, int isadd)>();
+                    (string rawnumstr, int isadd) temp;
+                    for (int i = 0; i < CellValue.Count; i++)
+                    {
+                        temp.isadd = CellValue[i].Sign;
+                        temp.rawnumstr = StaticMethods.SciToExp(CellValue[i].Value + "*10^(" + CellValue[i].Digit + ")");
+                        input.Add(temp);
+                    }
+                    string userresult = StaticMethods.SciToExp(_uservalue + "*10^(" + _userdigit + ")");
+                    (bool correct, string message, CheckFloat2 correctvalue) = CheckFloat2.CheckGroupMul(input, userresult);
+
+                    if (correctvalue.ToString().Contains("E") || correctvalue.ToString().Contains("e"))
+                    {
+                        _ansstate = 1;
+                        Ans.text = StaticMethods.ExpToSci(correctvalue.ToString());
+                        AnsSwitchButton.FindChildren("Text").GetComponent<Text>().text = @"a*10^(b) <=> a";
+                    }
+                    else
+                    {
+                        _ansstate = 0;
+                        Ans.text = correctvalue.ToString();
+                        AnsSwitchButton.FindChildren("Text").GetComponent<Text>().text = @"a <=> a*10^(b)";
+                    }
+                    if (correct)
+                    {
+                        Reason.text = "计算正确";
+                    }
+                    else
+                    {
+                        Reason.text = message;
+                    }
                 }
-                else
+                else if (IfMix)//混合运算
                 {
-                    _ansstate = 0;
-                    Ans.text = ShowValue;
+                    List<(CheckFloat2 rawnumstr, bool isadd)> input = new List<(CheckFloat2 rawnumstr, bool isadd)>();
+                    (CheckFloat2 rawnumstr, bool isadd) temp;
+                    for (int i = 0; i < CellValue.Count; i++)
+                    {
+                        if (CellValue[i].Sign == 0)
+                        {
+                            temp.isadd = true;
+                        }
+                        else
+                        {
+                            temp.isadd = false;
+                        }
+                        string temp1 = StaticMethods.SciToExp(CellValue[i].Value + "*10^(" + CellValue[i].Digit + ")");
+                        temp.rawnumstr = new CheckFloat2(temp1);
+                        input.Add(temp);
+                    }
+                    CheckFloat2 HiddenValue;//用于传递有效位数的值
+                    decimal RealValue;//未保留的值
+                    string ShowValue;//此处显示的值
+                    RealValue = CheckFloat2.GroupMulRaw(input);
+                    ShowValue = new CheckFloat2(CheckFloat2.KeepEffective(RealValue, 9)).ToString();
+                    for (int i = 0; i < input.Count; i++)
+                    {
+                        CheckFloat2 temp2 = input[i].rawnumstr;
+                        temp2 = StaticMethods.CheckSimilar(input[i].rawnumstr, MixControlObject.GetComponent<MixCalcControl>().HistoryResult);
+                        input[i] = (temp2, input[i].isadd);
+                    }
+                    HiddenValue = CheckFloat2.GroupMul(input);
+                    MixControlObject.GetComponent<MixCalcControl>().HistoryResult.Add(HiddenValue);
+                    MixControlObject.GetComponent<MixCalcControl>().NumRealLength = HiddenValue.EffectiveDigit;
+                    MixControlObject.GetComponent<MixCalcControl>().LastValue = ShowValue;
+                    MixControlObject.GetComponent<MixCalcControl>().RecordNum += 1;
+                    if (ShowValue.Contains("E") || ShowValue.Contains("e"))
+                    {
+                        _ansstate = 1;
+                        Ans.text = StaticMethods.ExpToSci(ShowValue);
+                        AnsSwitchButton.FindChildren("Text").GetComponent<Text>().text = @"a*10^(b) <=> a";
+                    }
+                    else
+                    {
+                        _ansstate = 0;
+                        Ans.text = ShowValue;
+                        AnsSwitchButton.FindChildren("Text").GetComponent<Text>().text = @"a <=> a*10^(b)";
+                    }
                 }
             }
+            catch
+            {
+                Ans.text = "?";
+                Reason.text = "计算过程发生异常";
+            }            
         });
 
         //用户答案输入初始化

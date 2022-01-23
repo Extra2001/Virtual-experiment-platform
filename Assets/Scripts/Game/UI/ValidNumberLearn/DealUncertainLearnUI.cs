@@ -128,7 +128,7 @@ public class DealUncertainLearnUI : HTBehaviour
     {
         UIAPI.Instance.ShowModel(new SimpleModel()
         {
-            Message = "继续返回将丢失当前进度，继续？",
+            Message = "继续返回可能丢失当前进度，继续？",
             ConfirmAction = () =>
             {
                 GameManager.Instance.SwitchBackToStart();

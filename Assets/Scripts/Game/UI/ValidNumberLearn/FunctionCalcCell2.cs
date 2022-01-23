@@ -28,7 +28,7 @@ public class FunctionCalcCell2 : HTBehaviour
         {
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                if (value.Length > 10)
+                if (value.Length > 9)
                 {
                     UIAPI.Instance.ShowModel(new SimpleModel()
                     {
@@ -86,7 +86,7 @@ public class FunctionCalcCell2 : HTBehaviour
         {            
             if ((!string.IsNullOrEmpty(value)) && double.TryParse(value, out double t))
             {
-                if (value.Length > 10)
+                if (value.Length > 9)
                 {
                     UIAPI.Instance.ShowModel(new SimpleModel()
                     {

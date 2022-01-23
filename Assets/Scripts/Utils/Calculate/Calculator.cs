@@ -467,23 +467,23 @@ public struct CheckFloat2
         CheckFloat2 res = new CheckFloat2(tmp, false);
         return res;
     }
-    public static string KeepEffective(decimal d, int n)
+    public static string KeepEffective(decimal d, long n)
     {//保留n位有效数字
         if (d == decimal.Zero) return "0";
         if (d > 1 || d < -1)
-            n = n - (int)Math.Log10(Math.Abs(Convert.ToDouble(d))) - 1;
+            n = n - (long)Math.Log10(Math.Abs(Convert.ToDouble(d))) - 1;
         else
-            n = n + (int)Math.Log10(1.0 / Math.Abs(Convert.ToDouble(d)));
+            n = n + (long)Math.Log10(1.0 / Math.Abs(Convert.ToDouble(d)));
         if (n < 0)
         {
             //d = Convert.ToDecimal((int)((double)d / Math.Pow(10, -n)));
-            d = Convert.ToDecimal((int)Math.Round((double)d / Math.Pow(10, -n), MidpointRounding.ToEven));
+            d = Convert.ToDecimal((long)Math.Round((double)d / Math.Pow(10, -n), MidpointRounding.ToEven));
             return $"{d}e{-n}";
         }
         else
         {
             //d = Convert.ToDecimal((int)((double)d * Math.Pow(10, n)));
-            d = Convert.ToDecimal((int)Math.Round((double)d * Math.Pow(10, n), MidpointRounding.ToEven));
+            d = Convert.ToDecimal((long)Math.Round((double)d * Math.Pow(10, n), MidpointRounding.ToEven));
             return $"{d}e{-n}";
         }
     }

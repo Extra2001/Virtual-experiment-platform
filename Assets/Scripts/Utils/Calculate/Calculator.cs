@@ -861,8 +861,8 @@ public static class StaticMethods {
         foreach (var item in HistoryResult)
         {
             a = (decimal)double.Parse(item.ToString());
-            b = (decimal)double.Parse(CheckFloat2.KeepEffective(decimal.Parse(input.ToString()), item.EffectiveDigit));
-            if (Math.Abs(a-b) < 0.000000010m)
+            b = (decimal)double.Parse(CheckFloat2.KeepEffective(decimal.Parse(input.ToString()), item.EffectiveDigit));            
+            if (Math.Abs(a-b) < 0.0000000001m)
             {
                 ans = item;
             }

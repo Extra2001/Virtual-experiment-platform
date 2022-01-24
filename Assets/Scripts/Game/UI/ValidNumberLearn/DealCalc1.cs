@@ -178,17 +178,11 @@ public class DealCalc1 : HTBehaviour
                     ShowValue = new CheckFloat2(CheckFloat2.KeepEffective(RealValue, 9)).ToString();
                     for (int i = 0; i < input.Count; i++)
                     {
-                        string zjf = "p0:" + input[i].rawnumstr;
-                        Application.ExternalCall("zjffunction", zjf);
                         CheckFloat2 temp2 = input[i].rawnumstr;
                         temp2 = StaticMethods.CheckSimilar(input[i].rawnumstr, MixControlObject.GetComponent<MixCalcControl>().HistoryResult);
                         input[i] = (temp2, input[i].isadd);
-                        zjf = "p1:" + temp2;
-                        Application.ExternalCall("zjffunction", zjf);
                     }
                     HiddenValue = CheckFloat2.GroupAdd(input);
-                    string zjf1 = "p+:" + HiddenValue.EffectiveDigit;
-                    Application.ExternalCall("zjffunction", zjf1);
                     MixControlObject.GetComponent<MixCalcControl>().HistoryResult.Add(HiddenValue);
                     MixControlObject.GetComponent<MixCalcControl>().NumRealLength = HiddenValue.EffectiveDigit;
                     MixControlObject.GetComponent<MixCalcControl>().LastValue = ShowValue;

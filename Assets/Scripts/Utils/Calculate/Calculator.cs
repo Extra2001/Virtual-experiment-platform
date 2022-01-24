@@ -467,24 +467,29 @@ public struct CheckFloat2
         CheckFloat2 res = new CheckFloat2(tmp, false);
         return res;
     }
-    public static string KeepEffective(decimal d, long n)
+    public static string KeepEffective(decimal d, int n)
     {//保留n位有效数字
+        long value = 0;
         if (d == decimal.Zero) return "0";
         if (d > 1 || d < -1)
-            n = n - (long)Math.Log10(Math.Abs(Convert.ToDouble(d))) - 1;
+            //n = n - (int)Math.Log10(Math.Abs(Convert.ToDouble(d))) - 1;
+            n = n - Convert.ToInt32(Math.Floor(Math.Log10(Math.Abs(Convert.ToDouble(d))) + 1e-10)) - 1;
         else
-            n = n + (long)Math.Log10(1.0 / Math.Abs(Convert.ToDouble(d)));
+            //n = n + (int)Math.Log10(1.0 / Math.Abs(Convert.ToDouble(d)));
+            n = n + Convert.ToInt32(Math.Floor(Math.Log10(1.0 / Math.Abs(Convert.ToDouble(d))) + 1e-10));
         if (n < 0)
         {
             //d = Convert.ToDecimal((int)((double)d / Math.Pow(10, -n)));
-            d = Convert.ToDecimal((long)Math.Round((double)d / Math.Pow(10, -n), MidpointRounding.ToEven));
-            return $"{d}e{-n}";
+            //d = Convert.ToDecimal((long)Math.Round((double)d / Math.Pow(10, -n), MidpointRounding.ToEven));
+            value = Convert.ToInt64(Math.Round((double)d / Math.Pow(10, -n), MidpointRounding.ToEven));
+            return $"{value}e{-n}";
         }
         else
         {
             //d = Convert.ToDecimal((int)((double)d * Math.Pow(10, n)));
-            d = Convert.ToDecimal((long)Math.Round((double)d * Math.Pow(10, n), MidpointRounding.ToEven));
-            return $"{d}e{-n}";
+            //d = Convert.ToDecimal((long)Math.Round((double)d * Math.Pow(10, n), MidpointRounding.ToEven));
+            value = Convert.ToInt64(Math.Round((double)d * Math.Pow(10, n), MidpointRounding.ToEven));
+            return $"{value}e{-n}";
         }
     }
 

@@ -62,6 +62,12 @@ public class GameButtonUILogic : UILogicResident
         {
             GameManager.Instance.SwitchProcedure<ProcessExplainProcedure>();
         });
+        UIEntity.FindChildren("PerspectiveButton").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            if (PerspectiveManager.Instance.showed)
+                PerspectiveManager.Instance.HidePerspective();
+            else PerspectiveManager.Instance.ShowPerspective();
+        });
     }
 
     /// <summary>
@@ -75,7 +81,7 @@ public class GameButtonUILogic : UILogicResident
             ShowButtons(GameManager.Instance.CurrentInstrument);
         else
         {
-            string[] names = new string[] { "PauseButton", "BagButton", "TableButton", "UncertaintyButton", "OptionsButton" };
+            string[] names = new string[] { "PauseButton", "BagButton", "TableButton", "UncertaintyButton", "OptionsButton", "PerspectiveButton" };
 
             gameButtonItems.ForEach(x =>
             {
@@ -124,7 +130,7 @@ public class GameButtonUILogic : UILogicResident
     }
     private void ShowButtons(InstrumentBase instrument)
     {
-        string[] names = new string[] { "PauseButton", "BagButton", "TableButton", "UncertaintyButton", "OptionsButton" };
+        string[] names = new string[] { "PauseButton", "BagButton", "TableButton", "UncertaintyButton", "OptionsButton", "PerspectiveButton" };
 
         gameButtonItems.ForEach(x =>
         {

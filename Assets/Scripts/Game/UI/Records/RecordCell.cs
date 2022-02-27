@@ -107,17 +107,17 @@ public class RecordCell : HTBehaviour
             {
                 RecordManager.GetRecord(recordId, x =>
                 {                                        
-                    if (!x.experimentFinish)
-                    {
-                        UIAPI.Instance.ShowModel(new SimpleModel()
-                        {
-                            ShowCancel = false,
-                            Title = "警告",
-                            Message = "该存档实验未完成"
-                        });
-                    }
-                    else
-                    {
+                    //if (!x.experimentFinish)
+                    //{
+                    //    UIAPI.Instance.ShowModel(new SimpleModel()
+                    //    {
+                    //        ShowCancel = false,
+                    //        Title = "警告",
+                    //        Message = "该存档实验未完成"
+                    //    });
+                    //}
+                    //else
+                    //{
                         UIAPI.Instance.ShowModel(new SimpleModel()
                         {
                             Title = "提示",
@@ -132,7 +132,7 @@ public class RecordCell : HTBehaviour
                             }
                         });
                         
-                    }
+                    //}
                     GameLaunch.Instance.HideGeneralLoadingScreen();
                 }, x =>
                 {

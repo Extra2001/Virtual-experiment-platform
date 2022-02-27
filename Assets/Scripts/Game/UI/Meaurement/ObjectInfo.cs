@@ -71,7 +71,7 @@ public class ObjectInfo : HTBehaviour
         {
             // 要步进缩放的轴
             var axis = _StepAxis.selectedSegmentIndex;
-            var step = Convert.ToDouble(_Step.text);
+            var step = Convert.ToDouble(_Step.text) * 0.02;//一个步长对应物体的2%
             Debug.Log(axis);
             Debug.Log(step);
             Debug.Log(objectValue.Scale);

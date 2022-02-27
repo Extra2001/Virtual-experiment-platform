@@ -61,7 +61,7 @@ public class Initializer
             {
                 id = 0,
                 Name = "书本",
-                DetailMessage = "一本书，23页。若要加减一页请将步进间隔改为0.043。",
+                DetailMessage = "一本书，当前为50页厚。加减一个步长即为增减一页。",
                 Integrated = true,
                 PreviewImage = $"Objects/PreviewImages/book",
                 ResourcePath = $"Objects/Models/book"

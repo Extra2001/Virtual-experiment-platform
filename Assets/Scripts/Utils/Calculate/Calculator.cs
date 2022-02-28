@@ -469,9 +469,36 @@ public struct CheckFloat2
     }
     public static string KeepEffective(decimal d, int n)
     {//保留n位有效数字
-        long value = 0;
+        if (d == decimal.Zero)//张峻凡20220228
+        {
+            string format0 = "F" + (n - 1);
+            string ans0 = d.ToString(format0);
+            return ans0;
+        } 
+        string sign = "";
+        decimal value = Math.Abs(d);
+        int digit = 0;
+        if (d < 0)
+        {
+            sign = "-";
+        }
+        while (value >= 10)
+        {
+            value /= 10;
+            digit += 1;
+        }
+        while (value < 1)
+        {
+            value *= 10;
+            digit -= 1;
+        }
+        value = Math.Round(value, n, MidpointRounding.ToEven);
+        string format = "F" + (n - 1);
+        string ans = sign + value.ToString(format) + "e" + digit;
+        return ans;
+        /*long value = 0;
         if (d == decimal.Zero) return "0";
-        if (d > 1 || d < -1)
+        if (d >= 1 || d <= -1)
             //n = n - (int)Math.Log10(Math.Abs(Convert.ToDouble(d))) - 1;
             n = n - Convert.ToInt32(Math.Floor(Math.Log10(Math.Abs(Convert.ToDouble(d))) + 1e-10)) - 1;
         else
@@ -490,7 +517,7 @@ public struct CheckFloat2
             //d = Convert.ToDecimal((long)Math.Round((double)d * Math.Pow(10, n), MidpointRounding.ToEven));
             value = Convert.ToInt64(Math.Round((double)d * Math.Pow(10, n), MidpointRounding.ToEven));
             return $"{value}e{-n}";
-        }
+        }*/
     }
 
     public static string KeepTo(decimal truevalue, int n)

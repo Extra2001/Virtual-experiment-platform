@@ -365,6 +365,22 @@ public struct CheckFloat2
     public int EffectiveDigit { get; private set; }//有效数字个数
     public static int Effectiveness(string num)
     {//计算一个字符串表示的小数有多少位有效数字
+        if (double.Parse(num) == 0)//特判0.000类型
+        {
+            int ans0 = 0;
+            foreach (var item in num)
+            {
+                if (item == 'E' || item == 'e')
+                {
+                    break;
+                }
+                if (item == '0')
+                {
+                    ans0 += 1;
+                }
+            }
+            return ans0;
+        }
         int digits = 0; bool lead0 = true;
         foreach (var item in num)
         {
@@ -417,7 +433,8 @@ public struct CheckFloat2
         }
         else
         {
-            LoDigit = 0; HiDigit = 0;
+            HiDigit = 0;
+            LoDigit = HiDigit - EffectiveDigit + 1;
         }
     }
     public static CheckFloat2 GroupAdd(IList<(CheckFloat2 val, bool isadd)> inputs)

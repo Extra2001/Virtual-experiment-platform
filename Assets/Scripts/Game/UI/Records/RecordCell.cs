@@ -106,19 +106,19 @@ public class RecordCell : HTBehaviour
             _UploadButton.onClick.AddListener(() =>
             {
                 RecordManager.GetRecord(recordId, x =>
-                {                                        
-                    //if (!x.experimentFinish)
-                    //{
-                    //    UIAPI.Instance.ShowModel(new SimpleModel()
-                    //    {
-                    //        ShowCancel = false,
-                    //        Title = "警告",
-                    //        Message = "该存档实验未完成"
-                    //    });
-                    //}
-                    //else
-                    //{
-                        UIAPI.Instance.ShowModel(new SimpleModel()
+                {
+                if (!x.experimentFinish)
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
+                    {
+                        ShowCancel = false,
+                        Title = "警告",
+                        Message = "该存档实验未完成"
+                    });
+                }
+                else
+                {
+                    UIAPI.Instance.ShowModel(new SimpleModel()
                         {
                             Title = "提示",
                             Message = "是否要上传pdf",
@@ -131,8 +131,8 @@ public class RecordCell : HTBehaviour
                                 GetComponent<LoadImgFromFile>().RecivePng(null);
                             }
                         });
-                        
-                    //}
+
+                    }
                     GameLaunch.Instance.HideGeneralLoadingScreen();
                 }, x =>
                 {

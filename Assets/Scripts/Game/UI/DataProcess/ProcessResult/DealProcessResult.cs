@@ -115,7 +115,7 @@ public class DealProcessResult : HTBehaviour
                     quantityErrors.Add(result.err);
                 }
             }
-            else if(item.processMethod == 2)
+            else if(item.processMethod == 2)//逐差法
             {
                 UserInputSuccessiveDifference calc = new UserInputSuccessiveDifference();
                 double[] temp = new double[item.DifferencedData.data.Count];
@@ -127,7 +127,7 @@ public class DealProcessResult : HTBehaviour
                 calc.y_nplusi_minus_y_i = temp;
                 calc.x_nplusi_minus_x_i = double.Parse(item.stepLength);
                 calc.user_aver_b = double.Parse(StaticMethods.NumberFormat(item.AverageExpression.GetExpressionExecuted()));
-                calc.correct_b_uncb = double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3)));
+                calc.correct_b_uncb = double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3))) / temp.Length;
                 calc.user_b_unca = double.Parse(StaticMethods.NumberFormat(item.UaExpression.GetExpressionExecuted()));
                 calc.user_b_uncb = double.Parse(StaticMethods.NumberFormat(item.UbExpression.GetExpressionExecuted()));
                 calc.user_b_unc = double.Parse(StaticMethods.NumberFormat(item.ComplexExpression.GetExpressionExecuted()));

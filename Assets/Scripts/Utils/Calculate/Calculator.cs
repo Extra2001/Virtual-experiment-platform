@@ -1612,14 +1612,13 @@ public class CalcResult {
         if(!input.correct_b_uncb.AlmostEqual(input.user_b_uncb)) {
             flag = false;
             result.err.ub.right = false;
-            if(input.correct_b_uncb.AlmostEqual(input.user_b_uncb / Math.Sqrt(3))) {
+            if(input.correct_b_uncb.AlmostEqual(input.user_b_uncb / Math.Sqrt(3)/bk.Length)) {
                 result.err.ub.message = "是否忘除以根号3";
             }
             else {
                 result.err.ub.message = "b类不确定度计算错误";
             }
-
-            result.err.ub.latex = StaticMethods.GetUbExprLatex($@"\Delta {input.name}");
+            result.err.ub.latex = $@"u_b({{\Delta {input.name}}})=\frac{{1}}{{{bk.Length}}}\frac{{\Delta_{{instrument}}}}{{\sqrt{3}}}";
         }
         if(!input.user_b_unca.AlmostEqual(uncb)) {
             flag = false;
@@ -1627,20 +1626,20 @@ public class CalcResult {
             double k = input.y_nplusi_minus_y_i.Length;
             if(input.y_nplusi_minus_y_i.Length % 2 == 0)
 
-                if(input.user_b_unca.AlmostEqual(uncb * Math.Sqrt(k / (k - 1)))) {
+                if(input.user_b_unca.AlmostEqual(uncb * Math.Sqrt(k / (k - 1))/bk.Length)) {
                     result.err.ua.message = "是否将n除成了n-1，请注意样本方差的含义";
                 }
                 else {
                     result.err.ua.message = "a类不确定度计算错误";
                 }
 
-            result.err.ua.latex = $@"u_a({{\Delta {input.name}}})=\sqrt{{\frac{{\Sigma{{(\Delta {input.name}_i-\overline{{\Delta {input.name}}})^2}}}}{{n(n-1)}}}}";
+            result.err.ua.latex = $@"u_a({{\Delta {input.name}}})=\frac{{1}}{{{bk.Length}}}\sqrt{{\frac{{\Sigma{{(\Delta {input.name}_i-\overline{{\Delta {input.name}}})^2}}}}{{n(n-1)}}}}";
         }
-        if(!input.user_aver_b.AlmostEqual(double.Parse(StaticMethods.NumberFormat(b)))) {
+        if(!input.user_aver_b.AlmostEqual(double.Parse(StaticMethods.NumberFormat(b))/bk.Length)) {
             flag = false;
             result.err.average.right = false;
             result.err.average.message = "平均值计算错误";
-            result.err.average.latex = StaticMethods.GetAverageLatex($@"\Delta {input.name}");
+            result.err.average.latex = $@"\overline{{\Delta {input.name}}}=\frac{{1}}{{{bk.Length}}}\frac{{\sum_{{i=1}}^{{n}}{{\Delta {input.name}_i}}}}{{n}}";
         }
         if(!input.user_b_unc.AlmostEqual(StaticMethods.CalcUncertain(uncb, input.correct_b_uncb))) {
             flag = false;

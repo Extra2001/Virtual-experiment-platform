@@ -87,7 +87,7 @@ public class MeasuredDifference1 : HTBehaviour
 
     private void ShowImage()
     {
-        var latex = $"{quantity.Symbol}=\\frac{{\\delta{quantity.Symbol}}}{{{quantity.DifferencedData.data.Count}}}";
+        var latex = $@"{quantity.Symbol}=\frac{{\delta {quantity.Symbol}}}{{{quantity.DifferencedData.data.Count}}}";
         LatexEquationRender.Render(latex, res => previewImage.FitImage(res, 170, 40));
     }
 

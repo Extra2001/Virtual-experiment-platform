@@ -154,7 +154,7 @@ public class DealProcessResult : HTBehaviour
                     quantityErrors.Add(result.err);
                 }
             }
-            else if (item.processMethod == 3)
+            else if (item.processMethod == 3)//一元线性回归法
             {
                 UserInputLinearRegression calc = new UserInputLinearRegression();
                 calc.name = item.Symbol;
@@ -164,6 +164,11 @@ public class DealProcessResult : HTBehaviour
                     temp[i] = double.Parse(item.IndependentData.data[i]);
                 }
                 calc.x = temp;
+                double x_squre_mean, x_mean_square;
+                //求方均根与均方根
+                x_squre_mean = StaticMethods.CenterMoment(temp, 2);
+                x_mean_square = Math.Pow(StaticMethods.Average(temp), 2);
+                //求方均根与均方根结束
                 temp = new double[item.MesuredData.data.Count];
                 for (int i = 0; i < item.MesuredData.data.Count; i++)
                 {
@@ -173,7 +178,7 @@ public class DealProcessResult : HTBehaviour
                 calc.a = double.Parse(StaticMethods.NumberFormat(item.AExpression.GetExpressionExecuted()));
                 calc.b = double.Parse(StaticMethods.NumberFormat(item.BExpression.GetExpressionExecuted()));
                 calc.r = double.Parse(StaticMethods.NumberFormat(item.RelationExpression.GetExpressionExecuted()));
-                calc.correct_uncb = double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3)));
+                calc.correct_uncb = double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3))) * Math.Sqrt(1 / (temp.Length * (x_squre_mean - x_mean_square)));
                 calc.f_unca = double.Parse(StaticMethods.NumberFormat(item.UaExpression.GetExpressionExecuted()));
                 calc.f_uncb = double.Parse(StaticMethods.NumberFormat(item.UbExpression.GetExpressionExecuted()));
                 calc.f_unc = double.Parse(StaticMethods.NumberFormat(item.ComplexExpression.GetExpressionExecuted()));

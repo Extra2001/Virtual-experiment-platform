@@ -1788,7 +1788,8 @@ public class CalcResult
             flag = false;
             result.err.ub.right = false;
             result.err.ub.message = "b类不确定度计算错误";
-            result.err.ub.latex = StaticMethods.GetUbExprLatex(input.ifa ? "a" : "b");
+            string varname = input.ifa ? "a" : "b";
+            result.err.ub.latex = $@"u_b({varname})=\frac{{\Delta_{{instrument}}}}{{\sqrt{{3}}}}\sqrt{{\frac{{1}}{{n(\overline{{x^2}}-(\overline{{x}})^2)}}}}";
         }
         if (input.ifa)
         {

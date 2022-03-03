@@ -218,7 +218,7 @@ public partial class FormulaController : MonoBehaviour
                 continue;
             clickedButton = item.Key;
             clickedCell = cell;
-            var newCell = SelectCell(node.PrefabName, node.value);
+            var newCell = SelectCell(node.PrefabName, node.value, node.name);
             newCell.value = node.value;
             newCell.ReplaceFlags.Clear();
             if (node.ReplaceFlags.Count >= 1)

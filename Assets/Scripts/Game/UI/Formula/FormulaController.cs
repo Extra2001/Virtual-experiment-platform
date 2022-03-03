@@ -308,63 +308,12 @@ public partial class FormulaController : MonoBehaviour
     }
     private IEnumerator RefreshContentSize(GameObject baseObject)
     {
-        var list = baseObject.GetComponentsInChildren<ContentSizeFitter>();
-        for (int i = 0; i < list.Length; i++)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        RefreshContentSizeFitter(baseObject);
         yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        for (int i = list.Length - 1; i >= 0; i--)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        RefreshContentSizeFitter(baseObject);
         yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        for (int i = 0; i < list.Length; i++)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        RefreshContentSizeFitter(baseObject);
         yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        for (int i = list.Length - 1; i >= 0; i--)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-
-        for (int i = 0; i < list.Length; i++)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        for (int i = list.Length - 1; i >= 0; i--)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        for (int i = 0; i < list.Length; i++)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        for (int i = list.Length - 1; i >= 0; i--)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-
-        for (int i = 0; i < list.Length; i++)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        for (int i = list.Length - 1; i >= 0; i--)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        for (int i = 0; i < list.Length; i++)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        for (int i = list.Length - 1; i >= 0; i--)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
-        yield return 1;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
-        //RefreshContentSizeFitter(baseObject);
-        //yield return 1;
-        //RefreshContentSizeFitter(baseObject);
-        //yield return 1;
-        //RefreshContentSizeFitter(baseObject);
-        //yield return 1;
     }
     /// <summary>
     /// 刷新UI适应布局

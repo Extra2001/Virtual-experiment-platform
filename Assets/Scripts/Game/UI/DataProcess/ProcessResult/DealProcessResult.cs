@@ -273,7 +273,19 @@ public class DealProcessResult : HTBehaviour
                     x[i] = double.Parse(item.IndependentData.data[i]);
                 }
 
-                calc_complex.AddRegression(item.Symbol, x, y);
+                //求n,方均根与均方根
+                double[] temp = new double[item.IndependentData.data.Count];
+                for (int i = 0; i < item.IndependentData.data.Count; i++)
+                {
+                    temp[i] = double.Parse(item.IndependentData.data[i]);
+                }
+                double k, x_squre_mean, x_mean_square;
+                k = temp.Length;
+                x_squre_mean = StaticMethods.CenterMoment(temp, 2);
+                x_mean_square = Math.Pow(StaticMethods.Average(temp), 2);
+                //求n,方均根与均方根结束
+                double _ub = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3) / Math.Sqrt(k * (x_squre_mean - x_mean_square)); 
+                calc_complex.AddRegression(item.Symbol, _ub, x, y);
             }
             else
             {
@@ -293,7 +305,7 @@ public class DealProcessResult : HTBehaviour
                     }                   
                 }
 
-                calc_complex.AddRegression(item.Symbol, x, y);
+                calc_complex.AddRegression(item.Symbol, 0, x, y);
             }
 
             if (item.processMethod == 4)

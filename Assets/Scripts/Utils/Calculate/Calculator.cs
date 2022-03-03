@@ -1360,13 +1360,13 @@ public class CalcVariable
 {//2021.8.20
     public int vartype;//0表示有原始数据 1表示没有原始数据[] 只有值不确定度
     public List<double> values;
-    public double val;
-    public double ub;
+    public double val;//主值
+    public double ub;//不确定度
     public double userua, userub, userunc, useraver;//用户测量的ua,ub,用户的合成的不确定度
 
-    public CalcVariable(double ub, int measures, int vartype = 0)
+    public CalcVariable(double unc, int measures, int vartype = 0)
     {//测量了measures个数据
-        this.ub = ub; values = new List<double>(measures);
+        this.ub = unc; values = new List<double>(measures);
         this.vartype = vartype;
     }
     public (double average, double ua, double unc) CalcUncertain()
@@ -1506,13 +1506,14 @@ public class CalcArgs
             return false;
         }
     }
-    public bool AddRegression(string varname, double[] x, double[] y)
+    public bool AddRegression(string varname, double ub, double[] x, double[] y)
     {
         var regres = StaticMethods.LinearRegression(x, y);
 
         if (ValidVarname(varname))
         {
-            vars[varname] = new CalcVariable(regres.b_unca, 1, 1);
+            double unc = Math.Sqrt(regres.b_unca * regres.b_unca + ub * ub);
+            vars[varname] = new CalcVariable(unc, 1, 1);
             vars[varname].val = regres.b;
             return true;
         }

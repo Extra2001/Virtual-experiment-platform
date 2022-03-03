@@ -259,7 +259,8 @@ public class DealProcessResult : HTBehaviour
             }
             else if (item.processMethod == 2)
             {
-                calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
+                double _ub = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3) / item.DifferencedData.data.Count;
+                calc_complex.AddVariable(item.Symbol, _ub, item.MesuredData.data.Count);
                 calc_complex.Measure(item.Symbol, item.DifferencedData.data.ToDouble().ToArray());
             }
             else if(item.processMethod == 3)

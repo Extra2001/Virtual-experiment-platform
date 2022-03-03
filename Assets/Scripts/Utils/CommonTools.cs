@@ -182,7 +182,7 @@ public static class CommonTools
     /// </summary>
     public static bool AlmostEqual(this double value1, double value2, double precision = 0.0005)
     {
-        return Math.Abs(value1 - value2) < (value1 * precision);//误差允许0.05%
+        return Math.Abs(value1 - value2) <= (value1 * precision);//误差允许0.05%
     }
 
     public static MyVector3 GetMyVector(this Vector3 vector3)

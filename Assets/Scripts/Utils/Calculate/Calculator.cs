@@ -1446,13 +1446,6 @@ public class CalcVariable
         }
 
 
-        /*if(flag) {
-            sb.Append("A类不确定度，B类不确定度及合成不确定度的正确答案如下");
-            return (uu.average, uu.ua, uu.unc, string.Concat("检查出以下错误\r\n", sb.ToString()));
-        }
-        else {
-            return (uu.average, uu.ua, uu.unc, null);//没有错
-        }*/
     }
 }
 public class CalcArgs
@@ -1767,7 +1760,7 @@ public class CalcResult
             flag = false;
             result.err.b.right = false;
             result.err.b.message = "一元线性回归y=bx+a系数b计算错误";
-            result.err.b.latex = @"b=\frac{\overline{x}\overline{y}-\overline{xy}}{(\overline{x})^2-\overline{x^2}}";
+            result.err.b.latex = @"b=\frac{\overline{x}\cdot\overline{y}-\overline{xy}}{(\overline{x})^2-\overline{x^2}}";
         }
         if (!input.a.AlmostEqual(a))
         {
@@ -1781,7 +1774,7 @@ public class CalcResult
             flag = false;
             result.err.r.right = false;
             result.err.r.message = "一元线性回归y=bx+a相关系数r计算错误";
-            result.err.r.latex = @"\frac{\overline{xy}-\overline{x}\overline{y}}{\sqrt{(\overline{x^2}-(\overline{x})^2)(\overline{y^2}-(\overline{y})^2)}}";
+            result.err.r.latex = @"\frac{\overline{xy}-\overline{x}\cdot\overline{y}}{\sqrt{(\overline{x^2}-(\overline{x})^2)(\overline{y^2}-(\overline{y})^2)}}";
         }
         if (!input.f_uncb.AlmostEqual(input.correct_uncb))
         {
@@ -1875,14 +1868,14 @@ public class CalcResult
                 result.err.ua.message = "a类不确定度计算错误";
             }
 
-            result.err.ua.latex = $@"u_a({{\Delta {input.name}}})=\frac{{1}}{{n}}\sqrt{{\frac{{\Sigma{{(\Delta {input.name}_i-\overline{{\Delta {input.name}}})^2}}}}{{n(n-1)}}}}";
+            result.err.ua.latex = $@"u_a({{\Delta {input.name}}})=\frac{{1}}{{n}}\sqrt{{\frac{{\Sigma{{(\delta {input.name}_i-\overline{{\delta {input.name}}})^2}}}}{{n(n-1)}}}}";
         }
         if (!input.user_aver_b.AlmostEqual(double.Parse(StaticMethods.NumberFormat(b)) / bk.Length))
         {
             flag = false;
             result.err.average.right = false;
             result.err.average.message = "平均值计算错误";
-            result.err.average.latex = $@"\overline{{\Delta {input.name}}}=\frac{{1}}{{n}}\frac{{\sum_{{i=1}}^{{n}}{{\Delta {input.name}_i}}}}{{n}}";
+            result.err.average.latex = $@"\overline{{\Delta {input.name}}}=\frac{{\overline{{\delta {input.name}}}}}{{n}}";
         }
         if (!input.user_b_unc.AlmostEqual(StaticMethods.CalcUncertain(uncb, input.correct_b_uncb)))
         {

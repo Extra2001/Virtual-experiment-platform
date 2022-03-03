@@ -11,10 +11,12 @@ public class NextBackButtonOnMeasuredDataProcess : HTBehaviour
     public Button BackButton;
     public MeasuredProcessController controller;
 
+    Record recordHH => RecordManager.tempRecord;
+
     private void Start()
     {
         GameManager gm = GameManager.Instance;
-        Record rec = RecordManager.tempRecord;
+        Record rec = recordHH;
         BackButton.onClick.AddListener(() =>
         {
             if (gm._currentQuantityIndex == 0)

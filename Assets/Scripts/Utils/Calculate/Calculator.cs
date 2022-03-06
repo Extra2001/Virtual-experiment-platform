@@ -1410,8 +1410,9 @@ public class CalcVariable
             uncb = Math.Sqrt(uncb / (bk.Length * (bk.Length - 1))) / bk.Length;
 
             _value = b;
-            _unc = uncb;
-        }else if (vartype == 3)
+            _unc = StaticMethods.CalcUncertain(uncb, ub);
+        }
+        else if (vartype == 3)
         {
             double[] x = new double[values.Count];
             double[] y = new double[selfValues.Count];
@@ -1420,7 +1421,6 @@ public class CalcVariable
             _value = regres.b;
             _unc = StaticMethods.CalcUncertain(regres.b_unca, ub);
         }
-
 
         return (double.Parse(StaticMethods.NumberFormat(_value)), double.Parse(StaticMethods.NumberFormat(_unc)));
     }

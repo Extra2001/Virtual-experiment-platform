@@ -33,9 +33,9 @@ public class ThermometerInstruction : IndirectMeasurementInstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override bool ShowValue(double value)
+    public override bool ShowValue(double value, bool silent = false)
     {
-        if (base.ShowValue(value))
+        if (base.ShowValue(value, silent))
         {
             Entity.FindChildren("Thermometer_son").GetComponent<thermometer_main>().ShowNum((float)value);
             return true;
@@ -53,12 +53,12 @@ public class ThermometerInstruction : IndirectMeasurementInstrumentBase
     {
         base.OnShow();
         GenMainValueAndRandomErrorLimit();
-        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit, true);
     }
 
     public override void ReshowValue()
     {
-        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit, true);
     }
 
     public override void ShowGameButton(List<GameButtonItem> buttonItems)

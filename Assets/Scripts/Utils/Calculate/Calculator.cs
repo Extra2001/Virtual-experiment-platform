@@ -1360,7 +1360,7 @@ public class CalcVariable
 {//2021.8.20
     public int vartype;//1代表列表法，2代表逐差法，3代表一元线性回归和图像法
     public List<double> values;
-    public List<double> selfValues;//一元线性回归和图像的自变量
+    public List<double> selfValues = new List<double>();//一元线性回归和图像的自变量
     public double val;//主值
     public double ub;//B类不确定度
     public double userua, userub, userunc, useraver;//用户测量的ua,ub,用户的合成的不确定度
@@ -1394,7 +1394,8 @@ public class CalcVariable
             var u = CalcUncertain();
             _value = u.average;
             _unc = u.unc;
-        }else if(vartype == 2)
+        }
+        else if(vartype == 2)
         {
             double[] bk = new double[values.Count];
             double b = 0, uncb = 0;

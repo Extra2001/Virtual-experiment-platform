@@ -1417,6 +1417,11 @@ public class CalcVariable
         {
             double[] x = new double[values.Count];
             double[] y = new double[selfValues.Count];
+            for (int i = 0; i < x.Length; i++)
+            {
+                x[i] = values[i];
+                y[i] = selfValues[i];
+            }
             var regres = StaticMethods.LinearRegression(x, y);
 
             _value = regres.b;

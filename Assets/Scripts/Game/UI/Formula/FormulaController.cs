@@ -308,12 +308,34 @@ public partial class FormulaController : MonoBehaviour
     }
     private IEnumerator RefreshContentSize(GameObject baseObject)
     {
-        RefreshContentSizeFitter(baseObject);
+        var list = baseObject.GetComponentsInChildren<ContentSizeFitter>();
+        for (int i = 0; i < list.Length; i++)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
         yield return 1;
-        RefreshContentSizeFitter(baseObject);
+
+        list = baseObject.GetComponentsInChildren<ContentSizeFitter>();
+        for (int i = list.Length - 1; i >= 0; i--)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
         yield return 1;
-        RefreshContentSizeFitter(baseObject);
+
+        list = baseObject.GetComponentsInChildren<ContentSizeFitter>();
+        for (int i = 0; i < list.Length; i++)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
         yield return 1;
+
+        list = baseObject.GetComponentsInChildren<ContentSizeFitter>();
+        for (int i = list.Length - 1; i >= 0; i--)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(list[i].gameObject.rectTransform());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(baseCell.gameObject.rectTransform());
+        //RefreshContentSizeFitter(baseObject);
+        //yield return 1;
+        //RefreshContentSizeFitter(baseObject);
+        //yield return 1;
+        //RefreshContentSizeFitter(baseObject);
+        //yield return 1;
     }
     /// <summary>
     /// 刷新UI适应布局

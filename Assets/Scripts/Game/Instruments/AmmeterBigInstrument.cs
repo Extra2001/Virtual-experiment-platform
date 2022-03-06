@@ -34,9 +34,9 @@ public class AmmeterBigInstrument : IndirectMeasurementInstrumentBase
         throw new System.NotImplementedException();
     }
 
-    public override bool ShowValue(double value)
+    public override bool ShowValue(double value, bool silent = false)
     {
-        if (base.ShowValue(value))
+        if (base.ShowValue(value, silent))
         {
             Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().ShowNum((float)value);
             return true;
@@ -54,13 +54,13 @@ public class AmmeterBigInstrument : IndirectMeasurementInstrumentBase
     {
         base.OnShow();
         GenMainValueAndRandomErrorLimit();
-        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit, true);
         Entity.FindChildren("Ammeter_son").GetComponent<RotateAmmeter>().MaxA = 3f;
     }
 
     public override void ReshowValue()
     {
-        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit, true);
     }
 
 

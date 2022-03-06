@@ -30,7 +30,7 @@ public interface IShowInfoPanelable
     void ShowInfoPanel(Dictionary<string, IntrumentInfoItem> infoItems);
 }
 
-public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable, IShowValuable, IShowInfoPanelable
+public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable, IShowInfoPanelable
 {
     public Vector3 Position = new Vector3();
     /// <summary>
@@ -92,11 +92,11 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
     /// <returns>测量数据</returns>
     public abstract double GetMeasureResult();
 
-    public virtual bool ShowValue(double value)
+    public virtual bool ShowValue(double value, bool silent = false)
     {
         if (value > URV || value < LRV)
         {
-            UIAPI.Instance.ShowModel(new SimpleModel()
+            if (!silent) UIAPI.Instance.ShowModel(new SimpleModel()
             {
                 ShowCancel = false,
                 Message = "主值不能超过量程"
@@ -120,7 +120,7 @@ public abstract class InstrumentBase : EntityLogicBase, IMeasurable, IResetable,
         Entity.transform.GetChild(0).localPosition = initPosition;
         Entity.transform.GetChild(0).localRotation = initRotation;
         RandomErrorLimit = 0;
-        ShowValue(0);
+        ShowValue(0, true);
     }
 
     protected virtual void AddRightButton()//添加右键菜单功能

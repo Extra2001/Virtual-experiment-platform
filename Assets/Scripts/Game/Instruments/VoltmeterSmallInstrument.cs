@@ -34,9 +34,9 @@ public class VoltmeterSmallInstrument : IndirectMeasurementInstrumentBase
     {
         throw new System.NotImplementedException();
     }
-    public override bool ShowValue(double value)
+    public override bool ShowValue(double value, bool silent = false)
     {
-        if (base.ShowValue(value))
+        if (base.ShowValue(value, silent))
         {
             Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().ShowNum((float)value);
             return true;
@@ -53,13 +53,13 @@ public class VoltmeterSmallInstrument : IndirectMeasurementInstrumentBase
     {
         base.OnShow();
         GenMainValueAndRandomErrorLimit();
-        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit, true);
         Entity.FindChildren("Voltmeter_son").GetComponent<RotateVoltmeter>().MaxV = 3;
     }
 
     public override void ReshowValue()
     {
-        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit);
+        ShowValue(MainValue + UnityEngine.Random.Range(-1f, 1f) * RandomErrorLimit, true);
     }
 
     public override void ShowGameButton(List<GameButtonItem> buttonItems)

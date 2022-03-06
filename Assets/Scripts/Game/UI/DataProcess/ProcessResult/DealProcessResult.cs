@@ -91,7 +91,7 @@ public class DealProcessResult : HTBehaviour
                 {
                     temp.Add(double.Parse(item.MesuredData.data[i]));
                 }
-                calc.data = new CalcVariable(double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3))), temp.Count);
+                calc.data = new CalcVariable(double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3))), temp.Count, item.processMethod);
                 calc.data.values = temp;
                 calc.data.userua = double.Parse(StaticMethods.NumberFormat(item.UaExpression.GetExpressionExecuted()));
                 calc.data.userub = double.Parse(StaticMethods.NumberFormat(item.UbExpression.GetExpressionExecuted()));
@@ -254,13 +254,13 @@ public class DealProcessResult : HTBehaviour
         {
             if(item.processMethod == 1)
             {
-                calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
+                calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count, item.processMethod);
                 calc_complex.Measure(item.Symbol, item.MesuredData.data.ToDouble().ToArray());
             }
             else if (item.processMethod == 2)
             {
                 double _ub = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3) / item.DifferencedData.data.Count;
-                calc_complex.AddVariable(item.Symbol, _ub, item.MesuredData.data.Count);
+                calc_complex.AddVariable(item.Symbol, _ub, item.DifferencedData.data.Count, item.processMethod);
                 calc_complex.Measure(item.Symbol, item.DifferencedData.data.ToDouble().ToArray());
             }
             else if(item.processMethod == 3)
@@ -284,8 +284,10 @@ public class DealProcessResult : HTBehaviour
                 x_squre_mean = StaticMethods.CenterMoment(temp, 2);
                 x_mean_square = Math.Pow(StaticMethods.Average(temp), 2);
                 //求n,方均根与均方根结束
-                double _ub = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3) / Math.Sqrt(k * (x_squre_mean - x_mean_square)); 
-                calc_complex.AddRegression(item.Symbol, _ub, x, y);
+                double _ub = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3) / Math.Sqrt(k * (x_squre_mean - x_mean_square));
+                calc_complex.AddVariable(item.Symbol, _ub, x.Length, 3);
+                calc_complex.Measure(item.Symbol, x);
+                calc_complex.SelfValue(item.Symbol, y);
             }
             else
             {
@@ -305,7 +307,9 @@ public class DealProcessResult : HTBehaviour
                     }                   
                 }
 
-                calc_complex.AddRegression(item.Symbol, 0, x, y);
+                calc_complex.AddVariable(item.Symbol, 0, x.Length, 3);
+                calc_complex.Measure(item.Symbol, x);
+                calc_complex.SelfValue(item.Symbol, y);
             }
 
             if (item.processMethod == 4)

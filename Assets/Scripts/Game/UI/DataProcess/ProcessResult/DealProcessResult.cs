@@ -236,7 +236,7 @@ public class DealProcessResult : HTBehaviour
             }
         }
 
-
+        //直接测量量错误统计
         RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
         /*if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
             RecordManager.tempRecord.score.MeasureQuantityError = quantityErrors.Count;
@@ -332,17 +332,16 @@ public class DealProcessResult : HTBehaviour
         {
             if (!complexresult.err.answer.right)
             {
-                RecordManager.tempRecord.score.ComplexQuantityError += 1;
+                RecordManager.tempRecord.score.ComplexQuantityError += 1;//合成测量量错误统计
                 complexresult.err.answer.userformula = RecordManager.tempRecord.complexQuantityModel.AverageExpression;
             }
             if (!complexresult.err.answerunc.right)
             {
-                RecordManager.tempRecord.score.ComplexQuantityError += 1;
+                RecordManager.tempRecord.score.ComplexQuantityError += 1;//合成测量量错误统计
                 complexresult.err.answerunc.userformula = RecordManager.tempRecord.complexQuantityModel.UncertainExpression;
             }
             quantityErrors.Add(complexresult.err);
 
-            RecordManager.tempRecord.score.ComplexQuantityError += 1;
 
         }
         //}

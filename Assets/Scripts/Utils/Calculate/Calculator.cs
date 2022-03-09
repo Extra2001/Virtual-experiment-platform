@@ -1335,20 +1335,23 @@ public static class StaticMethods
         return string.Concat(@"\overline{", varname, @"}=\frac{\sum_{i=1}^{n}{", varname, "_i}}{n}");
         //return @"{\overline{x}=0}";
     }
-    public static (bool correct, string reason) CheckUncertain(string value, string unc)
+    public static (bool correct, string reason) CheckUncertain(string value, string unc, string unit)
     {
-        CheckFloat v = new CheckFloat(value, false), u = new CheckFloat(unc, false);
+        CheckFloat2 v = new CheckFloat2(value, false), u = new CheckFloat2(unc, false);
         if (u.EffectiveDigit != 1)
         {
             return (false, "不确定度保留1位有效数字");
         }
+        else if(v.LoDigit != u.HiDigit)
+        {
+            return (false, "有效数字没有对齐");
+        }else if (string.IsNullOrEmpty(unit))
+        {
+            return (false, "未填写表达式单位");
+        }
         else
         {
-            if (v.LoDigit == u.HiDigit)
-            {
-                return (true, null);
-            }
-            return (false, "有效数字没有对齐");
+            return (true, null);
         }
     }
     public static bool CheckLine(double x1, double y1, double x2, double y2, double userk)

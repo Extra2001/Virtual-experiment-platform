@@ -37,7 +37,7 @@ public class NextBackButtonOnComplexDataProcess : HTBehaviour
                     ShowModel($"合成物理量的不确定度还未计算");
                     return;
                 }
-                (flag, reason) = StaticMethods.CheckUncertain(RecordManager.tempRecord.complexQuantityModel.AnswerAverage, RecordManager.tempRecord.complexQuantityModel.AnswerUncertain);
+                (flag, reason) = StaticMethods.CheckUncertain(RecordManager.tempRecord.complexQuantityModel.AnswerAverage, RecordManager.tempRecord.complexQuantityModel.AnswerUncertain, RecordManager.tempRecord.complexQuantityModel.Unit);
             }
         }
         catch

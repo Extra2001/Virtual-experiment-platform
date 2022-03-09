@@ -236,10 +236,12 @@ public class DealProcessResult : HTBehaviour
             }
         }
 
-        if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
+
+        RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
+        /*if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
             RecordManager.tempRecord.score.MeasureQuantityError = quantityErrors.Count;
         else if (quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
-            RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
+            RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;*/
 
         
         CheckComplex();
@@ -247,8 +249,6 @@ public class DealProcessResult : HTBehaviour
 
     private void CheckComplex()
     {
-        //if (!MeasureErrorFlag)
-        //{
         CalcArgs calc_complex = new CalcArgs();
         foreach (var item in RecordManager.tempRecord.quantities)
         {
@@ -342,12 +342,8 @@ public class DealProcessResult : HTBehaviour
             }
             quantityErrors.Add(complexresult.err);
 
-            if (quantityErrors.Count > 0)
-            {
-                RecordManager.tempRecord.score.ComplexQuantityError += quantityErrors.Count;
-            }
+            RecordManager.tempRecord.score.ComplexQuantityError += 1;
 
-            
         }
         //}
     }

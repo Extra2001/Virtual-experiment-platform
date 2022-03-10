@@ -14,7 +14,6 @@ public class NextBackButtonOnMeasuredDataProcess : HTBehaviour
     private void Start()
     {
         GameManager gm = GameManager.Instance;
-        Record rec = RecordManager.tempRecord;
         BackButton.onClick.AddListener(() =>
         {
             if (gm._currentQuantityIndex == 0)
@@ -32,7 +31,7 @@ public class NextBackButtonOnMeasuredDataProcess : HTBehaviour
         {
             if (controller != null && controller.CheckAll())
             {
-                if (gm._currentQuantityIndex >= rec.quantities.Count - 1)
+                if (gm._currentQuantityIndex >= RecordManager.tempRecord.quantities.Count - 1)
                 {
                     gm.SwitchProcedure<ComplexDataProcessProcedure>();
                 }

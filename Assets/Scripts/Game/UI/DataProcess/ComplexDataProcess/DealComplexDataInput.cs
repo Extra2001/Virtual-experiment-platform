@@ -21,6 +21,7 @@ public class DealComplexDataInput : HTBehaviour
 
     public InputField MainValue;
     public InputField Uncertain;
+    public InputField Unit;
 
     public GameObject HidePanel;
 
@@ -51,7 +52,7 @@ public class DealComplexDataInput : HTBehaviour
                 RecordManager.tempRecord.complexQuantityModel.AnswerAverage = string.Empty;
             }            
         });
-        Uncertain.onValueChanged.AddListener(x =>
+        Uncertain.onEndEdit.AddListener(x =>
         {
             if ((!string.IsNullOrEmpty(x)) && double.TryParse(x, out double t))
             {
@@ -60,9 +61,13 @@ public class DealComplexDataInput : HTBehaviour
             else
             {
                 RecordManager.tempRecord.complexQuantityModel.AnswerUncertain = string.Empty;
-            }
-                
+            }               
         });
+        Unit.onEndEdit.AddListener(x =>
+        {
+            RecordManager.tempRecord.complexQuantityModel.Unit = x;
+        });
+
         formulaController.onSelectCell += FormulaController_onSelectCell;
     }
     
@@ -99,6 +104,7 @@ public class DealComplexDataInput : HTBehaviour
         }
         MainValue.text = model.AnswerAverage;
         Uncertain.text = model.AnswerUncertain;
+        Unit.text = model.Unit;
     }
 
     private void RenderFormula()

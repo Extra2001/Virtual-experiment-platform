@@ -91,7 +91,7 @@ public class DealProcessResult : HTBehaviour
                 {
                     temp.Add(double.Parse(item.MesuredData.data[i]));
                 }
-                calc.data = new CalcVariable(double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3))), temp.Count);
+                calc.data = new CalcVariable(double.Parse(StaticMethods.NumberFormat(GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3))), temp.Count, item.processMethod);
                 calc.data.values = temp;
                 calc.data.userua = double.Parse(StaticMethods.NumberFormat(item.UaExpression.GetExpressionExecuted()));
                 calc.data.userub = double.Parse(StaticMethods.NumberFormat(item.UbExpression.GetExpressionExecuted()));
@@ -236,10 +236,12 @@ public class DealProcessResult : HTBehaviour
             }
         }
 
-        if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
+        //直接测量量错误统计
+        RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
+        /*if (quantityErrors.Count > RecordManager.tempRecord.score.MeasureQuantityError)
             RecordManager.tempRecord.score.MeasureQuantityError = quantityErrors.Count;
         else if (quantityErrors.Count < RecordManager.tempRecord.score.MeasureQuantityError)
-            RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;
+            RecordManager.tempRecord.score.MeasureQuantityError += quantityErrors.Count;*/
 
         
         CheckComplex();
@@ -247,20 +249,18 @@ public class DealProcessResult : HTBehaviour
 
     private void CheckComplex()
     {
-        //if (!MeasureErrorFlag)
-        //{
         CalcArgs calc_complex = new CalcArgs();
         foreach (var item in RecordManager.tempRecord.quantities)
         {
             if(item.processMethod == 1)
             {
-                calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count);
+                calc_complex.AddVariable(item.Symbol, GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3), item.MesuredData.data.Count, item.processMethod);
                 calc_complex.Measure(item.Symbol, item.MesuredData.data.ToDouble().ToArray());
             }
             else if (item.processMethod == 2)
             {
                 double _ub = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3) / item.DifferencedData.data.Count;
-                calc_complex.AddVariable(item.Symbol, _ub, item.MesuredData.data.Count);
+                calc_complex.AddVariable(item.Symbol, _ub, item.DifferencedData.data.Count, item.processMethod);
                 calc_complex.Measure(item.Symbol, item.DifferencedData.data.ToDouble().ToArray());
             }
             else if(item.processMethod == 3)
@@ -273,7 +273,21 @@ public class DealProcessResult : HTBehaviour
                     x[i] = double.Parse(item.IndependentData.data[i]);
                 }
 
-                calc_complex.AddRegression(item.Symbol, x, y);
+                //求n,方均根与均方根
+                double[] temp = new double[item.IndependentData.data.Count];
+                for (int i = 0; i < item.IndependentData.data.Count; i++)
+                {
+                    temp[i] = double.Parse(item.IndependentData.data[i]);
+                }
+                double k, x_squre_mean, x_mean_square;
+                k = temp.Length;
+                x_squre_mean = StaticMethods.CenterMoment(temp, 2);
+                x_mean_square = Math.Pow(StaticMethods.Average(temp), 2);
+                //求n,方均根与均方根结束
+                double _ub = GameManager.Instance.GetInstrument(item.InstrumentType).ErrorLimit / Math.Sqrt(3) / Math.Sqrt(k * (x_squre_mean - x_mean_square));
+                calc_complex.AddVariable(item.Symbol, _ub, x.Length, 3);
+                calc_complex.Measure(item.Symbol, x);
+                calc_complex.SelfValue(item.Symbol, y);
             }
             else
             {
@@ -293,7 +307,9 @@ public class DealProcessResult : HTBehaviour
                     }                   
                 }
 
-                calc_complex.AddRegression(item.Symbol, x, y);
+                calc_complex.AddVariable(item.Symbol, 0, x.Length, 3);
+                calc_complex.Measure(item.Symbol, x);
+                calc_complex.SelfValue(item.Symbol, y);
             }
 
             if (item.processMethod == 4)
@@ -316,22 +332,17 @@ public class DealProcessResult : HTBehaviour
         {
             if (!complexresult.err.answer.right)
             {
-                RecordManager.tempRecord.score.ComplexQuantityError += 1;
+                RecordManager.tempRecord.score.ComplexQuantityError += 1;//合成测量量错误统计
                 complexresult.err.answer.userformula = RecordManager.tempRecord.complexQuantityModel.AverageExpression;
             }
             if (!complexresult.err.answerunc.right)
             {
-                RecordManager.tempRecord.score.ComplexQuantityError += 1;
+                RecordManager.tempRecord.score.ComplexQuantityError += 1;//合成测量量错误统计
                 complexresult.err.answerunc.userformula = RecordManager.tempRecord.complexQuantityModel.UncertainExpression;
             }
             quantityErrors.Add(complexresult.err);
 
-            if (quantityErrors.Count > 0)
-            {
-                RecordManager.tempRecord.score.ComplexQuantityError += quantityErrors.Count;
-            }
 
-            
         }
         //}
     }

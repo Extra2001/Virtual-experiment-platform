@@ -1335,20 +1335,23 @@ public static class StaticMethods
         return string.Concat(@"\overline{", varname, @"}=\frac{\sum_{i=1}^{n}{", varname, "_i}}{n}");
         //return @"{\overline{x}=0}";
     }
-    public static (bool correct, string reason) CheckUncertain(string value, string unc)
+    public static (bool correct, string reason) CheckUncertain(string value, string unc, string unit)
     {
-        CheckFloat v = new CheckFloat(value, false), u = new CheckFloat(unc, false);
+        CheckFloat2 v = new CheckFloat2(value, false), u = new CheckFloat2(unc, false);
         if (u.EffectiveDigit != 1)
         {
             return (false, "不确定度保留1位有效数字");
         }
+        else if(v.LoDigit != u.HiDigit)
+        {
+            return (false, "有效数字没有对齐");
+        }else if (string.IsNullOrEmpty(unit))
+        {
+            return (false, "未填写表达式单位");
+        }
         else
         {
-            if (v.LoDigit == u.HiDigit)
-            {
-                return (true, null);
-            }
-            return (false, "有效数字没有对齐");
+            return (true, null);
         }
     }
     public static bool CheckLine(double x1, double y1, double x2, double y2, double userk)
@@ -1358,13 +1361,14 @@ public static class StaticMethods
 }
 public class CalcVariable
 {//2021.8.20
-    public int vartype;//0表示有原始数据 1表示没有原始数据[] 只有值不确定度
+    public int vartype;//1代表列表法，2代表逐差法，3代表一元线性回归和图像法
     public List<double> values;
-    public double val;
-    public double ub;
+    public List<double> selfValues = new List<double>();//一元线性回归和图像的自变量
+    public double val;//主值
+    public double ub;//B类不确定度
     public double userua, userub, userunc, useraver;//用户测量的ua,ub,用户的合成的不确定度
 
-    public CalcVariable(double ub, int measures, int vartype = 0)
+    public CalcVariable(double ub, int measures, int vartype)
     {//测量了measures个数据
         this.ub = ub; values = new List<double>(measures);
         this.vartype = vartype;
@@ -1384,7 +1388,53 @@ public class CalcVariable
         }
         return (double.Parse(StaticMethods.NumberFormat(average)), double.Parse(StaticMethods.NumberFormat(Math.Sqrt(sum2))), double.Parse(StaticMethods.NumberFormat(Math.Sqrt(Math.Pow(double.Parse(StaticMethods.NumberFormat(Math.Sqrt(sum2))), 2) + ub * ub))));
     }
-    //下面的是8月20号加的
+
+    public (double value, double unc) GetValueAndUncertain()
+    {
+        double _value = 0, _unc = 0;
+        if (vartype == 1)
+        {
+            var u = CalcUncertain();
+            _value = u.average;
+            _unc = u.unc;
+        }
+        else if(vartype == 2)
+        {
+            double[] bk = new double[values.Count];
+            double b = 0, uncb = 0;
+            for (int i = 0; i < bk.Length; i++)
+            {
+                bk[i] = values[i];
+            }
+            b = StaticMethods.Average(bk);
+            for (int i = 0; i < bk.Length; i++)
+            {
+                uncb += ((bk[i] - b) * (bk[i] - b));
+            }
+            uncb = Math.Sqrt(uncb / (bk.Length * (bk.Length - 1))) / bk.Length;
+
+            _value = b;
+            _unc = StaticMethods.CalcUncertain(uncb, ub);
+        }
+        else if (vartype == 3)
+        {
+            double[] x = new double[values.Count];
+            double[] y = new double[selfValues.Count];
+            for (int i = 0; i < x.Length; i++)
+            {
+                x[i] = values[i];
+                y[i] = selfValues[i];
+            }
+            var regres = StaticMethods.LinearRegression(x, y);
+
+            _value = regres.b;
+            _unc = StaticMethods.CalcUncertain(regres.b_unca, ub);
+        }
+
+        return (double.Parse(StaticMethods.NumberFormat(_value)), double.Parse(StaticMethods.NumberFormat(_unc)));
+    }
+    //下面的是2022年3月6日注释
+    /*
     public (string UaError, string UbError, string UncError, string AverError, bool IfError) CheckInfo()
     {
         if (this.vartype == 0)
@@ -1446,7 +1496,7 @@ public class CalcVariable
         }
 
 
-    }
+    }*/
 }
 public class CalcArgs
 {//一次计算
@@ -1493,12 +1543,12 @@ public class CalcArgs
             return true;
         }
     }
-    public bool AddVariable(string varname, double ub, int measures)
+    public bool AddVariable(string varname, double ub, int measures, int type)
     {
         //先检查变量如果没有出现过就加入
         if (ValidVarname(varname))
         {
-            vars[varname] = new CalcVariable(ub, measures);
+            vars[varname] = new CalcVariable(ub, measures, type);
             return true;
         }
         else
@@ -1506,13 +1556,15 @@ public class CalcArgs
             return false;
         }
     }
-    public bool AddRegression(string varname, double[] x, double[] y)
+    /*
+    public bool AddRegression(string varname, double ub, double[] x, double[] y)
     {
         var regres = StaticMethods.LinearRegression(x, y);
 
         if (ValidVarname(varname))
         {
-            vars[varname] = new CalcVariable(regres.b_unca, 1, 1);
+            double unc = Math.Sqrt(regres.b_unca * regres.b_unca + ub * ub);
+            vars[varname] = new CalcVariable(unc, 1, 3);
             vars[varname].val = regres.b;
             return true;
         }
@@ -1520,13 +1572,24 @@ public class CalcArgs
         {
             return false;
         }
-    }
+    }*/
+
     public bool Measure(string varname, double[] values)
     {
         //修改测量值 成功返回true
         if (vars.ContainsKey(varname))
         {
             vars[varname].values.Clear(); vars[varname].values.AddRange(values); return true;
+        }
+        return false;
+    }
+
+    public bool SelfValue(string varname, double[] values)
+    {
+        //修改自变量 成功返回true
+        if (vars.ContainsKey(varname))
+        {
+            vars[varname].selfValues.Clear(); vars[varname].selfValues.AddRange(values); return true;
         }
         return false;
     }
@@ -1561,6 +1624,8 @@ public class CalcArgs
         }
         return (val, unc.Sqrt());
     }
+
+    /*
     public static CalcMeasureResult CalculateMeasureValue(CalcArgs argobj)
     {//代入数据
         List<QuantityError> errors = new List<QuantityError>(argobj.vars.Count);
@@ -1621,7 +1686,7 @@ public class CalcArgs
         res.status = flag ? "计算有误" : "计算无误";
         res.err = errors;
         return res;
-    }
+    }*/
 
     public static CalcResult CalculateComplexValue(string expression, CalcArgs argobj)
     {
@@ -1638,18 +1703,9 @@ public class CalcArgs
         }
         foreach (var item in argobj.vars)
         {
-            if (argobj.vars[item.Key].vartype == 1)
-            {//20211123修改
-                vals[item.Key] = argobj.vars[item.Key].val;
-                vals[$"u_{item.Key}"] = argobj.vars[item.Key].ub;
-            }
-            else
-            {
-                var u = argobj.vars[item.Key].CalcUncertain();
-                vals[item.Key] = u.average;
-                vals[$"u_{item.Key}"] = u.unc;
-            }
-
+            var u = argobj.vars[item.Key].GetValueAndUncertain();
+            vals[item.Key] = u.value;
+            vals[$"u_{item.Key}"] = u.unc;
         }
         double val1 = valexpr.Evaluate(vals).RealValue;//对的val
         double unc1 = uncexpr.Evaluate(vals).RealValue;//对的unc
@@ -1702,15 +1758,8 @@ public class CalcArgs
         }
         foreach (var item in argobj.vars)
         {
-            if (item.Value.vartype == 0)
-            {
-                var u = StaticMethods.Average(argobj.vars[item.Key].values);
-                vals[item.Key] = u;
-            }
-            else
-            {//一元线性回归和图表法 20211123
-                vals[item.Key] = item.Value.val;
-            }
+            var u = argobj.vars[item.Key].GetValueAndUncertain();
+            vals[item.Key] = u.value;
         }
         double val1 = valexpr.Evaluate(vals).RealValue;//对的val
         if (!val1.AlmostEqual(argobj.userval, 0.05))
@@ -1793,7 +1842,7 @@ public class CalcResult
                 result.err.ua.message = "a类不确定度计算错误";
                 result.err.ua.latex = @"u_a(a)=b\sqrt{\frac{\overline{x^2}}{n-2}(\frac{1}{r^2}-1)}";
             }
-            if (!input.f_unc.AlmostEqual(StaticMethods.CalcUncertain(a_unca, input.correct_uncb)))
+            if (!input.f_unc.AlmostEqual(double.Parse(StaticMethods.NumberFormat(StaticMethods.CalcUncertain(a_unca, input.correct_uncb)))))
             {
                 flag = false;
                 result.err.unc.right = false;
@@ -1839,7 +1888,7 @@ public class CalcResult
         {
             uncb += ((bk[i] - b) * (bk[i] - b));
         }
-        uncb = double.Parse(StaticMethods.NumberFormat(Math.Sqrt(uncb / (bk.Length * (bk.Length - 1))))) / bk.Length;
+        uncb = double.Parse(StaticMethods.NumberFormat(Math.Sqrt(uncb / (bk.Length * (bk.Length - 1))) / bk.Length));
         if (!input.correct_b_uncb.AlmostEqual(input.user_b_uncb))
         {
             flag = false;

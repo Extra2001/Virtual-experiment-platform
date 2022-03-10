@@ -112,25 +112,29 @@ public class ObjectInfo : HTBehaviour
             {
                 objectValue.LineScaleZ = objectValue.Scale;
                 objectValue.LineScaleY = objectValue.Scale;
-                objectValue.LineScaleX = Math.Max(1, objectValue.LineScaleX - objectValue.Scale * (float)step);
+                objectValue.LineScaleX = Math.Max(objectValue.Scale, objectValue.LineScaleX - objectValue.Scale * (float)step);
                 _StepCount.text = ((objectValue.LineScaleX - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString("F0");
             }
             if (axis == 1)
             {
                 objectValue.LineScaleZ = objectValue.Scale;
                 objectValue.LineScaleX = objectValue.Scale;
-                objectValue.LineScaleY = Math.Max(1, objectValue.LineScaleY - objectValue.Scale * (float)step);
+                objectValue.LineScaleY = Math.Max(objectValue.Scale, objectValue.LineScaleY - objectValue.Scale * (float)step);
                 _StepCount.text = ((objectValue.LineScaleY - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString("F0");
             }
             if (axis == 2)
             {
                 objectValue.LineScaleX = objectValue.Scale;
                 objectValue.LineScaleY = objectValue.Scale;
-                objectValue.LineScaleZ = Math.Max(1, objectValue.LineScaleZ - objectValue.Scale * (float)step);
+                objectValue.LineScaleZ = Math.Max(objectValue.Scale, objectValue.LineScaleZ - objectValue.Scale * (float)step);
                 _StepCount.text = ((objectValue.LineScaleZ - objectValue.Scale) / ((float)step * objectValue.Scale)).ToString("F0");
             }
         });
-        _ResetStep.onClick.AddListener(() => { objectValue.Scale = objectValue.Scale; _StepCount.text = "0"; });
+        _ResetStep.onClick.AddListener(() =>
+        {
+            objectValue.Scale = objectValue.Scale;
+            _StepCount.text = "0"; 
+        });
         _Righting.onClick.AddListener(RightIt);
         _StepAxis.onValueChanged.AddListener(x => new int().Equals(x != -1 ? axis = x : x));
     }

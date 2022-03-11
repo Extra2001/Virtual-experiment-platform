@@ -1413,7 +1413,7 @@ public class CalcVariable
             }
             uncb = Math.Sqrt(uncb / (bk.Length * (bk.Length - 1))) / bk.Length;
 
-            _value = b;
+            _value = b / bk.Length;
             _unc = StaticMethods.CalcUncertain(uncb, ub);
         }
         else if (vartype == 3)

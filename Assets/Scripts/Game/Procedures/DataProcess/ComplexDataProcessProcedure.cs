@@ -41,22 +41,19 @@ public class ComplexDataProcessProcedure : ProcedureBase
             if (item.processMethod == 1)
                 result = StaticMethods.Average(item.MesuredData.data.ToDouble()).ToString();
             else if (item.processMethod == 2)
-                result = StaticMethods.Average(item.DifferencedData.data.ToDouble()).ToString();
-            // 下面可能还要改
+                result = (StaticMethods.Average(item.DifferencedData.data.ToDouble()) / item.DifferencedData.data.Count).ToString();
             else if (item.processMethod == 3 && item.nextValue == 0)
                 result = item.BExpression.GetExpressionExecuted().ToString();
-            else if (item.processMethod == 3 && item.nextValue == 1)
-                result = item.AExpression.GetExpressionExecuted().ToString();
-            else if (item.processMethod == 4 && item.nextValue == 0)
-                result = string.IsNullOrEmpty(item.change_rate) ? "0" : item.change_rate;
-            else if (item.processMethod == 4 && item.nextValue == 1)
+            //else if (item.processMethod == 3 && item.nextValue == 1)
+            //    result = item.AExpression.GetExpressionExecuted().ToString();//一元线性回归此处已阉割
+            else if (item.processMethod == 4)
                 result = string.IsNullOrEmpty(item.change_rate) ? "0" : item.change_rate;
         }
         else if (ComplexStatisticValue.Uncertain == valueKind)
         {
             result = item.ComplexExpression.GetExpressionExecuted().ToString();
         }
-        return result;
+        return StaticMethods.NumberFormat(double.Parse(result));//因直接测量量处保留了有效位数
     }
 
     /// <summary>

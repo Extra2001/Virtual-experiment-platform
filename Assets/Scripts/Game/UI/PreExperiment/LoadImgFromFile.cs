@@ -82,7 +82,7 @@ public class LoadImgFromFile : HTBehaviour
 
             List<ExperimentReportModelBuilder> models = new List<ExperimentReportModelBuilder>();
             List<ExperimentReportContentBuilder> contents = new List<ExperimentReportContentBuilder>();
-            var hh = new string[] { "直接计算", "逐差法", "一元线性回归", "图示法" };
+            var hh = new string[] { "", "直接计算", "逐差法", "一元线性回归", "图示法" };
             contents.Add(new ExperimentReportContentBuilder("实验设计", $"实验共测量{x.quantities.Count}个物理量，分别有{string.Join("、", x.quantities.Select(x => x.Name + "(" + x.Symbol + ")" + "，使用" + x.InstrumentType.CreateInstrumentInstance().InstName + "测量，并使用" + hh[x.processMethod] + "进行数据处理；"))}"));
             contents.Add(new ExperimentReportContentBuilder("数据处理", string.Join("\n", x.quantities.Select(y =>
             $"物理量：{y.Name}，代号：{y.Symbol}，数据组数：{y.MesuredData.data.Count}，{Group(y.processMethod, y.MesuredData.data.Count)}处理方法：{hh[y.processMethod]}，原始数据：{string.Join(";", y.MesuredData.data)}，自变量：{string.Join(";", y.IndependentData.data)}，逐差数据：{string.Join(";", y.DifferencedData.data)}"))));

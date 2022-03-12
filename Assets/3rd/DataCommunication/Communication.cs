@@ -57,7 +57,7 @@ namespace WisdomTree.Common.Function
 
         public static Communication Instance;
 
-        private static string _UUID = "Defult";
+        public static string _UUID = "Defult";
 
         private static long startTime;
 
@@ -73,7 +73,7 @@ namespace WisdomTree.Common.Function
         private static int courseId;
         private static string appId;
         private static string secret;
-        private static string ticket;
+        public static string ticket = "Defult";
 
         /// <summary>
         /// 初始化

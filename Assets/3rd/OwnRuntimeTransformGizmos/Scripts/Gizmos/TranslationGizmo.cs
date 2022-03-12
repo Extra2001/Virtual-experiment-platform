@@ -60,7 +60,8 @@ namespace RTEditor
         };
         private ShortcutKeys _enableBoxSnappingShortcut = new ShortcutKeys("Enable box snapping", 1)
         {
-            Key0 = KeyCode.B,
+            //Key0 = KeyCode.B, //原代码
+            Key0 = KeyCode.None,//强制禁用B
             UseModifiers = false,
             UseMouseButtons = false,
             UseStrictModifierCheck = true

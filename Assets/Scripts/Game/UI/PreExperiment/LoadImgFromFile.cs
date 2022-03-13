@@ -62,41 +62,63 @@ public class LoadImgFromFile : HTBehaviour
         Debug.Log(b);
         */
 
-        
-
-        Record record = RecordManager.GetRecord(GetComponent<RecordCell>().recordId, x => 
+        Record record = RecordManager.GetRecord(GetComponent<RecordCell>().recordId, x =>
         {
-
-            Action<string> action = delegate (string s)
+        Action<string> action = delegate (string s)
+        {
+            x.uploadFinish = true;
+            x.Save();
+            GetComponent<RecordCell>()._UploadButton.FindChildren("Text").GetComponent<Text>().text = "上传（已上传）";
+            UIAPI.Instance.ShowModel(new SimpleModel()
             {
-                x.uploadFinish = true;
-                x.Save();
-                GetComponent<RecordCell>()._UploadButton.FindChildren("Text").GetComponent<Text>().text = "上传（已上传）";
-                UIAPI.Instance.ShowModel(new SimpleModel()
-                {
-                    ShowCancel = false,
-                    Title = "提示",
-                    Message = "实验数据上传成功"
-                });                
+                ShowCancel = false,
+                Title = "提示",
+                Message = "实验数据上传成功"
+            });
+        };
+
+        List<ExperimentReportModelBuilder> models = new List<ExperimentReportModelBuilder>();
+        List<ExperimentReportContentBuilder> contents = new List<ExperimentReportContentBuilder>();
+        var hh = new string[] { "", "直接计算", "逐差法", "一元线性回归", "图示法" };
+        contents.Add(new ExperimentReportContentBuilder("实验设计", $"实验共测量{x.quantities.Count}个物理量，分别有{string.Join("、", x.quantities.Select(x => x.Name + "(" + x.Symbol + ")" + "，使用" + x.InstrumentType.CreateInstrumentInstance().InstName + "测量，并使用" + hh[x.processMethod] + "进行数据处理；"))}"));
+        contents.Add(new ExperimentReportContentBuilder("数据处理", string.Join("\n", x.quantities.Select(y =>
+        $"物理量：{y.Name}，代号：{y.Symbol}，数据组数：{y.MesuredData.data.Count}，{Group(y.processMethod, y.MesuredData.data.Count)}处理方法：{hh[y.processMethod]}，原始数据：{string.Join(";", y.MesuredData.data)}，自变量：{string.Join(";", y.IndependentData.data)}，逐差数据：{string.Join(";", y.DifferencedData.data)}"))));
+        if (url != null)
+        {
+            contents.Add(new ExperimentReportContentBuilder("附加材料", new Files("附加材料", url, 1, 1, 1))); /*这里换成已打开的文件*/
+        }
+        models.Add(new ExperimentReportModelBuilder("实验报告", contents.ToArray()));
+            var vseModel = new VSEReportUpload()
+            {
+                previewurl = "https://www.zhihuishu.com/virtual_portals_h5/virtualExperiment.html#/indexPage?courseId=2000074157",
+                title = "交互式测量误差和数据处理虚拟仿真实验",
+                startTime = GameManager.Instance.startTime.Ticks/ 1000000,
+                endTime = DateTime.Now.Ticks/ 1000000,
+                timeUsed = (int)((DateTime.Now.Ticks - GameManager.Instance.startTime.Ticks) / 1000/ 1000000),
+                status = 1,
+                score = (int)(20 * x.score.CalcScore()),
+                steps = new List<VSEReportStep>()
+               {
+                   new VSEReportStep()
+                   {
+                        seq = 1,
+                         maxScore = 100,
+                         score = (int)(20 * x.score.CalcScore()),
+                          endTime = DateTime.Now.Ticks,
+                           evaluation = $"本次实验记录数据发生{x.score.DataRecordError}次错误，处理直接测量量发生{x.score.MeasureQuantityError}次错误，处理最终合成量发生{x.score.ComplexQuantityError}次错误。",
+                            expectTime = 0,
+                             remarks = "",
+                              repeatCount = 0,
+                               scoringModel ="",
+                                startTime = GameManager.Instance.startTime.Ticks/1000000,
+                                 timeUsed  = (int)((DateTime.Now.Ticks - GameManager.Instance.startTime.Ticks) / 1000/ 1000000),
+                                  title = "步骤"
+                   }
+               }
             };
-
-            List<ExperimentReportModelBuilder> models = new List<ExperimentReportModelBuilder>();
-            List<ExperimentReportContentBuilder> contents = new List<ExperimentReportContentBuilder>();
-            var hh = new string[] { "", "直接计算", "逐差法", "一元线性回归", "图示法" };
-            contents.Add(new ExperimentReportContentBuilder("实验设计", $"实验共测量{x.quantities.Count}个物理量，分别有{string.Join("、", x.quantities.Select(x => x.Name + "(" + x.Symbol + ")" + "，使用" + x.InstrumentType.CreateInstrumentInstance().InstName + "测量，并使用" + hh[x.processMethod] + "进行数据处理；"))}"));
-            contents.Add(new ExperimentReportContentBuilder("数据处理", string.Join("\n", x.quantities.Select(y =>
-            $"物理量：{y.Name}，代号：{y.Symbol}，数据组数：{y.MesuredData.data.Count}，{Group(y.processMethod, y.MesuredData.data.Count)}处理方法：{hh[y.processMethod]}，原始数据：{string.Join(";", y.MesuredData.data)}，自变量：{string.Join(";", y.IndependentData.data)}，逐差数据：{string.Join(";", y.DifferencedData.data)}"))));
-            if (url != null)
-            {
-                contents.Add(new ExperimentReportContentBuilder("附加材料", new Files("附加材料", url, 1, 1, 1))); /*这里换成已打开的文件*/
-            }
-            models.Add(new ExperimentReportModelBuilder("实验报告", contents.ToArray()));
             Communication.UploadReport(GameManager.Instance.startTime, DateTime.Now, 20 * x.score.CalcScore(), $"本次实验记录数据发生{x.score.DataRecordError}次错误，处理直接测量量发生{x.score.MeasureQuantityError}次错误，处理最终合成量发生{x.score.ComplexQuantityError}次错误。", models.ToArray(), new Step[0], action);//这里也可以添加很多实验步骤。
-
-
+            VSEManager.Instance.UploadReport(vseModel, null);
         });
-
-
     }
 
     private static string Group(int processMethod, int groupCount)

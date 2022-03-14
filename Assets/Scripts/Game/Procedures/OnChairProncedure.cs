@@ -28,6 +28,9 @@ public class OnChairProcedure : ProcedureBase
         GameManager.Instance.PersonPosition = RecordManager.tempRecord.FPSPosition;
         GameManager.Instance.PersonRotation = RecordManager.tempRecord.FPSRotation;
 
+        //启用物体选择
+        RTGController.Current.IsUse = true;
+
         base.OnEnter(lastProcedure);
         //打开相应UI
         Main.m_UI.OpenUI<GameButtonUILogic>();
@@ -66,6 +69,9 @@ public class OnChairProcedure : ProcedureBase
         Main.m_UI.CloseUI<GameButtonUILogic>();
         KeyboardManager.Instance.UnRegister(KeyCode.T);
         KeyboardManager.Instance.UnRegister(KeyCode.B);
+
+        //关闭物体选择
+        RTGController.Current.IsUse = false;
     }
 
     /// <summary>

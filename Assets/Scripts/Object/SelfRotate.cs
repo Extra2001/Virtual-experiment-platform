@@ -65,7 +65,6 @@ public class SelfRotate : HTBehaviour
     void Start()
     {
         onTW = false;
-        RTF = GameObject.Find("(Singleton)RTEditor.EditorObjectSelection");
     }
     void LiveImageVanish()
     {
@@ -78,7 +77,7 @@ public class SelfRotate : HTBehaviour
         TarX = this.transform.localEulerAngles.x;
         TarY = this.transform.localEulerAngles.y;
         TarZ = this.transform.localEulerAngles.z;
-        if (RTF.GetComponent<EditorObjectSelection>().Skode_Press() == 0)
+        if (RTGController.Current._targetObject == null)
         {
             if (this.transform.localEulerAngles.x < 30 || this.transform.localEulerAngles.x > 330)
             {

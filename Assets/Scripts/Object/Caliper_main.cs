@@ -3,7 +3,6 @@
     描述：游标卡尺行为处理程序
 *************************************************************************************/
 using HT.Framework;
-using RTEditor;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 using DG.Tweening;

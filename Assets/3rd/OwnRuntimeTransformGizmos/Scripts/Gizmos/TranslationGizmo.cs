@@ -36,77 +36,107 @@ namespace RTEditor
         /// <summary>
         /// Shortcut keys.
         /// </summary>
+        /// 
+
+        //20220314张峻凡注释无用功能
         [SerializeField]
         private ShortcutKeys _translateAlongScreenAxesShortcut = new ShortcutKeys("Translate along screen axes", 0)
         {
-            LShift = true,
+            /*LShift = true,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true*/
+            UseModifiers = false,
             UseMouseButtons = false,
             UseStrictModifierCheck = true
+
         };
         [SerializeField]
         private ShortcutKeys _enableStepSnappingShortcut = new ShortcutKeys("Enable step snapping", 0)
         {
-            LCtrl = true,
+            /*LCtrl = true,
             UseMouseButtons = false,
-            UseStrictModifierCheck = true
-        };
-        [SerializeField]
-        private ShortcutKeys _enableVertexSnappingShortcut = new ShortcutKeys("Enable vertex snapping", 1)
-        {
-            Key0 = KeyCode.V,
-            UseModifiers = false,
-            UseMouseButtons = false,
-            UseStrictModifierCheck = true
-        };
-        private ShortcutKeys _enableBoxSnappingShortcut = new ShortcutKeys("Enable box snapping", 1)
-        {
-            //Key0 = KeyCode.B, //原代码
-            Key0 = KeyCode.None,//强制禁用B
+            UseStrictModifierCheck = true*/
             UseModifiers = false,
             UseMouseButtons = false,
             UseStrictModifierCheck = true
         };
         [SerializeField]
-        private ShortcutKeys _enableSurfacePlacementWithYAlignment = new ShortcutKeys("Enable surface placement (with Y axis alignment)", 1)
+        private ShortcutKeys _enableVertexSnappingShortcut = new ShortcutKeys("Enable vertex snapping", 0)
         {
-            Key0 = KeyCode.Space,
+            /*Key0 = KeyCode.V,
+            UseModifiers = false,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true*/
+            UseModifiers = false,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true
+        };
+        private ShortcutKeys _enableBoxSnappingShortcut = new ShortcutKeys("Enable box snapping", 0)
+        {
+            /*Key0 = KeyCode.B,
+            UseModifiers = false,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true*/
             UseModifiers = false,
             UseMouseButtons = false,
             UseStrictModifierCheck = true
         };
         [SerializeField]
-        private ShortcutKeys _enableSurfacePlacementWithXAlignment = new ShortcutKeys("Enable surface placement (with X axis alignment)", 2)
+        private ShortcutKeys _enableSurfacePlacementWithYAlignment = new ShortcutKeys("Enable surface placement (with Y axis alignment)", 0)
         {
-            Key0 = KeyCode.Space,
+            /*Key0 = KeyCode.Space,
+            UseModifiers = false,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true*/
+            UseModifiers = false,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true
+        };
+        [SerializeField]
+        private ShortcutKeys _enableSurfacePlacementWithXAlignment = new ShortcutKeys("Enable surface placement (with X axis alignment)", 0)
+        {
+            /*Key0 = KeyCode.Space,
             Key1 = KeyCode.X,
             UseModifiers = false,
             UseMouseButtons = false,
-            UseStrictModifierCheck = true
-        };
-        [SerializeField]
-        private ShortcutKeys _enableSurfacePlacementWithZAlignment = new ShortcutKeys("Enable surface placement (with Z axis alignment)", 2)
-        {
-            Key0 = KeyCode.Space,
-            Key1 = KeyCode.Z,
+            UseStrictModifierCheck = true*/
             UseModifiers = false,
             UseMouseButtons = false,
             UseStrictModifierCheck = true
         };
         [SerializeField]
-        private ShortcutKeys _enableSurfacePlacementNoAxisAlignment = new ShortcutKeys("Enable surface placement (no alignment", 1)
+        private ShortcutKeys _enableSurfacePlacementWithZAlignment = new ShortcutKeys("Enable surface placement (with Z axis alignment)", 0)
         {
-            Key0 = KeyCode.Space,
+            /*Key0 = KeyCode.Space,
+            Key1 = KeyCode.Z,
+            UseModifiers = false,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true*/
+            UseModifiers = false,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true
+        };
+        [SerializeField]
+        private ShortcutKeys _enableSurfacePlacementNoAxisAlignment = new ShortcutKeys("Enable surface placement (no alignment", 0)
+        {
+            /*Key0 = KeyCode.Space,
             LCtrl = true,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true*/
+            UseModifiers = false,
             UseMouseButtons = false,
             UseStrictModifierCheck = true
         };
         [SerializeField]
         private ShortcutKeys _enableMoveScale = new ShortcutKeys("Enable move scale", 0)
         {
-            LAlt = true,
+            /*LAlt = true,
             UseMouseButtons = false,
             UseStrictMouseCheck = false,
-            UseStrictModifierCheck = true,
+            UseStrictModifierCheck = true,*/
+            UseModifiers = false,
+            UseMouseButtons = false,
+            UseStrictModifierCheck = true
         };
 
         private bool IsTranslateAlongScreenAxesShActive { get { return _translateAlongScreenAxesShortcut.IsActive(); } }

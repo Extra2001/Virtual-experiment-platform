@@ -14,20 +14,20 @@ public class VSEManager : HTBehaviour
 {
     public static VSEManager Instance = null;
 
-    private string appid = "";
-    private string secret = "";
-    private string access_token
+    private static string appid = "";
+    private static string secret = "";
+    private static string access_token
     {
         get => PlayerPrefs.HasKey("access_token") ? PlayerPrefs.GetString("access_token") : "";
         set => PlayerPrefs.SetString("access_token", value);
     }
-    private VSEAccessTokenGET vse_user_info
+    private static VSEAccessTokenGET vse_user_info
     {
         get => PlayerPrefs.HasKey("vse_user_info") ? JsonConvert.DeserializeObject<VSEAccessTokenGET>(PlayerPrefs.GetString("vse_user_info")) : new VSEAccessTokenGET();
         set => PlayerPrefs.SetString("vse_user_info", JsonConvert.SerializeObject(value));
     }
 
-    public AccountType accountType
+    public static AccountType accountType
     {
         get
         {
@@ -41,7 +41,7 @@ public class VSEManager : HTBehaviour
         }
     }
 
-    public void Init()
+    public static void Init()
     {
         if (Instance == null)
         {
@@ -59,38 +59,39 @@ public class VSEManager : HTBehaviour
         IEnumerator WaitForParam()
         {
             yield return new WaitWhile(() => Communication.ticket == "Defult");
-
+            yield return new WaitWhile(() => FindObjectsOfType<SimpleModelPanel>(true).Length == 0);
+            Debug.Log(accountType);
             if (accountType == AccountType.NotLogin)
-                UIAPI.Instance.ShowModel(new SimpleModel()
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
                 {
                     ShowCancel = false,
-                    Title = "重要提示",
-                    Message = "您未登录账号，仅能体验虚拟实验，存档同步、实验报告上传等功能暂不可用。"
+                    Title = new BindableString("重要提示"),
+                    Message = new BindableString("您未登录账号，仅能体验虚拟实验，存档同步、实验报告上传等功能暂不可用。")
                 });
             else if (accountType == AccountType.VSEClass)
             {
-                UIAPI.Instance.ShowModel(new SimpleModel()
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
                 {
                     ShowCancel = false,
-                    Title = "重要提示",
-                    Message = "您为微实课堂用户，存档同步暂不可用。"
+                    Title = new BindableString("重要提示"),
+                    Message = new BindableString("您为微实课堂用户，存档同步暂不可用。")
                 });
-                StartCoroutine(GetAccessToken());
+                Instance.StartCoroutine(GetAccessToken());
             }
             else if (accountType == AccountType.Both)
             {
-                UIAPI.Instance.ShowModel(new SimpleModel()
+                UIAPI.Instance.ShowModel(new ModelDialogModel()
                 {
                     ShowCancel = false,
-                    Title = "重要提示",
-                    Message = "您同时登录了智慧树和微实课堂，存档将伴随您的智慧树账户，实验报告将同时上传至两个平台。"
+                    Title = new BindableString("重要提示"),
+                    Message = new BindableString("您同时登录了智慧树和微实课堂，存档将伴随您的智慧树账户，实验报告将同时上传至两个平台。")
                 });
-                StartCoroutine(GetAccessToken());
+                Instance.StartCoroutine(GetAccessToken());
             }
         }
     }
 
-    private IEnumerator GetAccessToken()
+    private static IEnumerator GetAccessToken()
     {
         var ticket = Communication.ticket;
         using (var www = UnityWebRequest.Get($"http://39.106.55.217:9099" +
@@ -124,7 +125,7 @@ public class VSEManager : HTBehaviour
         }
     }
 
-    public void UploadReport(VSEReportUpload reportUpload, Action<string> responseAction)
+    public static void UploadReport(VSEReportUpload reportUpload, Action<string> responseAction)
     {
         if (accountType == AccountType.VSEClass || accountType == AccountType.Both)
         {
@@ -167,7 +168,7 @@ public class VSEManager : HTBehaviour
         }
     }
 
-    private IEnumerator RefreshAccessToken()
+    private static IEnumerator RefreshAccessToken()
     {
         using (var www = UnityWebRequest.Get($"http://39.106.55.217:9099" +
                $"/api/open/token/refresh?access_token={access_token}&appid={appid}&signature={GetMd5(access_token + appid + secret)}"))
@@ -199,7 +200,7 @@ public class VSEManager : HTBehaviour
         }
     }
 
-    private string GetMd5(string input)
+    private static string GetMd5(string input)
     {
         // Create a new instance of the MD5CryptoServiceProvider object.
         MD5 md5Hasher = MD5.Create();

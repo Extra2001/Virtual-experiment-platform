@@ -90,7 +90,7 @@ public class LoadImgFromFile : HTBehaviour
         models.Add(new ExperimentReportModelBuilder("实验报告", contents.ToArray()));
             var vseModel = new VSEReportUpload()
             {
-                previewurl = "https://www.zhihuishu.com/virtual_portals_h5/virtualExperiment.html#/indexPage?courseId=2000074157",
+                previewurl = url,
                 title = "交互式测量误差和数据处理虚拟仿真实验",
                 startTime = GameManager.Instance.startTime.Ticks/ 1000000,
                 endTime = DateTime.Now.Ticks/ 1000000,
@@ -117,7 +117,7 @@ public class LoadImgFromFile : HTBehaviour
                }
             };
             Communication.UploadReport(GameManager.Instance.startTime, DateTime.Now, 20 * x.score.CalcScore(), $"本次实验记录数据发生{x.score.DataRecordError}次错误，处理直接测量量发生{x.score.MeasureQuantityError}次错误，处理最终合成量发生{x.score.ComplexQuantityError}次错误。", models.ToArray(), new Step[0], action);//这里也可以添加很多实验步骤。
-            VSEManager.Instance.UploadReport(vseModel, null);
+            VSEManager.UploadReport(vseModel, null);
         });
     }
 

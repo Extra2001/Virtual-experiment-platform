@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// 模态提示框UI逻辑类
 /// </summary>
 [UIResource(null, null, "UI/ModelPanel")]
-public class ModelUILogic : WithSingleModeUILogic, IDataDriver<ModelDialogModel>
+public class ModelUILogic : UILogicTemporary, IDataDriver<ModelDialogModel>
 {
     public ModelDialogModel Data { get; set; } = new ModelDialogModel();
 
@@ -89,8 +89,6 @@ public class ModelUILogic : WithSingleModeUILogic, IDataDriver<ModelDialogModel>
             ConfirmButton.rectTransform().localPosition = position;
             CancelButton.gameObject.SetActive(false);
         }
-
-        Main.m_UI.OpenUI<ModelUILogic>();
     }
 
     /// <summary>

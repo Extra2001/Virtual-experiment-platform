@@ -60,6 +60,7 @@ public class GameLaunch : MonoBehaviour
     private void LaunchManagers()
     {
         WisdomTree.Common.Function.Communication.Init(() => RecordManager.UpdateRecordInfos(null));
+        VSEManager.Init();
 
         MainThread.Enable();
 

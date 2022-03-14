@@ -10,6 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using Common;
 using System.Linq;
+using UnityEngine;
 
 public static class RecordManager
 {
@@ -117,13 +118,24 @@ public static class RecordManager
             done?.Invoke();
             return;
         }
-        Storage.RemoteStorage.SetStorage(RecordInfoToName(record.info), record, responseAction: x =>
+        else if(VSEManager.accountType == VSEManager.AccountType.VSEClass || VSEManager.accountType == VSEManager.AccountType.NotLogin)
         {
+            LocalRecordStorage.SetStorage(RecordInfoToName(record.info), record);
             UpdateRecordInfos(y =>
             {
                 done?.Invoke();
             });
-        }, error: y => error?.Invoke());
+        }
+        else
+        {
+            Storage.RemoteStorage.SetStorage(RecordInfoToName(record.info), record, responseAction: x =>
+            {
+                UpdateRecordInfos(y =>
+                {
+                    done?.Invoke();
+                });
+            }, error: y => error?.Invoke());
+        }
     }
     /// <summary>
     /// 获取存档
@@ -135,9 +147,12 @@ public static class RecordManager
     }
     public static Record GetRecord(RecordInfo info, Action<Record> done, Action<string> error = null)
     {
-        if(info.id == -2)
+        if (info.id == -2)
             return Storage.UnityStorage.GetStorage<Record>("tempRecord", null, null);
-        Storage.RemoteStorage.GetStorage(RecordInfoToName(info), done, error);
+        else if (VSEManager.accountType == VSEManager.AccountType.VSEClass || VSEManager.accountType == VSEManager.AccountType.NotLogin)
+            done?.Invoke(LocalRecordStorage.GetStorage(RecordInfoToName(info)));
+        else
+            Storage.RemoteStorage.GetStorage(RecordInfoToName(info), done, error);
         return null;
     }
     /// <summary>
@@ -150,17 +165,28 @@ public static class RecordManager
     }
     public static void DeleteRecord(RecordInfo info, Action done = null, Action error = null)
     {
-        Storage.RemoteStorage.DeleteStorage(RecordInfoToName(info), x =>
+        if (VSEManager.accountType == VSEManager.AccountType.VSEClass || VSEManager.accountType == VSEManager.AccountType.NotLogin)
         {
-            if (x)
+            LocalRecordStorage.DeleteStorage(RecordInfoToName(info));
+            UpdateRecordInfos(y =>
             {
-                UpdateRecordInfos(y =>
+                done?.Invoke();
+            });
+        }
+        else
+        {
+            Storage.RemoteStorage.DeleteStorage(RecordInfoToName(info), x =>
+            {
+                if (x)
                 {
-                    done?.Invoke();
-                });
-            }
-            else error?.Invoke();
-        });
+                    UpdateRecordInfos(y =>
+                    {
+                        done?.Invoke();
+                    });
+                }
+                else error?.Invoke();
+            });
+        }
     }
     /// <summary>
     /// 深拷贝
@@ -207,12 +233,22 @@ public static class RecordManager
     /// </summary>
     public static void UpdateRecordInfos(Action<List<RecordInfo>> action)
     {
-        Storage.RemoteStorage.GetAllKeys(x =>
+        if (VSEManager.accountType == VSEManager.AccountType.VSEClass || VSEManager.accountType == VSEManager.AccountType.NotLogin)
         {
+            var x =  LocalRecordStorage.GetAllKeys();
             _recordInfos = x.Select(y => NameToRecordInfo(y)).ToList();
             Main.m_Event.Throw<RecordUpdateEventHandler>();
             action?.Invoke(_recordInfos);
-        });
+        }
+        else
+        {
+            Storage.RemoteStorage.GetAllKeys(x =>
+            {
+                _recordInfos = x.Select(y => NameToRecordInfo(y)).ToList();
+                Main.m_Event.Throw<RecordUpdateEventHandler>();
+                action?.Invoke(_recordInfos);
+            });
+        }
     }
     private static RecordInfo NameToRecordInfo(string name)
     {
@@ -227,6 +263,47 @@ public static class RecordManager
     private static string RecordInfoToName(RecordInfo recordInfo)
     {
         return string.Join("|", recordInfo.id, recordInfo.time.ToUnixTimeSeconds(), recordInfo.title);
+    }
+}
+
+public static class LocalRecordStorage
+{
+    public static Record GetStorage(string name)
+    {
+        Dictionary<string, Record> records = new Dictionary<string, Record>();
+        if (PlayerPrefs.HasKey("Record"))
+            records = Storage.UnityStorage.GetStorage<Dictionary<string, Record>>("Record", null, null);
+        if (records.ContainsKey(name))
+            return records[name];
+        return null;
+    }
+    public static void SetStorage(string name, Record record)
+    {
+        Dictionary<string, Record> records = new Dictionary<string, Record>();
+        if (PlayerPrefs.HasKey("Record"))
+            records = Storage.UnityStorage.GetStorage<Dictionary<string, Record>>("Record", null, null);
+        if (records.ContainsKey(name))
+            records[name] = record;
+        else records.Add(name, record);
+        Storage.UnityStorage.SetStorage("Record", records);
+    }
+
+    public static void DeleteStorage(string name)
+    {
+        Dictionary<string, Record> records = new Dictionary<string, Record>();
+        if (PlayerPrefs.HasKey("Record"))
+            records = Storage.UnityStorage.GetStorage<Dictionary<string, Record>>("Record", null, null);
+        if (records.ContainsKey(name))
+            records.Remove(name);
+        Storage.UnityStorage.SetStorage("Record", records);
+    }
+
+    public static List<string> GetAllKeys()
+    {
+        Dictionary<string, Record> records = new Dictionary<string, Record>();
+        if (PlayerPrefs.HasKey("Record"))
+            records = Storage.UnityStorage.GetStorage<Dictionary<string, Record>>("Record", null, null);
+        return records.Keys.ToList();
     }
 }
 

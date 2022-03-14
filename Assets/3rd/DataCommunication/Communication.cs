@@ -105,13 +105,14 @@ namespace WisdomTree.Common.Function
 #if UNITY_EDITOR
             experimentId = 371;
             courseId = 2000074157;
-            _UUID = "Vj1KNxJG";
+            //_UUID = "Vj1KNxJG";
+            //_UUID = "";
             //_UUID = BuilderSettings.GetString("uuid");
             //courseId = BuilderSettings.GetInt("courseId");
             //experimentId = BuilderSettings.GetInt("experimentId");  
             //appId = BuilderSettings.GetString("appId");
             //secret = BuilderSettings.GetString("secret");
-            //ticket = BuilderSettings.GetString("ticket");
+            ticket = "";
 #endif
             Instance.StartCoroutine(WaitForParam());
 

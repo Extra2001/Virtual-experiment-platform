@@ -52,6 +52,9 @@ public class RTGController : SingletonBehaviourBase<RTGController>
 
         _workGizmo = _objectMoveGizmo;
         _workGizmoId = GizmoId.Move;
+
+
+        
     }
 
     // Update is called once per frame

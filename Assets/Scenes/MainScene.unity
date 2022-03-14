@@ -871,7 +871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34f19b53fadd774980f1539fb0b0829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsSelectedObject: 0
+  _targetObject: {fileID: 0}
 --- !u!114 &726128194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1118,7 +1118,7 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _gridUp:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 93
       _lCtrl: 0
       _lCmd: 0
@@ -1133,7 +1133,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 0
     _gridDown:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 91
       _lCtrl: 0
       _lCmd: 0
@@ -1204,7 +1204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf910afe7ec945e49824651f72101819, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isEnabled: 1
+  _isEnabled: 0
   _actionLimit: 50
 --- !u!1 &1076361387
 GameObject:
@@ -1687,7 +1687,7 @@ MonoBehaviour:
       _text: Scale gizmo
     - _tooltip: Allows you to change universal gizmo settings.
       _text: Universal gizmo
-    _activeTabIndex: 0
+    _activeTabIndex: 1
   _settings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -1706,10 +1706,10 @@ MonoBehaviour:
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
-      _boxWidth: 1.01
-      _boxHeight: 1.01
-      _boxDepth: 1.01
-      _sphereRadius: 0.73
+      _boxWidth: 0.022444446
+      _boxHeight: 0.022444446
+      _boxDepth: 0.022444446
+      _sphereRadius: 0.016222224
       _trPrismWidth: 1
       _trPrismHeight: 1
       _trPrismDepth: 1
@@ -1724,8 +1724,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1746,8 +1746,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1768,8 +1768,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1790,8 +1790,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1812,8 +1812,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1834,8 +1834,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1853,10 +1853,10 @@ MonoBehaviour:
       _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
     _screenCorner: 1
     _screenOffset: {x: 0, y: 0}
-    _screenSize: 90
+    _screenSize: 2
     _axesLabelTint: {r: 1, g: 1, b: 1, a: 1}
     _camPrjSwitchLabelTint: {r: 1, g: 1, b: 1, a: 0.7}
-    _isCamPrjSwitchLabelVisible: 1
+    _isCamPrjSwitchLabelVisible: 0
   _moveGizmoSettings2D:
     _canBeDisplayed: 1
     _isExpanded: 0
@@ -2554,9 +2554,9 @@ MonoBehaviour:
         _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
   _moveGizmoHotkeys:
     _canBeDisplayed: 1
-    _isExpanded: 0
+    _isExpanded: 1
     _enable2DMode:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 0
       _lCtrl: 0
       _lCmd: 0
@@ -2571,7 +2571,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 0
     _enableSnapping:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 0
       _lCtrl: 1
       _lCmd: 0
@@ -2586,7 +2586,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 0
     _enableVertexSnapping:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 118
       _lCtrl: 0
       _lCmd: 0
@@ -5054,7 +5054,7 @@ MonoBehaviour:
     _smoothValue: 4
     _invertX: 0
     _invertY: 0
-    _isPanningEnabled: 1
+    _isPanningEnabled: 0
   _lookAroundSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -5064,7 +5064,7 @@ MonoBehaviour:
     smoothValue: 4
     _invertX: 0
     _invertY: 0
-    _isLookAroundEnabled: 1
+    _isLookAroundEnabled: 0
   _orbitSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -5074,7 +5074,7 @@ MonoBehaviour:
     _smoothValue: 8
     _invertX: 0
     _invertY: 0
-    _isOrbitEnabled: 1
+    _isOrbitEnabled: 0
   _zoomSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -5086,7 +5086,7 @@ MonoBehaviour:
     _orthoZoomSmoothValue: 5
     _perspZoomSmoothValue: 5
     _invertZoomAxis: 0
-    _isZoomEnabled: 1
+    _isZoomEnabled: 0
   _focusSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -5110,7 +5110,7 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _moveForward:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 119
       _lCtrl: 0
       _lCmd: 0
@@ -5125,7 +5125,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 1
     _moveBack:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 115
       _lCtrl: 0
       _lCmd: 0
@@ -5140,7 +5140,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 1
     _strafeLeft:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 97
       _lCtrl: 0
       _lCmd: 0
@@ -5155,7 +5155,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 1
     _strafeRight:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 100
       _lCtrl: 0
       _lCmd: 0
@@ -5170,7 +5170,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 1
     _moveUp:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 101
       _lCtrl: 0
       _lCmd: 0
@@ -5185,7 +5185,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 1
     _moveDown:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 113
       _lCtrl: 0
       _lCmd: 0
@@ -5200,7 +5200,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 1
     _pan:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 0
       _lCtrl: 0
       _lCmd: 0
@@ -5215,7 +5215,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 1
     _lookAround:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 0
       _lCtrl: 0
       _lCmd: 0
@@ -5230,7 +5230,7 @@ MonoBehaviour:
       _staticData:
         CanHaveMouseButtons: 1
     _orbit:
-      _isEnabled: 1
+      _isEnabled: 0
       _key: 0
       _lCtrl: 0
       _lCmd: 0

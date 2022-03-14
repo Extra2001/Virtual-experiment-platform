@@ -36,8 +36,6 @@ namespace RTEditor
         /// <summary>
         /// Shortcut keys.
         /// </summary>
-        /// 
-
         //20220314张峻凡注释无用功能
         [SerializeField]
         private ShortcutKeys _translateAlongScreenAxesShortcut = new ShortcutKeys("Translate along screen axes", 0)

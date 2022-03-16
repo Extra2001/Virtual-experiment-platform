@@ -5,7 +5,7 @@
 using HT.Framework;
 using DG.Tweening;
 using UnityEngine;
-using RTEditor;
+//using RTEditor;
 //实现物体自身在三欧拉角接近90倍数时，自旋转到
 //保证在无选中操作时方可启用
 //欧拉角换算四元数在换回
@@ -65,7 +65,6 @@ public class SelfRotate : HTBehaviour
     void Start()
     {
         onTW = false;
-        RTF = GameObject.Find("(Singleton)RTEditor.EditorObjectSelection");
     }
     void LiveImageVanish()
     {
@@ -78,7 +77,7 @@ public class SelfRotate : HTBehaviour
         TarX = this.transform.localEulerAngles.x;
         TarY = this.transform.localEulerAngles.y;
         TarZ = this.transform.localEulerAngles.z;
-        if (RTF.GetComponent<EditorObjectSelection>().Skode_Press() == 0)
+        if (RTGController.Current._targetObject == null)
         {
             if (this.transform.localEulerAngles.x < 30 || this.transform.localEulerAngles.x > 330)
             {

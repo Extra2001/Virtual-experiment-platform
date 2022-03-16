@@ -13,7 +13,7 @@ public static class ProcessManager
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
         return;
-#endif
+#else
         int port = GetPort();
         var startInfo = new ProcessStartInfo()
         {
@@ -29,7 +29,8 @@ public static class ProcessManager
 
         Port = port;
         //Port = 5000;
-        //UnityEngine.Debug.Log($"服务已运行在 http://localhost:{port}/");
+        UnityEngine.Debug.Log($"服务已运行在 http://localhost:{port}/");
+#endif
     }
 
     private static void Process_Exited(object sender, System.EventArgs e)

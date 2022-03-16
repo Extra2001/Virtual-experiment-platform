@@ -50,6 +50,7 @@ namespace RTG
         {
             _camera = gameObject.AddComponent<Camera>();
             _transform = _camera.transform;
+            _camera.enabled = false;
         }
 
         private void Start()

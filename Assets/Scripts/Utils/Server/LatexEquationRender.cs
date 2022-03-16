@@ -13,10 +13,13 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using UnityEngine.Networking;
+using Unity.VectorGraphics;
+using System.Collections;
+using Newtonsoft.Json;
 
 public class LatexEquationRender : MonoBehaviour
 {
-    LatexEquationRender Instance = null;
+    public static LatexEquationRender Instance = null;
     static List<Model> stack = new List<Model>();
     int callback = 0;
     string base64 = "";
@@ -59,43 +62,36 @@ public class LatexEquationRender : MonoBehaviour
         });
 #endif
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR
-        string postbody = "{\"equation\":\"" + tex + "\"}";
-        byte[] postData = Encoding.UTF8.GetBytes(postbody); // 把字符串转换为bype数组
-        var www = new UnityWebRequest($"http://localhost:{ProcessManager.Port}/", UnityWebRequest.kHttpVerbPOST);
-        www.uploadHandler = new UploadHandlerRaw(postData);
-        www.downloadHandler = new DownloadHandlerBuffer();
-        www.uploadHandler.contentType = "application/json";
-        www.SetRequestHeader("Content-Type", "application/json");
-        www.SetRequestHeader("Accept", "application/json");
-        www.SendWebRequest().completed += x =>
-          {
-              if (www.responseCode == 200)
-              {
-                  //byte[] buffers = null;
-                  //try
-                  //{
-                  //    using (var ms = new MemoryStream())
-                  //    {
-                  //        var buffer = Encoding.Default.GetBytes(www.downloadHandler.text);
-                  //        using (var rms = new MemoryStream(buffer))
-                  //        {
-                  //            var svg = Svg.SvgDocument.Open<Svg.SvgDocument>(rms);
-                  //            var bitmap = svg.Draw(1000, (int)Math.Round((double)svg.Height / svg.Width * 1000));
-                  //            bitmap.Save(ms, ImageFormat.Png);
-                  //            buffers = ms.GetBuffer();
-                  //        }
-                  //    }
-                  //}
-                  //catch { errorHandler?.Invoke(); }
-                  //if (buffers != null)
-                  //    action?.Invoke(CommonTools.GetSprite(buffers));
-                  //else errorHandler?.Invoke();
-              }
-              else
-              {
-                  //errorHandler?.Invoke();
-              }
-          };
+        tex = tex.Replace("\\", "\\\\");
+        string postbody = "{\"auth\":{\"user\":\"guest\",\"password\":\"guest\"},\"latex\":\"" + tex + "\",\"resolution\":600,\"color\":\"000000\"}";
+        VSEManager.Instance.StartCoroutine(StartRequest());
+
+        IEnumerator StartRequest()
+        {
+            using (UnityWebRequest www = UnityWebRequest.Post($"https://latex2png.com/api/convert", postbody))
+            {
+                www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(postbody));
+                www.uploadHandler.contentType = "application/json";
+                www.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36");
+                yield return www.SendWebRequest();
+                if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+                    errorHandler?.Invoke();
+                else
+                {
+                    var text = www.downloadHandler.text;
+                    var url = "https://latex2png.com" + JsonConvert.DeserializeObject<RequestModel2>(text).url;
+                    using (UnityWebRequest www2 = UnityWebRequest.Get(url))
+                    {
+                        yield return www2.SendWebRequest();
+                        if (www2.result == UnityWebRequest.Result.ConnectionError || www2.result == UnityWebRequest.Result.ProtocolError)
+                            errorHandler?.Invoke();
+                        var sprite = CommonTools.GetSprite(www2.downloadHandler.data);
+                        action?.Invoke(sprite);
+
+                    }
+                }
+            }
+        }
 #endif
     }
     public class Model
@@ -103,5 +99,10 @@ public class LatexEquationRender : MonoBehaviour
         public string tex;
         public UnityAction<Sprite> action;
         public UnityAction errorHandler;
+    }
+
+    public class RequestModel2
+    {
+        public string url { get; set; }
     }
 }

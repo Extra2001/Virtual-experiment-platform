@@ -30,7 +30,7 @@ public class GameLaunch : MonoBehaviour
         InitLoading.gameObject.SetActive(true);
         LoadingScreen.gameObject.SetActive(true);
 
-        ProcessManager.StartService();
+        //ProcessManager.StartService();
 
         UIAPIInitializer.Current.Initialize();
 
@@ -72,6 +72,6 @@ public class GameLaunch : MonoBehaviour
     }
     private void OnDestroy()
     {
-        ProcessManager.StopService();
+        //ProcessManager.StopService();
     }
 }

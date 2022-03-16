@@ -5,8 +5,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Runtime.InteropServices;
-using System.Linq;
+using HT.Framework;
 
 public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
 {
@@ -19,35 +18,15 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
     private Dictionary<KeyCode, Action> registeredHoldOn = new Dictionary<KeyCode, Action>();
     private Dictionary<int, Tuple<Func<bool>, Action>> registedCustom = new Dictionary<int, Tuple<Func<bool>, Action>>();
 
-    /*[DllImport("user32.dll", EntryPoint = "keybd_event")]//此处只用于windows平台的模拟输入，安卓平台需更改
-    public static extern void Keybd_event(
-          byte bvk,//虚拟键值 ESC键对应的是27
-          byte bScan,//0
-          int dwFlags,//0为按下，1按住，2释放
-          int dwExtraInfo//0
-          );*/
-
-
     private void Update()
     {
         foreach (var item in registeredPermanant)
             if (Input.GetKeyDown(item.Key))
                 item.Value.Invoke();
-    }
-
-    private void FixedUpdate()
-    {
-        if (work)
+        if (!Main.Current.Pause)
         {
             foreach (var item in registered)
                 if (Input.GetKeyDown(item.Key))
-                {
-                    item.Value.Invoke();
-                    work = false;
-                    Invoke(nameof(Restore), 0.3f);
-                }
-            foreach (var item in registeredHoldOn)
-                if (Input.GetKey(item.Key))
                     item.Value.Invoke();
             foreach (var item in registedCustom)
                 if (item.Value.Item1.Invoke())
@@ -55,9 +34,11 @@ public class KeyboardManager : SingletonBehaviorManager<KeyboardManager>
         }
     }
 
-    private void Restore()
+    private void FixedUpdate()
     {
-        work = true;
+        foreach (var item in registeredHoldOn)
+            if (Input.GetKey(item.Key))
+                item.Value.Invoke();
     }
 
     /// <summary>
